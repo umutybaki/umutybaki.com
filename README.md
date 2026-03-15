@@ -1,6 +1,6 @@
 # Umut Yalçın Baki - Personal Portfolio
 
-A modern, high-performance, and bilingual personal portfolio website.
+A simple, high-performance, and bilingual personal portfolio website.
 
 [![Website](https://img.shields.io/badge/Website-umutybaki.com-blue)](https://umutybaki.com)
 [![GitHub](https://img.shields.io/badge/GitHub-umutybaki-black?logo=github)](https://github.com/umutybaki)
@@ -16,17 +16,16 @@ This repository contains the source code for my personal portfolio website, host
 
 -   **🌍 Bilingual Support**: Seamlessly toggle between **English** and **Turkish** with a persistent language switcher.
 -   **🌓 Theme Toggle**: Switch between **Dark** and **Light** modes, with system preference detection and local storage persistence.
--   **✨ Constellation Animation**: A custom, performance-optimized background animation using the **HTML5 Canvas API**.
+-   **✨ Constellation Animation**: A custom background animation using the **HTML5 Canvas API**.
 -   **📱 Fully Responsive**: Optimized for all screen sizes, from mobile devices to high-resolution desktops.
--   **🖱️ Interactive UI**: Modern components including scroll-reveal animations and collapsible accordion sections.
 
 ## 🛠️ Tech Stack
 
 Built with a focus on simplicity and performance using core web technologies:
 
--   **HTML5**: Semantic structure for accessibility and SEO.
--   **CSS3**: Custom properties (variables), Flexbox, and Grid for dynamic and responsive layouts.
--   **Vanilla JavaScript**: Modern ES6+ for all logic, animations, and state management (no heavy frameworks).
+-   **HTML**: Semantic structure for accessibility and SEO.
+-   **CSS**: Custom props and Grid for dynamic and responsive layouts.
+-   **JavaScript**: Modern script for all logic, animations, and state management (no framework, only vanilla JS).
 -   **Google Fonts**: Inter for typography and Roboto Mono for technical details.
 
 ## 📂 Project Structure
@@ -35,8 +34,7 @@ Built with a focus on simplicity and performance using core web technologies:
 .
 ├── index.html   # Main layout and bilingual content
 ├── style.css    # Core design system and responsive styles
-├── script.js    # Interactive logic and background animations
-└── assets/      # Media and graphic assets (if applicable)
+└── script.js    # Interactive logic and background animations
 ```
 
 ## 🛠️ Local Development
