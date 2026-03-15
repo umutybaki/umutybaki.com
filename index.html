@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umut Yalçın Baki</title>
+    <meta name="description"
+        content="Portfolio of Umut Yalçın Baki, Software Engineer & Computer Engineering/Economics double major at Koç University.">
+
+    <!-- Google Fonts: Inter and Roboto Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Canvas for Constellations -->
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="glow-overlay"></div>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section id="hero" class="reveal active">
+            <div class="hero-header-wrapper">
+                <h1 class="hero-name">Umut Yalçın Baki</h1>
+                <div class="header-controls" style="display: flex; gap: 1rem; align-items: center;">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <button id="lang-toggle" class="lang-toggle" aria-label="Toggle Language">
+                        <div class="lang-slider"></div>
+                        <span class="lang-label en">EN</span>
+                        <span class="lang-label tr">TR</span>
+                    </button>
+                </div>
+            </div>
+
+            <h2 class="hero-tagline">
+                <span class="lang-en">Koç University - Computer Engineering & Economics DM</span>
+                <span class="lang-tr">Koç Üniversitesi - Bilgisayar Mühendisliği & Ekonomi ÇAP</span>
+            </h2>
+
+            <div class="hero-bio">
+                <p class="lang-en">
+                    I like building things that make sense. I want to be a software engineer who
+                    develops impactful and scalable solutions.
+                    I like tinkering on the low-level, but I have the sense required to actually build things ground up.
+                </p>
+                <p class="lang-tr">
+                    Mantıklı ve işe yarar şeyler inşa etmeyi seviyorum. Etkili ve ölçeklenebilir
+                    çözümler geliştiren bir yazılım mühendisi olmak istiyorum.
+                    Düşük levelde uğraşmayı seviyorum, ve bir şeyleri sıfırdan inşa etmek için gereken mantığa ve
+                    kararlılığa sahibim.
+                </p>
+            </div>
+
+            <div class="hero-contact">
+                <a href="mailto:umut@baki.org.tr" class="contact-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    umut@baki.org.tr
+                </a>
+                <a href="https://www.linkedin.com/in/umutybaki" target="_blank" rel="noopener noreferrer"
+                    class="contact-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                    linkedin.com/in/umutybaki
+                </a>
+                <a href="https://github.com/umutybaki" target="_blank" rel="noopener noreferrer" class="contact-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                        </path>
+                    </svg>
+                    github.com/umutybaki
+                </a>
+            </div>
+
+            <div class="hero-skills" style="margin-top: 2.5rem;">
+                <div class="skill-tags">
+                    <span class="skill-tag tag-lang">Python</span>
+                    <span class="skill-tag tag-lang">Java</span>
+                    <span class="skill-tag tag-lang">HTML</span>
+                    <span class="skill-tag tag-lang">CSS</span>
+                    <span class="skill-tag tag-lang">JavaScript/TypeScript</span>
+                    <span class="skill-tag tag-lang">SQL</span>
+                    <span class="skill-tag tag-infra">Git</span>
+                    <span class="skill-tag tag-infra">AWS</span>
+                    <span class="skill-tag tag-infra">Supabase</span>
+                    <span class="skill-tag tag-infra">Linux</span>
+                    <span class="skill-tag tag-tool">Claude Code</span>
+                    <span class="skill-tag tag-tool">Figma</span>
+                    <span class="skill-tag tag-tool">Canva</span>
+                </div>
+            </div>
+
+            <div class="hero-languages" style="margin-top: 1rem;">
+                <div class="skill-tags">
+                    <span class="skill-tag tag-spoken">
+                        <span class="lang-en">Turkish (Native)</span>
+                        <span class="lang-tr">Türkçe (Anadil)</span>
+                    </span>
+                    <span class="skill-tag tag-spoken">
+                        <span class="lang-en">English (Fluent)</span>
+                        <span class="lang-tr">İngilizce (Akıcı)</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="reveal">
+            <h2 class="section-title">
+                <span class="lang-en">Career</span>
+                <span class="lang-tr">Kariyer</span>
+            </h2>
+
+            <div class="timeline">
+                <!-- Odarama -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="box-shadow: 0 0 15px rgba(209, 0, 177, 0.4);">
+                        <svg width="32" height="32" viewBox="0 0 38 38" fill="none">
+                            <path
+                                d="M11.2536 24.0711V11.136H26.136V25.8671H14.3519L25.5992 37C32.1316 36.8042 37.3864 31.4848 37.3864 24.9691V12.034C37.3864 5.40023 31.9307 0 25.2256 0H12.1576C5.45571 0 0 5.40024 0 12.0371V24.9722C0 31.3077 4.96916 36.5153 11.2536 36.9751V24.0742V24.0711Z"
+                                fill="#D100B1" />
+                        </svg>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>
+                                <span class="lang-en">Software Developer Intern <a href="https://odarama.com"
+                                        target="_blank" rel="noopener noreferrer" class="highlight"
+                                        style="color: inherit;">@ Odarama</a></span>
+                                <span class="lang-tr">Yazılım Geliştirici Stajyeri <a href="https://odarama.com"
+                                        target="_blank" rel="noopener noreferrer" class="highlight"
+                                        style="color: inherit;">@ Odarama</a></span>
+                            </h3>
+                            <span class="timeline-date">
+                                <span class="lang-en">June 2025 - August 2025</span>
+                                <span class="lang-tr">Haziran 2025 - Ağustos 2025</span>
+                            </span>
+                        </div>
+                        <div class="lang-en">
+                            <p>Built a custom WordPress plugin for batch image processing (WebP conversion) with an
+                                integrated AI-based description generator, cutting the sales team's venue data entry
+                                time by 50%.</p>
+                            <p>Implemented the new frontend architecture from external UI/UX designs, achieving a 40%
+                                speed increase by optimizing translation workflows and coordinating with the design
+                                team.</p>
+                            <p>Engineered a dynamic DataLayer implementation using JavaScript to enable marketing
+                                analytics tracking.</p>
+                        </div>
+                        <div class="lang-tr">
+                            <p>Satış ekibinin mekan verisi giriş süresini %50 kısaltan, entegre yapay zeka destekli
+                                açıklama oluşturuculu ve toplu görüntü işleme (WebP dönüştürme) özelliğine sahip özel
+                                bir WordPress eklentisi geliştirdim.</p>
+                            <p>Dış UI/UX tasarımlarından yeni frontend mimarisini entegre ettim; tasarım ekibiyle
+                                koordineli çalışarak ve çeviri iş akışlarını optimize ederek hızda %40 artış sağladım.
+                            </p>
+                            <p>Pazarlama analitiği takibini sağlamak için JavaScript ile dinamik bir DataLayer (Veri
+                                Katmanı) mimarisi kurguladım.</p>
+                        </div>
+                        <div class="skill-tags">
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">WebP</span>
+                            <span class="skill-tag">WordPress API</span>
+                            <span class="skill-tag">Frontend Architecture</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gordion Partners -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);">
+                        <svg width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 131 124"
+                            fill="currentColor">
+                            <path
+                                d="m636 1126c-16-55-21-75-46-201-7-33-14-66-16-72-7-25-35-13-51 22-11 23-27 38-49 45-18 6-36 20-39 31-10 31-52 75-84 89-18 7-34 24-40 42-13 36-31 28-31-13 0-30 30-69 54-69 16 0 62-51 71-79 3-11 21-25 40-31 23-8 37-20 41-35 3-13 17-33 30-46 21-20 33-59 19-59-25 0-65 35-75 64-8 24-20 38-40 44-16 6-40 28-53 49-29 45-54 68-84 77-12 4-26 21-32 38-10 28-13 30-25 17-25-25-8-67 35-90 22-11 50-37 64-60 14-22 41-47 61-56 22-11 37-26 41-43 3-14 14-35 25-46 11-13 15-24 10-28-17-11-40 5-62 40-11 20-33 40-50 45-16 6-32 20-36 32-9 31-34 56-75 78-24 12-41 30-48 49-13 37-31 31-31-11 0-32 19-55 68-81 18-9 40-33 49-53 10-20 27-38 39-41 32-8 56-38 52-64-2-19-15-25-73-40-38-10-90-20-115-24s-56-15-69-25l-23-18 93-22c52-11 105-21 119-21 36 0 70-27 70-55 0-19-9-28-35-39-22-10-45-31-62-60-19-32-38-49-61-57-37-12-52-35-52-78 0-21 5-31 15-31 8 0 15 8 15 18 0 21 35 62 54 62 15 0 54 40 70 72 6 13 28 31 49 41 20 10 37 25 37 32 0 15 38 55 52 55s9-37-7-50c-8-7-15-20-15-30 0-11-18-29-45-44-29-17-52-41-65-66-12-23-28-40-38-40-24-1-60-33-62-56-7-58 10-72 32-27 7 16 29 36 48 45 19 10 44 34 56 54s41 47 63 61c23 14 41 32 41 42 0 21 40 61 61 61 29 0 29-13-1-43-17-17-30-39-30-48 0-11-15-25-36-35-23-11-47-35-66-66-17-28-37-48-47-48-28 0-61-43-61-78 0-34 17-43 27-14 10 28 45 62 64 62 10 0 30 20 47 48 18 30 43 55 65 65 21 10 37 27 41 41 5 22 33 42 43 32 5-4 29-111 43-186 5-25 17-72 27-105l19-60 21 85c12 47 31 125 42 174s22 90 24 93c10 9 38-12 43-33 4-15 22-32 48-45 28-14 47-33 59-59 10-22 28-42 40-46 30-9 57-34 68-62 13-33 29-27 29 11 0 36-33 77-62 77-9 0-30 22-46 48-19 31-43 55-66 66-21 10-36 24-36 35 0 9-13 31-30 48-30 31-30 43 0 43 21 0 60-41 60-62 0-9 19-27 43-41 23-14 51-41 62-62 13-24 32-42 56-52 26-10 41-24 48-44 17-50 38-33 31 25-2 23-38 55-62 56-10 0-26 17-38 40-13 25-36 49-65 66-33 19-45 32-45 49 0 13-7 25-15 29-15 6-21 46-7 46s52-40 52-54c0-8 20-24 45-36 28-13 45-28 45-39 0-21 47-66 78-76 14-4 30-21 38-41 16-39 34-37 34 4 0 36-12 53-51 71-19 9-46 36-63 60-16 25-43 49-62 57-25 11-34 20-34 39 0 28 34 55 70 55 14 0 67 10 119 22 84 19 92 23 75 35-19 14-27 16-174 50-73 17-85 23-88 42-4 26 20 57 51 65 12 3 32 24 45 46 13 24 38 48 61 60 40 20 51 36 51 75 0 37-19 40-31 6-7-20-26-39-52-53s-50-38-62-62c-12-22-32-43-51-51-17-7-40-29-52-49-22-37-29-41-56-30-13 5-12 9 8 25 13 10 26 31 29 47 4 19 16 32 38 42 18 8 47 35 63 59 17 24 46 51 65 60 41 19 60 66 36 90-12 13-15 12-20-5-12-35-22-49-41-53-26-4-51-28-76-72-11-20-34-43-52-50-18-8-38-28-47-48-14-29-49-60-71-61-17 0-7 40 11 50 11 5 25 25 31 44 8 26 20 38 45 46 23 8 38 22 50 46 9 20 31 43 48 53 48 25 67 49 67 80 0 42-19 49-33 12-6-17-23-35-39-42-32-13-78-63-78-85 0-7-17-22-37-31-23-11-44-31-53-50s-23-33-33-33c-20 0-18-4-41 105-26 122-48 208-56 224-5 9-13-5-24-43zm40-192c25-91 33-148 22-161-11-14-68-14-85-1-13 11-9 70 7 118 5 14 14 45 20 69 6 23 13 41 16 39 2-3 12-32 20-64zm62-259c15-18 22-39 22-65 0-32-6-43-37-69-50-41-91-41-138 0-29 25-35 38-35 69 0 98 122 140 188 65zm-244-17c3-7 7-30 9-50 5-31 2-38-14-43-18-6-147 17-194 34-18 7-18 9 7 25 14 9 54 21 89 27s65 12 68 15c9 9 32 4 35-8zm410-4c45-9 92-24 105-32 22-15 22-16 5-23-42-16-183-41-197-36-13 5-17 49-8 100 1 9 2 9 95-9zm-210-190c12-5 15-15 10-48-7-44-41-176-48-183-5-6-43 123-50 176-5 31-3 47 6 53 15 9 60 11 82 2z"
+                                transform="matrix(.1 0 0 -.1 0 124)" />
+                        </svg>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>
+                                <span class="lang-en">Business Development Intern <a href="https://investment.com.tr"
+                                        target="_blank" rel="noopener noreferrer" class="highlight"
+                                        style="color: inherit;">@ Gordion Partners</a></span>
+                                <span class="lang-tr">İş Geliştirme Stajyeri <a href="https://investment.com.tr"
+                                        target="_blank" rel="noopener noreferrer" class="highlight"
+                                        style="color: inherit;">@ Gordion Partners</a></span>
+                            </h3>
+                            <span class="timeline-date">
+                                <span class="lang-en">Nov 2023 - Oct 2024</span>
+                                <span class="lang-tr">Kasım 2023 - Ekim 2024</span>
+                            </span>
+                        </div>
+                        <div class="lang-en">
+                            <p>Programmed workflow automation tools using AI APIs, Python, and VBA, optimizing business
+                                operations and boosting internal efficiency.</p>
+                            <p>Deployed faster AWS server infrastructure across 15+ company websites.</p>
+                            <p>Supported business strategy directly under the CEO, helping strategize new businesses and
+                                develop existing ones.</p>
+                        </div>
+                        <div class="lang-tr">
+                            <p>Yapay zeka API'leri, Python ve VBA kullanarak iş akışı otomasyon araçları programladım,
+                                iş operasyonlarını optimize ederek iç verimliliği artırdım.</p>
+                            <p>15'ten fazla şirket web sitesini hızlandıran yeni AWS sunucu altyapılarını kurdum.</p>
+                            <p>Doğrudan CEO'ya bağlı olarak işletme stratejisini destekledim, yeni operasyonların
+                                planlanmasına ve mevcut iş kollarının geliştirilmesine yardımcı oldum.</p>
+                        </div>
+
+                        <div class="skill-tags">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">AWS</span>
+                            <span class="skill-tag">VBA</span>
+                            <span class="skill-tag">Business Strategy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KOLT -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="box-shadow: 0 0 15px rgba(194, 11, 36, 0.4);">
+                        <svg width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 410 334"
+                            fill="#c20b24">
+                            <g transform="matrix(.1 0 0 -.1 0 334)">
+                                <path
+                                    d="m1725 3130c-7-11-8-1027-2-1037 3-5 41-4 84 1l80 9 23 76c13 42 27 83 31 91 7 14 161 485 210 640 11 36 24 74 28 85 23 60 42 128 36 133-10 10-484 12-490 2z" />
+                                <path
+                                    d="m1555 3104c-135-31-289-78-347-104-16-7-28-20-28-28 0-15 92-299 109-337 10-20 87-247 164-475 23-69 48-130 56-136 10-8 23-6 49 8 20 10 42 18 49 18 30 0 33 58 31 553l-3 502-30 2c-16 0-39-1-50-3z" />
+                                <path
+                                    d="m2297 3103c-2-5-19-53-36-108-18-55-36-109-41-120s-12-31-15-45c-4-14-17-54-30-90-12-36-32-96-44-135-12-38-26-79-31-90-30-71-131-397-127-409 5-13 31-18 157-28 34-3 38 1 113 102 42 58 84 114 92 125 7 11 104 142 215 290 246 331 254 341 247 359-5 13-158 78-230 97-17 5-75 20-127 34-98 26-136 31-143 18z" />
+                                <path
+                                    d="m984 2891c-109-67-244-176-244-198 0-12 259-370 307-423 7-8 47-60 88-115 140-188 178-237 197-253 13-10 23-5 62 30 54 47 54 39 7 168-52 146-117 332-146 415-14 44-30 89-35 100-9 21-84 236-103 292-5 17-17 33-26 36-9 2-57-21-107-52z" />
+                                <path
+                                    d="m2881 2892c-10-10-40-46-67-82-26-36-59-79-73-96s-35-44-46-59c-18-26-63-85-83-110-78-99-372-494-372-501 0-5 12-15 28-21 15-7 51-28 80-48 30-19 58-35 62-35 12 0 44 22 220 151 228 166 416 303 440 319 90 62 260 191 260 197 0 5-28 31-61 58-34 28-69 57-79 65-20 17-26 21-130 90-41 27-80 50-86 50s-17 6-23 14c-19 22-50 26-70 8z" />
+                                <path
+                                    d="m620 2575c-19-25-40-51-45-58-18-21-63-91-85-132-6-11-17-31-25-44-8-15-10-31-5-40 4-9 49-45 100-81 50-36 132-95 183-132s106-77 122-88c17-12 69-49 117-83 47-34 96-69 108-77 13-8 28-19 34-25 6-5 33-25 59-43 53-36 56-35 90 25l18 32-46 58c-57 72-38 47-197 258-74 100-142 187-149 195-8 8-22 26-32 40-9 14-32 44-50 67-17 23-54 71-81 107-28 36-57 66-65 66-9 0-32-20-51-45z" />
+                                <path
+                                    d="m3295 2475c-49-35-95-68-100-73-6-5-83-60-170-122-88-63-195-139-237-169-42-31-128-92-192-136-63-44-115-86-115-93-1-7 22-40 50-74s55-72 60-86c10-27 30-27 104 2 49 18 215 79 310 112 39 14 84 31 100 39 17 7 57 22 90 33s98 34 145 52c47 17 96 35 110 40 133 46 227 83 238 94s9 20-9 57c-24 46-144 228-176 266-10 12-29 37-43 55-33 43-58 68-67 67-5 0-48-29-98-64z" />
+                                <path
+                                    d="m401 2198c-47-126-82-254-84-307l-2-45 65-21c36-12 119-39 185-60s134-44 152-51c17-8 36-14 43-14 14 0 282-87 325-105 45-19 88-26 103-16 8 4 16 26 19 48l5 40-83 58c-46 33-112 78-147 102-34 24-90 63-125 88-34 24-98 69-142 100-44 30-118 82-165 115s-97 67-113 75c-26 15-28 15-36-7z" />
+                                <path
+                                    d="m1778 1986c-25-6-50-15-55-19-4-5-8-51-9-103-1-92 0-95 23-100 14-4 28-3 32 2 10 11 56 135 69 186 12 44 5 48-60 34z" />
+                                <path
+                                    d="m1932 1991c-6-4-29-60-51-126-30-88-37-123-30-137 20-38 51-19 109 67 38 55 35 52 85 114 20 24 34 49 32 54-6 18-125 41-145 28z" />
+                                <path
+                                    d="m3679 1990c-8-5-49-20-90-34-139-47-364-124-494-170-71-25-197-69-280-97-82-28-154-55-159-60-6-5-2-24 8-47 10-21 26-70 36-108l18-69 563-3c309-1 566 1 570 5 21 22-35 364-83 508-28 85-46 100-89 75z" />
+                                <path
+                                    d="m1565 1917c-27-23-27-24-11-55 9-17 16-37 16-45 0-26 34-59 52-52 15 6 17 20 15 88-2 75-4 82-23 85-12 2-34-8-49-21z" />
+                                <path
+                                    d="m2056 1809c-54-71-100-138-103-148-2-9 2-23 11-30 13-11 23-7 63 21 26 18 50 36 53 39s30 23 60 44 59 42 65 47c5 4 32 25 58 44 41 30 47 39 35 49-22 22-106 65-125 65-11 0-54-48-117-131z" />
+                                <path
+                                    d="m1437 1845c-15-14-27-29-27-32 0-4 12-24 27-45 19-28 33-38 47-36 18 3 21 9 19 52-1 32-8 55-20 67-18 18-19 18-46-6z" />
+                                <path
+                                    d="m2307 1767c-180-130-215-155-249-176-37-22-45-41-32-75 3-9 14-16 23-16 17 0 91 24 126 40 21 10 237 85 293 101 17 6 32 17 32 25 0 29-97 144-121 144-8 0-40-19-72-43z" />
+                                <path
+                                    d="m295 1750c-3-5-5-77-4-160 1-131 4-152 19-160 9-5 167-12 351-15s374-7 422-10c86-4 88-3 97 21 16 41-3 71-52 85-24 6-61 17-83 25-22 7-87 27-145 45-58 17-136 42-175 54-38 13-104 33-145 45-41 13-114 35-163 51-95 31-113 34-122 19z" />
+                                <path
+                                    d="m2310 1517c-229-78-264-92-255-108 8-11 525-12 544 0 11 7 11 15 1 47-26 81-49 129-62 131-7 2-110-30-228-70z" />
+                                <path
+                                    d="m314 1326c-3-8 2-43 11-78 55-207 72-245 104-229 9 5 180 63 380 130s372 126 382 132c24 13 24 35 0 49-13 6-171 10-446 10-358 0-426-2-431-14z" />
+                                <path
+                                    d="m2078 1334c-10-3-18-14-18-23 0-21 24-31 205-87 66-20 158-49 205-65 47-15 99-29 115-31l30-3 3 80c5 135 24 123-206 124-108 1-224 3-257 6-33 2-68 1-77-1z" />
+                                <path
+                                    d="m2046 1198c-8-12-13-25-10-30 6-10 169-130 215-160 14-9 32-23 40-30 8-8 47-35 87-62 40-26 78-53 85-60 19-18 65-46 76-46s49 117 58 176l5 41-143 53c-79 29-182 66-229 82s-100 36-118 44c-43 18-48 18-66-8z" />
+                                <path
+                                    d="m1197 1204c-6-7-243-88-554-192-179-59-203-70-203-88 0-12 7-27 15-34s15-17 15-22c0-15 86-141 121-176 33-34 37-34 79 8 5 5 19 15 155 109 50 34 131 91 180 126 50 35 127 90 173 122 46 31 87 64 92 73 19 35-46 100-73 74z" />
+                                <path
+                                    d="m1981 1084c-12-15-21-33-21-41s35-60 78-116 127-166 186-244c59-79 116-147 126-153 14-7 21-5 33 13 8 12 27 36 41 52 39 44 78 114 73 130-3 7-43 41-89 76s-85 66-88 69c-6 8-290 224-307 233-6 4-20-4-32-19z" />
+                                <path
+                                    d="m1294 1052c-12-9-32-24-44-32-13-8-35-24-49-35-28-22-190-139-231-167-14-10-50-35-80-57s-90-64-132-93c-43-29-78-58-78-65 0-6 19-26 42-44 24-19 45-36 48-39 18-20 155-108 162-104 4 3 81 103 170 222s173 232 187 251c14 18 43 56 63 84l38 51-22 23c-25 27-45 29-74 5z" />
+                                <path
+                                    d="m1868 993c-26-7-29-31-9-81 33-79 101-267 101-277 0-6 6-21 13-35 8-15 31-75 52-135 46-136 51-142 96-120 55 28 169 106 169 115 0 7-191 269-272 374-13 16-34 45-48 65-41 58-84 98-102 94z" />
+                                <path
+                                    d="m1429 963c-13-16-31-39-40-53s-25-35-35-47c-11-11-26-31-34-43-28-41-260-355-288-390-28-36-32-70-7-70 8 0 36-10 62-21 51-23 63-28 133-53 81-29 82-27 120 110 12 43 27 97 35 119 7 22 21 67 30 100 10 33 21 71 26 85 4 14 17 59 29 100s29 95 37 120c13 41 13 45-3 57-26 19-38 16-65-14z" />
+                                <path
+                                    d="m1724 949c-8-13-6-481 3-611 6-98 6-98 32-98 37 0 192 35 218 49l22 11-25 73c-14 39-29 81-34 92s-18 49-30 85c-28 88-78 224-103 285-11 28-23 63-26 79-7 30-45 54-57 35z" />
+                                <path
+                                    d="m1575 938c-2-7-12-38-21-68s-22-73-29-95c-18-58-41-136-92-315-8-30-21-73-28-95s-16-57-20-78c-7-33-5-38 20-47 31-12 214-13 233-2 17 11 15 693-2 704-18 12-56 9-61-4z" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>
+                                <span class="lang-en">Python Programming Tutor <a href="https://ku.edu.tr"
+                                        target="_blank" rel="noopener noreferrer" class="highlight"
+                                        style="color: inherit;">@ KOLT, Koç University</a></span>
+                                <span class="lang-tr">Python Programlama Eğitmeni <a href="https://ku.edu.tr"
+                                        target="_blank" rel="noopener noreferrer" class="highlight"
+                                        style="color: inherit;">@ KOLT, Koç Üniversitesi</a></span>
+                            </h3>
+                            <span class="timeline-date">
+                                <span class="lang-en">Oct 2023 - June 2024</span>
+                                <span class="lang-tr">Ekim 2023 - Haziran 2024</span>
+                            </span>
+                        </div>
+                        <p class="lang-en">Guided students on Python programming courses (COMP132, UNIV199) as an
+                            "A"-graded student.</p>
+                        <p class="lang-tr">Öğrencilere sınıfını "A" harf notu ile tamamlamış bir öğrenci olarak Python
+                            programlama derslerinde (COMP132, UNIV199) rehberlik ettim.</p>
+
+                        <div class="skill-tags">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Teaching</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Assistant -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="box-shadow: 0 0 15px rgba(194, 11, 36, 0.4);">
+                        <svg width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 410 334"
+                            fill="#c20b24">
+                            <g transform="matrix(.1 0 0 -.1 0 334)">
+                                <path
+                                    d="m1725 3130c-7-11-8-1027-2-1037 3-5 41-4 84 1l80 9 23 76c13 42 27 83 31 91 7 14 161 485 210 640 11 36 24 74 28 85 23 60 42 128 36 133-10 10-484 12-490 2z" />
+                                <path
+                                    d="m1555 3104c-135-31-289-78-347-104-16-7-28-20-28-28 0-15 92-299 109-337 10-20 87-247 164-475 23-69 48-130 56-136 10-8 23-6 49 8 20 10 42 18 49 18 30 0 33 58 31 553l-3 502-30 2c-16 0-39-1-50-3z" />
+                                <path
+                                    d="m2297 3103c-2-5-19-53-36-108-18-55-36-109-41-120s-12-31-15-45c-4-14-17-54-30-90-12-36-32-96-44-135-12-38-26-79-31-90-30-71-131-397-127-409 5-13 31-18 157-28 34-3 38 1 113 102 42 58 84 114 92 125 7 11 104 142 215 290 246 331 254 341 247 359-5 13-158 78-230 97-17 5-75 20-127 34-98 26-136 31-143 18z" />
+                                <path
+                                    d="m984 2891c-109-67-244-176-244-198 0-12 259-370 307-423 7-8 47-60 88-115 140-188 178-237 197-253 13-10 23-5 62 30 54 47 54 39 7 168-52 146-117 332-146 415-14 44-30 89-35 100-9 21-84 236-103 292-5 17-17 33-26 36-9 2-57-21-107-52z" />
+                                <path
+                                    d="m2881 2892c-10-10-40-46-67-82-26-36-59-79-73-96s-35-44-46-59c-18-26-63-85-83-110-78-99-372-494-372-501 0-5 12-15 28-21 15-7 51-28 80-48 30-19 58-35 62-35 12 0 44 22 220 151 228 166 416 303 440 319 90 62 260 191 260 197 0 5-28 31-61 58-34 28-69 57-79 65-20 17-26 21-130 90-41 27-80 50-86 50s-17 6-23 14c-19 22-50 26-70 8z" />
+                                <path
+                                    d="m620 2575c-19-25-40-51-45-58-18-21-63-91-85-132-6-11-17-31-25-44-8-15-10-31-5-40 4-9 49-45 100-81 50-36 132-95 183-132s106-77 122-88c17-12 69-49 117-83 47-34 96-69 108-77 13-8 28-19 34-25 6-5 33-25 59-43 53-36 56-35 90 25l18 32-46 58c-57 72-38 47-197 258-74 100-142 187-149 195-8 8-22 26-32 40-9 14-32 44-50 67-17 23-54 71-81 107-28 36-57 66-65 66-9 0-32-20-51-45z" />
+                                <path
+                                    d="m3295 2475c-49-35-95-68-100-73-6-5-83-60-170-122-88-63-195-139-237-169-42-31-128-92-192-136-63-44-115-86-115-93-1-7 22-40 50-74s55-72 60-86c10-27 30-27 104 2 49 18 215 79 310 112 39 14 84 31 100 39 17 7 57 22 90 33s98 34 145 52c47 17 96 35 110 40 133 46 227 83 238 94s9 20-9 57c-24 46-144 228-176 266-10 12-29 37-43 55-33 43-58 68-67 67-5 0-48-29-98-64z" />
+                                <path
+                                    d="m401 2198c-47-126-82-254-84-307l-2-45 65-21c36-12 119-39 185-60s134-44 152-51c17-8 36-14 43-14 14 0 282-87 325-105 45-19 88-26 103-16 8 4 16 26 19 48l5 40-83 58c-46 33-112 78-147 102-34 24-90 63-125 88-34 24-98 69-142 100-44 30-118 82-165 115s-97 67-113 75c-26 15-28 15-36-7z" />
+                                <path
+                                    d="m1778 1986c-25-6-50-15-55-19-4-5-8-51-9-103-1-92 0-95 23-100 14-4 28-3 32 2 10 11 56 135 69 186 12 44 5 48-60 34z" />
+                                <path
+                                    d="m1932 1991c-6-4-29-60-51-126-30-88-37-123-30-137 20-38 51-19 109 67 38 55 35 52 85 114 20 24 34 49 32 54-6 18-125 41-145 28z" />
+                                <path
+                                    d="m3679 1990c-8-5-49-20-90-34-139-47-364-124-494-170-71-25-197-69-280-97-82-28-154-55-159-60-6-5-2-24 8-47 10-21 26-70 36-108l18-69 563-3c309-1 566 1 570 5 21 22-35 364-83 508-28 85-46 100-89 75z" />
+                                <path
+                                    d="m1565 1917c-27-23-27-24-11-55 9-17 16-37 16-45 0-26 34-59 52-52 15 6 17 20 15 88-2 75-4 82-23 85-12 2-34-8-49-21z" />
+                                <path
+                                    d="m2056 1809c-54-71-100-138-103-148-2-9 2-23 11-30 13-11 23-7 63 21 26 18 50 36 53 39s30 23 60 44 59 42 65 47c5 4 32 25 58 44 41 30 47 39 35 49-22 22-106 65-125 65-11 0-54-48-117-131z" />
+                                <path
+                                    d="m1437 1845c-15-14-27-29-27-32 0-4 12-24 27-45 19-28 33-38 47-36 18 3 21 9 19 52-1 32-8 55-20 67-18 18-19 18-46-6z" />
+                                <path
+                                    d="m2307 1767c-180-130-215-155-249-176-37-22-45-41-32-75 3-9 14-16 23-16 17 0 91 24 126 40 21 10 237 85 293 101 17 6 32 17 32 25 0 29-97 144-121 144-8 0-40-19-72-43z" />
+                                <path
+                                    d="m295 1750c-3-5-5-77-4-160 1-131 4-152 19-160 9-5 167-12 351-15s374-7 422-10c86-4 88-3 97 21 16 41-3 71-52 85-24 6-61 17-83 25-22 7-87 27-145 45-58 17-136 42-175 54-38 13-104 33-145 45-41 13-114 35-163 51-95 31-113 34-122 19z" />
+                                <path
+                                    d="m2310 1517c-229-78-264-92-255-108 8-11 525-12 544 0 11 7 11 15 1 47-26 81-49 129-62 131-7 2-110-30-228-70z" />
+                                <path
+                                    d="m314 1326c-3-8 2-43 11-78 55-207 72-245 104-229 9 5 180 63 380 130s372 126 382 132c24 13 24 35 0 49-13 6-171 10-446 10-358 0-426-2-431-14z" />
+                                <path
+                                    d="m2078 1334c-10-3-18-14-18-23 0-21 24-31 205-87 66-20 158-49 205-65 47-15 99-29 115-31l30-3 3 80c5 135 24 123-206 124-108 1-224 3-257 6-33 2-68 1-77-1z" />
+                                <path
+                                    d="m2046 1198c-8-12-13-25-10-30 6-10 169-130 215-160 14-9 32-23 40-30 8-8 47-35 87-62 40-26 78-53 85-60 19-18 65-46 76-46s49 117 58 176l5 41-143 53c-79 29-182 66-229 82s-100 36-118 44c-43 18-48 18-66-8z" />
+                                <path
+                                    d="m1197 1204c-6-7-243-88-554-192-179-59-203-70-203-88 0-12 7-27 15-34s15-17 15-22c0-15 86-141 121-176 33-34 37-34 79 8 5 5 19 15 155 109 50 34 131 91 180 126 50 35 127 90 173 122 46 31 87 64 92 73 19 35-46 100-73 74z" />
+                                <path
+                                    d="m1981 1084c-12-15-21-33-21-41s35-60 78-116 127-166 186-244c59-79 116-147 126-153 14-7 21-5 33 13 8 12 27 36 41 52 39 44 78 114 73 130-3 7-43 41-89 76s-85 66-88 69c-6 8-290 224-307 233-6 4-20-4-32-19z" />
+                                <path
+                                    d="m1294 1052c-12-9-32-24-44-32-13-8-35-24-49-35-28-22-190-139-231-167-14-10-50-35-80-57s-90-64-132-93c-43-29-78-58-78-65 0-6 19-26 42-44 24-19 45-36 48-39 18-20 155-108 162-104 4 3 81 103 170 222s173 232 187 251c14 18 43 56 63 84l38 51-22 23c-25 27-45 29-74 5z" />
+                                <path
+                                    d="m1868 993c-26-7-29-31-9-81 33-79 101-267 101-277 0-6 6-21 13-35 8-15 31-75 52-135 46-136 51-142 96-120 55 28 169 106 169 115 0 7-191 269-272 374-13 16-34 45-48 65-41 58-84 98-102 94z" />
+                                <path
+                                    d="m1429 963c-13-16-31-39-40-53s-25-35-35-47c-11-11-26-31-34-43-28-41-260-355-288-390-28-36-32-70-7-70 8 0 36-10 62-21 51-23 63-28 133-53 81-29 82-27 120 110 12 43 27 97 35 119 7 22 21 67 30 100 10 33 21 71 26 85 4 14 17 59 29 100s29 95 37 120c13 41 13 45-3 57-26 19-38 16-65-14z" />
+                                <path
+                                    d="m1724 949c-8-13-6-481 3-611 6-98 6-98 32-98 37 0 192 35 218 49l22 11-25 73c-14 39-29 81-34 92s-18 49-30 85c-28 88-78 224-103 285-11 28-23 63-26 79-7 30-45 54-57 35z" />
+                                <path
+                                    d="m1575 938c-2-7-12-38-21-68s-22-73-29-95c-18-58-41-136-92-315-8-30-21-73-28-95s-16-57-20-78c-7-33-5-38 20-47 31-12 214-13 233-2 17 11 15 693-2 704-18 12-56 9-61-4z" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>
+                                <span class="lang-en">Research Assistant <a href="https://ku.edu.tr" target="_blank"
+                                        rel="noopener noreferrer" class="highlight" style="color: inherit;">@ Koç Uni,
+                                        Economics Dept</a></span>
+                                <span class="lang-tr">Araştırma Asistanı <a href="https://ku.edu.tr" target="_blank"
+                                        rel="noopener noreferrer" class="highlight" style="color: inherit;">@ Koç Üni,
+                                        Ekonomi Bölümü</a></span>
+                            </h3>
+                            <span class="timeline-date">
+                                <span class="lang-en">Nov 2022 - Feb 2023</span>
+                                <span class="lang-tr">Kasım 2022 - Şubat 2023</span>
+                            </span>
+                        </div>
+                        <p class="lang-en">Assisted with data entry and classification for the "Peer Interactions and
+                            Their Role in Shaping Children's Beliefs on Inclusivity" project funded €2M by ERC.</p>
+                        <p class="lang-tr">ERC tarafından 2 Milyon € fonlanan "Akran Etkileşimleri ve Çocukların
+                            Kapsayıcılık İnançlarının Şekillenmesindeki Rolü" projesinde veri girişi ve
+                            sınıflandırmasına yardımcı oldum.</p>
+
+                        <div class="skill-tags">
+                            <span class="skill-tag">Data Classification</span>
+                            <span class="skill-tag">Research</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="reveal">
+            <h2 class="section-title">
+                <span class="lang-en">Education</span>
+                <span class="lang-tr">Eğitim</span>
+            </h2>
+
+            <div class="timeline">
+                <!-- Maastricht -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="box-shadow: 0 0 15px rgba(1, 28, 61, 0.4);">
+                        <svg width="32" height="32" preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 183.000000 231.000000">
+                            <g transform="translate(0.000000,231.000000) scale(0.100000,-0.100000)">
+                                <path fill="currentColor"
+                                    d="M200 1537 l0 -566 138 63 c75 34 334 152 575 261 240 110 436 203 435 207 -3 7 -1092 578 -1135 595 -10 4 -13 -112 -13 -560z m280 47 c0 -74 5 -144 10 -155 8 -14 21 -19 51 -19 53 0 59 18 59 181 l0 130 53 -3 52 -3 -1 -145 c0 -163 -10 -195 -67 -230 -45 -28 -159 -28 -204 0 -52 31 -57 51 -61 223 l-4 157 56 0 56 0 0 -136z" />
+                                <path fill="currentColor"
+                                    d="M1575 1317 c-11 -8 -128 -69 -260 -136 -662 -339 -865 -445 -865 -452 0 -4 42 -25 93 -48 50 -22 308 -139 572 -259 l480 -219 3 284 c1 156 1 410 0 564 -3 277 -3 279 -23 266z m-360 -479 c15 -68 31 -127 35 -131 4 -5 22 50 40 122 l32 131 62 0 61 0 34 -169 c18 -93 36 -181 38 -195 5 -27 5 -27 -43 -24 l-48 3 -22 124 c-13 68 -25 125 -27 128 -3 2 -8 -9 -11 -24 -4 -15 -18 -74 -33 -131 l-26 -103 -56 3 -55 3 -31 129 c-18 71 -34 125 -37 120 -3 -5 -16 -64 -29 -131 l-24 -123 -47 0 c-27 0 -48 5 -48 10 0 6 21 94 46 195 l46 185 58 0 57 0 28 -122z" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>
+                                <span class="lang-en"><a href="https://maastrichtuniversity.nl" target="_blank"
+                                        rel="noopener noreferrer" style="color: inherit;">Maastricht University</a>
+                                    <span class="highlight">· School of Business and Economics</span></span>
+                                <span class="lang-tr"><a href="https://maastrichtuniversity.nl" target="_blank"
+                                        rel="noopener noreferrer" style="color: inherit;">Maastricht Üniversitesi</a>
+                                    <span class="highlight">· İşletme ve Ekonomi Okulu</span></span>
+                            </h3>
+                            <span class="timeline-date">
+                                <span class="lang-en">Sep 2025 - Feb 2026</span>
+                                <span class="lang-tr">Eylül 2025 - Şubat 2026</span>
+                            </span>
+                        </div>
+                        <p class="lang-en">Erasmus Exchange (1 semester) in Netherlands.</p>
+                        <p class="lang-tr">Hollanda'da Erasmus Değişim Programı (1 yarıyıl).</p>
+                    </div>
+                </div>
+
+                <!-- Koç University -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="box-shadow: 0 0 15px rgba(194, 11, 36, 0.4);">
+                        <svg width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 410 334"
+                            fill="#c20b24">
+                            <g transform="matrix(.1 0 0 -.1 0 334)">
+                                <path
+                                    d="m1725 3130c-7-11-8-1027-2-1037 3-5 41-4 84 1l80 9 23 76c13 42 27 83 31 91 7 14 161 485 210 640 11 36 24 74 28 85 23 60 42 128 36 133-10 10-484 12-490 2z" />
+                                <path
+                                    d="m1555 3104c-135-31-289-78-347-104-16-7-28-20-28-28 0-15 92-299 109-337 10-20 87-247 164-475 23-69 48-130 56-136 10-8 23-6 49 8 20 10 42 18 49 18 30 0 33 58 31 553l-3 502-30 2c-16 0-39-1-50-3z" />
+                                <path
+                                    d="m2297 3103c-2-5-19-53-36-108-18-55-36-109-41-120s-12-31-15-45c-4-14-17-54-30-90-12-36-32-96-44-135-12-38-26-79-31-90-30-71-131-397-127-409 5-13 31-18 157-28 34-3 38 1 113 102 42 58 84 114 92 125 7 11 104 142 215 290 246 331 254 341 247 359-5 13-158 78-230 97-17 5-75 20-127 34-98 26-136 31-143 18z" />
+                                <path
+                                    d="m984 2891c-109-67-244-176-244-198 0-12 259-370 307-423 7-8 47-60 88-115 140-188 178-237 197-253 13-10 23-5 62 30 54 47 54 39 7 168-52 146-117 332-146 415-14 44-30 89-35 100-9 21-84 236-103 292-5 17-17 33-26 36-9 2-57-21-107-52z" />
+                                <path
+                                    d="m2881 2892c-10-10-40-46-67-82-26-36-59-79-73-96s-35-44-46-59c-18-26-63-85-83-110-78-99-372-494-372-501 0-5 12-15 28-21 15-7 51-28 80-48 30-19 58-35 62-35 12 0 44 22 220 151 228 166 416 303 440 319 90 62 260 191 260 197 0 5-28 31-61 58-34 28-69 57-79 65-20 17-26 21-130 90-41 27-80 50-86 50s-17 6-23 14c-19 22-50 26-70 8z" />
+                                <path
+                                    d="m620 2575c-19-25-40-51-45-58-18-21-63-91-85-132-6-11-17-31-25-44-8-15-10-31-5-40 4-9 49-45 100-81 50-36 132-95 183-132s106-77 122-88c17-12 69-49 117-83 47-34 96-69 108-77 13-8 28-19 34-25 6-5 33-25 59-43 53-36 56-35 90 25l18 32-46 58c-57 72-38 47-197 258-74 100-142 187-149 195-8 8-22 26-32 40-9 14-32 44-50 67-17 23-54 71-81 107-28 36-57 66-65 66-9 0-32-20-51-45z" />
+                                <path
+                                    d="m3295 2475c-49-35-95-68-100-73-6-5-83-60-170-122-88-63-195-139-237-169-42-31-128-92-192-136-63-44-115-86-115-93-1-7 22-40 50-74s55-72 60-86c10-27 30-27 104 2 49 18 215 79 310 112 39 14 84 31 100 39 17 7 57 22 90 33s98 34 145 52c47 17 96 35 110 40 133 46 227 83 238 94s9 20-9 57c-24 46-144 228-176 266-10 12-29 37-43 55-33 43-58 68-67 67-5 0-48-29-98-64z" />
+                                <path
+                                    d="m401 2198c-47-126-82-254-84-307l-2-45 65-21c36-12 119-39 185-60s134-44 152-51c17-8 36-14 43-14 14 0 282-87 325-105 45-19 88-26 103-16 8 4 16 26 19 48l5 40-83 58c-46 33-112 78-147 102-34 24-90 63-125 88-34 24-98 69-142 100-44 30-118 82-165 115s-97 67-113 75c-26 15-28 15-36-7z" />
+                                <path
+                                    d="m1778 1986c-25-6-50-15-55-19-4-5-8-51-9-103-1-92 0-95 23-100 14-4 28-3 32 2 10 11 56 135 69 186 12 44 5 48-60 34z" />
+                                <path
+                                    d="m1932 1991c-6-4-29-60-51-126-30-88-37-123-30-137 20-38 51-19 109 67 38 55 35 52 85 114 20 24 34 49 32 54-6 18-125 41-145 28z" />
+                                <path
+                                    d="m3679 1990c-8-5-49-20-90-34-139-47-364-124-494-170-71-25-197-69-280-97-82-28-154-55-159-60-6-5-2-24 8-47 10-21 26-70 36-108l18-69 563-3c309-1 566 1 570 5 21 22-35 364-83 508-28 85-46 100-89 75z" />
+                                <path
+                                    d="m1565 1917c-27-23-27-24-11-55 9-17 16-37 16-45 0-26 34-59 52-52 15 6 17 20 15 88-2 75-4 82-23 85-12 2-34-8-49-21z" />
+                                <path
+                                    d="m2056 1809c-54-71-100-138-103-148-2-9 2-23 11-30 13-11 23-7 63 21 26 18 50 36 53 39s30 23 60 44 59 42 65 47c5 4 32 25 58 44 41 30 47 39 35 49-22 22-106 65-125 65-11 0-54-48-117-131z" />
+                                <path
+                                    d="m1437 1845c-15-14-27-29-27-32 0-4 12-24 27-45 19-28 33-38 47-36 18 3 21 9 19 52-1 32-8 55-20 67-18 18-19 18-46-6z" />
+                                <path
+                                    d="m2307 1767c-180-130-215-155-249-176-37-22-45-41-32-75 3-9 14-16 23-16 17 0 91 24 126 40 21 10 237 85 293 101 17 6 32 17 32 25 0 29-97 144-121 144-8 0-40-19-72-43z" />
+                                <path
+                                    d="m295 1750c-3-5-5-77-4-160 1-131 4-152 19-160 9-5 167-12 351-15s374-7 422-10c86-4 88-3 97 21 16 41-3 71-52 85-24 6-61 17-83 25-22 7-87 27-145 45-58 17-136 42-175 54-38 13-104 33-145 45-41 13-114 35-163 51-95 31-113 34-122 19z" />
+                                <path
+                                    d="m2310 1517c-229-78-264-92-255-108 8-11 525-12 544 0 11 7 11 15 1 47-26 81-49 129-62 131-7 2-110-30-228-70z" />
+                                <path
+                                    d="m314 1326c-3-8 2-43 11-78 55-207 72-245 104-229 9 5 180 63 380 130s372 126 382 132c24 13 24 35 0 49-13 6-171 10-446 10-358 0-426-2-431-14z" />
+                                <path
+                                    d="m2078 1334c-10-3-18-14-18-23 0-21 24-31 205-87 66-20 158-49 205-65 47-15 99-29 115-31l30-3 3 80c5 135 24 123-206 124-108 1-224 3-257 6-33 2-68 1-77-1z" />
+                                <path
+                                    d="m2046 1198c-8-12-13-25-10-30 6-10 169-130 215-160 14-9 32-23 40-30 8-8 47-35 87-62 40-26 78-53 85-60 19-18 65-46 76-46s49 117 58 176l5 41-143 53c-79 29-182 66-229 82s-100 36-118 44c-43 18-48 18-66-8z" />
+                                <path
+                                    d="m1197 1204c-6-7-243-88-554-192-179-59-203-70-203-88 0-12 7-27 15-34s15-17 15-22c0-15 86-141 121-176 33-34 37-34 79 8 5 5 19 15 155 109 50 34 131 91 180 126 50 35 127 90 173 122 46 31 87 64 92 73 19 35-46 100-73 74z" />
+                                <path
+                                    d="m1981 1084c-12-15-21-33-21-41s35-60 78-116 127-166 186-244c59-79 116-147 126-153 14-7 21-5 33 13 8 12 27 36 41 52 39 44 78 114 73 130-3 7-43 41-89 76s-85 66-88 69c-6 8-290 224-307 233-6 4-20-4-32-19z" />
+                                <path
+                                    d="m1294 1052c-12-9-32-24-44-32-13-8-35-24-49-35-28-22-190-139-231-167-14-10-50-35-80-57s-90-64-132-93c-43-29-78-58-78-65 0-6 19-26 42-44 24-19 45-36 48-39 18-20 155-108 162-104 4 3 81 103 170 222s173 232 187 251c14 18 43 56 63 84l38 51-22 23c-25 27-45 29-74 5z" />
+                                <path
+                                    d="m1868 993c-26-7-29-31-9-81 33-79 101-267 101-277 0-6 6-21 13-35 8-15 31-75 52-135 46-136 51-142 96-120 55 28 169 106 169 115 0 7-191 269-272 374-13 16-34 45-48 65-41 58-84 98-102 94z" />
+                                <path
+                                    d="m1429 963c-13-16-31-39-40-53s-25-35-35-47c-11-11-26-31-34-43-28-41-260-355-288-390-28-36-32-70-7-70 8 0 36-10 62-21 51-23 63-28 133-53 81-29 82-27 120 110 12 43 27 97 35 119 7 22 21 67 30 100 10 33 21 71 26 85 4 14 17 59 29 100s29 95 37 120c13 41 13 45-3 57-26 19-38 16-65-14z" />
+                                <path
+                                    d="m1724 949c-8-13-6-481 3-611 6-98 6-98 32-98 37 0 192 35 218 49l22 11-25 73c-14 39-29 81-34 92s-18 49-30 85c-28 88-78 224-103 285-11 28-23 63-26 79-7 30-45 54-57 35z" />
+                                <path
+                                    d="m1575 938c-2-7-12-38-21-68s-22-73-29-95c-18-58-41-136-92-315-8-30-21-73-28-95s-16-57-20-78c-7-33-5-38 20-47 31-12 214-13 233-2 17 11 15 693-2 704-18 12-56 9-61-4z" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>
+                                <span class="lang-en"><a href="https://ku.edu.tr" target="_blank"
+                                        rel="noopener noreferrer" style="color: inherit;">Koç University</a> <span
+                                        class="highlight">· College of Engineering / College of Administrative Sciences
+                                        and Economics</span></span>
+                                <span class="lang-tr"><a href="https://ku.edu.tr" target="_blank"
+                                        rel="noopener noreferrer" style="color: inherit;">Koç Üniversitesi</a> <span
+                                        class="highlight">· Mühendislik Fakültesi / İktisadi ve İdari Bilimler
+                                        Fakültesi</span></span>
+                            </h3>
+                            <span class="timeline-date">
+                                <span class="lang-en">Sep 2022 - June 2027 (Expected)</span>
+                                <span class="lang-tr">Eylül 2022 - Haziran 2027 (Beklenen)</span>
+                            </span>
+                        </div>
+                        <div class="lang-en">
+                            <p><strong>GPA:</strong> 3.69 / 4.00</p>
+                            <p>Merit-based 100% Scholarship (ranked 144th nationally at YKS) <br> Vehbi Koç Honor Award
+                                & Dean's Honor Award recipient.</p>
+                        </div>
+                        <div class="lang-tr">
+                            <p><strong>Not Ortalaması:</strong> 3.69 / 4.00</p>
+                            <p>Üstün Başarı Yüzde 100 Burslusu (YKS Türkiye 144.'sü)</p>
+                            <p>Vehbi Koç Onur Ödülü ve Dekanlık Onur Ödülü sahibi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High School -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);">
+                        <svg width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 296 297"
+                            fill="#FF0000">
+                            <g transform="matrix(.1 0 0 -.1 0 297)">
+                                <path
+                                    d="m86 2904c-3-9-6-357-6-775v-759h40 40v48c1 26 5 67 11 92s14 72 20 105c5 32 14 64 19 69 6 6 10 19 10 31 0 11 6 32 14 47s17 40 21 57 11 31 16 31 9 7 9 15c0 15 39 96 50 105 4 3 10 12 13 20 18 38 92 144 137 195 67 76 218 215 234 215 4 0 13 6 20 13 29 27 60 45 173 101 43 21 90 45 105 52 14 8 35 14 46 14s33 7 48 15c16 8 44 15 61 15 53 0 90 30 128 106 19 38 35 73 35 78s7 17 15 25c8 9 17 36 21 59l7 42h-641c-574 0-640-2-646-16z" />
+                                <path
+                                    d="m1590 2885c0-19 4-35 10-35 5 0 13-12 16-27 4-15 13-34 21-41 7-7 13-22 13-31 0-10 7-24 15-31s15-20 15-29c1-38 63-81 118-81 15 0 40-7 56-15 15-8 37-15 48-15s32-6 46-14c15-7 63-30 107-51s94-49 112-61c17-13 35-24 38-24 10 0 86-60 117-92 15-15 30-28 33-28 7 0 105-97 105-104 0-2 16-22 36-43 31-32 79-98 119-165 42-70 115-230 115-255 0-10 7-27 15-37 8-11 15-36 15-56s5-41 12-48 14-52 16-104c5-116 11-128 62-128h40v775 775h-650-650z" />
+                                <path
+                                    d="m1458 2858c-9-18-19-43-23-55-3-13-11-23-16-23s-9-9-9-19c0-11-6-26-14-34s-18-31-21-51l-7-36h116c107 0 116 1 116 19 0 10-7 24-15 31s-15 17-15 23c0 15-82 177-89 177-4 0-14-15-23-32z" />
+                                <path
+                                    d="m1311 2543c-18-20-111-204-111-219 0-6-7-17-15-24s-15-21-15-31c0-9-6-24-13-31-8-7-17-26-21-41-3-15-11-27-16-27-6 0-10-9-10-19 0-11-7-26-15-35-8-8-15-19-15-25 0-9-80-177-101-211-5-8-12-22-15-30s-52-109-109-225c-57-115-105-219-107-230-3-20 3-20 337-20h340l3 593 2 592h-52c-35-1-58-6-67-17z" />
+                                <path
+                                    d="m1530 1965v-595h350c193 0 350 1 350 3 0 1-27 55-60 120s-60 123-60 128c0 6-7 17-15 25-8 9-15 24-15 35 0 10-4 19-9 19s-13 10-16 23c-6 20-205 431-226 467-5 8-12 22-15 30s-33 68-65 133-59 125-59 133-3 14-7 14c-5 0-16 14-25 30-16 28-21 30-73 30h-55z" />
+                                <path
+                                    d="m1140 2514c-14-7-35-14-47-14s-34-7-50-15c-15-8-62-30-103-50-95-46-98-48-193-118-72-54-217-191-217-206 0-3-14-22-30-41-43-51-45-54-53-70-4-8-16-28-26-45-24-37-61-115-106-220-24-59-64-253-69-335l-1-25 196-3c181-2 197-1 202 15 4 10 11 25 16 33 19 33 220 446 226 468 3 12 11 22 16 22s9 9 9 19c0 11 6 26 13 33 8 7 17 26 21 41 3 15 11 27 16 27 6 0 10 6 10 14s34 81 75 163c41 81 75 153 75 159s7 17 15 24 15 21 15 31c0 9 7 24 15 33 8 8 15 21 15 30 0 8 7 22 16 30 14 15 13 16-8 15-13-1-34-7-48-15z" />
+                                <path
+                                    d="m1770 2516c0-7 14-38 30-69 17-31 30-63 30-72 0-8 4-15 10-15 5 0 13-12 16-27 4-15 13-34 21-41 7-7 13-22 13-33 0-10 5-19 10-19 6 0 10-5 10-12 0-10 205-435 231-478 5-8 12-22 15-30s26-55 50-103c24-49 44-95 44-103s4-14 10-14c5 0 13-12 16-27 4-15 13-34 21-41 7-7 13-22 13-32s7-21 16-24 99-6 200-6h184v68c0 37-7 85-15 107s-14 54-15 71c0 18-7 45-15 60-8 16-15 37-15 46s-6 29-14 45c-8 15-30 60-48 98-18 39-39 76-45 83-7 7-13 19-13 27 0 7-3 15-7 17-9 3-53 64-53 72 0 18-239 256-257 256-3 0-22 12-42 28-47 36-62 44-151 87-41 20-88 42-103 50-16 8-38 15-50 15s-35 7-51 15c-35 19-46 19-46 1z" />
+                                <path
+                                    d="m80 765c0-278 3-505 8-505 7 1 95 179 107 218 3 12 11 22 16 22s9 9 9 19c0 11 6 26 13 33 8 7 17 26 21 41 3 15 11 27 16 27 6 0 10 8 10 18s7 28 16 41c16 22 16 25 0 51-9 16-16 33-16 40 0 6-7 18-15 26-8 9-15 25-15 37s-7 31-15 41c-8 11-15 32-15 46s-4 30-10 36c-5 5-14 37-19 69-6 33-14 80-20 105s-10 66-11 93v47h-40-40z" />
+                                <path
+                                    d="m244 1238c4-18 12-71 19-118 6-47 15-90 19-96s10-31 14-55 13-53 20-64c8-11 14-27 14-37s7-26 16-37c16-18 18-16 50 47 19 37 34 72 34 78s7 17 15 24 15 21 15 31c0 9 7 24 15 33 8 8 15 21 15 30 0 8 6 21 13 28 8 7 17 26 21 41 3 15 11 27 16 27 6 0 10 8 10 18s7 27 15 38c32 42 24 44-156 44h-171z" />
+                                <path
+                                    d="m673 1255c-7-8-13-18-13-24 0-5-34-76-75-158-41-81-75-153-75-159s-7-17-15-24-15-21-15-31c0-9-6-24-13-31-8-7-17-26-21-41-3-15-11-27-16-27-13 0-13-87 0-103 39-45 50-61 50-68 0-22 208-231 275-277 22-15 42-29 45-32 10-11 46-31 73-41 15-6 27-15 27-20s9-9 19-9c11 0 26-6 33-14 8-7 28-17 46-21 17-3 34-11 37-16 4-5 14-9 23-9s28-6 42-13c15-8 48-17 74-20 27-4 54-11 60-16s52-10 101-12l90-4 3 593 2 592h-372c-309-1-375-3-385-15z" />
+                                <path
+                                    d="m1530 675v-595l93 6c50 4 97 11 103 15 6 5 33 12 60 16 26 3 59 12 74 20 14 7 35 13 48 13 12 0 22 4 22 9s14 13 32 16c17 4 38 14 46 21 7 8 22 14 33 14 10 0 19 4 19 9s12 14 28 20c43 17 118 69 177 123 17 15 33 28 37 28 10 0 65 57 113 116 22 27 44 54 50 61 26 31 31 39 38 53 4 8 16 30 27 48 18 30 19 38 8 70-7 21-18 44-25 53-7 8-13 20-13 25s-27 62-60 127-60 123-60 128c0 6-7 17-15 25-8 9-15 24-15 35 0 10-4 19-10 19-5 0-13 12-16 27-4 15-13 34-21 41-7 7-13 22-13 33 0 18-11 19-380 19h-380z" />
+                                <path
+                                    d="m2378 1263c6-2 12-10 12-16 0-7 29-70 65-141 36-70 65-134 65-142s4-14 10-14c5 0 13-12 16-27 4-15 13-34 21-41 7-7 13-21 13-30 0-10 9-23 20-30 18-11 20-10 20 11 0 13 7 32 15 43 8 10 15 28 15 39s7 33 15 49c8 15 15 42 15 60 1 17 7 49 15 71s15 70 15 108v67l-172-1c-95 0-167-3-160-6z" />
+                                <path
+                                    d="m2799 1268c0-2-4-52-8-111-5-60-14-114-20-120s-11-25-11-42c0-16-7-43-15-59-8-15-15-37-15-48s-6-32-13-46c-69-136-69-131 7-283 36-72 66-137 66-144s7-18 15-25 15-20 15-30 7-23 15-30 15-20 15-29 9-27 20-41c19-25 20-23 20 493v517h-45c-25 0-45-1-46-2z" />
+                                <path
+                                    d="m350 587c-8-12-23-40-33-62s-23-47-28-55-12-22-15-30-42-88-86-177c-43-90-77-167-73-173 7-12 855-14 855-2 0 4-39 25-85 47-47 22-85 43-85 47 0 5-7 8-15 8-9 0-18 7-21 15-4 8-12 15-18 15-12 0-60 36-98 72-10 10-21 18-24 18-16 0-212 214-223 244-2 6-11 21-21 33l-16 21z" />
+                                <path
+                                    d="m2550 538c-41-59-218-246-240-253-8-3-26-15-40-27-37-33-88-68-99-68-5 0-11-4-13-8-5-12-147-82-166-82-15 0-15-2-2-10 14-9 870-15 870-6 0 2-13 28-30 59-16 31-30 62-30 68s-7 17-15 25c-8 9-15 24-15 35 0 10-4 19-9 19s-13 10-16 23c-18 59-131 276-145 276-8 0-31-22-50-51z" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>
+                                <span class="lang-en"><a href="https://tevinanc.k12.tr" target="_blank"
+                                        rel="noopener noreferrer" style="color: inherit;">TEV İnanç Türkeş High
+                                        School</a> <span class="highlight">·
+                                        Kocaeli</span></span>
+                                <span class="lang-tr"><a href="https://tevinanc.k12.tr" target="_blank"
+                                        rel="noopener noreferrer" style="color: inherit;">TEV İnanç Türkeş Özel
+                                        Lisesi</a> <span class="highlight">·
+                                        Kocaeli</span></span>
+                            </h3>
+                            <span class="timeline-date">
+                                <span class="lang-en">Sep 2017 - June 2022</span>
+                                <span class="lang-tr">Eylül 2017 - Haziran 2022</span>
+                            </span>
+                        </div>
+                        <p class="lang-en"><strong>GPA:</strong> 96.72 / 100</p>
+                        <p class="lang-tr"><strong>Not Ortalaması:</strong> 96.72 / 100</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+        <!-- Volunteering Section (Collapsible) -->
+        <section id="volunteering" class="reveal accordion is-open">
+            <div class="accordion-header">
+                <h2 class="section-title" style="margin-bottom: 0;">
+                    <span class="lang-en">Volunteering & Extracurriculars</span>
+                    <span class="lang-tr">Gönüllülük & Ders Dışı Etkinlikler</span>
+                </h2>
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="accordion-content">
+                <div class="accordion-inner">
+                    <ul class="custom-list" style="margin-top: 2rem;">
+                        <li>
+                            <strong>
+                                <span class="lang-en">Koç University Investment Group</span>
+                                <span class="lang-tr">Koç Üniversitesi Yatırım Kulübü</span>
+                            </strong>
+                            <span class="list-meta">
+                                <span class="lang-en">Oct 2024 - June 2025</span>
+                                <span class="lang-tr">Ekim 2024 - Haziran 2025</span>
+                            </span>
+                            <p class="lang-en">Selected after completing training supported by İş Yatırım. Analyzed and
+                                presented stock commodities; organized seminars and financial training programs.</p>
+                            <p class="lang-tr">İş Yatırım destekli eğitimleri tamamladıktan sonra seçildim. Hisse
+                                senedi/emtia
+                                analizi ve sunumu; seminer ve finansal eğitim programları organizasyonu görevlerinde
+                                bulundum.
+                            </p>
+                        </li>
+                        <li>
+                            <strong>
+                                <span class="lang-en">Koç University Entrepreneurship Club</span>
+                                <span class="lang-tr">Koç Üniversitesi Girişimcilik Kulübü</span>
+                            </strong>
+                            <span class="list-meta">
+                                <span class="lang-en">Oct 2022 - Feb 2025</span>
+                                <span class="lang-tr">Ekim 2022 - Şubat 2025</span>
+                            </span>
+                            <p>
+                                <span class="lang-en">Active member.</span>
+                                <span class="lang-tr">Aktif Üye.</span>
+                            </p>
+                        </li>
+                        <li>
+                            <strong>
+                                <span class="lang-en">Koç University Economics Club</span>
+                                <span class="lang-tr">Koç Üniversitesi Ekonomi Kulübü</span>
+                            </strong>
+                            <span class="list-meta">
+                                <span class="lang-en">Oct 2022 - Oct 2024</span>
+                                <span class="lang-tr">Ekim 2022 - Ekim 2024</span>
+                            </span>
+                            <p>
+                                <span class="lang-en">Career-focused activities.</span>
+                                <span class="lang-tr">Kariyer odaklı etkinlikler.</span>
+                            </p>
+                        </li>
+                        <li>
+                            <strong>
+                                <span class="lang-en">İLMED — TEV İnanç Türkeş High School Alumni Foundation</span>
+                                <span class="lang-tr">İLMED — TEV İnanç Türkeş Lisesi Mezunları Derneği</span>
+                            </strong>
+                            <span class="list-meta">
+                                <span class="lang-en">Oct 2022 - June 2023</span>
+                                <span class="lang-tr">Ekim 2022 - Haziran 2023</span>
+                            </span>
+                            <p class="lang-en">Prepared seasonal e-mail bulletins covering community news about the TEV
+                                Foundation and alumni.</p>
+                            <p class="lang-tr">TEV Vakfı ve mezunlarla ilgili topluluk haberlerini içeren sezonluk
+                                e-posta
+                                bültenleri hazırladım.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificates Section (Collapsible) -->
+        <section id="certificates" class="reveal accordion">
+            <div class="accordion-header">
+                <h2 class="section-title" style="margin-bottom: 0;">
+                    <span class="lang-en">Certificates & Training</span>
+                    <span class="lang-tr">Sertifikalar & Eğitimler</span>
+                </h2>
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="accordion-content">
+                <div class="accordion-inner">
+                    <ul class="custom-list" style="margin-top: 2rem;">
+                        <li>
+                            <strong>
+                                <span class="lang-en">YASED Academy Trainee</span>
+                                <span class="lang-tr">YASED Akademi Stajyeri</span>
+                            </strong>
+                            <span class="list-meta">
+                                <span class="lang-en">International Investors Association · Feb 2025</span>
+                                <span class="lang-tr">Uluslararası Yatırımcılar Derneği · Şubat 2025</span>
+                            </span>
+                            <p class="lang-en">Covered Digital Transformation & AI, Sustainability, Communication, and
+                                Financial & Legal Literacy.</p>
+                            <p class="lang-tr">Dijital Dönüşüm & Yapay Zeka, Sürdürülebilirlik, İletişim ve Finansal &
+                                Hukuki Okuryazarlık eğitimlerini tamamladım.</p>
+                        </li>
+                        <li>
+                            <strong>
+                                <span class="lang-en">Foundations of Project Management</span>
+                                <span class="lang-tr">Proje Yönetiminin Temelleri</span>
+                            </strong>
+                            <span class="list-meta">Google via Coursera · <span class="lang-en">Aug 2022</span><span
+                                    class="lang-tr">Ağustos 2022</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Competitions Section (Collapsible) -->
+        <section id="competitions" class="reveal accordion">
+            <div class="accordion-header">
+                <h2 class="section-title" style="margin-bottom: 0;">
+                    <span class="lang-en">Competitions & Achievements</span>
+                    <span class="lang-tr">Yarışmalar & Başarılar</span>
+                </h2>
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="accordion-content">
+                <div class="accordion-inner">
+                    <ul class="custom-list" style="margin-top: 2rem;">
+                        <li>
+                            <strong>
+                                <span class="lang-en">Boğaziçi Business Challenge</span>
+                                <span class="lang-tr">Boğaziçi İş Dünyası Yarışması</span>
+                            </strong>
+                            <span class="list-meta">
+                                <span class="lang-en">Apr 2024</span>
+                                <span class="lang-tr">Nisan 2024</span>
+                            </span>
+                            <p class="lang-en">Second place as a team in a business simulation competition.</p>
+                            <p class="lang-tr">Bir iş simülasyonu yarışmasında takım olarak ikinci olduk.</p>
+                        </li>
+                        <li>
+                            <strong>
+                                <span class="lang-en">Ignite'23 Entrepreneurship Competition</span>
+                                <span class="lang-tr">Ignite'23 Girişimcilik Yarışması</span>
+                            </strong>
+                            <span class="list-meta">
+                                <span class="lang-en">QNB Finansbank · Sep 2023</span>
+                                <span class="lang-tr">QNB Finansbank · Eylül 2023</span>
+                            </span>
+                            <p class="lang-en">Presented a FinTech team project to the jury after a two-day ideathon.
+                            </p>
+                            <p class="lang-tr">İki günlük ideathon sonunda jüriye FinTech takım projesini sundum.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
