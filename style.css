@@ -534,8 +534,44 @@ html[lang="tr"] .lang-label.tr {
   font-size: 0.95rem;
 }
 
+/* --- Navbar --- */
+.main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(248, 250, 252, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-med), border-color var(--transition-med);
+}
+
+:root[data-theme="dark"] .main-nav {
+  background-color: rgba(15, 23, 42, 0.75);
+}
+
+.nav-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-name {
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+  .nav-content {
+    padding: 1rem 1.5rem;
+  }
+
   .custom-list {
     grid-template-columns: 1fr;
   }
