@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide 3: Memory Management — Stack, Heap, and Memory Bugs</title>
+  <meta name="description" content="A template for writing blog posts.">
+
+  <!-- Google Fonts: Inter and Roboto Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="../style.css">
+
+  <!-- Markdown Theme Stylesheet (dynamically updated by script below) -->
+  <link id="markdown-theme-style" rel="stylesheet" href="../github-markdown-dark.css">
+
+  <style>
+    .blog-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* Ensure markdown content background is transparent to show the animated canvas behind it */
+    .markdown-body {
+      background-color: transparent !important;
+      margin-top: 2rem;
+      transition: color 0.3s ease;
+    }
+
+    /* Back link styling */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background Canvas for Constellations -->
+  <canvas id="bg-canvas"></canvas>
+
+  <nav class="main-nav">
+    <div class="nav-content">
+      <div class="nav-name">Umut Yalçın Baki</div>
+      <div class="header-controls" style="display: flex; gap: 1rem; align-items: center;">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="lang-toggle" class="lang-toggle" aria-label="Toggle Language">
+          <div class="lang-slider"></div>
+          <span class="lang-label en">EN</span>
+          <span class="lang-label tr">TR</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container blog-container reveal active">
+
+    <!-- Markdown Extracted Content -->
+    <article class="markdown-body">
+      <h1 id="guide-3-memory-management-stack-heap-and-memory-bugs">Guide 3: Memory Management — Stack, Heap, and Memory Bugs
+      </h1>
+      <h2 id="introduction">Introduction</h2>
+      <p>Memory management is one of the most heavily tested topics on COMP201 midterms. This guide covers the stack, heap,
+        dynamic allocation functions (malloc, calloc, realloc, strdup), freeing memory, and the 13 critical memory bug
+        categories that appear repeatedly in exam problems. Understanding these concepts deeply—not just memorizing them—is
+        essential for success.</p>
+      <hr>
+      <h2 id="part-1-the-stack">Part 1: The Stack</h2>
+      <h3 id="overview">Overview</h3>
+      <p>The <strong>stack</strong> is the portion of memory automatically managed by the processor. It stores:</p>
+      <ul>
+        <li>Local variables declared inside functions</li>
+        <li>Function parameters</li>
+        <li>Return addresses for function calls</li>
+      </ul>
+      <h3 id="key-properties">Key Properties</h3>
+      <p><strong>Automatic Management</strong>: When you declare a local variable in C, it automatically gets allocated when
+        the function is called and deallocated when the function returns.</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">example</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> x = <span class="hljs-number">42</span>;        <span class="hljs-comment">// allocated on stack</span>
+          <span class="hljs-keyword">char</span> buffer[<span class="hljs-number">100</span>];  <span class="hljs-comment">// allocated on stack</span>
+      }  <span class="hljs-comment">// x and buffer automatically freed here</span>
+      </code></pre>
+      <p><strong>LIFO (Last-In-First-Out)</strong>: The stack grows downward as functions are called, and shrinks as they
+        return. Each function call creates a <strong>stack frame</strong> containing its local variables.</p>
+      <p><strong>Fixed Size</strong>: The total stack size is fixed, typically 8MB on modern systems. Large allocations can
+        cause a <strong>stack overflow</strong>.</p>
+      <p><strong>Speed</strong>: Stack allocation/deallocation is extremely fast—just a pointer adjustment.</p>
+      <p><strong>Type Safety</strong>: The compiler checks variable types on the stack.</p>
+      <h3 id="stack-frames-and-function-calls">Stack Frames and Function Calls</h3>
+      <p>When a function is called, a new frame is pushed onto the stack:</p>
+      <pre><code>STACK MEMORY (grows downward)
+      ┌─────────────────┐
+      │     main        │ ← main's frame
+      │  x = <span class="hljs-number">10</span>         │   (contains <span class="hljs-built_in">local</span> vars)
+      ├─────────────────┤
+      │  <span class="hljs-built_in">factorial</span>      │ ← <span class="hljs-built_in">factorial</span>'s frame (<span class="hljs-built_in">first</span> call)
+      │  n = <span class="hljs-number">5</span>          │
+      ├─────────────────┤
+      │  <span class="hljs-built_in">factorial</span>      │ ← <span class="hljs-built_in">factorial</span>'s frame (<span class="hljs-built_in">second</span> call)
+      │  n = <span class="hljs-number">4</span>          │
+      ├─────────────────┤
+      │      ...        │
+      └─────────────────┘
+      </code></pre>
+      <p>When <code>factorial(5)</code> returns, its frame is freed. When <code>factorial(4)</code> returns, its frame is
+        freed. The stack automatically cleans up.</p>
+      <h3 id="critical-stack-danger-returning-pointer-to-local-variable">Critical Stack Danger: Returning Pointer to Local
+        Variable</h3>
+      <p>This is a classic exam bug:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">create_string</span><span class="hljs-params">(<span class="hljs-keyword">char</span> ch, <span class="hljs-keyword">int</span> num)</span> </span>{
+          <span class="hljs-keyword">char</span> new_str[num + <span class="hljs-number">1</span>];     <span class="hljs-comment">// allocates on STACK</span>
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; num; i++) {
+              new_str[i] = ch;
+          }
+          new_str[num] = <span class="hljs-string">'\0'</span>;
+          <span class="hljs-keyword">return</span> new_str;            <span class="hljs-comment">// DANGER! Returning pointer to stack memory</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = create_string(<span class="hljs-string">'a'</span>, <span class="hljs-number">4</span>);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s"</span>, str);         <span class="hljs-comment">// UNDEFINED BEHAVIOR</span>
+                                     <span class="hljs-comment">// new_str's stack frame was freed when</span>
+                                     <span class="hljs-comment">// create_string returned!</span>
+      }
+      </code></pre>
+      <p><strong>What goes wrong</strong>: When <code>create_string()</code> returns, its stack frame is destroyed. The local
+        variable <code>new_str</code> no longer exists. The pointer <code>str</code> in main now points to freed (recycled)
+        memory. Accessing it is undefined behavior—it might print garbage, crash, or appear to work by coincidence.</p>
+      <p><strong>Why it happens</strong>: <code>new_str</code> is an array on the stack, not a pointer. It&#39;s not allocated
+        with <code>malloc()</code>, so we can&#39;t return it.</p>
+      <p><strong>The fix</strong>: Allocate the string on the <strong>heap</strong> instead, which persists until explicitly
+        freed.</p>
+      <hr>
+      <h2 id="part-2-the-heap">Part 2: The Heap</h2>
+      <h3 id="overview">Overview</h3>
+      <p>The <strong>heap</strong> is a portion of memory that you (the programmer) manage explicitly. The operating system
+        provides memory blocks when requested via <code>malloc()</code>, <code>calloc()</code>, and <code>realloc()</code>.
+        You&#39;re responsible for freeing memory with <code>free()</code>.</p>
+      <h3 id="key-properties">Key Properties</h3>
+      <p><strong>Manual Management</strong>: You control when memory is allocated and freed.</p>
+      <p><strong>Grows Upward</strong>: Unlike the stack, the heap grows upward as more memory is allocated.</p>
+      <p><strong>Plentiful</strong>: The heap can grow very large (limited mainly by available RAM).</p>
+      <p><strong>Slow</strong>: Heap allocation/deallocation is slower than stack allocation.</p>
+      <p><strong>No Type Safety</strong>: Heap memory is returned as <code>void *</code>. You&#39;re responsible for using it
+        correctly.</p>
+      <p><strong>Lifetime Control</strong>: Memory persists until you explicitly call <code>free()</code>.</p>
+      <h3 id="memory-layout-simplified-64-bit-linux-">Memory Layout (Simplified 64-bit Linux)</h3>
+      <pre><code>HIGH ADDRESSES
+          <span class="hljs-comment">(reserved)</span>
+      
+      <span class="hljs-number">8</span>MB
+          STACK <span class="hljs-comment">(grows downward)</span>  ↓
+      
+          <span class="hljs-comment">(unallocated gap)</span>
+      
+          HEAP <span class="hljs-comment">(grows upward)</span>     ↑
+          Global data
+          Text <span class="hljs-comment">(code)</span>
+      
+      LOW ADDRESSES
+      </code></pre>
+      <h3 id="the-heap-solution-to-returning-strings">The Heap Solution to Returning Strings</h3>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">create_string</span><span class="hljs-params">(<span class="hljs-keyword">char</span> ch, <span class="hljs-keyword">int</span> num)</span> </span>{
+          <span class="hljs-keyword">char</span> *new_str = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">char</span>) * (num + <span class="hljs-number">1</span>));
+          <span class="hljs-comment">// new_str points to heap memory that PERSISTS</span>
+      
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; num; i++) {
+              new_str[i] = ch;
+          }
+          new_str[num] = <span class="hljs-string">'\0'</span>;
+          <span class="hljs-keyword">return</span> new_str;  <span class="hljs-comment">// Now safe! Heap memory persists</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = create_string(<span class="hljs-string">'a'</span>, <span class="hljs-number">4</span>);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s"</span>, str);  <span class="hljs-comment">// Works correctly! Prints "aaaa"</span>
+          <span class="hljs-built_in">free</span>(str);          <span class="hljs-comment">// OUR responsibility to free it</span>
+          <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+      }
+      </code></pre>
+      <p><strong>Key insight</strong>: With the heap, we explicitly allocate memory that outlives the function, return a
+        pointer to it, and trust the caller to free it when done.</p>
+      <hr>
+      <h2 id="part-3-dynamic-memory-allocation-functions">Part 3: Dynamic Memory Allocation Functions</h2>
+      <h3 id="malloc-memory-allocate">malloc() — Memory Allocate</h3>
+      <p><strong>Signature</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">malloc</span><span class="hljs-params">(<span class="hljs-keyword">size_t</span> size)</span></span>;
+      </code></pre>
+      <p><strong>Purpose</strong>: Allocates <code>size</code> bytes of uninitialized memory on the heap.</p>
+      <p><strong>Returns</strong>:</p>
+      <ul>
+        <li>A <code>void *</code> pointer to the starting address of the allocated block</li>
+        <li><code>NULL</code> if allocation fails (out of memory)</li>
+      </ul>
+      <p><strong>Memory Content</strong>: The allocated memory is <strong>not zeroed out</strong>. It contains whatever
+        garbage was previously in that memory location.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c">int *nums = malloc(10 * sizeof(int));  // allocate space for 10 ints
+      assert(nums != NU<span class="hljs-class">LL);</span>                   //<span class="hljs-built_in"> check </span>for allocation failure
+      nums[0] = 42;
+      nums[1] = 99;
+      // ... use the<span class="hljs-built_in"> array </span>...
+      free(nums);  // MUST free when done
+      </code></pre>
+      <p><strong>Common Mistake</strong>: Forgetting to multiply by <code>sizeof()</code>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);        <span class="hljs-comment">// WRONG! Only 100 bytes, not 100 ints</span>
+      <span class="hljs-keyword">int</span> *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));  <span class="hljs-comment">// Correct on most systems</span>
+      </code></pre>
+      <h3 id="calloc-cleared-allocate">calloc() — Cleared Allocate</h3>
+      <p><strong>Signature</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">calloc</span><span class="hljs-params">(<span class="hljs-keyword">size_t</span> nmemb, <span class="hljs-keyword">size_t</span> size)</span></span>;
+      </code></pre>
+      <p><strong>Purpose</strong>: Allocates memory for <code>nmemb</code> elements of size <code>size</code> each, and
+        <strong>zero-initializes all bytes</strong>.</p>
+      <p><strong>Equivalent to</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// These are roughly equivalent:</span>
+      <span class="hljs-keyword">int</span> *arr1 = <span class="hljs-built_in">calloc</span>(<span class="hljs-number">20</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      
+      <span class="hljs-keyword">int</span> *arr2 = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">20</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">20</span>; i++) arr2[i] = <span class="hljs-number">0</span>;
+      </code></pre>
+      <p><strong>When to use</strong>: When you need all values initialized to 0. Useful for:</p>
+      <ul>
+        <li>Allocating arrays of structs where you want fields to start at 0/NULL</li>
+        <li>Allocating boolean arrays where false=0</li>
+        <li>Any situation where uninitialized data would be problematic</li>
+      </ul>
+      <p><strong>Performance note</strong>: <code>calloc()</code> is slower than <code>malloc()</code> because it must zero
+        every byte. Only use when you actually need zeroed memory.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *scores = <span class="hljs-built_in">calloc</span>(<span class="hljs-number">100</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-comment">// All 100 ints are now 0</span>
+      <span class="hljs-built_in">free</span>(scores);
+      </code></pre>
+      <h3 id="realloc-resize-allocation">realloc() — Resize Allocation</h3>
+      <p><strong>Signature</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">realloc</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *ptr, <span class="hljs-keyword">size_t</span> new_size)</span></span>;
+      </code></pre>
+      <p><strong>Purpose</strong>: Resize a previously allocated block to a new size.</p>
+      <p><strong>Behavior</strong>:</p>
+      <ol>
+        <li>If there&#39;s enough space after the existing block, simply extend it</li>
+        <li>If not, allocate new memory at a different location, copy old data, free the old block, return pointer to new
+          location</li>
+      </ol>
+      <p><strong>Critical Point</strong>: <code>realloc()</code> may <strong>move your memory</strong>. The returned pointer
+        might be different from the input pointer.</p>
+      <p><strong>Danger</strong>: Naive code that doesn&#39;t save the return value leaks memory on failure:</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// WRONG - can leak memory:</span>
+      <span class="hljs-keyword">int</span> *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      arr = <span class="hljs-built_in">realloc</span>(arr, <span class="hljs-number">200</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));  <span class="hljs-comment">// if realloc fails, returns NULL</span>
+                                               <span class="hljs-comment">// arr is now NULL, original memory leaked!</span>
+      </code></pre>
+      <p><strong>Correct Pattern</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-keyword">int</span> *temp = <span class="hljs-built_in">realloc</span>(arr, <span class="hljs-number">200</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-keyword">if</span> (temp == <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-comment">// realloc failed, arr still points to original memory</span>
+          <span class="hljs-built_in">free</span>(arr);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Allocation failed\n"</span>);
+          <span class="hljs-keyword">return</span>;
+      }
+      arr = temp;  <span class="hljs-comment">// now safe to use arr</span>
+      </code></pre>
+      <p><strong>Example: Growing a Dynamic String</strong>:</p>
+      <pre><code class="lang-c">char *str = strdup(<span class="hljs-string">"Hello"</span>)<span class="hljs-comment">;</span>
+      assert(<span class="hljs-name">str</span> != NULL)<span class="hljs-comment">;</span>
+      
+      // Want to make it hold <span class="hljs-string">"Hello world!"</span>
+      char *addition = <span class="hljs-string">" world!"</span><span class="hljs-comment">;</span>
+      size_t new_size = strlen(<span class="hljs-name">str</span>) + strlen(<span class="hljs-name">addition</span>) + <span class="hljs-number">1</span><span class="hljs-comment">;</span>
+      char *temp = realloc(<span class="hljs-name">str</span>, new_size)<span class="hljs-comment">;</span>
+      assert(<span class="hljs-name">temp</span> != NULL)<span class="hljs-comment">;</span>
+      str = temp<span class="hljs-comment">;</span>
+      
+      strcat(<span class="hljs-name">str</span>, addition)<span class="hljs-comment">;</span>
+      printf(<span class="hljs-string">"%s\n"</span>, str)<span class="hljs-comment">;  // prints "Hello world!"</span>
+      free(<span class="hljs-name">str</span>)<span class="hljs-comment">;</span>
+      </code></pre>
+      <h3 id="strdup-string-duplicate">strdup() — String Duplicate</h3>
+      <p><strong>Signature</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">strdup</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s)</span></span>;
+      </code></pre>
+      <p><strong>Purpose</strong>: Allocate a new string on the heap that&#39;s a copy of the input string.</p>
+      <p><strong>Equivalent to</strong>:</p>
+      <pre><code class="lang-c">// These are equivalent:
+      char *<span class="hljs-keyword">copy</span><span class="bash"> = strdup(<span class="hljs-string">"Hello"</span>);
+      </span>
+      char *<span class="hljs-keyword">copy</span><span class="bash"> = malloc(strlen(<span class="hljs-string">"Hello"</span>) + 1);
+      </span>strcpy(<span class="hljs-keyword">copy</span><span class="bash">, <span class="hljs-string">"Hello"</span>);</span>
+      </code></pre>
+      <p><strong>Returns</strong>: A pointer to the new heap-allocated string, or <code>NULL</code> on failure.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c">char *original = <span class="hljs-string">"Hello, World!"</span>;
+      char *<span class="hljs-keyword">copy</span><span class="bash"> = strdup(original);
+      </span>assert(<span class="hljs-keyword">copy</span><span class="bash"> != NULL);
+      </span>
+      <span class="hljs-keyword">copy</span><span class="bash">[0] = <span class="hljs-string">'J'</span>;  // modify the copy
+      </span>printf(<span class="hljs-string">"%s\n"</span>, original);  // <span class="hljs-string">"Hello, World!"</span> - unchanged
+      printf(<span class="hljs-string">"%s\n"</span>, <span class="hljs-keyword">copy</span><span class="bash">);      // <span class="hljs-string">"Jello, World!"</span> - changed
+      </span>free(<span class="hljs-keyword">copy</span><span class="bash">);</span>
+      </code></pre>
+      <p><strong>When to use</strong>:</p>
+      <ul>
+        <li>When you receive a string pointer you don&#39;t own (like a function parameter)</li>
+        <li>When you need to modify the string</li>
+        <li>When the original string might be deallocated before you&#39;re done using it</li>
+      </ul>
+      <hr>
+      <h2 id="part-4-freeing-memory">Part 4: Freeing Memory</h2>
+      <h3 id="free-deallocate">free() — Deallocate</h3>
+      <p><strong>Signature</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">free</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *ptr)</span></span>;
+      </code></pre>
+      <p><strong>Purpose</strong>: Deallocate memory previously allocated by <code>malloc()</code>, <code>calloc()</code>, or
+        <code>realloc()</code>.</p>
+      <p><strong>Critical Rules</strong>:</p>
+      <ol>
+        <li><strong>Exactly Once</strong>: Each allocated block must be freed exactly once</li>
+        <li><strong>Starting Address</strong>: You must free the pointer you received from allocation (for malloc&#39;d
+          memory)</li>
+        <li><strong>NULL Safe</strong>: Calling <code>free(NULL)</code> is safe—it does nothing</li>
+      </ol>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *bytes = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">4</span>);
+      <span class="hljs-comment">// ... use bytes ...</span>
+      <span class="hljs-built_in">free</span>(bytes);     <span class="hljs-comment">// correct</span>
+      <span class="hljs-built_in">free</span>(bytes);     <span class="hljs-comment">// ERROR! Double-free (undefined behavior)</span>
+      
+      <span class="hljs-keyword">int</span> *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-built_in">free</span>(arr + <span class="hljs-number">5</span>);   <span class="hljs-comment">// ERROR! Not the starting address</span>
+      <span class="hljs-built_in">free</span>(arr);       <span class="hljs-comment">// if above didn't catch the error, error here too</span>
+      </code></pre>
+      <h3 id="memory-cleanup-patterns">Memory Cleanup Patterns</h3>
+      <p><strong>Pattern 1: Simple Allocation and Free</strong></p>
+      <pre><code class="lang-c"><span class="hljs-built_in">char</span> *<span class="hljs-built_in">str</span> = malloc(<span class="hljs-number">100</span>);
+      <span class="hljs-keyword">assert</span>(<span class="hljs-built_in">str</span> != NULL);
+      <span class="hljs-comment">// ... use str ...</span>
+      free(<span class="hljs-built_in">str</span>);
+      </code></pre>
+      <p><strong>Pattern 2: Strdup and Free</strong></p>
+      <pre><code class="lang-c">char *<span class="hljs-keyword">copy</span><span class="bash"> = strdup(<span class="hljs-string">"Hello"</span>);
+      </span>assert(<span class="hljs-keyword">copy</span><span class="bash"> != NULL);
+      </span>// ... use <span class="hljs-keyword">copy</span><span class="bash"> ...
+      </span>free(<span class="hljs-keyword">copy</span><span class="bash">);</span>
+      </code></pre>
+      <p><strong>Pattern 3: Array of Pointers</strong></p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> **strings = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">char</span> *));
+      assert(strings != <span class="hljs-literal">NULL</span>);
+      
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+          strings[i] = strdup(<span class="hljs-string">"test"</span>);
+          assert(strings[i] != <span class="hljs-literal">NULL</span>);
+      }
+      
+      <span class="hljs-comment">// MUST free in right order:</span>
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+          <span class="hljs-built_in">free</span>(strings[i]);  <span class="hljs-comment">// free each string first</span>
+      }
+      <span class="hljs-built_in">free</span>(strings);         <span class="hljs-comment">// then free the array</span>
+      </code></pre>
+      <h3 id="memory-leak">Memory Leak</h3>
+      <p><strong>Definition</strong>: A memory leak occurs when you allocate memory but fail to free it.</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">leak_example</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);
+          <span class="hljs-comment">// ... use str ...</span>
+          <span class="hljs-keyword">return</span>;  <span class="hljs-comment">// str not freed! Memory leaked.</span>
+      }
+      </code></pre>
+      <p><strong>Consequences</strong>:</p>
+      <ul>
+        <li>In long-running programs, leaked memory accumulates</li>
+        <li>Eventually the program runs out of heap space</li>
+        <li>malloc() fails, returning NULL</li>
+      </ul>
+      <p><strong>Important Note</strong>: Memory leaks are generally <strong>less critical</strong> than other bugs. A program
+        with leaks often runs fine until it accumulates enough leaked memory. However, exam problems often test memory leaks
+        because they demonstrate understanding of memory management responsibility.</p>
+      <h3 id="valgrind-mental-model">Valgrind: Mental Model</h3>
+      <p>Valgrind is a tool that tracks every malloc and free call. It reports:</p>
+      <ul>
+        <li><strong>Still reachable</strong>: Memory allocated but not freed (leaks)</li>
+        <li><strong>Definitely lost</strong>: Memory allocated and pointer was lost (likely bug)</li>
+        <li><strong>Invalid free</strong>: free() called on non-heap memory or already-freed memory</li>
+      </ul>
+      <p>For the exam, understand the <strong>concept</strong>: Valgrind is tracking whether every allocation has a matching
+        free.</p>
+      <hr>
+      <h2 id="part-5-stack-vs-heap-comparison">Part 5: Stack vs Heap Comparison</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Characteristic</th>
+            <th>Stack</th>
+            <th>Heap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Management</strong></td>
+            <td>Automatic</td>
+            <td>Manual (programmer)</td>
+          </tr>
+          <tr>
+            <td><strong>Speed</strong></td>
+            <td>Very fast</td>
+            <td>Slower</td>
+          </tr>
+          <tr>
+            <td><strong>Size</strong></td>
+            <td>Fixed (~8MB default)</td>
+            <td>Large (limited by RAM)</td>
+          </tr>
+          <tr>
+            <td><strong>Grows</strong></td>
+            <td>Downward</td>
+            <td>Upward</td>
+          </tr>
+          <tr>
+            <td><strong>Lifetime</strong></td>
+            <td>Until function returns</td>
+            <td>Until <code>free()</code> called</td>
+          </tr>
+          <tr>
+            <td><strong>Type Safety</strong></td>
+            <td>Checked by compiler</td>
+            <td>No safety</td>
+          </tr>
+          <tr>
+            <td><strong>Scope</strong></td>
+            <td>Function scope</td>
+            <td>Unlimited scope</td>
+          </tr>
+          <tr>
+            <td><strong>Can overflow</strong></td>
+            <td>Stack overflow</td>
+            <td>Fails malloc, returns NULL</td>
+          </tr>
+          <tr>
+            <td><strong>Use When</strong></td>
+            <td>Fixed-size local data</td>
+            <td>Variable-size, long-lived, or returned data</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3 id="when-to-use-each">When to Use Each</h3>
+      <p><strong>Prefer Stack When</strong>:</p>
+      <ul>
+        <li>You know the size at compile time</li>
+        <li>Data is only needed within one function</li>
+        <li>Data doesn&#39;t need to outlive the function</li>
+        <li>You want automatic cleanup</li>
+      </ul>
+      <p><strong>Need Heap When</strong>:</p>
+      <ul>
+        <li>Size determined at runtime</li>
+        <li>Data must outlive the function that creates it</li>
+        <li>You need a very large allocation (would overflow stack)</li>
+        <li>You need to resize memory</li>
+      </ul>
+      <p><strong>General Principle</strong>: Unless a situation requires heap allocation, stack allocation is preferred.
+        However, many programs mix both—using the stack for fixed-size structures and the heap for dynamically-sized data.</p>
+      <hr>
+      <h2 id="part-6-the-13-memory-bug-types">Part 6: The 13 Memory Bug Types</h2>
+      <p>This is the most heavily tested section. Understand not just the name but the intuition, the formal definition, code
+        examples, what goes wrong, and how to fix it.</p>
+      <h3 id="bug-1-memory-leak">Bug 1: Memory Leak</h3>
+      <p><strong>Intuition</strong>: You ask for memory but never return it to the system.</p>
+      <p><strong>Definition</strong>: Allocating memory with <code>malloc()</code>, <code>calloc()</code>, or
+        <code>realloc()</code> but failing to call <code>free()</code> on that memory, causing it to remain allocated until
+        program termination.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">process_file</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *filename)</span> </span>{
+          FILE *fp = fopen(filename, <span class="hljs-string">"r"</span>);
+          <span class="hljs-keyword">char</span> *buffer = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">1024</span>);
+      
+          <span class="hljs-comment">// Read from file into buffer</span>
+          <span class="hljs-comment">// ... work with buffer ...</span>
+      
+          fclose(fp);
+          <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> buffer not freed!</span>
+          <span class="hljs-comment">// If process_file is called many times, memory leaks accumulate</span>
+      }
+      </code></pre>
+      <p><strong>What goes wrong</strong>: Each call to <code>process_file()</code> leaves 1024 bytes allocated. After 1000
+        calls, 1MB is leaked. The heap fills up, malloc eventually returns NULL, and the program crashes.</p>
+      <p><strong>Fix</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">process_file</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *filename)</span> </span>{
+          FILE *fp = fopen(filename, <span class="hljs-string">"r"</span>);
+          <span class="hljs-keyword">char</span> *buffer = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">1024</span>);
+      
+          <span class="hljs-comment">// ... work ...</span>
+      
+          fclose(fp);
+          <span class="hljs-built_in">free</span>(buffer);  <span class="hljs-comment">// FIXED</span>
+      }
+      </code></pre>
+      <h3 id="bug-2-use-after-free">Bug 2: Use After Free</h3>
+      <p><strong>Intuition</strong>: You return a pointer to memory to the system, then try to use it.</p>
+      <p><strong>Definition</strong>: Accessing heap memory via a pointer after that memory has been freed via
+        <code>free()</code>.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span> = malloc(<span class="hljs-number">10</span>);
+      strcpy(<span class="hljs-keyword">str</span>, <span class="hljs-string">"hello"</span>);
+      free(<span class="hljs-keyword">str</span>);
+      
+      printf(<span class="hljs-string">"%s\n"</span>, <span class="hljs-keyword">str</span>);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> Use after free</span>
+      <span class="hljs-keyword">str</span>[<span class="hljs-number">0</span>] = <span class="hljs-string">'H'</span>;         <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> Use after free</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: After <code>free()</code>, the memory is returned to the heap allocator and may be
+        reused for other allocations. Reading from the freed memory might show:</p>
+      <ul>
+        <li>Garbage</li>
+        <li>Data from another part of the program (information leak!)</li>
+        <li>Stale data that looks &quot;correct&quot; by coincidence</li>
+      </ul>
+      <p>Writing to freed memory corrupts other allocated blocks.</p>
+      <p><strong>Fix</strong>: Set pointer to NULL after freeing, then check before use:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+      <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"hello"</span>);
+      <span class="hljs-built_in">free</span>(str);
+      str = <span class="hljs-literal">NULL</span>;
+      <span class="hljs-keyword">if</span> (str != <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, str);  <span class="hljs-comment">// Safe: won't execute</span>
+      }
+      </code></pre>
+      <h3 id="bug-3-double-free">Bug 3: Double Free</h3>
+      <p><strong>Intuition</strong>: You return the same memory to the system twice.</p>
+      <p><strong>Definition</strong>: Calling <code>free()</code> on the same pointer twice (or on multiple pointers to the
+        same block).</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c">char *str = malloc(<span class="hljs-number">10</span>)<span class="hljs-comment">;</span>
+      strcpy(<span class="hljs-name">str</span>, <span class="hljs-string">"hello"</span>)<span class="hljs-comment">;</span>
+      free(<span class="hljs-name">str</span>)<span class="hljs-comment">;</span>
+      free(<span class="hljs-name">str</span>)<span class="hljs-comment">;  // <span class="hljs-doctag">BUG:</span> Double free</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: The heap allocator&#39;s internal structures become corrupted. The second
+        <code>free()</code> tries to return already-returned memory to the free list, causing:</p>
+      <ul>
+        <li>Immediate crash (most likely)</li>
+        <li>Silent corruption that causes crashes later</li>
+        <li>Security vulnerabilities</li>
+      </ul>
+      <p><strong>Fix</strong>: After freeing, set pointer to NULL:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+      <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"hello"</span>);
+      <span class="hljs-built_in">free</span>(str);
+      str = <span class="hljs-literal">NULL</span>;
+      <span class="hljs-built_in">free</span>(str);  <span class="hljs-comment">// Safe: free(NULL) does nothing</span>
+      </code></pre>
+      <p>Or use pointers more carefully in functions returning pointers:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span> = malloc(<span class="hljs-number">10</span>);
+      <span class="hljs-comment">// ... use str ...</span>
+      <span class="hljs-comment">// Return to caller; let THEM free it</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">str</span>;
+      <span class="hljs-comment">// Don't free here!</span>
+      </code></pre>
+      <h3 id="bug-4-freeing-unallocated-storage">Bug 4: Freeing Unallocated Storage</h3>
+      <p><strong>Intuition</strong>: You try to return memory to the system that never came from malloc/calloc/realloc.</p>
+      <p><strong>Definition</strong>: Calling <code>free()</code> on a pointer that was never returned by
+        <code>malloc()</code>, <code>calloc()</code>, or <code>realloc()</code>.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// Stack variable</span>
+      <span class="hljs-keyword">int</span> arr[<span class="hljs-number">100</span>];
+      <span class="hljs-built_in">free</span>(arr);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> arr is on stack, not heap</span>
+      
+      <span class="hljs-comment">// Function parameter</span>
+      <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">process</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *str)</span> </span>{
+          <span class="hljs-built_in">free</span>(str);  <span class="hljs-comment">// BUG if caller passed stack-allocated string</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> buf[<span class="hljs-number">100</span>] = <span class="hljs-string">"hello"</span>;
+          process(buf);  <span class="hljs-comment">// Crashes in process()</span>
+      }
+      
+      <span class="hljs-comment">// Literal string</span>
+      <span class="hljs-keyword">char</span> *msg = <span class="hljs-string">"hello"</span>;  <span class="hljs-comment">// points to read-only string literal</span>
+      <span class="hljs-built_in">free</span>(msg);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> can't free literal strings</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: The heap allocator&#39;s bookkeeping is violated. It tries to mark memory that was
+        never allocated as free, corrupting the free list. Usually crashes immediately with &quot;corrupt heap&quot; error.
+      </p>
+      <p><strong>Fix</strong>: Only free memory from malloc/calloc/realloc:</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// Right: allocate then free</span>
+      <span class="hljs-keyword">char</span> *msg = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+      <span class="hljs-built_in">strcpy</span>(msg, <span class="hljs-string">"hello"</span>);
+      <span class="hljs-built_in">free</span>(msg);
+      
+      <span class="hljs-comment">// Right: let caller manage</span>
+      <span class="hljs-keyword">char</span> buf[<span class="hljs-number">100</span>] = <span class="hljs-string">"hello"</span>;
+      process(buf);  <span class="hljs-comment">// no free needed</span>
+      
+      <span class="hljs-comment">// Right: don't free literals</span>
+      <span class="hljs-keyword">char</span> *msg = <span class="hljs-string">"hello"</span>;  <span class="hljs-comment">// don't free this</span>
+      </code></pre>
+      <h3 id="bug-5-freeing-stack-space">Bug 5: Freeing Stack Space</h3>
+      <p><strong>Intuition</strong>: A specific case of freeing unallocated storage—trying to free a stack variable.</p>
+      <p><strong>Definition</strong>: Calling <code>free()</code> on a pointer to a stack-allocated variable.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">process_data</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> data[<span class="hljs-number">1000</span>];  <span class="hljs-comment">// Stack allocated</span>
+          <span class="hljs-keyword">int</span> *ptr = data;
+      
+          <span class="hljs-comment">// ... use ptr ...</span>
+      
+          <span class="hljs-built_in">free</span>(ptr);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> data is on stack!</span>
+      }
+      </code></pre>
+      <p><strong>What goes wrong</strong>: Same as &quot;Freeing Unallocated Storage&quot;—heap corruption, crash.</p>
+      <p><strong>Fix</strong>: Don&#39;t free stack memory:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">process_data</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> data[<span class="hljs-number">1000</span>];  <span class="hljs-comment">// Stack allocated</span>
+          <span class="hljs-keyword">int</span> *ptr = data;
+      
+          <span class="hljs-comment">// ... use ptr ...</span>
+      
+          <span class="hljs-comment">// Don't free; ptr is destroyed automatically</span>
+      }
+      </code></pre>
+      <h3 id="bug-6-dangling-pointer">Bug 6: Dangling Pointer</h3>
+      <p><strong>Intuition</strong>: You have a pointer to memory that&#39;s been freed (or gone out of scope).</p>
+      <p><strong>Definition</strong>: A pointer that refers to memory that&#39;s no longer valid—either freed or
+        stack-allocated that&#39;s gone out of scope.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">get_temp</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> buf[<span class="hljs-number">100</span>] = <span class="hljs-string">"temporary"</span>;  <span class="hljs-comment">// Stack allocated</span>
+          <span class="hljs-keyword">return</span> buf;  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> Returning dangling pointer</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *ptr = get_temp();
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, ptr);  <span class="hljs-comment">// UNDEFINED: buf is gone</span>
+      }
+      </code></pre>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *ptr;
+      {
+          <span class="hljs-keyword">char</span> *temp = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">50</span>);
+          <span class="hljs-built_in">strcpy</span>(temp, <span class="hljs-string">"test"</span>);
+          ptr = temp;
+          <span class="hljs-built_in">free</span>(temp);  <span class="hljs-comment">// ptr now dangling</span>
+          temp = <span class="hljs-literal">NULL</span>;
+      }
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, ptr);  <span class="hljs-comment">// UNDEFINED: dangling pointer</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: Accessing the pointer reads undefined memory—garbage, crashed program, or security
+        vulnerability.</p>
+      <p><strong>Fix</strong>: Either return new heap memory, or adjust lifetime:</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// Fix 1: Return heap memory</span>
+      <span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">get_temp</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *buf = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);
+          <span class="hljs-built_in">strcpy</span>(buf, <span class="hljs-string">"temporary"</span>);
+          <span class="hljs-keyword">return</span> buf;  <span class="hljs-comment">// Caller must free</span>
+      }
+      
+      <span class="hljs-comment">// Fix 2: Use stack return value (requires caller to copy)</span>
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">process</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *dest, <span class="hljs-keyword">size_t</span> size)</span> </span>{
+          <span class="hljs-built_in">snprintf</span>(dest, size, <span class="hljs-string">"temporary"</span>);
+          <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> buf[<span class="hljs-number">100</span>];
+          process(buf, <span class="hljs-keyword">sizeof</span>(buf));
+      }
+      </code></pre>
+      <h3 id="bug-7-returning-pointer-to-local-variable">Bug 7: Returning Pointer to Local Variable</h3>
+      <p><strong>Intuition</strong>: A specific dangling pointer case—returning stack variable&#39;s address.</p>
+      <p><strong>Definition</strong>: A function returns a pointer to a local variable (stack-allocated). When the function
+        returns, the local variable&#39;s memory is freed, and the returned pointer becomes invalid.</p>
+      <p><strong>Example</strong> (classic exam question):</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">int</span> *<span class="hljs-title">get_number</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> x = <span class="hljs-number">42</span>;
+          <span class="hljs-keyword">return</span> &amp;x;  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> Returning pointer to stack variable</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> *ptr = get_number();
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *ptr);  <span class="hljs-comment">// UNDEFINED: x no longer exists</span>
+      }
+      </code></pre>
+      <p>More subtle:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">create_string</span><span class="hljs-params">(<span class="hljs-keyword">char</span> ch, <span class="hljs-keyword">int</span> num)</span> </span>{
+          <span class="hljs-keyword">char</span> new_str[num + <span class="hljs-number">1</span>];  <span class="hljs-comment">// Stack allocated</span>
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; num; i++) {
+              new_str[i] = ch;
+          }
+          new_str[num] = <span class="hljs-string">'\0'</span>;
+          <span class="hljs-keyword">return</span> new_str;  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> Returning pointer to local array</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = create_string(<span class="hljs-string">'a'</span>, <span class="hljs-number">4</span>);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, str);  <span class="hljs-comment">// UNDEFINED</span>
+      }
+      </code></pre>
+      <p><strong>What goes wrong</strong>: The stack frame is destroyed when the function returns. The array/variable no
+        longer exists. The returned pointer points to memory that&#39;s now unallocated and will be reused by future function
+        calls. Reading it returns whatever is currently on the stack. Writing to it corrupts other function&#39;s data.</p>
+      <p><strong>Fix</strong>: Use heap allocation:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">create_string</span><span class="hljs-params">(<span class="hljs-keyword">char</span> ch, <span class="hljs-keyword">int</span> num)</span> </span>{
+          <span class="hljs-keyword">char</span> *new_str = <span class="hljs-built_in">malloc</span>(num + <span class="hljs-number">1</span>);  <span class="hljs-comment">// Heap allocated</span>
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; num; i++) {
+              new_str[i] = ch;
+          }
+          new_str[num] = <span class="hljs-string">'\0'</span>;
+          <span class="hljs-keyword">return</span> new_str;  <span class="hljs-comment">// Safe: heap memory persists</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = create_string(<span class="hljs-string">'a'</span>, <span class="hljs-number">4</span>);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, str);  <span class="hljs-comment">// Works: "aaaa"</span>
+          <span class="hljs-built_in">free</span>(str);  <span class="hljs-comment">// Caller's responsibility</span>
+      }
+      </code></pre>
+      <h3 id="bug-8-buffer-overflow-insufficient-space">Bug 8: Buffer Overflow / Insufficient Space</h3>
+      <p><strong>Intuition</strong>: Writing more data to a buffer than it can hold.</p>
+      <p><strong>Definition</strong>: Writing past the end of an allocated buffer, corrupting memory beyond the buffer.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// Static buffer too small</span>
+      <span class="hljs-keyword">char</span> buf[<span class="hljs-number">5</span>];
+      <span class="hljs-built_in">strcpy</span>(buf, <span class="hljs-string">"hello, world"</span>);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> "hello, world" is 12 chars + null</span>
+                                    <span class="hljs-comment">// buf only has 5 chars; overflow!</span>
+      
+      <span class="hljs-comment">// Malloc'd buffer too small</span>
+      <span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+      <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"this is a very long string"</span>);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> overflow</span>
+      
+      <span class="hljs-comment">// Array index out of bounds</span>
+      <span class="hljs-keyword">int</span> arr[<span class="hljs-number">10</span>];
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">10</span>; i++) {  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> should be i &lt; 10</span>
+          arr[i] = <span class="hljs-number">0</span>;  <span class="hljs-comment">// arr[10] is out of bounds</span>
+      }
+      </code></pre>
+      <p><strong>What goes wrong</strong>: Data is written past the end of the buffer, corrupting whatever follows in memory:
+      </p>
+      <ul>
+        <li>Other local variables get overwritten</li>
+        <li>Heap bookkeeping data gets corrupted</li>
+        <li>Return addresses on the stack get overwritten</li>
+        <li>The program crashes with no clear indication of why</li>
+      </ul>
+      <p>This is a classic security vulnerability.</p>
+      <p><strong>Fix</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// Use strncpy to limit copying</span>
+      <span class="hljs-keyword">char</span> buf[<span class="hljs-number">10</span>];
+      <span class="hljs-built_in">strncpy</span>(buf, <span class="hljs-string">"hello"</span>, <span class="hljs-keyword">sizeof</span>(buf) - <span class="hljs-number">1</span>);
+      buf[<span class="hljs-keyword">sizeof</span>(buf) - <span class="hljs-number">1</span>] = <span class="hljs-string">'\0'</span>;
+      
+      <span class="hljs-comment">// Allocate enough space</span>
+      <span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">strlen</span>(<span class="hljs-string">"long string"</span>) + <span class="hljs-number">1</span>);
+      <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"long string"</span>);
+      
+      <span class="hljs-comment">// Use bounds checking in loops</span>
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {  <span class="hljs-comment">// correct: &lt;, not &lt;=</span>
+          arr[i] = <span class="hljs-number">0</span>;
+      }
+      </code></pre>
+      <h3 id="bug-9-uninitialized-pointer-dereference">Bug 9: Uninitialized Pointer Dereference</h3>
+      <p><strong>Intuition</strong>: Using a pointer before assigning it a valid address.</p>
+      <p><strong>Definition</strong>: Dereferencing a pointer that hasn&#39;t been initialized (or set to an invalid address),
+        causing access to undefined memory.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *ptr;        <span class="hljs-comment">// Uninitialized!</span>
+      *ptr = <span class="hljs-number">42</span>;       <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> ptr points to random memory</span>
+      
+      <span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span>;       <span class="hljs-comment">// Uninitialized!</span>
+      strcpy(<span class="hljs-keyword">str</span>, <span class="hljs-string">"hello"</span>);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> str points to random memory</span>
+      
+      <span class="hljs-keyword">int</span> arr[<span class="hljs-number">10</span>];
+      <span class="hljs-keyword">int</span> *p = arr;
+      p++;
+      p++;
+      <span class="hljs-keyword">int</span> *q;  <span class="hljs-comment">// Uninitialized!</span>
+      *q = *p;  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> q is uninitialized</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: The pointer contains whatever garbage was in that memory location. Dereferencing it
+        accesses random memory, likely causing:</p>
+      <ul>
+        <li>Immediate crash (segmentation fault)</li>
+        <li>Subtle memory corruption</li>
+      </ul>
+      <p><strong>Fix</strong>: Always initialize pointers:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *ptr = <span class="hljs-literal">NULL</span>;  <span class="hljs-comment">// Initialized to NULL</span>
+      <span class="hljs-keyword">if</span> (something) {
+          ptr = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+          assert(ptr != <span class="hljs-literal">NULL</span>);
+          *ptr = <span class="hljs-number">42</span>;
+      }
+      <span class="hljs-built_in">free</span>(ptr);
+      
+      <span class="hljs-keyword">char</span> *str = <span class="hljs-literal">NULL</span>;  <span class="hljs-comment">// Initialized</span>
+      <span class="hljs-keyword">if</span> (need_string) {
+          str = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);
+          <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"hello"</span>);
+      }
+      <span class="hljs-built_in">free</span>(str);
+      </code></pre>
+      <h3 id="bug-10-null-dereference">Bug 10: NULL Dereference</h3>
+      <p><strong>Intuition</strong>: Following a NULL pointer.</p>
+      <p><strong>Definition</strong>: Dereferencing a pointer that has the value NULL, causing an invalid memory access.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *ptr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+      <span class="hljs-keyword">if</span> (ptr == <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Allocation failed\n"</span>);
+          <span class="hljs-comment">// ptr is NULL here</span>
+      }
+      
+      *ptr = <span class="hljs-number">42</span>;  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> NULL dereference if allocation failed</span>
+      
+      <span class="hljs-keyword">char</span> *str = strdup(<span class="hljs-string">"hello"</span>);
+      <span class="hljs-comment">// No assert! strdup could have failed</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, str);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> if str is NULL, crash</span>
+      
+      <span class="hljs-keyword">int</span> *arr[<span class="hljs-number">10</span>];
+      arr[<span class="hljs-number">0</span>] = <span class="hljs-literal">NULL</span>;
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *arr[<span class="hljs-number">0</span>]);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> NULL dereference</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: Dereferencing NULL is undefined behavior. On most systems, address 0 is not
+        accessible, causing:</p>
+      <ul>
+        <li>Immediate crash (segmentation fault)</li>
+        <li>In some contexts, memory corruption</li>
+      </ul>
+      <p><strong>Fix</strong>: Always check for NULL:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *ptr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+      <span class="hljs-keyword">if</span> (ptr == <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">"Allocation failed\n"</span>);
+          <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+      }
+      *ptr = <span class="hljs-number">42</span>;
+      
+      <span class="hljs-keyword">char</span> *str = strdup(<span class="hljs-string">"hello"</span>);
+      assert(str != <span class="hljs-literal">NULL</span>);  <span class="hljs-comment">// Crash if NULL; better than silent bug</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, str);
+      
+      <span class="hljs-keyword">int</span> *arr[<span class="hljs-number">10</span>] = {<span class="hljs-literal">NULL</span>};
+      <span class="hljs-keyword">if</span> (arr[<span class="hljs-number">0</span>] != <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *arr[<span class="hljs-number">0</span>]);
+      }
+      </code></pre>
+      <h3 id="bug-11-array-index-out-of-bounds">Bug 11: Array Index Out of Bounds</h3>
+      <p><strong>Intuition</strong>: Accessing an array element that doesn&#39;t exist.</p>
+      <p><strong>Definition</strong>: Using an array index outside the valid range (0 to size-1), accessing invalid memory.
+      </p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">10</span>];
+      arr[<span class="hljs-number">10</span>] = <span class="hljs-number">42</span>;  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> Valid indices are 0-9, not 0-10</span>
+      
+      char str[<span class="hljs-number">5</span>] = <span class="hljs-string">"hello"</span>;  <span class="hljs-comment">// Valid indices 0-4 (including '\0' at position 4)</span>
+      printf(<span class="hljs-string">"%c<span class="hljs-subst">\n</span>"</span>, str[<span class="hljs-number">5</span>]);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> out of bounds</span>
+      
+      for (int i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">10</span>; i++) {  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> should be &lt; 10</span>
+          arr[i] = i;
+      }
+      </code></pre>
+      <p><strong>What goes wrong</strong>: Accessing memory beyond the array corrupts other data or crashes.</p>
+      <p><strong>Fix</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> arr[<span class="hljs-number">10</span>];
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {  <span class="hljs-comment">// &lt; not &lt;=</span>
+          arr[i] = i;
+      }
+      
+      arr[<span class="hljs-number">9</span>] = <span class="hljs-number">42</span>;  <span class="hljs-comment">// Valid</span>
+      
+      <span class="hljs-comment">// For dynamic arrays, track size</span>
+      <span class="hljs-keyword">int</span> *dyn = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+          dyn[i] = i;
+      }
+      </code></pre>
+      <h3 id="bug-12-assignment-of-incompatible-types">Bug 12: Assignment of Incompatible Types</h3>
+      <p><strong>Intuition</strong>: Treating one type of pointer as another type.</p>
+      <p><strong>Definition</strong>: Assigning or casting pointers of incompatible types, leading to misinterpretation of
+        data.</p>
+      <p><strong>Example</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *str = <span class="hljs-string">"hello"</span>;
+      <span class="hljs-keyword">int</span> *as_int = (<span class="hljs-keyword">int</span> *) str;
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *as_int);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> interpreting char data as int</span>
+      
+      <span class="hljs-keyword">double</span> *d = (<span class="hljs-keyword">double</span> *) <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> allocated int space but using as double pointer</span>
+      
+      <span class="hljs-keyword">struct</span> Point { <span class="hljs-keyword">int</span> x; <span class="hljs-keyword">int</span> y; };
+      <span class="hljs-keyword">struct</span> Point *p = (<span class="hljs-keyword">struct</span> Point *) <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> not enough space for struct</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: Data is misinterpreted. Reading an int from char data reads garbage. Writing to
+        misaligned memory corrupts neighboring data.</p>
+      <p><strong>Fix</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+      <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"hello"</span>);
+      <span class="hljs-comment">// char *str = (char *) str;  // Don't cast</span>
+      <span class="hljs-comment">// int *as_int = (int *) str;  // Wrong</span>
+      
+      <span class="hljs-keyword">double</span> *d = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">double</span>));  <span class="hljs-comment">// Allocate right type</span>
+      
+      <span class="hljs-keyword">struct</span> Point *p = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> Point));  <span class="hljs-comment">// Right size</span>
+      </code></pre>
+      <h3 id="bug-13-incorrect-pointer-arithmetic">Bug 13: Incorrect Pointer Arithmetic</h3>
+      <p><strong>Intuition</strong>: Moving a pointer wrong number of bytes.</p>
+      <p><strong>Definition</strong>: Adding/subtracting from a pointer using the wrong scale, causing the pointer to land at
+        unintended addresses.</p>
+      <p><strong>Important</strong>: C&#39;s pointer arithmetic <strong>scales by the type&#39;s size</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p;
+      p += <span class="hljs-number">1</span>;      <span class="hljs-comment">// Moves by 1 * sizeof(int) = 4 bytes (on 32-bit)</span>
+      
+      <span class="hljs-keyword">char</span> *c;
+      c += <span class="hljs-number">1</span>;      <span class="hljs-comment">// Moves by 1 * sizeof(char) = 1 byte</span>
+      
+      <span class="hljs-keyword">double</span> *d;
+      d += <span class="hljs-number">1</span>;      <span class="hljs-comment">// Moves by 1 * sizeof(double) = 8 bytes</span>
+      </code></pre>
+      <p><strong>Example</strong> (classic exam bug):</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *nums = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      <span class="hljs-comment">// nums[0] is at address, say, 0x1000</span>
+      <span class="hljs-comment">// nums[1] is at address 0x1004 (4 bytes later)</span>
+      
+      <span class="hljs-keyword">int</span> *p = nums;
+      p++;  <span class="hljs-comment">// Moves to 0x1004 (nums[1]) - CORRECT by accident!</span>
+      
+      <span class="hljs-comment">// But accessing wrong element:</span>
+      *(p + <span class="hljs-number">3</span>);  <span class="hljs-comment">// Moves from current to +3*4=+12 bytes</span>
+                 <span class="hljs-comment">// This is nums[1] + 3 = nums[4]</span>
+      
+      <span class="hljs-comment">// Common <span class="hljs-doctag">bug:</span> confusing array index with pointer arithmetic</span>
+      <span class="hljs-keyword">int</span> *arr = nums + <span class="hljs-number">1</span>;  <span class="hljs-comment">// arr points to nums[1]</span>
+      arr[<span class="hljs-number">0</span>] = <span class="hljs-number">42</span>;  <span class="hljs-comment">// Same as nums[1] = 42</span>
+      arr[<span class="hljs-number">1</span>] = <span class="hljs-number">99</span>;  <span class="hljs-comment">// Same as nums[2] = 99</span>
+      <span class="hljs-comment">// This is easy to get confused about!</span>
+      </code></pre>
+      <p><strong>What goes wrong</strong>: The pointer lands at the wrong address, corrupting or reading unintended data.</p>
+      <p><strong>Fix</strong>: Be very careful with pointer arithmetic; use array indexing when possible:</p>
+      <pre><code class="lang-c">int *nums = malloc(<span class="hljs-number">10</span> * sizeof(int));
+      
+      <span class="hljs-comment">// Right: array indexing</span>
+      nums[<span class="hljs-number">3</span>] = <span class="hljs-number">42</span>;
+      nums[<span class="hljs-number">4</span>] = <span class="hljs-number">99</span>;
+      
+      <span class="hljs-comment">// Also right: careful pointer arithmetic</span>
+      *(nums + <span class="hljs-number">3</span>) = <span class="hljs-number">42</span>;
+      *(nums + <span class="hljs-number">4</span>) = <span class="hljs-number">99</span>;
+      
+      <span class="hljs-comment">// Wrong: forgetting scale</span>
+      <span class="hljs-comment">// *(nums + 12) = 42;  // Moves 12 elements, not 12 bytes!</span>
+      </code></pre>
+      <hr>
+      <h2 id="part-7-stack-vs-heap-common-exam-patterns">Part 7: Stack vs Heap: Common Exam Patterns</h2>
+      <h3 id="pattern-1-function-returns-data">Pattern 1: Function Returns Data</h3>
+      <p><strong>Question</strong>: When should a function return stack vs heap?</p>
+      <p><strong>Stack Return</strong>:</p>
+      <pre><code class="lang-c">// <span class="hljs-keyword">Return</span> simple types directly (<span class="hljs-keyword">value</span>, not <span class="hljs-keyword">pointer</span>)
+      <span class="hljs-built_in">int</span> get_count() {
+          <span class="hljs-built_in">int</span> <span class="hljs-built_in">count</span> = <span class="hljs-number">100</span>;
+          <span class="hljs-keyword">return</span> <span class="hljs-built_in">count</span>;  // Correct: <span class="hljs-keyword">return</span> by <span class="hljs-keyword">value</span>
+      }
+      </code></pre>
+      <p><strong>Heap Return</strong> (when caller needs dynamic memory):</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// Return pointer to heap memory when size is variable</span>
+      <span class="hljs-keyword">char</span> *read_line(<span class="hljs-keyword">FILE</span> *fp) {
+          <span class="hljs-keyword">char</span> *<span class="hljs-keyword">line</span> = malloc(256);
+          fgets(<span class="hljs-keyword">line</span>, 256, fp);
+          <span class="hljs-keyword">return</span> <span class="hljs-keyword">line</span>;  <span class="hljs-comment">// Caller must free</span>
+      }
+      </code></pre>
+      <p><strong>Wrong</strong> (returns pointer to local variable):</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">get_message</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> buf[<span class="hljs-number">100</span>] = <span class="hljs-string">"hello"</span>;
+          <span class="hljs-keyword">return</span> buf;  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> dangling pointer!</span>
+      }
+      </code></pre>
+      <h3 id="pattern-2-array-allocation">Pattern 2: Array Allocation</h3>
+      <p><strong>Stack when size is known</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">process_data</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> scores[<span class="hljs-number">100</span>];  <span class="hljs-comment">// Fixed size, stack</span>
+          <span class="hljs-comment">// ... use scores ...</span>
+      }  <span class="hljs-comment">// Automatically freed</span>
+      </code></pre>
+      <p><strong>Heap when size is runtime-determined</strong>:</p>
+      <pre><code class="lang-c">int *allocate_scores(int n) {
+         <span class="hljs-built_in"> int </span>*scores = malloc(n * sizeof(int));
+          // ...<span class="hljs-built_in"> fill </span>scores ...
+         <span class="hljs-built_in"> return </span>scores;  // Caller must free
+      }
+      </code></pre>
+      <h3 id="pattern-3-function-parameters">Pattern 3: Function Parameters</h3>
+      <p><strong>Stack data passed by value or reference</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">update_buffer</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *buf)</span> </span>{
+          <span class="hljs-comment">// buf points to data allocated by caller</span>
+          <span class="hljs-comment">// Don't free it here! Caller manages lifetime</span>
+          <span class="hljs-built_in">strcpy</span>(buf, <span class="hljs-string">"new value"</span>);
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> mybuf[<span class="hljs-number">100</span>];
+          update_buffer(mybuf);  <span class="hljs-comment">// Pass pointer to stack data</span>
+          <span class="hljs-comment">// mybuf still valid here</span>
+      }
+      </code></pre>
+      <p><strong>Caller&#39;s responsibility when function returns heap</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">create_string</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *s = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">50</span>);
+          <span class="hljs-built_in">strcpy</span>(s, <span class="hljs-string">"hello"</span>);
+          <span class="hljs-keyword">return</span> s;  <span class="hljs-comment">// Caller owns it now</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = create_string();
+          <span class="hljs-comment">// ... use str ...</span>
+          <span class="hljs-built_in">free</span>(str);  <span class="hljs-comment">// Caller must free</span>
+      }
+      </code></pre>
+      <hr>
+      <h2 id="part-8-common-exam-traps">Part 8: Common Exam Traps</h2>
+      <h3 id="trap-1-malloc-returns-null-on-failure">Trap 1: Malloc returns NULL on failure</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *arr = <span class="hljs-built_in">malloc</span>(size);
+      arr[<span class="hljs-number">0</span>] = <span class="hljs-number">42</span>;  <span class="hljs-comment">// BUG if malloc returned NULL!</span>
+      </code></pre>
+      <p><strong>Fix</strong>: Always check</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *arr = <span class="hljs-built_in">malloc</span>(size);
+      <span class="hljs-keyword">if</span> (arr == <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">"Out of memory\n"</span>);
+          <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+      }
+      arr[<span class="hljs-number">0</span>] = <span class="hljs-number">42</span>;
+      </code></pre>
+      <h3 id="trap-2-forgetting-to-add-1-for-null-terminator">Trap 2: Forgetting to add 1 for null terminator</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">strlen</span>(<span class="hljs-string">"hello"</span>));  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> off-by-one!</span>
+      <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"hello"</span>);  <span class="hljs-comment">// Buffer overflow!</span>
+      </code></pre>
+      <p><strong>Fix</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *str = <span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">strlen</span>(<span class="hljs-string">"hello"</span>) + <span class="hljs-number">1</span>);  <span class="hljs-comment">// +1 for '\0'</span>
+      <span class="hljs-built_in">strcpy</span>(str, <span class="hljs-string">"hello"</span>);  <span class="hljs-comment">// Correct</span>
+      </code></pre>
+      <h3 id="trap-3-pointer-to-pointer-confusion">Trap 3: Pointer to pointer confusion</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> **ptr_to_ptr = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>*));
+      *ptr_to_ptr = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+      **ptr_to_ptr = <span class="hljs-number">42</span>;
+      
+      <span class="hljs-comment">// Must free in right order:</span>
+      <span class="hljs-built_in">free</span>(*ptr_to_ptr);  <span class="hljs-comment">// Free the int</span>
+      <span class="hljs-built_in">free</span>(ptr_to_ptr);   <span class="hljs-comment">// Free the pointer</span>
+      </code></pre>
+      <h3 id="trap-4-lost-pointers">Trap 4: Lost pointers</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span> = malloc(<span class="hljs-number">100</span>);
+      <span class="hljs-keyword">str</span> = malloc(<span class="hljs-number">100</span>);  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> Original 100 bytes leaked!</span>
+      
+      <span class="hljs-comment">// Fix: free before reallocating</span>
+      <span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span> = malloc(<span class="hljs-number">100</span>);
+      free(<span class="hljs-keyword">str</span>);
+      <span class="hljs-keyword">str</span> = malloc(<span class="hljs-number">100</span>);
+      
+      <span class="hljs-comment">// Or use realloc:</span>
+      <span class="hljs-keyword">str</span> = realloc(<span class="hljs-keyword">str</span>, <span class="hljs-number">200</span>);  <span class="hljs-comment">// Safely resizes and preserves data</span>
+      </code></pre>
+      <h3 id="trap-5-modifying-loop-variable">Trap 5: Modifying loop variable</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">char</span>*));
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+          arr[i] = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">50</span>);
+      }
+      
+      <span class="hljs-comment">// Wrong: can't free properly if arr is modified</span>
+      <span class="hljs-comment">// arr = arr + 5;  // arr no longer points to start!</span>
+      
+      <span class="hljs-comment">// Correct: keep original pointer</span>
+      <span class="hljs-keyword">char</span> *start = arr;
+      <span class="hljs-comment">// ... use arr ...</span>
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+          <span class="hljs-built_in">free</span>(arr[i]);
+      }
+      <span class="hljs-built_in">free</span>(start);
+      </code></pre>
+      <h3 id="trap-6-sizeof-confusion">Trap 6: sizeof confusion</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *buf = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);  <span class="hljs-comment">// Correct: 100 bytes</span>
+      
+      <span class="hljs-keyword">char</span> *buf = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">char</span>) * <span class="hljs-number">100</span>);  <span class="hljs-comment">// Also correct</span>
+      
+      <span class="hljs-keyword">int</span> *nums = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));  <span class="hljs-comment">// Correct</span>
+      
+      <span class="hljs-keyword">int</span> *nums = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>*));  <span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> allocates pointers!</span>
+      </code></pre>
+      <h3 id="trap-7-function-modifying-pointers">Trap 7: Function modifying pointers</h3>
+      <p>When passing a pointer to a function, the function gets a <strong>copy</strong> of the pointer:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">reset</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *ptr)</span> </span>{
+          ptr = <span class="hljs-literal">NULL</span>;  <span class="hljs-comment">// Changes the local copy, not the original!</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> *p = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+          reset(p);
+          *p = <span class="hljs-number">42</span>;  <span class="hljs-comment">// p is NOT NULL; still valid</span>
+      }
+      </code></pre>
+      <p>If the function needs to modify the pointer itself, need a pointer-to-pointer:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">reset</span><span class="hljs-params">(<span class="hljs-keyword">int</span> **ptr)</span> </span>{
+          <span class="hljs-built_in">free</span>(*ptr);
+          *ptr = <span class="hljs-literal">NULL</span>;  <span class="hljs-comment">// Changes the original</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> *p = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>);
+          reset(&amp;p);
+          *p = <span class="hljs-number">42</span>;  <span class="hljs-comment">// ERROR: p is NULL now</span>
+      }
+      </code></pre>
+      <h3 id="trap-8-realloc-failures-leak-memory">Trap 8: realloc failures leak memory</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);
+      arr = <span class="hljs-built_in">realloc</span>(arr, <span class="hljs-number">200</span>);  <span class="hljs-comment">// If fails, arr becomes NULL and 100 bytes leak!</span>
+      
+      <span class="hljs-comment">// Right pattern:</span>
+      <span class="hljs-keyword">char</span> *temp = <span class="hljs-built_in">realloc</span>(arr, <span class="hljs-number">200</span>);
+      <span class="hljs-keyword">if</span> (temp == <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">free</span>(arr);
+          <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+      }
+      arr = temp;
+      </code></pre>
+      <h3 id="trap-9-strdup-on-null">Trap 9: Strdup on NULL</h3>
+      <pre><code class="lang-c"><span class="hljs-built_in">char</span> *<span class="hljs-built_in">str</span> = NULL;
+      <span class="hljs-built_in">char</span> *<span class="hljs-built_in">copy</span> = strdup(<span class="hljs-built_in">str</span>);  <span class="hljs-comment">// Undefined behavior</span>
+      </code></pre>
+      <h3 id="trap-10-free-order-in-structs">Trap 10: Free order in structs</h3>
+      <pre><code class="lang-c">struct <span class="hljs-keyword">Node</span> <span class="hljs-title">{
+          char</span> *data;
+          int value;
+      };
+      
+      struct <span class="hljs-keyword">Node</span> <span class="hljs-title">*node</span> = malloc(sizeof(struct <span class="hljs-keyword">Node</span><span class="hljs-title">));
+      node-</span>&gt;data = malloc(<span class="hljs-number">50</span>);
+      
+      // Wrong order:
+      free(<span class="hljs-keyword">node</span><span class="hljs-title">);     // Free</span> the struct first
+      free(<span class="hljs-keyword">node</span><span class="hljs-title">-&gt;data</span>);  // Can't access <span class="hljs-keyword">node</span><span class="hljs-title">-&gt;data</span> now! Error.
+      
+      // Right order:
+      free(<span class="hljs-keyword">node</span><span class="hljs-title">-&gt;data</span>);  // Free the contained data first
+      free(<span class="hljs-keyword">node</span><span class="hljs-title">);        // Then</span> free the struct
+      </code></pre>
+      <hr>
+      <h2 id="part-9-exam-style-practice-problems">Part 9: Exam-Style Practice Problems</h2>
+      <h3 id="problem-1-string-manipulation-with-multiple-allocations">Problem 1: String Manipulation with Multiple
+        Allocations</h3>
+      <p><strong>Question</strong>: Write a function that concatenates two strings and returns the result. The input strings
+        are read-only (owned by caller). Your function must allocate new memory, and the caller will free it.</p>
+      <pre><code class="lang-c"><span class="hljs-comment">// Your implementation:</span>
+      <span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">concat</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s1, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s2)</span> </span>{
+          <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement this</span>
+      }
+      
+      <span class="hljs-comment">// Test code:</span>
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *result = concat(<span class="hljs-string">"hello"</span>, <span class="hljs-string">" world"</span>);
+          assert(result != <span class="hljs-literal">NULL</span>);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, result);  <span class="hljs-comment">// Should print "hello world"</span>
+          <span class="hljs-built_in">free</span>(result);
+          <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+      }
+      </code></pre>
+      <p><strong>Solution</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">concat</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s1, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s2)</span> </span>{
+          <span class="hljs-comment">// Calculate size needed (include null terminator)</span>
+          <span class="hljs-keyword">size_t</span> size = <span class="hljs-built_in">strlen</span>(s1) + <span class="hljs-built_in">strlen</span>(s2) + <span class="hljs-number">1</span>;
+      
+          <span class="hljs-comment">// Allocate memory</span>
+          <span class="hljs-keyword">char</span> *result = <span class="hljs-built_in">malloc</span>(size);
+          assert(result != <span class="hljs-literal">NULL</span>);
+      
+          <span class="hljs-comment">// Copy both strings</span>
+          <span class="hljs-built_in">strcpy</span>(result, s1);
+          <span class="hljs-built_in">strcat</span>(result, s2);
+      
+          <span class="hljs-keyword">return</span> result;
+      }
+      </code></pre>
+      <p><strong>Exam variations</strong>:</p>
+      <ul>
+        <li>What if s1 or s2 is NULL? (Check before using)</li>
+        <li>What if malloc fails? (Return NULL and let caller check)</li>
+        <li>What if the strings are very large? (Still works; malloc handles it)</li>
+      </ul>
+      <hr>
+      <h3 id="problem-2-array-of-strings">Problem 2: Array of Strings</h3>
+      <p><strong>Question</strong>: Write a function that takes an array of strings and a count, and returns a new array with
+        copies of those strings. You must allocate the new array and all its strings.</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> **<span class="hljs-title">copy_strings</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *<span class="hljs-keyword">const</span> *strings, <span class="hljs-keyword">int</span> count)</span> </span>{
+          <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement this</span>
+      }
+      
+      <span class="hljs-comment">// Test:</span>
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *original[] = {<span class="hljs-string">"apple"</span>, <span class="hljs-string">"banana"</span>, <span class="hljs-string">"cherry"</span>};
+          <span class="hljs-keyword">char</span> **copy = copy_strings(original, <span class="hljs-number">3</span>);
+      
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+              <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, copy[i]);
+          }
+      
+          <span class="hljs-comment">// Free: must free in right order</span>
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+              <span class="hljs-built_in">free</span>(copy[i]);
+          }
+          <span class="hljs-built_in">free</span>(copy);
+      }
+      </code></pre>
+      <p><strong>Solution</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-built_in">char</span> **copy_strings(<span class="hljs-keyword">const</span> <span class="hljs-built_in">char</span> *<span class="hljs-keyword">const</span> *strings, <span class="hljs-built_in">int</span> count) {
+          // <span class="hljs-type">Allocate</span> <span class="hljs-built_in">array</span> <span class="hljs-keyword">of</span> pointers
+          <span class="hljs-built_in">char</span> **<span class="hljs-literal">result</span> = malloc(count * sizeof(<span class="hljs-built_in">char</span> *));
+          assert(<span class="hljs-literal">result</span> != <span class="hljs-type">NULL</span>);
+      
+          // <span class="hljs-type">Allocate</span> <span class="hljs-keyword">and</span> copy each <span class="hljs-built_in">string</span>
+          <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; count; i++) {
+              <span class="hljs-literal">result</span>[i] = strdup(strings[i]);
+              assert(<span class="hljs-literal">result</span>[i] != <span class="hljs-type">NULL</span>);
+          }
+      
+          <span class="hljs-keyword">return</span> <span class="hljs-literal">result</span>;
+      }
+      </code></pre>
+      <p><strong>Exam variations</strong>:</p>
+      <ul>
+        <li>What if count is 0? (malloc(0) is implementation-defined; check it)</li>
+        <li>What if one of the original strings is NULL? (Handle it or document assumptions)</li>
+        <li>What if strdup fails? (Cleanup partially allocated strings)</li>
+      </ul>
+      <hr>
+      <h3 id="problem-3-dynamic-array-growth-with-realloc">Problem 3: Dynamic Array Growth with Realloc</h3>
+      <p><strong>Question</strong>: Implement a simple dynamic array that starts small and grows as needed. Implement
+        <code>add()</code> function.</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> {
+          <span class="hljs-keyword">int</span> *data;
+          <span class="hljs-keyword">int</span> size;      <span class="hljs-comment">// Number of elements currently stored</span>
+          <span class="hljs-keyword">int</span> capacity;  <span class="hljs-comment">// Allocated space</span>
+      } IntArray;
+      
+      <span class="hljs-function">IntArray *<span class="hljs-title">create_array</span><span class="hljs-params">()</span> </span>{
+          IntArray *arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(IntArray));
+          arr-&gt;data = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+          arr-&gt;size = <span class="hljs-number">0</span>;
+          arr-&gt;capacity = <span class="hljs-number">10</span>;
+          <span class="hljs-keyword">return</span> arr;
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(IntArray *arr, <span class="hljs-keyword">int</span> value)</span> </span>{
+          <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> If size == capacity, reallocate with double capacity</span>
+          <span class="hljs-comment">// Then add the value</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">free_array</span><span class="hljs-params">(IntArray *arr)</span> </span>{
+          <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement</span>
+      }
+      </code></pre>
+      <p><strong>Solution</strong>:</p>
+      <pre><code class="lang-c">void add(IntArray *arr, int value) {
+          <span class="hljs-comment">// Check if we need to grow</span>
+          <span class="hljs-function"><span class="hljs-title">if</span> (arr-&gt;</span><span class="hljs-function"><span class="hljs-title">size</span> == arr-&gt;</span>capacity) {
+              <span class="hljs-function"><span class="hljs-title">arr</span>-&gt;</span>capacity *= <span class="hljs-number">2</span>;
+              <span class="hljs-function"><span class="hljs-title">int</span> *temp = realloc(arr-&gt;</span><span class="hljs-function"><span class="hljs-title">data</span>, arr-&gt;</span>capacity * sizeof(int));
+              assert(temp != NULL);
+              <span class="hljs-function"><span class="hljs-title">arr</span>-&gt;</span><span class="hljs-keyword">data</span> = temp;
+          }
+      
+          <span class="hljs-comment">// Add the value</span>
+          <span class="hljs-function"><span class="hljs-title">arr</span>-&gt;</span><span class="hljs-function"><span class="hljs-title">data</span>[arr-&gt;</span>size] = value;
+          <span class="hljs-function"><span class="hljs-title">arr</span>-&gt;</span>size++;
+      }
+      
+      void free_array(IntArray *arr) {
+          <span class="hljs-function"><span class="hljs-title">free</span>(arr-&gt;</span><span class="hljs-keyword">data</span>);
+          free(arr);
+      }
+      </code></pre>
+      <p><strong>Exam variations</strong>:</p>
+      <ul>
+        <li>What if realloc fails? (Don&#39;t modify arr, return error)</li>
+        <li>What if we shrink? (Similar logic, but half capacity)</li>
+      </ul>
+      <hr>
+      <h3 id="problem-4-memory-bug-identification">Problem 4: Memory Bug Identification</h3>
+      <p><strong>Question</strong>: Identify all memory bugs in this code:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">concat_with_separator</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s1, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s2, <span class="hljs-keyword">char</span> sep)</span> </span>{
+          <span class="hljs-keyword">char</span> *result = <span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">strlen</span>(s1) + <span class="hljs-built_in">strlen</span>(s2));  <span class="hljs-comment">// Line 1</span>
+          <span class="hljs-built_in">strcpy</span>(result, s1);
+          result[<span class="hljs-built_in">strlen</span>(s1)] = sep;
+          <span class="hljs-built_in">strcpy</span>(result + <span class="hljs-built_in">strlen</span>(s1) + <span class="hljs-number">1</span>, s2);
+          <span class="hljs-keyword">return</span> result;
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = concat_with_separator(<span class="hljs-string">"hello"</span>, <span class="hljs-string">"world"</span>, <span class="hljs-string">'-'</span>);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, str);
+          <span class="hljs-keyword">char</span> *copy = str;
+          <span class="hljs-built_in">free</span>(copy);
+          <span class="hljs-built_in">free</span>(str);  <span class="hljs-comment">// Line 11</span>
+          <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+      }
+      </code></pre>
+      <p><strong>Answer</strong>:</p>
+      <ol>
+        <li><strong>Line 1</strong>: Insufficient space. Need <code>strlen(s1) + strlen(s2) + 2</code> (for separator and null
+          terminator).</li>
+        <li><strong>Line 11</strong>: Double free. <code>str</code> and <code>copy</code> point to the same memory; freeing
+          both is a double free.</li>
+      </ol>
+      <p><strong>Fixed version</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span> *<span class="hljs-title">concat_with_separator</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s1, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s2, <span class="hljs-keyword">char</span> sep)</span> </span>{
+          <span class="hljs-keyword">size_t</span> size = <span class="hljs-built_in">strlen</span>(s1) + <span class="hljs-built_in">strlen</span>(s2) + <span class="hljs-number">2</span>;  <span class="hljs-comment">// +1 for sep, +1 for null</span>
+          <span class="hljs-keyword">char</span> *result = <span class="hljs-built_in">malloc</span>(size);
+          assert(result != <span class="hljs-literal">NULL</span>);
+          <span class="hljs-built_in">strcpy</span>(result, s1);
+          result[<span class="hljs-built_in">strlen</span>(s1)] = sep;
+          <span class="hljs-built_in">strcpy</span>(result + <span class="hljs-built_in">strlen</span>(s1) + <span class="hljs-number">1</span>, s2);
+          <span class="hljs-keyword">return</span> result;
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> *str = concat_with_separator(<span class="hljs-string">"hello"</span>, <span class="hljs-string">"world"</span>, <span class="hljs-string">'-'</span>);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, str);
+          <span class="hljs-built_in">free</span>(str);  <span class="hljs-comment">// Only free once</span>
+          <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+      }
+      </code></pre>
+      <hr>
+      <h2 id="conclusion">Conclusion</h2>
+      <p>Master these concepts:</p>
+      <ol>
+        <li><strong>Stack</strong>: Automatic, fast, fixed size, automatic cleanup</li>
+        <li><strong>Heap</strong>: Manual, slower, flexible, explicit cleanup required</li>
+        <li><strong>Allocation functions</strong>: malloc (uninitialized), calloc (zeroed), realloc (resize), strdup (string
+          copy)</li>
+        <li><strong>free()</strong>: Exactly once, starting address, NULL-safe</li>
+        <li><strong>13 Bug types</strong>: Understand the intuition, definition, example, and fix for each</li>
+      </ol>
+      <p>The key to exam success is not memorizing, but deeply understanding when to use each approach and why certain
+        patterns lead to bugs. Trace through code carefully: What is allocated? Where? When is it freed? Do all allocations
+        have matching frees?</p>
+      <p>Memory management is difficult because errors are often silent—they corrupt memory elsewhere. The fix is always
+        vigilance: check malloc returns, free exactly once, use tools like Valgrind, and practice.</p>
+
+    </article>
+  </main>
+
+  <!-- Base Scripts -->
+  <script src="../script.js"></script>
+
+  <!-- Blog Specific Theme Switcher for Markdown -->
+  <script>
+    // Observe theme changes on the html tag to swap out the markdown CSS accordingly
+    const htmlElement = document.documentElement;
+    const markdownStyleLink = document.getElementById('markdown-theme-style');
+
+    function updateMarkdownTheme() {
+      const currentTheme = htmlElement.getAttribute('data-theme') || 'dark';
+      if (currentTheme === 'dark') {
+        markdownStyleLink.href = '../github-markdown-dark.css';
+      } else {
+        markdownStyleLink.href = '../github-markdown-light.css';
+      }
+    }
+
+    // Run once on initial load
+    updateMarkdownTheme();
+
+    // Watch for 'data-theme' attribute changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          updateMarkdownTheme();
+        }
+      });
+    });
+
+    observer.observe(htmlElement, { attributes: true });
+  </script>
+</body>
+
+</html>

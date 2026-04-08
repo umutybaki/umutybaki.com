@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Representations — Complete Midterm Study Guide</title>
+  <meta name="description" content="A template for writing blog posts.">
+
+  <!-- Google Fonts: Inter and Roboto Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="../style.css">
+
+  <!-- Markdown Theme Stylesheet (dynamically updated by script below) -->
+  <link id="markdown-theme-style" rel="stylesheet" href="../github-markdown-dark.css">
+
+  <style>
+    .blog-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* Ensure markdown content background is transparent to show the animated canvas behind it */
+    .markdown-body {
+      background-color: transparent !important;
+      margin-top: 2rem;
+      transition: color 0.3s ease;
+    }
+
+    /* Back link styling */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background Canvas for Constellations -->
+  <canvas id="bg-canvas"></canvas>
+
+  <nav class="main-nav">
+    <div class="nav-content">
+      <div class="nav-name">Umut Yalçın Baki</div>
+      <div class="header-controls" style="display: flex; gap: 1rem; align-items: center;">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="lang-toggle" class="lang-toggle" aria-label="Toggle Language">
+          <div class="lang-slider"></div>
+          <span class="lang-label en">EN</span>
+          <span class="lang-label tr">TR</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container blog-container reveal active">
+
+    <!-- Markdown Extracted Content -->
+    <article class="markdown-body">
+<h1 id="data-representations-complete-midterm-study-guide">Data Representations — Complete Midterm Study Guide</h1>
+<blockquote>
+  <p><strong>Course:</strong> COMP201: Computer Systems &amp; Programming — KOÇ University, Spring 2026</p>
+  <p><strong>Coverage:</strong> Lectures 2, 3, 4 — Bits &amp; Bytes, Integers, Bitwise Operators, Floating Point</p>
+  <p>This guide is written to be <strong>fully self-contained</strong>. You should be able to sit the midterm having
+    studied only this document. Exam-style worked examples are included throughout, drawn from past COMP201 midterms.
+  </p>
+</blockquote>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+  <li><a href="#1-bits-bytes-and-hexadecimal">Bits, Bytes, and Hexadecimal</a></li>
+  <li><a href="#2-integer-representations">Integer Representations</a>
+    <ul>
+      <li>2.1 Unsigned Integers</li>
+      <li>2.2 Signed Integers — Two&#39;s Complement</li>
+      <li>2.3 Overflow</li>
+    </ul>
+  </li>
+  <li><a href="#3-casting-and-combining-types">Casting and Combining Types</a>
+    <ul>
+      <li>3.1 Same-size casting (signed ↔ unsigned)</li>
+      <li>3.2 Expanding: Zero Extension and Sign Extension</li>
+      <li>3.3 Truncation</li>
+      <li>3.4 Mixed-type comparisons</li>
+    </ul>
+  </li>
+  <li><a href="#4-byte-ordering-endianness">Byte Ordering (Endianness)</a></li>
+  <li><a href="#5-bitwise-operators">Bitwise Operators</a>
+    <ul>
+      <li>5.1 AND, OR, NOT, XOR</li>
+      <li>5.2 Bitwise vs. Logical operators</li>
+      <li>5.3 Bitmasks</li>
+      <li>5.4 Bit Shift Operators</li>
+    </ul>
+  </li>
+  <li><a href="#6-floating-point-numbers">Floating Point Numbers</a>
+    <ul>
+      <li>6.1 Why integers are not enough</li>
+      <li>6.2 Fixed Point (and why it fails)</li>
+      <li>6.3 IEEE 754 Floating Point</li>
+      <li>6.4 Normalized vs. Denormalized numbers</li>
+      <li>6.5 Special Values (±∞, NaN, ±0)</li>
+      <li>6.6 Tiny Floating Point Examples</li>
+      <li>6.7 Floating Point Arithmetic Pitfalls</li>
+      <li>6.8 Floating Point in C</li>
+    </ul>
+  </li>
+  <li><a href="#7-key-formulas--quick-reference">Key Formulas &amp; Quick Reference</a></li>
+  <li><a href="#8-exam-style-practice-problems">Exam-Style Practice Problems</a></li>
+</ol>
+<hr>
+<h2 id="1-bits-bytes-and-hexadecimal">1. Bits, Bytes, and Hexadecimal</h2>
+<h3 id="why-binary-">Why Binary?</h3>
+<p>Computers are built on transistors, which have two states: <strong>on</strong> (1) and <strong>off</strong> (0). This
+  is why all data — numbers, text, images, audio — is ultimately stored as sequences of 0s and 1s called
+  <strong>bits</strong>.</p>
+<p>A single bit can represent only 2 values. To represent richer data, we group bits together. <strong>8 bits = 1
+    byte</strong>, and computer memory is a large array of bytes. Memory is <strong>byte-addressable</strong>: you can
+  point to (store the address of) a byte, but not an individual bit.</p>
+<h3 id="base-2-binary-numbers">Base-2 (Binary) Numbers</h3>
+<p>In binary, each digit position represents a power of 2 (just as decimal uses powers of 10):</p>
+<pre><code>Binary:  <span class="hljs-number"> 1 </span><span class="hljs-number"> 0 </span><span class="hljs-number"> 1 </span> 1
+Position:<span class="hljs-number"> 3 </span><span class="hljs-number"> 2 </span><span class="hljs-number"> 1 </span> 0
+Value:   <span class="hljs-number"> 8 </span><span class="hljs-number"> 0 </span><span class="hljs-number"> 2 </span><span class="hljs-number"> 1 </span> →<span class="hljs-number"> 8 </span>+<span class="hljs-number"> 2 </span>+<span class="hljs-number"> 1 </span>=<span class="hljs-number"> 11 </span>(decimal)
+</code></pre>
+<p><strong>Key trick — multiplying/dividing by 2:</strong> Appending a 0 on the right multiplies by 2 (shift left).
+  Removing the rightmost 0 divides by 2 (shift right).</p>
+<p><strong>Converting decimal → binary:</strong> Repeatedly find the largest power of 2 ≤ your number, place a 1,
+  subtract, repeat.</p>
+<blockquote>
+  <p><strong>Example:</strong> 14 in binary?</p>
+  <ul>
+    <li>Largest power of 2 ≤ 14 is $2^3 = 8$ → place 1 at position 3</li>
+    <li>14 − 8 = 6. Largest power of 2 ≤ 6 is $2^2 = 4$ → place 1 at position 2</li>
+    <li>6 − 4 = 2. Largest power of 2 ≤ 2 is $2^1 = 2$ → place 1 at position 1</li>
+    <li>2 − 2 = 0. Done → <strong>1110₂</strong></li>
+  </ul>
+</blockquote>
+<p><strong>A single byte (8 bits):</strong> can hold values from 0 to $2^8 - 1 = 255$.</p>
+<h3 id="hexadecimal-base-16-">Hexadecimal (Base 16)</h3>
+<p>When working with 32 or 64 bits, binary is unwieldy. <strong>Hexadecimal (hex)</strong> groups bits in blocks of 4,
+  reducing length by 4×. Each hex digit represents exactly 4 bits.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Hex</th>
+      <th>Decimal</th>
+      <th>Binary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0000</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0001</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>0010</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>0011</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>4</td>
+      <td>0100</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>5</td>
+      <td>0101</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>6</td>
+      <td>0110</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>7</td>
+      <td>0111</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>8</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>9</td>
+      <td>1001</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>10</td>
+      <td>1010</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>11</td>
+      <td>1011</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>12</td>
+      <td>1100</td>
+    </tr>
+    <tr>
+      <td>D</td>
+      <td>13</td>
+      <td>1101</td>
+    </tr>
+    <tr>
+      <td>E</td>
+      <td>14</td>
+      <td>1110</td>
+    </tr>
+    <tr>
+      <td>F</td>
+      <td>15</td>
+      <td>1111</td>
+    </tr>
+  </tbody>
+</table>
+<p>In C, hex numbers are prefixed with <code>0x</code> (e.g., <code>0xf5</code>). Binary is prefixed with
+  <code>0b</code>.</p>
+<p><strong>Converting binary → hex:</strong> Group binary digits in blocks of 4 from the right. Convert each group.</p>
+<blockquote>
+  <p><strong>Example:</strong> <code>0b1111001010</code> → group from right: <code>11 1100 1010</code> → pad to
+    <code>0011 1100 1010</code> → <code>0x3CA</code></p>
+</blockquote>
+<p><strong>Converting hex → binary:</strong> Replace each hex digit with its 4-bit binary equivalent.</p>
+<blockquote>
+  <p><strong>Example:</strong> <code>0x173A</code> → <code>0001 0111 0011 1010</code></p>
+</blockquote>
+<hr>
+<h2 id="2-integer-representations">2. Integer Representations</h2>
+<h3 id="c-type-sizes-64-bit-system-">C Type Sizes (64-bit system)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>C Type</th>
+      <th>Size (Bytes)</th>
+      <th>Size (Bits)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>char</code></td>
+      <td>1</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td><code>short</code></td>
+      <td>2</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <td><code>int</code></td>
+      <td>4</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <td><code>long</code></td>
+      <td>8</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <td><code>float</code></td>
+      <td>4</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <td><code>double</code></td>
+      <td>8</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <td><code>char *</code> (ptr)</td>
+      <td>8</td>
+      <td>64</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>
+  <p><strong>Historical note:</strong> On 32-bit systems (pre-2000s), <code>char *</code> and <code>long</code> were 4
+    bytes. The move to 64-bit happened because 32-bit pointers max out at only 4 GB of addressable memory.</p>
+</blockquote>
+<h3 id="2-1-unsigned-integers">2.1 Unsigned Integers</h3>
+<p>An <strong>unsigned integer</strong> stores only non-negative values. With $w$ bits, the representable range is:</p>
+<p>$$0 \leq x \leq 2^w - 1$$</p>
+<p>The binary-to-value conversion is straightforward positional notation:</p>
+<p>$$x = \sum_{i=0}^{w-1} b_i \cdot 2^i$$</p>
+<p>where $b_i$ is bit $i$ (0-indexed from the right).</p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Min</th>
+      <th>Max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>unsigned char</code></td>
+      <td>0</td>
+      <td>255</td>
+    </tr>
+    <tr>
+      <td><code>unsigned short</code></td>
+      <td>0</td>
+      <td>65,535</td>
+    </tr>
+    <tr>
+      <td><code>unsigned int</code></td>
+      <td>0</td>
+      <td>4,294,967,295</td>
+    </tr>
+    <tr>
+      <td><code>unsigned long</code></td>
+      <td>0</td>
+      <td>18,446,744,073,709,551,615</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="2-2-signed-integers-two-s-complement">2.2 Signed Integers — Two&#39;s Complement</h3>
+<p><strong>The problem:</strong> How do we represent negative numbers in binary? We need a scheme where regular addition
+  still works.</p>
+<h4 id="why-not-sign-magnitude-">Why not Sign-Magnitude?</h4>
+<p>One naive idea is to use the most-significant bit (MSB) as a sign bit: 0 = positive, 1 = negative. This is called
+  <strong>sign-magnitude</strong>. For example, in 4 bits:</p>
+<ul>
+  <li><code>0111</code> = +7, <code>1111</code> = -7</li>
+  <li><code>0000</code> = +0, <code>1000</code> = -0 ← <strong>two representations for zero!</strong></li>
+</ul>
+<p>This wastes a bit and makes arithmetic hardware more complex. <strong>We don&#39;t use it.</strong></p>
+<h4 id="two-s-complement">Two&#39;s Complement</h4>
+<p>The insight behind two&#39;s complement is that we want binary addition to &quot;just work&quot; for any mix of
+  positive and negative numbers. The solution is:</p>
+<ul>
+  <li><strong>Positive numbers</strong> are represented normally (MSB = 0).</li>
+  <li><strong>Negative numbers</strong> are represented as the <strong>bitwise NOT + 1</strong> of their positive
+    counterpart.</li>
+</ul>
+<p>$$-x = (\sim x) + 1$$</p>
+<p>For a $w$-bit two&#39;s complement number, the value is:</p>
+<p>$$x = -b<em>{w-1} \cdot 2^{w-1} + \sum</em>{i=0}^{w-2} b_i \cdot 2^i$$</p>
+<p>The MSB acts as a <strong>sign bit</strong> but contributes $-2^{w-1}$ (negative!) to the value.</p>
+<p><strong>Converting positive → negative (and back):</strong> Two methods, same result:</p>
+<ol>
+  <li><strong>Invert all bits, then add 1</strong></li>
+  <li><strong>Shortcut:</strong> Working from the right, copy all bits through (and including) the first 1, then invert
+    the rest.</li>
+</ol>
+<blockquote>
+  <p><strong>Example (4-bit):</strong> Convert +5 (<code>0101</code>) to −5:
+    Method 1: <code>~0101 = 1010</code>, then <code>1010 + 0001 = 1011</code> → <strong>−5 is <code>1011</code></strong>
+    Method 2: Copy rightmost <code>1</code>: <code>_101</code> → invert rest: <code>1011</code> ✓</p>
+  <p><strong>Verify:</strong> <code>1011</code> has MSB=1, so value = $-8 + 0 + 2 + 1 = -5$ ✓</p>
+</blockquote>
+<p><strong>The same formula works to go negative→positive</strong> (two&#39;s complement is its own inverse).</p>
+<h4 id="min-and-max-values-for-two-s-complement">Min and Max Values for Two&#39;s Complement</h4>
+<p>With $w$ bits:</p>
+<ul>
+  <li><strong>Maximum (TMax):</strong> <code>0111...1</code> = $2^{w-1} - 1$</li>
+  <li><strong>Minimum (TMin):</strong> <code>1000...0</code> = $-2^{w-1}$</li>
+</ul>
+<p>Notice: $|TMin| = |TMax| + 1$. There is <strong>one more negative value than positive</strong>.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>TMin</th>
+      <th>TMax</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>char</code></td>
+      <td>−128</td>
+      <td>127</td>
+    </tr>
+    <tr>
+      <td><code>short</code></td>
+      <td>−32,768</td>
+      <td>32,767</td>
+    </tr>
+    <tr>
+      <td><code>int</code></td>
+      <td>−2,147,483,648</td>
+      <td>2,147,483,647</td>
+    </tr>
+    <tr>
+      <td><code>long</code></td>
+      <td>−9,223,372,036,854,775,808</td>
+      <td>9,223,372,036,854,775,807</td>
+    </tr>
+  </tbody>
+</table>
+<p>These are accessible in C via <code>&lt;limits.h&gt;</code> as <code>INT_MIN</code>, <code>INT_MAX</code>,
+  <code>UINT_MAX</code>, etc.</p>
+<h4 id="4-bit-two-s-complement-full-table">4-bit Two&#39;s Complement — Full Table</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Binary</th>
+      <th>Unsigned Value</th>
+      <th>Signed (Two&#39;s Comp) Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0000</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>0001</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>0010</td>
+      <td>2</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>0011</td>
+      <td>3</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>0100</td>
+      <td>4</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>0101</td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>0110</td>
+      <td>6</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>0111</td>
+      <td>7</td>
+      <td><strong>7 (TMax)</strong></td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>8</td>
+      <td><strong>−8 (TMin)</strong></td>
+    </tr>
+    <tr>
+      <td>1001</td>
+      <td>9</td>
+      <td>−7</td>
+    </tr>
+    <tr>
+      <td>1010</td>
+      <td>10</td>
+      <td>−6</td>
+    </tr>
+    <tr>
+      <td>1011</td>
+      <td>11</td>
+      <td>−5</td>
+    </tr>
+    <tr>
+      <td>1100</td>
+      <td>12</td>
+      <td>−4</td>
+    </tr>
+    <tr>
+      <td>1101</td>
+      <td>13</td>
+      <td>−3</td>
+    </tr>
+    <tr>
+      <td>1110</td>
+      <td>14</td>
+      <td>−2</td>
+    </tr>
+    <tr>
+      <td>1111</td>
+      <td>15</td>
+      <td>−1</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Key insight:</strong> The bit patterns for small negative numbers (−1, −2, …) look like large unsigned
+  numbers (15, 14, …). Casting just reinterprets the same bits.</p>
+<h4 id="two-s-complement-arithmetic">Two&#39;s Complement Arithmetic</h4>
+<p>Addition works identically for signed and unsigned — just add the bits and discard any carry out of the top bit:</p>
+<blockquote>
+  <p><strong>Example:</strong> 2 + (−5) in 4-bit:
+    <code>0010 + 1011 = 1101</code> = −3 ✓
+  </p>
+  <p><strong>Subtraction:</strong> $a - b = a + (-b)$. Negate $b$ using two&#39;s complement, then add.</p>
+</blockquote>
+<h3 id="2-3-overflow">2.3 Overflow</h3>
+<p><strong>Overflow</strong> happens when a result exceeds the range of the type.</p>
+<p><strong>Unsigned overflow:</strong> If you add 1 to the maximum value, you wrap around to 0. If you subtract 1 from
+  0, you wrap around to the maximum.</p>
+<pre><code><span class="hljs-number">0b1111</span> + <span class="hljs-number">0b0001</span> = <span class="hljs-number">0b10000</span> → (drop the carry) <span class="hljs-number">0b0000</span>
+<span class="hljs-number">0b0000</span> - <span class="hljs-number">0b0001</span> = <span class="hljs-number">0b1111</span> (wraps to <span class="hljs-number">15</span> <span class="hljs-keyword">for</span> <span class="hljs-number">4</span>-bit unsigned)
+</code></pre>
+<p>Unsigned arithmetic is always modulo $2^w$.</p>
+<p><strong>Signed overflow:</strong></p>
+<ul>
+  <li>Adding two positive numbers → negative result (positive overflow)</li>
+  <li>Adding two negative numbers → positive result (negative overflow)</li>
+</ul>
+<p>Overflow for signed integers occurs <strong>only</strong> when two numbers of the <strong>same sign</strong> are
+  added and the result has the <strong>opposite sign</strong>. It never happens when adding numbers of different signs.
+</p>
+<h4 id="real-world-overflow-examples">Real-World Overflow Examples</h4>
+<ul>
+  <li><strong>YouTube view counter:</strong> Originally stored as a 32-bit integer. &quot;Gangnam Style&quot; exceeded
+    2,147,483,647 views, forcing YouTube to upgrade to 64-bit integers.</li>
+  <li><strong>Windows 95 crash after 49.7 days:</strong> The <code>GetTickCount()</code> function returned milliseconds
+    as a 32-bit unsigned int. $2^{32}$ ms / 86,400,000 ms per day ≈ 49.7 days.</li>
+  <li><strong>Civilization / Gandhi bug:</strong> Gandhi&#39;s aggression score was 1. Adopting democracy reduced it by
+    2, causing unsigned underflow to 255 — making Gandhi very aggressive.</li>
+  <li><strong>Ariane 5 rocket (1996):</strong> $500M rocket exploded 37 seconds after launch due to overflow when
+    converting a 64-bit float to a 16-bit signed integer.</li>
+</ul>
+<hr>
+<h2 id="3-casting-and-combining-types">3. Casting and Combining Types</h2>
+<h3 id="3-1-same-size-casting-signed-unsigned-">3.1 Same-Size Casting (Signed ↔ Unsigned)</h3>
+<p><strong>The golden rule:</strong> When you cast between signed and unsigned types of the same size, <strong>the bits
+    do not change</strong>. Only the interpretation changes.</p>
+<pre><code class="lang-c"><span class="hljs-keyword">int</span> v = <span class="hljs-number">-12345</span>;
+<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> uv = v;         <span class="hljs-comment">// same bits, different interpretation</span>
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"v = %d, uv = %u\n"</span>, v, uv);
+<span class="hljs-comment">// prints: v = -12345, uv = 4294954951</span>
+</code></pre>
+<p>The bits of −12345 in 32-bit two&#39;s complement are <code>0b11111111111111111100111111000111</code>. Interpreted as
+  an unsigned number, this is 4,294,954,951.</p>
+<p><strong>printf format specifiers:</strong></p>
+<ul>
+  <li><code>%d</code> — signed 32-bit int</li>
+  <li><code>%u</code> — unsigned 32-bit int</li>
+  <li><code>%x</code> — hex 32-bit int</li>
+</ul>
+<p>The format specifier (not the variable type) controls how the value is printed.</p>
+<h3 id="3-2-expanding-zero-extension-and-sign-extension">3.2 Expanding: Zero Extension and Sign Extension</h3>
+<p>When converting to a <strong>larger</strong> type (e.g., <code>short</code> → <code>int</code>):</p>
+<p><strong>Unsigned values → Zero extension:</strong> New high-order bits are filled with 0s.</p>
+<pre><code class="lang-c"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span> s = <span class="hljs-number">4</span>;    <span class="hljs-comment">// 0000 0000 0000 0100</span>
+<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> i = s;      <span class="hljs-comment">// 0000 0000 0000 0000 0000 0000 0000 0100</span>
+</code></pre>
+<p><strong>Signed values → Sign extension:</strong> New high-order bits are filled with the sign bit (the MSB).</p>
+<pre><code class="lang-c">short s = 4;    // 0000 0000 0000 0100<span class="hljs-built_in">
+int </span>i = s;      // 0000 0000 0000 0000 0000 0000 0000 0100  (sign bit=0,<span class="hljs-built_in"> fill </span>with 0s)
+
+short s = -4;   // 1111 1111 1111 1100<span class="hljs-built_in">
+int </span>i = s;      // 1111 1111 1111 1111 1111 1111 1111 1100  (sign bit=1,<span class="hljs-built_in"> fill </span>with 1s)
+</code></pre>
+<p>Both methods preserve the numeric value. Sign extension works because filling with the sign bit maintains the
+  two&#39;s complement value.</p>
+<h3 id="3-3-truncation">3.3 Truncation</h3>
+<p>When converting to a <strong>smaller</strong> type, C <strong>drops the higher-order bits</strong> (truncates). This
+  can change the value significantly.</p>
+<pre><code class="lang-c">int x = 53191;           //<span class="hljs-number"> 0000 </span>0000<span class="hljs-number"> 0000 </span>0000<span class="hljs-number"> 1100 </span>1111<span class="hljs-number"> 1100 </span>0111
+short sx = x;            // drops top<span class="hljs-number"> 16 </span>bits →<span class="hljs-number"> 1100 </span>1111<span class="hljs-number"> 1100 </span>0111 = -12345 !
+int y = sx;              // sign-extends back →<span class="hljs-number"> 1111 </span>1111<span class="hljs-number"> 1111 </span>1111<span class="hljs-number"> 1100 </span>1111<span class="hljs-number"> 1100 </span>0111 = -12345
+</code></pre>
+<p>For unsigned truncation: the result is the original value <strong>mod</strong> $2^k$ where $k$ is the new bit width.
+  For signed truncation: similar behavior, but the result is then reinterpreted as two&#39;s complement.</p>
+<blockquote>
+  <p><strong>Practice:</strong> <code>short x = 130; char cx = x;</code>
+    130 = <code>0b0000 0000 1000 0010</code>. Take lowest 8 bits: <code>1000 0010</code> = −126 (as <code>char</code>).
+    So <code>cx = -126</code>.</p>
+  <p><strong>Practice:</strong> <code>short x = -132; char cx = x;</code>
+    −132 = <code>0b1111 1111 0111 1100</code>. Take lowest 8 bits: <code>0111 1100</code> = 124. So
+    <code>cx = 124</code>.</p>
+</blockquote>
+<h3 id="3-4-mixed-type-comparisons">3.4 Mixed-Type Comparisons</h3>
+<p><strong>Critical rule:</strong> When C compares a signed and an unsigned integer, it <strong>implicitly casts the
+    signed value to unsigned</strong>, then compares both as non-negative. This leads to very surprising results:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Expression</th>
+      <th>Type</th>
+      <th>Result</th>
+      <th>Expected?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>0 == 0U</code></td>
+      <td>unsigned</td>
+      <td>1</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td><code>-1 &lt; 0</code></td>
+      <td>signed</td>
+      <td>1</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td><code>-1 &lt; 0U</code></td>
+      <td>unsigned</td>
+      <td><strong>0</strong></td>
+      <td>✗ (-1 cast to unsigned = huge number)</td>
+    </tr>
+    <tr>
+      <td><code>2147483647U &gt; -2147483647 - 1</code></td>
+      <td>unsigned</td>
+      <td><strong>0</strong></td>
+      <td>✗</td>
+    </tr>
+    <tr>
+      <td><code>2147483647 &gt; (int)2147483648U</code></td>
+      <td>signed</td>
+      <td><strong>1</strong> (wrong!)</td>
+      <td>✗ (2147483648U overflows int → TMin)</td>
+    </tr>
+    <tr>
+      <td><code>(unsigned)-1 &gt; -2</code></td>
+      <td>unsigned</td>
+      <td>1</td>
+      <td>✓</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>The danger:</strong> Any function or comparison that mixes <code>int</code> and <code>unsigned int</code> may
+  behave incorrectly. Always be intentional about types.</p>
+<hr>
+<h2 id="4-byte-ordering-endianness-">4. Byte Ordering (Endianness)</h2>
+<p>Multi-byte values (e.g., a 4-byte <code>int</code>) must be stored somewhere in memory. The question is: in what
+  order are the bytes stored?</p>
+<p><strong>Big Endian:</strong> Most significant byte at the lowest address (the &quot;big end&quot; first). Used by:
+  older SPARC, PowerPC, network protocols.</p>
+<p><strong>Little Endian:</strong> Least significant byte at the lowest address (the &quot;little end&quot; first). Used
+  by: x86, x86-64, most modern processors (ARM in default mode).</p>
+<blockquote>
+  <p><strong>Example:</strong> <code>int x = 0x01234567</code> at address <code>0x100</code>:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Big Endian</th>
+        <th>Little Endian</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0x100</td>
+        <td>01</td>
+        <td>67</td>
+      </tr>
+      <tr>
+        <td>0x101</td>
+        <td>23</td>
+        <td>45</td>
+      </tr>
+      <tr>
+        <td>0x102</td>
+        <td>45</td>
+        <td>23</td>
+      </tr>
+      <tr>
+        <td>0x103</td>
+        <td>67</td>
+        <td>01</td>
+      </tr>
+    </tbody>
+  </table>
+</blockquote>
+<p><strong>Why it matters:</strong> When you send data over a network, or read a binary file from a different
+  architecture, you must handle byte order. Network protocols use Big Endian (&quot;network byte order&quot;).</p>
+<hr>
+<h2 id="5-bitwise-operators">5. Bitwise Operators</h2>
+<h3 id="5-1-and-or-not-xor">5.1 AND, OR, NOT, XOR</h3>
+<p>These operators work <strong>bit by bit</strong> on the binary representation of integers.</p>
+<h4 id="and-">AND (<code>&amp;</code>)</h4>
+<p>Output is 1 only if <strong>both</strong> bits are 1.</p>
+<table>
+  <thead>
+    <tr>
+      <th>a</th>
+      <th>b</th>
+      <th>a &amp; b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td><strong>1</strong></td>
+    </tr>
+  </tbody>
+</table>
+<p>Mnemonic: <code>&amp; 1</code> lets a bit through; <code>&amp; 0</code> forces it to 0 (&quot;zeroing out&quot;).</p>
+<h4 id="or-">OR (<code>|</code>)</h4>
+<p>Output is 1 if <strong>either</strong> bit is 1.</p>
+<table>
+  <thead>
+    <tr>
+      <th>a</th>
+      <th>b</th>
+      <th>a \</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td><strong>1</strong></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0</td>
+      <td><strong>1</strong></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td><strong>1</strong></td>
+    </tr>
+  </tbody>
+</table>
+<p>Mnemonic: <code>| 1</code> forces a bit to 1 (&quot;turning on&quot;); <code>| 0</code> lets a bit through.</p>
+<h4 id="not-">NOT (<code>~</code>)</h4>
+<p>Unary operator. Flips every bit.</p>
+<table>
+  <thead>
+    <tr>
+      <th>a</th>
+      <th>~a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<h4 id="xor-">XOR (<code>^</code>)</h4>
+<p>Output is 1 if <strong>exactly one</strong> bit is 1.</p>
+<table>
+  <thead>
+    <tr>
+      <th>a</th>
+      <th>b</th>
+      <th>a ^ b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td><strong>1</strong></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0</td>
+      <td><strong>1</strong></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>Mnemonic: <code>^ 1</code> flips a bit; <code>^ 0</code> leaves a bit unchanged.</p>
+<h4 id="multi-bit-example">Multi-bit Example</h4>
+<pre><code>AND:          OR:           XOR:          NOT:
+  <span class="hljs-number">0110 1100</span>     <span class="hljs-number">0110 1100</span>     <span class="hljs-number">0110 1100</span>    ~<span class="hljs-number">1100</span>
+&amp; <span class="hljs-number">1010 1010</span>   | <span class="hljs-number">1010 1010</span>   ^ <span class="hljs-number">1010 1010</span>   ------
+-----------   -----------   -----------    <span class="hljs-number">0011</span>
+  <span class="hljs-number">0010 1000</span>     <span class="hljs-number">1110 1110</span>     <span class="hljs-number">1100 0110</span>
+</code></pre>
+<h3 id="5-2-bitwise-vs-logical-operators">5.2 Bitwise vs. Logical Operators</h3>
+<p>This is a <strong>very common source of bugs</strong> and exam questions. Do not confuse:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Bitwise</th>
+      <th>Logical</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>&amp;</code></td>
+      <td><code>&amp;&amp;</code></td>
+      <td>Bitwise AND vs. &quot;both are nonzero?&quot;</td>
+    </tr>
+    <tr>
+      <td>`\</td>
+      <td>`</td>
+      <td>`\</td>
+      <td>\</td>
+      <td>`</td>
+      <td>Bitwise OR vs. &quot;either is nonzero?&quot;</td>
+    </tr>
+    <tr>
+      <td><code>~</code></td>
+      <td><code>!</code></td>
+      <td>Flip all bits vs. &quot;is this zero?&quot;</td>
+    </tr>
+  </tbody>
+</table>
+<pre><code class="lang-c">int a = <span class="hljs-number">6</span>;   // <span class="hljs-number">0b0110</span>
+int b = <span class="hljs-number">12</span>;  // <span class="hljs-number">0b1100</span>
+
+a &amp; b  = <span class="hljs-number">4</span>   // bitwise: <span class="hljs-number">0b0100</span>
+a &amp;&amp; b = <span class="hljs-number">1</span>   // logical: both nonzero → <span class="hljs-literal">true</span> (<span class="hljs-number">1</span>)
+
+a | b  = <span class="hljs-number">14</span>  // bitwise: <span class="hljs-number">0b1110</span>
+a || b = <span class="hljs-number">1</span>   // logical: either nonzero → <span class="hljs-literal">true</span> (<span class="hljs-number">1</span>)
+
+~b     = ... // flips all <span class="hljs-number">32</span> bits of <span class="hljs-number">12</span>
+!b     = <span class="hljs-number">0</span>   // logical: b <span class="hljs-built_in">is</span> nonzero → <span class="hljs-literal">false</span> (<span class="hljs-number">0</span>)
+</code></pre>
+<h3 id="5-3-bitmasks">5.3 Bitmasks</h3>
+<p>A <strong>bitmask</strong> is a carefully crafted bit pattern used with bitwise operators to isolate, set, clear, or
+  flip specific bits in a larger value.</p>
+<p><strong>Common operations:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Operation</th>
+      <th>How to do it</th>
+      <th>Example</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Set</strong> bit $k$ to 1</td>
+      <td><code>x</code></td>
+      <td><code>= (1 &lt;&lt; k)</code></td>
+      <td>Turn on bit 3: `x</td>
+      <td>= 0x08`</td>
+    </tr>
+    <tr>
+      <td><strong>Clear</strong> bit $k$ to 0</td>
+      <td><code>x &amp;= ~(1 &lt;&lt; k)</code></td>
+      <td>Turn off bit 3: <code>x &amp;= ~0x08</code></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><strong>Test</strong> if bit $k$ is set</td>
+      <td><code>if (x &amp; (1 &lt;&lt; k))</code></td>
+      <td>Check bit 3: <code>if (x &amp; 0x08)</code></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><strong>Flip</strong> bit $k$</td>
+      <td><code>x ^= (1 &lt;&lt; k)</code></td>
+      <td>Toggle bit 3: <code>x ^= 0x08</code></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><strong>Get</strong> lowest byte</td>
+      <td><code>x &amp; 0xff</code></td>
+      <td>Mask to 8 bits</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><strong>Get</strong> second byte</td>
+      <td><code>(x &gt;&gt; 8) &amp; 0xff</code></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Summary of bitwise tricks:</strong></p>
+<ul>
+  <li><code>| 1</code> → turn bit ON</li>
+  <li><code>&amp; 0</code> → turn bit OFF</li>
+  <li><code>^ 1</code> → flip bit</li>
+  <li><code>&amp; mask</code> → isolate bits (intersection)</li>
+  <li><code>| mask</code> → set bits (union)</li>
+  <li><code>&amp; ~mask</code> → clear bits</li>
+</ul>
+<h4 id="bitmask-example-bit-vector-for-sets">Bitmask Example — Bit Vector for Sets</h4>
+<p>Imagine representing which courses you&#39;ve taken in a <code>char</code> (8 bits), one bit per course:</p>
+<pre><code class="lang-c">#<span class="hljs-built_in">define</span> COMP100  <span class="hljs-number">0x01</span>  <span class="hljs-comment">/* 0000 0001 */</span>
+#<span class="hljs-built_in">define</span> COMP106  <span class="hljs-number">0x02</span>  <span class="hljs-comment">/* 0000 0010 */</span>
+#<span class="hljs-built_in">define</span> COMP201  <span class="hljs-number">0x08</span>  <span class="hljs-comment">/* 0000 1000 */</span>
+#<span class="hljs-built_in">define</span> COMP202  <span class="hljs-number">0x10</span>  <span class="hljs-comment">/* 0001 0000 */</span>
+
+char myClasses = <span class="hljs-number">0b00100011</span>;  // taking COMP100, COMP106, COMP291
+
+myClasses |= COMP201;          // add COMP201: OR with its mask
+myClasses &amp;= ~COMP100;         // drop COMP100: AND with NOT of its mask
+<span class="hljs-keyword">if</span> (myClasses &amp; COMP202) { ... }  // test <span class="hljs-keyword">if</span> COMP202 <span class="hljs-built_in">is</span> set
+</code></pre>
+<p><strong>Check if n is a power of 2 (without loops):</strong>
+  Any power of 2 has exactly one bit set: <code>1000...0</code>. Subtract 1 and you get <code>0111...1</code>. Their AND
+  is always 0.</p>
+<pre><code class="lang-c"><span class="hljs-built_in">int</span> is_power_of_2 = (<span class="hljs-built_in">n</span> &gt; <span class="hljs-number">0</span>) &amp;&amp; !(<span class="hljs-built_in">n</span> &amp; (<span class="hljs-built_in">n</span> - <span class="hljs-number">1</span>));
+</code></pre>
+<h4 id="practice-setting-reading-bytes-of-a-32-bit-int">Practice: Setting/Reading Bytes of a 32-bit int</h4>
+<pre><code class="lang-c"><span class="hljs-keyword">int</span> j = ...;
+<span class="hljs-keyword">int</span> lowest_byte   = j &amp; <span class="hljs-number">0xff</span>;             <span class="hljs-comment">// isolate lowest byte</span>
+<span class="hljs-keyword">int</span> set_lowest_ff = j | <span class="hljs-number">0xff</span>;             <span class="hljs-comment">// set lowest byte to all 1s</span>
+<span class="hljs-keyword">int</span> flip_all_but_lowest = j ^ ~<span class="hljs-number">0xff</span>;      <span class="hljs-comment">// XOR flips bits where mask is 1</span>
+                                          <span class="hljs-comment">// ~0xff = 0xFFFFFF00 → flips top 3 bytes</span>
+</code></pre>
+<h3 id="5-4-bit-shift-operators">5.4 Bit Shift Operators</h3>
+<h4 id="left-shift-">Left Shift (<code>&lt;&lt;</code>)</h4>
+<p>Shifts bits to the left by $k$ positions. New low-order bits are filled with <strong>0s</strong>. Bits shifted off
+  the left end are discarded.</p>
+<pre><code class="lang-c">x &lt;&lt; k   // evaluates to x shifted left by k bits
+x &lt;&lt;= k  // <span class="hljs-keyword">in</span>-place left shift
+
+// <span class="hljs-number">8</span>-bit examples:
+<span class="hljs-number">0b00110111</span> &lt;&lt; <span class="hljs-number">2</span>  →  <span class="hljs-number">0b11011100</span>
+<span class="hljs-number">0b10010101</span> &lt;&lt; <span class="hljs-number">4</span>  →  <span class="hljs-number">0b01010000</span>  (top bits discarded)
+</code></pre>
+<p><strong>Key insight:</strong> Left-shifting by $k$ is equivalent to multiplying by $2^k$ (as long as no significant
+  bits are lost).</p>
+<h4 id="right-shift-">Right Shift (<code>&gt;&gt;</code>)</h4>
+<p>Shifts bits to the right by $k$ positions. Bits shifted off the right end are discarded. The key question is: what
+  fills the new <strong>high-order</strong> bits?</p>
+<p>There are <strong>two types</strong> of right shift:</p>
+<p><strong>Logical right shift:</strong> Always fills with <strong>0s</strong>. Used for <strong>unsigned</strong>
+  integers.</p>
+<p><strong>Arithmetic right shift:</strong> Fills with the <strong>sign bit</strong> (MSB). Used for
+  <strong>signed</strong> integers.</p>
+<pre><code class="lang-c"><span class="hljs-comment">// Unsigned (logical):</span>
+unsigned short x = <span class="hljs-number">2</span>;   <span class="hljs-comment">// 0000 0000 0000 0010</span>
+x &gt;&gt;= <span class="hljs-number">1</span>;                <span class="hljs-comment">// 0000 0000 0000 0001  (fills with 0)</span>
+<span class="hljs-comment">// x is now 1 ✓</span>
+
+<span class="hljs-comment">// Signed (arithmetic):</span>
+short x = <span class="hljs-number">-2</span>;           <span class="hljs-comment">// 1111 1111 1111 1110</span>
+x &gt;&gt;= <span class="hljs-number">1</span>;                <span class="hljs-comment">// 1111 1111 1111 1111  (fills with sign bit = 1)</span>
+<span class="hljs-comment">// x is now -1 ✓  (preserves sign!)</span>
+
+<span class="hljs-comment">// Signed logical (WRONG behavior):</span>
+short x = <span class="hljs-number">-2</span>;           <span class="hljs-comment">// 1111 1111 1111 1110</span>
+<span class="hljs-comment">// if logical were used: 0111 1111 1111 1111 = +32767  ✗</span>
+</code></pre>
+<p><strong>Why arithmetic right shift?</strong> Right-shifting a signed integer by $k$ is equivalent to dividing by
+  $2^k$ (rounded toward negative infinity). Arithmetic shift preserves this property.</p>
+<p><strong>Rule in C:</strong> The C standard says that right-shifting signed integers is
+  <em>implementation-defined</em>, but virtually all modern compilers use arithmetic shift for signed and logical shift
+  for unsigned.</p>
+<h4 id="shift-pitfalls">Shift Pitfalls</h4>
+<ol>
+  <li>
+    <p><strong>Operator precedence:</strong> <code>+</code> and <code>-</code> have <strong>higher</strong> precedence
+      than <code>&lt;&lt;</code> and <code>&gt;&gt;</code>. So <code>1 &lt;&lt; 2 + 3</code> means
+      <code>1 &lt;&lt; 5 = 32</code>, not <code>(1 &lt;&lt; 2) + 3 = 7</code>. <strong>Always use parentheses.</strong>
+    </p>
+  </li>
+  <li>
+    <p><strong>Shifting by ≥ width:</strong> The result is undefined in C if you shift by a number ≥ the bit width of
+      the type (e.g., shifting a 32-bit int by 32 or more).</p>
+  </li>
+  <li>
+    <p><strong>Left shift and overflow:</strong> If a left shift causes bits to be lost (overflow), the result is
+      undefined for signed integers.</p>
+  </li>
+</ol>
+<hr>
+<h2 id="6-floating-point-numbers">6. Floating Point Numbers</h2>
+<h3 id="6-1-why-integers-are-not-enough">6.1 Why Integers Are Not Enough</h3>
+<p>Integers can&#39;t represent numbers like 3.14, 0.001, or $6.02 \times 10^{23}$. We need a way to represent
+  <strong>real numbers</strong>.</p>
+<p>The fundamental challenge: between any two real numbers, there are infinitely many others. With a fixed number of
+  bits, we can only represent a finite set of values — so <strong>approximation is inevitable</strong>.</p>
+<p>Every number base has numbers that can&#39;t be represented exactly:</p>
+<ul>
+  <li>Base 10: $1/6 = 0.16666...$</li>
+  <li>Base 2: $1/10 = 0.000110011001100...$</li>
+</ul>
+<p>So even numbers we can write exactly in decimal (like 0.1) often can&#39;t be stored exactly in binary floating
+  point.</p>
+<h3 id="6-2-fixed-point-and-why-it-fails-">6.2 Fixed Point (and Why It Fails)</h3>
+<p><strong>Fixed point idea:</strong> Designate some bits for the integer part and some for the fractional part, like a
+  decimal point that never moves.</p>
+<pre><code><span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">1</span> . <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">1</span>
+<span class="hljs-number">8</span>s <span class="hljs-number">4</span>s <span class="hljs-number">2</span>s <span class="hljs-number">1</span>s  <span class="hljs-number">1</span>/<span class="hljs-number">2</span>s <span class="hljs-number">1</span>/<span class="hljs-number">4</span>s <span class="hljs-number">1</span>/<span class="hljs-number">8</span>s
+= <span class="hljs-number">8</span> + <span class="hljs-number">2</span> + <span class="hljs-number">1</span> + <span class="hljs-number">1</span>/<span class="hljs-number">4</span> + <span class="hljs-number">1</span>/<span class="hljs-number">8</span> = <span class="hljs-number">11.375</span>
+</code></pre>
+<p><strong>Problem:</strong> The decimal point is in a fixed position, so you must decide in advance how large and how
+  precise your numbers can be. To represent both $10^{38}$ and $10^{-38}$, you&#39;d need over 200 bits. The range vs.
+  precision tradeoff is terrible.</p>
+<h3 id="6-3-ieee-754-floating-point">6.3 IEEE 754 Floating Point</h3>
+<p>The standard approach is to use <strong>scientific notation in binary</strong>. A number is stored as:</p>
+<p>$$(-1)^s \times M \times 2^E$$</p>
+<p>where:</p>
+<ul>
+  <li>$s$ is the <strong>sign bit</strong> (0 = positive, 1 = negative)</li>
+  <li>$M$ is the <strong>significand</strong> (mantissa), a number in the range $[1.0, 2.0)$</li>
+  <li>$E$ is the <strong>exponent</strong></li>
+</ul>
+<h4 id="ieee-754-single-precision-32-bit-float-">IEEE 754 Single Precision (32-bit <code>float</code>)</h4>
+<pre><code>[ s | exponent (<span class="hljs-number">8</span> bits) | fraction (<span class="hljs-number">23</span> bits) ]
+  <span class="hljs-number">1</span>        <span class="hljs-number">8</span>                    <span class="hljs-number">23</span>             = <span class="hljs-number">32</span> bits total
+</code></pre>
+<h4 id="ieee-754-double-precision-64-bit-double-">IEEE 754 Double Precision (64-bit <code>double</code>)</h4>
+<pre><code>[ s | exponent (<span class="hljs-number">11</span> bits) | fraction (<span class="hljs-number">52</span> bits) ]
+  <span class="hljs-number">1</span>        <span class="hljs-number">11</span>                    <span class="hljs-number">52</span>            = <span class="hljs-number">64</span> bits total
+</code></pre>
+<h4 id="the-exponent-field-biased-representation-">The Exponent Field (Biased Representation)</h4>
+<p>The exponent is <strong>not</strong> stored in two&#39;s complement. Instead it uses a <strong>biased
+    (excess)</strong> representation so that:</p>
+<ul>
+  <li>Larger exponent bits = larger value</li>
+  <li>Unsigned integer comparison works directly on floats</li>
+</ul>
+<p>For 32-bit floats (8 exponent bits), the <strong>bias is 127</strong>:</p>
+<p>$$E<em>{actual} = E</em>{stored} - 127$$</p>
+<p>So if the stored exponent bits are <code>10000000</code> (= 128 in decimal), the actual exponent is $128 - 127 = 1$.
+</p>
+<p>The stored values <code>00000000</code> (0) and <code>11111111</code> (255) are <strong>reserved</strong> for special
+  cases (see below), so the range of actual exponents for normalized numbers is <strong>−126 to +127</strong>.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Stored Exponent</th>
+      <th>Actual Exponent ($E_{stored} - 127$)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>11111110 = 254</td>
+      <td>+127</td>
+    </tr>
+    <tr>
+      <td>11111101 = 253</td>
+      <td>+126</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>10000000 = 128</td>
+      <td>+1</td>
+    </tr>
+    <tr>
+      <td>01111111 = 127</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>01111110 = 126</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>00000001 = 1</td>
+      <td>-126</td>
+    </tr>
+    <tr>
+      <td>00000000 = 0</td>
+      <td>RESERVED (denormalized)</td>
+    </tr>
+    <tr>
+      <td>11111111 = 255</td>
+      <td>RESERVED (∞ or NaN)</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Bias for $k$-bit exponent field:</strong> $\text{bias} = 2^{k-1} - 1$</p>
+<p>So for an 8-bit field: bias = $2^7 - 1 = 127$. For a 4-bit field: bias = $2^3 - 1 = 7$.</p>
+<h4 id="the-fraction-field-implicit-leading-1-">The Fraction Field (Implicit Leading 1)</h4>
+<p>In normalized mode, the significand $M$ is always in the range $[1.0, 2.0)$. We can always write it as $1.xxxxx_2$
+  (one bit to the left of the binary point, which is always 1). Since the leading 1 is implicit, we only store the
+  fractional part $xxx...$</p>
+<p>This gives us <strong>one extra bit of precision for free!</strong> A 23-bit fraction field effectively stores 24
+  bits of precision.</p>
+<p>$$M = 1.\underbrace{f<em>{22}f</em>{21}...f_1f<em>0}</em>{\text{23 fraction bits}}$$</p>
+<p>$$\text{Value} = (-1)^s \times 1.\text{frac} \times 2^{E_{actual}}$$</p>
+<h4 id="step-by-step-encoding-a-number">Step-by-Step: Encoding a Number</h4>
+<p><strong>Example: Encode −0.75 in 32-bit IEEE 754</strong></p>
+<ol>
+  <li><strong>Sign:</strong> −0.75 is negative → $s = 1$</li>
+  <li><strong>Convert to binary:</strong> $0.75 = 0.5 + 0.25 = 2^{-1} + 2^{-2}$ → $0.11_2$</li>
+  <li><strong>Normalize:</strong> $0.11_2 = 1.1_2 \times 2^{-1}$</li>
+  <li><strong>Exponent:</strong> $E<em>{actual} = -1$ → $E</em>{stored} = -1 + 127 = 126$ → <code>01111110</code></li>
+  <li><strong>Fraction:</strong> $1.\mathbf{1}000...0$ → store <code>10000000000000000000000</code> (just the part after
+    the decimal point)</li>
+  <li><strong>Result:</strong> <code>1 01111110 10000000000000000000000</code></li>
+</ol>
+<p><strong>Example: Decode <code>0 10000001 01000000000000000000000</code></strong></p>
+<ol>
+  <li><strong>Sign:</strong> $s = 0$ → positive</li>
+  <li><strong>Exponent:</strong> stored = <code>10000001</code> = 129 → $E = 129 - 127 = 2$</li>
+  <li><strong>Fraction:</strong> <code>01000000000000000000000</code> → $M = 1.01_2 = 1 + 0.25 = 1.25$</li>
+  <li><strong>Value:</strong> $1.25 \times 2^2 = 5.0$</li>
+</ol>
+<h3 id="6-4-normalized-vs-denormalized-numbers">6.4 Normalized vs. Denormalized Numbers</h3>
+<h4 id="normalized-numbers-exponent-0-and-all-1s-">Normalized Numbers (exponent ≠ 0 and ≠ all-1s)</h4>
+<p>These are the standard numbers. The implicit leading 1 applies:
+  $$M = 1.\text{frac}, \quad E = E_{stored} - \text{bias}$$</p>
+<h4 id="denormalized-numbers-exponent-all-0s-">Denormalized Numbers (exponent = all 0s)</h4>
+<p>When the stored exponent is 0, we switch to <strong>denormalized mode</strong>:</p>
+<ul>
+  <li>The implicit leading 1 is <strong>dropped</strong> (becomes 0.frac)</li>
+  <li>The exponent is treated as $E = 1 - \text{bias}$ (NOT $0 - \text{bias}$)</li>
+</ul>
+<p>$$M = 0.\text{frac}, \quad E = 1 - \text{bias}$$</p>
+<p>For 32-bit floats: $E = 1 - 127 = -126$</p>
+<p><strong>Why denormalized?</strong> They fill in the gap between 0 and the smallest normalized number. Without them,
+  there&#39;d be a huge jump (underflow cliff). With them, numbers <strong>gradually</strong> get less precise as they
+  approach 0 (&quot;gradual underflow&quot;).</p>
+<p>If the fraction is also all 0s, the value is <strong>±0</strong> (both positive and negative zero exist).</p>
+<h3 id="6-5-special-values-nan-0-">6.5 Special Values (±∞, NaN, ±0)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Exponent</th>
+      <th>Fraction</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0 (all zeros)</td>
+      <td>0 (all zeros)</td>
+      <td>±0 (based on sign bit)</td>
+    </tr>
+    <tr>
+      <td>0 (all zeros)</td>
+      <td>nonzero</td>
+      <td>Denormalized number</td>
+    </tr>
+    <tr>
+      <td>1–254</td>
+      <td>anything</td>
+      <td>Normalized number</td>
+    </tr>
+    <tr>
+      <td>255 (all ones)</td>
+      <td>0 (all zeros)</td>
+      <td>±∞ (based on sign bit)</td>
+    </tr>
+    <tr>
+      <td>255 (all ones)</td>
+      <td>nonzero</td>
+      <td>NaN (Not a Number)</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Infinity (±∞):</strong> Results from dividing by zero or overflow. Useful: <code>∞ + x = ∞</code> for any
+  finite x. <code>∞ - ∞ = NaN</code>.</p>
+<p><strong>NaN (Not a Number):</strong> Results from undefined operations:</p>
+<ul>
+  <li>$\sqrt{-1}$</li>
+  <li>$\infty - \infty$</li>
+  <li>$\infty / \infty$</li>
+  <li>$0 \times \infty$</li>
+</ul>
+<p>NaN is &quot;infectious&quot;: any operation involving NaN returns NaN.</p>
+<p><strong>Two zeros (±0):</strong> IEEE 754 has both <code>+0.0</code> and <code>-0.0</code>. They compare as equal:
+  <code>(+0.0 == -0.0)</code> is true.</p>
+<h3 id="6-6-tiny-floating-point-examples">6.6 Tiny Floating Point Examples</h3>
+<p>The exam frequently gives you a <strong>custom small format</strong> and asks you to encode/decode values. Here&#39;s
+  how to handle any custom format:</p>
+<p><strong>General formula for a custom N-bit format with k exponent bits and (N-1-k) fraction bits:</strong>
+  $$\text{bias} = 2^{k-1} - 1$$</p>
+<p><strong>Example: 8-bit format with 4 exponent bits, 3 fraction bits, bias = 7</strong></p>
+<p>Layout: <code>[s | e3 e2 e1 e0 | f2 f1 f0]</code></p>
+<p>Let&#39;s work out a few values:</p>
+<table>
+  <thead>
+    <tr>
+      <th>s</th>
+      <th>exp</th>
+      <th>frac</th>
+      <th>Type</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0000</td>
+      <td>000</td>
+      <td>+Zero</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0000</td>
+      <td>001</td>
+      <td>Denormalized</td>
+      <td>$0.001 \times 2^{-6} = 1/512$</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0001</td>
+      <td>000</td>
+      <td>Normalized</td>
+      <td>$1.000 \times 2^{1-7} = 1 \times 2^{-6} = 1/64$</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0111</td>
+      <td>000</td>
+      <td>Normalized</td>
+      <td>$1.000 \times 2^{7-7} = 1$</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0111</td>
+      <td>001</td>
+      <td>Normalized</td>
+      <td>$1.001 \times 2^0 = 9/8$</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1110</td>
+      <td>111</td>
+      <td>Normalized</td>
+      <td>$1.111 \times 2^7 = 15/8 \times 128 = 240$</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1111</td>
+      <td>000</td>
+      <td>+∞</td>
+      <td>+∞</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0000</td>
+      <td>000</td>
+      <td>-Zero</td>
+      <td>−0</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Step-by-step to encode a decimal value in a custom format:</strong></p>
+<ol>
+  <li>Determine sign bit.</li>
+  <li>Convert the absolute value to binary.</li>
+  <li>Normalize: write as $1.xxx \times 2^E$ (or $0.xxx \times 2^{1-\text{bias}}$ for denormalized).</li>
+  <li>Compute stored exponent: $E_{stored} = E + \text{bias}$.</li>
+  <li>Extract the fraction bits (the part after the binary point in normalized form).</li>
+</ol>
+<blockquote>
+  <p><strong>Worked example (from past midterm):</strong> 8-bit format: 1 sign bit, 3 exponent bits, 4 fraction bits.
+    Bias = 3. Encode −5/64.</p>
+  <ol>
+    <li>Sign = 1 (negative)</li>
+    <li>$5/64 = 5 \times 2^{-6}$. In binary: $5 = 101_2$ so $5/64 = 0.000101_2$</li>
+    <li>Normalize: $1.01 \times 2^{-4}$</li>
+    <li>Stored exponent: $-4 + 3 = -1$. But stored exponent must be ≥ 1 for normalized. Since $-1 &lt; 1-3 = -2$...
+      let&#39;s check: $E_{min} = 1 - \text{bias} = 1 - 3 = -2$. Since $-4 &lt; -2$, this is denormalized.<ul>
+        <li>For denormalized: $E = 1 - 3 = -2$, so value = $(-1)^1 \times 0.\text{frac} \times 2^{-2}$</li>
+        <li>$5/64 = 0.\text{frac} \times 2^{-2}$ → $0.\text{frac} = 5/64 \times 4 = 5/16 = 0.0101_2$</li>
+        <li>frac bits = <code>0101</code></li>
+      </ul>
+    </li>
+    <li>Result: <code>1 000 0101</code> → confirms: $V = -1 \times 0.0101 \times 2^{-2} = -0.0101/4 = -5/64$ ✓</li>
+  </ol>
+</blockquote>
+<h3 id="6-7-floating-point-arithmetic-pitfalls">6.7 Floating Point Arithmetic Pitfalls</h3>
+<h4 id="floating-point-is-not-associative">Floating Point is NOT Associative</h4>
+<pre><code class="lang-c"><span class="hljs-attribute">float</span> a = <span class="hljs-number">3.14</span>;
+<span class="hljs-attribute">float</span> b = <span class="hljs-number">1</span>e20;
+
+(<span class="hljs-selector-tag">a</span> + b) - <span class="hljs-selector-tag">b</span>  = <span class="hljs-number">0.0</span>       <span class="hljs-comment">// loses 3.14 when adding to 1e20</span>
+<span class="hljs-selector-tag">a</span> + (<span class="hljs-selector-tag">b</span> - b)  = <span class="hljs-number">3.14</span>      <span class="hljs-comment">// evaluates 1e20 - 1e20 = 0 first</span>
+</code></pre>
+<p><strong>Why?</strong> When adding 3.14 and 1e20, we must align binary points. 3.14 is about $2^1$ while 1e20 is about
+  $2^{66}$. To add them, we shift 3.14&#39;s binary point 65 places right — it disappears beyond the 23 fraction bits we
+  have. The result is indistinguishable from 1e20.</p>
+<p>The order of operations <strong>matters</strong> for floating point. Never assume associativity.</p>
+<h4 id="floating-point-equality-is-unreliable">Floating Point Equality is Unreliable</h4>
+<p>Because of rounding, <code>0.1 + 0.2</code> in floating point is not exactly <code>0.3</code>. <strong>Never compare
+    floats with <code>==</code>.</strong> Use a tolerance check:</p>
+<pre><code class="lang-c"><span class="hljs-comment">// Bad:</span>
+<span class="hljs-keyword">if</span> <span class="hljs-comment">(a == b)</span> { ... }
+
+<span class="hljs-comment">// Good:</span>
+<span class="hljs-keyword">if</span> <span class="hljs-comment">(fabs(a - b)</span> &lt; <span class="hljs-number">1</span>e<span class="hljs-number">-9</span>) { ... }
+</code></pre>
+<h4 id="float-puzzles-know-these-for-the-exam-">Float Puzzles (know these for the exam!)</h4>
+<p>Assume <code>int x</code>, <code>float f</code>, <code>double d</code> (neither d nor f is NaN):</p>
+<table>
+  <thead>
+    <tr>
+      <th>Expression</th>
+      <th>True/False?</th>
+      <th>Why</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>x == (int)(float)x</code></td>
+      <td><strong>Sometimes False</strong></td>
+      <td>int → float may round (float has only 24 bits of mantissa)</td>
+    </tr>
+    <tr>
+      <td><code>x == (int)(double)x</code></td>
+      <td><strong>Always True</strong></td>
+      <td>double has 53 mantissa bits, enough for any 32-bit int</td>
+    </tr>
+    <tr>
+      <td><code>f == (float)(double)f</code></td>
+      <td><strong>Always True</strong></td>
+      <td>widening then narrowing float is lossless</td>
+    </tr>
+    <tr>
+      <td><code>d == (float)d</code></td>
+      <td><strong>Sometimes False</strong></td>
+      <td>double → float loses precision</td>
+    </tr>
+    <tr>
+      <td><code>f == -(-f)</code></td>
+      <td><strong>Always True</strong></td>
+      <td>negation just flips sign bit</td>
+    </tr>
+    <tr>
+      <td><code>2/3 == 2/3.0</code></td>
+      <td><strong>False</strong></td>
+      <td><code>2/3</code> is integer division (= 0); <code>2/3.0</code> is float (≈ 0.667)</td>
+    </tr>
+    <tr>
+      <td><code>d * d &gt;= 0.0</code></td>
+      <td><strong>Always True</strong></td>
+      <td>squaring a real number is always ≥ 0 (NaN excluded)</td>
+    </tr>
+    <tr>
+      <td><code>(d+f)-d == f</code></td>
+      <td><strong>Sometimes False</strong></td>
+      <td>non-associativity</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="6-8-floating-point-in-c">6.8 Floating Point in C</h3>
+<p><strong>C types:</strong></p>
+<ul>
+  <li><code>float</code> → single precision (32-bit)</li>
+  <li><code>double</code> → double precision (64-bit)</li>
+</ul>
+<p><strong>Casting behavior:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Conversion</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>double</code>/<code>float</code> → <code>int</code></td>
+      <td>Truncates (rounds toward zero). Undefined if out of range or NaN — typically gives TMin</td>
+    </tr>
+    <tr>
+      <td><code>int</code> → <code>double</code></td>
+      <td>Exact if int has ≤ 53 bits (always true for 32-bit int)</td>
+    </tr>
+    <tr>
+      <td><code>int</code> → <code>float</code></td>
+      <td>May round — float only has 24 bits of mantissa</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Real-world example:</strong> The Ariane 5 rocket crash (1996) was caused by converting a 64-bit double to a
+  16-bit signed integer. The value exceeded the 16-bit range, causing overflow and a hardware exception. The software
+  was reused from Ariane 4, which flew slower and never triggered the overflow.</p>
+<hr>
+<h2 id="7-key-formulas-quick-reference">7. Key Formulas &amp; Quick Reference</h2>
+<h3 id="integer-quick-reference">Integer Quick Reference</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Concept</th>
+      <th>Formula</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Unsigned range ($w$ bits)</td>
+      <td>$0$ to $2^w - 1$</td>
+    </tr>
+    <tr>
+      <td>Signed range ($w$ bits)</td>
+      <td>$-2^{w-1}$ to $2^{w-1} - 1$</td>
+    </tr>
+    <tr>
+      <td>TMax ($w$ bits)</td>
+      <td>$2^{w-1} - 1$</td>
+    </tr>
+    <tr>
+      <td>TMin ($w$ bits)</td>
+      <td>$-2^{w-1}$</td>
+    </tr>
+    <tr>
+      <td>Negate (two&#39;s complement)</td>
+      <td>$\sim x + 1$</td>
+    </tr>
+    <tr>
+      <td>$x + TMax + 1 = x - 1$ mod $2^w$</td>
+      <td>(overflow wraps)</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="floating-point-quick-reference">Floating Point Quick Reference</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>32-bit float</th>
+      <th>64-bit double</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Sign bits</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Exponent bits</td>
+      <td>8</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <td>Fraction bits</td>
+      <td>23</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <td>Bias</td>
+      <td>127</td>
+      <td>1023</td>
+    </tr>
+    <tr>
+      <td>Normalized exponent range</td>
+      <td>−126 to 127</td>
+      <td>−1022 to 1023</td>
+    </tr>
+    <tr>
+      <td>Approximate range</td>
+      <td>$\pm 1.2 \times 10^{-38}$ to $\pm 3.4 \times 10^{38}$</td>
+      <td>$\pm 2.2 \times 10^{-308}$ to $\pm 1.8 \times 10^{308}$</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="encoding-summary">Encoding Summary</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Case</th>
+      <th>Exponent</th>
+      <th>Fraction</th>
+      <th>Value Formula</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Normalized</td>
+      <td>$1$ to max-1</td>
+      <td>any</td>
+      <td>$(-1)^s \times 1.\text{frac} \times 2^{E-\text{bias}}$</td>
+    </tr>
+    <tr>
+      <td>Denormalized</td>
+      <td>all 0s</td>
+      <td>nonzero</td>
+      <td>$(-1)^s \times 0.\text{frac} \times 2^{1-\text{bias}}$</td>
+    </tr>
+    <tr>
+      <td>±0</td>
+      <td>all 0s</td>
+      <td>all 0s</td>
+      <td>$\pm 0$</td>
+    </tr>
+    <tr>
+      <td>±∞</td>
+      <td>all 1s</td>
+      <td>all 0s</td>
+      <td>$\pm \infty$</td>
+    </tr>
+    <tr>
+      <td>NaN</td>
+      <td>all 1s</td>
+      <td>nonzero</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="bitwise-operator-summary">Bitwise Operator Summary</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Operator</th>
+      <th>Symbol</th>
+      <th>Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AND</td>
+      <td><code>&amp;</code></td>
+      <td>Both bits must be 1</td>
+    </tr>
+    <tr>
+      <td>OR</td>
+      <td>`\</td>
+      <td>`</td>
+      <td>At least one bit is 1</td>
+    </tr>
+    <tr>
+      <td>XOR</td>
+      <td><code>^</code></td>
+      <td>Exactly one bit is 1</td>
+    </tr>
+    <tr>
+      <td>NOT</td>
+      <td><code>~</code></td>
+      <td>Flip all bits</td>
+    </tr>
+    <tr>
+      <td>Left shift</td>
+      <td><code>&lt;&lt;</code></td>
+      <td>Shift left, fill 0s (× $2^k$)</td>
+    </tr>
+    <tr>
+      <td>Right shift</td>
+      <td><code>&gt;&gt;</code></td>
+      <td>Shift right (÷ $2^k$), fill 0s (unsigned) or sign bit (signed)</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="8-exam-style-practice-problems">8. Exam-Style Practice Problems</h2>
+<h3 id="problem-set-1-integer-representations-like-midterm-q1-">Problem Set 1: Integer Representations (Like Midterm Q1)
+</h3>
+<p>Assume a <strong>10-bit machine</strong> where:</p>
+<ul>
+  <li>Two&#39;s complement is used for signed integers</li>
+  <li><code>short</code> integers are encoded using 5 bits</li>
+  <li>Sign extension occurs when <code>short</code> is cast to <code>int</code></li>
+  <li>All shift operations are arithmetic</li>
+</ul>
+<pre><code class="lang-c"><span class="hljs-keyword">short </span>sa = -<span class="hljs-number">7</span><span class="hljs-comment">;</span>
+int <span class="hljs-keyword">b </span>= <span class="hljs-number">2</span> * sa<span class="hljs-comment">;</span>
+int a = -<span class="hljs-number">32</span><span class="hljs-comment">;</span>
+<span class="hljs-keyword">short </span><span class="hljs-keyword">sb </span>= (<span class="hljs-keyword">short) </span>a<span class="hljs-comment">;</span>
+unsigned <span class="hljs-keyword">short </span>ua = a + <span class="hljs-number">28</span><span class="hljs-comment">;</span>
+</code></pre>
+<p>Fill in the table:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Expression</th>
+      <th>Decimal</th>
+      <th>Hex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Zero</td>
+      <td>0</td>
+      <td>0x000</td>
+    </tr>
+    <tr>
+      <td><code>(short) 1</code></td>
+      <td>1</td>
+      <td>0x001</td>
+    </tr>
+    <tr>
+      <td><code>sa</code></td>
+      <td>−7</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><code>b</code></td>
+      <td>−14</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><code>sb</code></td>
+      <td>?</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><code>ua</code></td>
+      <td>?</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><code>a &gt;&gt; 2</code></td>
+      <td>?</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><code>ua &gt;&gt; 2</code></td>
+      <td>?</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><code>b &lt;&lt; 3</code></td>
+      <td>?</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td>TMax (short)</td>
+      <td>?</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Solutions:</strong></p>
+<ul>
+  <li>
+    <p><code>sa = -7</code>: In 5-bit two&#39;s complement, TMax = 15, TMin = -16. −7 in 5-bit: <code>11001</code>. As a
+      10-bit two&#39;s complement value: sign-extend → <code>1111111001</code>. Hex of 10-bit: group as
+      <code>11 1111 1001</code> → <code>0x1F9</code>... wait, we need 10 bits = <code>11 1111 1001</code>. In hex
+      (grouping from right, 4+4+2): the 10-bit pattern is <code>1111111001</code>. As an unsigned 10-bit value:
+      $512+256+128+64+32+16+8+0+0+1 = 1017$, but as signed 10-bit: $-1024+... = $ actually this is signed. TMin for
+      10-bit short (5-bit): let me redo.</p>
+    <p>Actually, the machine has 10-bit ints and 5-bit shorts. So <code>short</code> is 5-bit, <code>int</code> is
+      10-bit.</p>
+    <p><code>sa = -7</code> in 5-bit two&#39;s complement: TMax₅ = 15, TMin₅ = -16. −7 = 5-bit two&#39;s complement:
+      <code>~7 + 1 = ~00111 + 1 = 11000 + 1 = 11001</code>. As 10-bit (sign-extended): <code>1111111001</code>. Hex of
+      10-bit value <code>1111111001</code> (unsigned) = 0x3F9. As signed 10-bit: $-512 + 256 + 128 + 64 + 32 + 16 + 8 +
+      0 + 0 + 1 = -7$. So <code>sa = -7</code>, hex <code>0x3F9</code>.</p>
+    <p><code>b = 2*sa = -14</code>. In 10-bit two&#39;s complement:
+      <code>~14 + 1 = ~0000001110 + 1 = 1111110001 + 1 = 1111110010</code>. Hex: <code>0x3F2</code>.</p>
+    <p><code>sb = (short)a</code>: <code>a = -32</code> in 10-bit. <code>short</code> is 5-bit. Truncate to lowest 5
+      bits. <code>−32</code> in 10-bit two&#39;s complement:
+      <code>−32 = ~32+1 = ~0000100000+1 = 1111011111+1 = 1111100000</code>. Lowest 5 bits: <code>00000</code> = 0.
+      <code>sb = 0</code>, hex <code>0x00</code>.</p>
+    <p><code>ua = a + 28 = -32 + 28 = -4</code>. Stored as <code>unsigned short</code> (5-bit unsigned). <code>−4</code>
+      as 10-bit: <code>1111111100</code>. Truncate to 5 bits: <code>11100</code> = 28. So <code>ua = 28</code>, hex
+      <code>0x1C</code>.</p>
+    <p><code>a &gt;&gt; 2 = -32 &gt;&gt; 2</code>. Arithmetic right shift: -32 / 4 = -8. <code>0x3F8</code>.</p>
+    <p><code>ua &gt;&gt; 2 = 28 &gt;&gt; 2</code>. Logical right shift (unsigned): 28 / 4 = 7. <code>0x007</code>.</p>
+    <p><code>b &lt;&lt; 3 = -14 &lt;&lt; 3 = -14 * 8 = -112</code>. In 10-bit: <code>−112</code>. <code>0x390</code>.
+    </p>
+    <p>TMax (short, 5-bit): $2^4 - 1 = 15$. <code>01111</code> = 15, <code>0x0F</code>.</p>
+  </li>
+</ul>
+<h3 id="problem-set-2-bitwise-operations-like-midterm-q1b-">Problem Set 2: Bitwise Operations (Like Midterm Q1b)</h3>
+<p>Given <code>a</code> is a <strong>32-bit signed int</strong>, classify each expression:</p>
+<ul>
+  <li><strong>Never zero</strong> — always evaluates to nonzero</li>
+  <li><strong>Sometimes zero</strong> — zero for some values of a, nonzero for others</li>
+  <li><strong>Always zero</strong> — always evaluates to zero</li>
+</ul>
+<table>
+  <thead>
+    <tr>
+      <th>Expression</th>
+      <th>Answer</th>
+      <th>Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`(~a) \</td>
+      <td>a`</td>
+      <td><strong>Never zero</strong></td>
+      <td>Every bit of `~a \</td>
+      <td>a<code>is 1, regardless of</code>a<code>. Result =</code>0xFFFFFFFF`.</td>
+    </tr>
+    <tr>
+      <td><code>(a &lt;&lt; 1) &amp; !!a</code></td>
+      <td><strong>Sometimes zero</strong></td>
+      <td>If <code>a=0</code>, then <code>!!a = 0</code> → result is 0. If <code>a=1</code> (odd),
+        <code>a&lt;&lt;1=2</code>, <code>!!a=1</code>, result = <code>2 &amp; 1 = 0</code>. If <code>a=2</code>, result
+        = <code>4 &amp; 1 = 0</code>. Hmm. <code>!!a</code> is 0 or 1. <code>(a&lt;&lt;1) &amp; 0 = 0</code> always when
+        <code>a=0</code>. When <code>a≠0</code>, <code>!!a=1</code>, so result = <code>(a&lt;&lt;1) &amp; 1</code>.
+        Left-shifting by 1 makes LSB 0, so <code>(a&lt;&lt;1) &amp; 1 = 0</code> always. So this is <strong>always
+          zero</strong>.</td>
+    </tr>
+    <tr>
+      <td><code>(a &amp; 0x00ff) ^ (a &amp; 0xff00)</code></td>
+      <td><strong>Sometimes zero</strong></td>
+      <td>Zero when <code>a</code>&#39;s byte 0 equals byte 1 (after XOR). For example, <code>a = 0x0101</code> →
+        <code>(0x01) ^ (0x01&lt;&lt;8)</code> ... wait, byte masking: <code>a &amp; 0x00ff</code> = lowest byte,
+        <code>a &amp; 0xff00</code> = second byte. XOR of two different-position values is 0 only when both are 0, i.e.,
+        when byte 0 and byte 1 of <code>a</code> are both 0. <strong>Sometimes zero</strong> (when <code>a</code>&#39;s
+        lowest two bytes are 0).</td>
+    </tr>
+    <tr>
+      <td><code>a &amp; (a &lt;&lt; 1)</code></td>
+      <td><strong>Sometimes zero</strong></td>
+      <td>Zero when <code>a=0</code>. Nonzero when adjacent bits in <code>a</code> are both 1 (e.g.,
+        <code>a=3=0b11</code>, <code>(3 &lt;&lt; 1)=6=0b110</code>, <code>3 &amp; 6 = 2</code>). <strong>Sometimes
+          zero</strong>.</td>
+    </tr>
+    <tr>
+      <td><code>~a + a + 1</code></td>
+      <td><strong>Always zero</strong></td>
+      <td><code>~a + 1 = -a</code> (two&#39;s complement negation). So <code>~a + a + 1 = (-a) + a = 0</code>. Always
+        zero (including overflow).</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="problem-set-3-floating-point-like-midterm-q2-">Problem Set 3: Floating Point (Like Midterm Q2)</h3>
+<p><strong>8-bit floating point</strong> format: 1 sign bit, 3 exponent bits, 4 fraction bits. Bias = 3.</p>
+<p>Encode the following values:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Sign</th>
+      <th>Stored Exp</th>
+      <th>Fraction</th>
+      <th>Binary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.0 (positive)</td>
+      <td>0</td>
+      <td>000</td>
+      <td>0000</td>
+      <td><code>0 000 0000</code></td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+      <td>0</td>
+      <td>011 (=3, actual E=0)</td>
+      <td>0000</td>
+      <td><code>0 011 0000</code></td>
+    </tr>
+    <tr>
+      <td>−0.75</td>
+      <td>1</td>
+      <td>010 (=2, actual E=−1)</td>
+      <td>1000 (= 0.5)</td>
+      <td><code>1 010 1000</code></td>
+    </tr>
+    <tr>
+      <td>+∞</td>
+      <td>0</td>
+      <td>111</td>
+      <td>0000</td>
+      <td><code>0 111 0000</code></td>
+    </tr>
+    <tr>
+      <td>NaN</td>
+      <td>0</td>
+      <td>111</td>
+      <td>0001 (any nonzero)</td>
+      <td><code>0 111 0001</code></td>
+    </tr>
+    <tr>
+      <td>Smallest pos. normalized</td>
+      <td>0</td>
+      <td>001</td>
+      <td>0000</td>
+      <td><code>0 001 0000</code></td>
+    </tr>
+    <tr>
+      <td>Largest pos. denormalized</td>
+      <td>0</td>
+      <td>000</td>
+      <td>1111</td>
+      <td><code>0 000 1111</code></td>
+    </tr>
+    <tr>
+      <td>Largest pos. normalized</td>
+      <td>0</td>
+      <td>110</td>
+      <td>1111</td>
+      <td><code>0 110 1111</code></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Worked example: Encoding 1.0</strong></p>
+<ul>
+  <li>Sign = 0</li>
+  <li>$1.0 = 1.0 \times 2^0$ → E = 0 → stored exponent = 0 + 3 = 3 = <code>011</code></li>
+  <li>Fraction = part after implicit 1. = <code>0000</code></li>
+  <li>Result: <code>0 011 0000</code></li>
+</ul>
+<p><strong>Worked example: Encoding −0.75</strong></p>
+<ul>
+  <li>Sign = 1 (negative)</li>
+  <li>$0.75 = 0.11_2 = 1.1_2 \times 2^{-1}$ → E = −1 → stored = −1 + 3 = 2 = <code>010</code></li>
+  <li>Fraction = <code>1000</code> (just the <code>.1000...</code> part)</li>
+  <li>Result: <code>1 010 1000</code></li>
+</ul>
+<p><strong>Worked example: Largest positive denormalized</strong></p>
+<ul>
+  <li>Exponent = <code>000</code>, fraction = <code>1111</code></li>
+  <li>$M = 0.1111_2 = 15/16$</li>
+  <li>$E = 1 - 3 = -2$</li>
+  <li>Value = $15/16 \times 2^{-2} = 15/64 \approx 0.234$</li>
+</ul>
+<p><strong>Worked example: Smallest positive normalized</strong></p>
+<ul>
+  <li>Exponent = <code>001</code> (= 1 stored, actual E = 1 − 3 = −2), fraction = <code>0000</code></li>
+  <li>$M = 1.0000 = 1$</li>
+  <li>Value = $1 \times 2^{-2} = 1/4 = 0.25$</li>
+</ul>
+<p>Notice: the smallest normalized (0.25) is larger than the largest denormalized (15/64 ≈ 0.234) — there&#39;s a small
+  gap filled by denormalized numbers.</p>
+<h3 id="problem-set-4-sign-extension-and-truncation">Problem Set 4: Sign Extension and Truncation</h3>
+<pre><code class="lang-c">// On a standard <span class="hljs-number">64</span>-bit machine:
+short x = -<span class="hljs-number">132</span>;  // <span class="hljs-number">16</span>-bit: <span class="hljs-number">0b1111</span> <span class="hljs-number">1111</span> <span class="hljs-number">0111</span> <span class="hljs-number">1100</span>
+char cx = x;     // <span class="hljs-built_in">truncate</span> to <span class="hljs-number">8</span> bits: <span class="hljs-number">0111</span> <span class="hljs-number">1100</span> = ?
+</code></pre>
+<p>Answer: <code>0111 1100</code> = 124. <code>cx = 124</code>.</p>
+<pre><code class="lang-c">short x = <span class="hljs-number">390</span>;   // <span class="hljs-number">0b0000</span> <span class="hljs-number">0001</span> <span class="hljs-number">1000</span> <span class="hljs-number">0110</span>
+char cx = x;     // <span class="hljs-built_in">truncate</span> to <span class="hljs-number">8</span> bits: <span class="hljs-number">1000</span> <span class="hljs-number">0110</span> = ?
+</code></pre>
+<p>Answer: <code>1000 0110</code> = −122 (as signed char). <code>cx = -122</code>.</p>
+<h3 id="problem-set-5-casting-and-mixed-type-comparisons">Problem Set 5: Casting and Mixed-Type Comparisons</h3>
+<p>For each expression, give the result (0 = false, 1 = true):</p>
+<pre><code class="lang-c">int x = <span class="hljs-number">-1</span>;
+unsigned int ux = x;  <span class="hljs-comment">// ux = 4294967295 (UINT_MAX)</span>
+
+x &lt; <span class="hljs-number">0</span>         → <span class="hljs-number">1</span>   (signed comparison)
+ux &lt; <span class="hljs-number">0</span>        → <span class="hljs-number">0</span>   (unsigned, can never be negative)
+x &lt; ux        → <span class="hljs-number">0</span>   (x cast to unsigned = huge number &gt; <span class="hljs-number">0</span>)
+x == ux       → <span class="hljs-number">1</span>   (same bits, == compares bits after type promotion)
+(int)ux == x  → <span class="hljs-number">1</span>   (cast ux back to int = <span class="hljs-number">-1</span>)
+ux == UINT_MAX → <span class="hljs-number">1</span>
+</code></pre>
+<hr>
+<h2 id="common-exam-traps-watch-out-for-these-">Common Exam Traps — Watch Out For These!</h2>
+<ol>
+  <li>
+    <p><strong>TMin is its own negation.</strong> In 32-bit: <code>~(-2147483648) + 1 = 2147483647 + 1</code> which
+      overflows back to −2147483648. So <code>−INT_MIN = INT_MIN</code>.</p>
+  </li>
+  <li>
+    <p><strong>Signed overflow is undefined behavior in C.</strong> The compiler can assume it never happens.
+      <code>INT_MAX + 1</code> is not <code>INT_MIN</code> in well-defined C code (even though it is in practice on most
+      hardware).</p>
+  </li>
+  <li>
+    <p><strong>Unsigned overflow is well-defined</strong> — it wraps modulo $2^w$.</p>
+  </li>
+  <li>
+    <p><strong>Left shifting a signed integer can cause undefined behavior</strong> if significant bits are lost.</p>
+  </li>
+  <li>
+    <p><strong>Float and int are completely different bit layouts</strong> — casting between them does NOT preserve bit
+      patterns. <code>(float)x</code> recomputes the value; <code>*(float *)&amp;x</code> reinterprets the bits
+      (different operation entirely).</p>
+  </li>
+  <li>
+    <p><strong><code>~a + a + 1 = 0</code> always</strong> — useful identity. Similarly, <code>~a = -a - 1</code>.</p>
+  </li>
+  <li>
+    <p><strong>Denormalized exponent trick:</strong> When the stored exponent is all zeros, the actual exponent is $1 -
+      \text{bias}$, NOT $0 - \text{bias}$. This ensures a smooth transition between denormalized and normalized numbers.
+    </p>
+  </li>
+  <li>
+    <p><strong>Two zeros in float:</strong> <code>+0.0</code> and <code>-0.0</code> have different bit patterns but
+      compare as equal.</p>
+  </li>
+  <li>
+    <p><strong>NaN is not equal to anything, including itself.</strong> The only way to test for NaN is
+      <code>isnan(x)</code> or <code>x != x</code>.</p>
+  </li>
+  <li>
+    <p><strong>Shift by $k \geq$ word size is undefined.</strong> Don&#39;t shift a 32-bit int by 32 or more bits.</p>
+  </li>
+</ol>
+<hr>
+<p><em>These notes cover all material from Lectures 2, 3, and 4 of COMP201. Combined with working through past midterm
+    problems, you should be fully prepared for the Data Representations portion of the exam. Good luck!</em></p>
+
+    </article>
+  </main>
+
+  <!-- Base Scripts -->
+  <script src="../script.js"></script>
+
+  <!-- Blog Specific Theme Switcher for Markdown -->
+  <script>
+    // Observe theme changes on the html tag to swap out the markdown CSS accordingly
+    const htmlElement = document.documentElement;
+    const markdownStyleLink = document.getElementById('markdown-theme-style');
+
+    function updateMarkdownTheme() {
+      const currentTheme = htmlElement.getAttribute('data-theme') || 'dark';
+      if (currentTheme === 'dark') {
+        markdownStyleLink.href = '../github-markdown-dark.css';
+      } else {
+        markdownStyleLink.href = '../github-markdown-light.css';
+      }
+    }
+
+    // Run once on initial load
+    updateMarkdownTheme();
+
+    // Watch for 'data-theme' attribute changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          updateMarkdownTheme();
+        }
+      });
+    });
+
+    observer.observe(htmlElement, { attributes: true });
+  </script>
+</body>
+
+</html>

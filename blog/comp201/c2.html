@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMP201 Study Guide 2: Pointers &amp; Arrays</title>
+  <meta name="description" content="A template for writing blog posts.">
+
+  <!-- Google Fonts: Inter and Roboto Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="../style.css">
+
+  <!-- Markdown Theme Stylesheet (dynamically updated by script below) -->
+  <link id="markdown-theme-style" rel="stylesheet" href="../github-markdown-dark.css">
+
+  <style>
+    .blog-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* Ensure markdown content background is transparent to show the animated canvas behind it */
+    .markdown-body {
+      background-color: transparent !important;
+      margin-top: 2rem;
+      transition: color 0.3s ease;
+    }
+
+    /* Back link styling */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background Canvas for Constellations -->
+  <canvas id="bg-canvas"></canvas>
+
+  <nav class="main-nav">
+    <div class="nav-content">
+      <div class="nav-name">Umut Yalçın Baki</div>
+      <div class="header-controls" style="display: flex; gap: 1rem; align-items: center;">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="lang-toggle" class="lang-toggle" aria-label="Toggle Language">
+          <div class="lang-slider"></div>
+          <span class="lang-label en">EN</span>
+          <span class="lang-label tr">TR</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container blog-container reveal active">
+
+    <!-- Markdown Extracted Content -->
+    <article class="markdown-body">
+      <h1 id="comp201-study-guide-2-pointers-arrays">COMP201 Study Guide 2: Pointers &amp; Arrays</h1>
+      <p><strong>A comprehensive guide to understanding memory, pointers, and arrays in C — everything you need for the
+          midterm.</strong></p>
+      <hr>
+      <h2 id="table-of-contents">Table of Contents</h2>
+      <ol>
+        <li><a href="#introduction">Introduction: Why Pointers Matter</a></li>
+        <li><a href="#pointers-fundamentals">Pointers Fundamentals</a></li>
+        <li><a href="#memory-diagrams">Memory Diagrams</a></li>
+        <li><a href="#pointers-and-parameters">Pointers and Parameters: Pass by Value</a></li>
+        <li><a href="#double-pointers">Double Pointers</a></li>
+        <li><a href="#arrays-in-memory">Arrays in Memory</a></li>
+        <li><a href="#pointer-array-equivalence">Pointer-Array Equivalence</a></li>
+        <li><a href="#pointer-arithmetic">Pointer Arithmetic</a></li>
+        <li><a href="#arrays-of-pointers">Arrays of Pointers</a></li>
+        <li><a href="#strings-in-memory">Strings in Memory</a></li>
+        <li><a href="#practice-problems">Practice Problems</a></li>
+        <li><a href="#common-exam-traps">Common Exam Traps</a></li>
+      </ol>
+      <hr>
+      <h2 id="introduction-why-pointers-matter-introduction-">Introduction: Why Pointers Matter {#introduction}</h2>
+      <p>Pointers are one of the most fundamental concepts in C, and they&#39;re essential for understanding how the language
+        works. Think of a pointer like a mailbox number — it doesn&#39;t hold your mail, but it tells you exactly where to
+        find it. In programming, pointers store memory addresses instead of values, letting you navigate memory and share data
+        between functions.</p>
+      <p><strong>Key insight:</strong> C uses <strong>pass-by-value semantics</strong>. This means when you pass a variable to
+        a function, the function gets a copy, not the original. If you want a function to modify the original variable, you
+        must pass the <strong>address</strong> of that variable using pointers.</p>
+      <hr>
+      <h2 id="pointers-fundamentals-pointers-fundamentals-">Pointers Fundamentals {#pointers-fundamentals}</h2>
+      <h3 id="what-is-a-pointer-">What is a Pointer?</h3>
+      <p>A <strong>pointer</strong> is a variable that stores a memory address. That&#39;s it. A pointer doesn&#39;t know or
+        care what type of value is at that address — it just holds the address itself.</p>
+      <p><strong>Analogy:</strong> If memory is a big apartment building, a pointer is like an apartment number. The pointer
+        doesn&#39;t live in the apartment; it just tells you where the apartment is.</p>
+      <h3 id="declaring-pointers">Declaring Pointers</h3>
+      <p>The <code>*</code> symbol in a pointer declaration is <strong>part of the type</strong>, not an operator:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p;      <span class="hljs-comment">// p is a pointer to an int</span>
+      <span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span>;   <span class="hljs-comment">// str is a pointer to a char</span>
+      <span class="hljs-keyword">double</span> *d;   <span class="hljs-comment">// d is a pointer to a double</span>
+      </code></pre>
+      <p>Read <code>int *p</code> as &quot;p is a pointer to an int,&quot; not &quot;int times pointer.&quot;</p>
+      <h3 id="the-address-of-operator-">The Address-of Operator: <code>&amp;</code></h3>
+      <p>The <code>&amp;</code> operator gets the address of a variable:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">42</span>;
+      <span class="hljs-keyword">int</span> *p = &amp;x;  <span class="hljs-comment">// p now holds the address of x</span>
+      </code></pre>
+      <p>This reads as: &quot;p is a pointer to int, initialized to the address of x.&quot;</p>
+      <h3 id="the-dereference-operator-">The Dereference Operator: <code>*</code></h3>
+      <p>The <code>*</code> operator (when used on a pointer) follows the pointer to get or set the value at that address:</p>
+      <pre><code class="lang-c"><span class="hljs-built_in">int</span> x = <span class="hljs-number">42</span>;
+      <span class="hljs-built_in">int</span> *p = &amp;x;
+      printf(<span class="hljs-string">"%d\n"</span>, *p);  // prints <span class="hljs-number">42</span> (follows p to get <span class="hljs-built_in">value</span> at that <span class="hljs-built_in">address</span>)
+      *p = <span class="hljs-number">100</span>;            // changes x to <span class="hljs-number">100</span> (modifies <span class="hljs-built_in">value</span> at <span class="hljs-built_in">address</span> p)
+      </code></pre>
+      <p><strong>Key distinction:</strong></p>
+      <ul>
+        <li><code>p</code> is the address</li>
+        <li><code>*p</code> is the value at that address</li>
+      </ul>
+      <h3 id="null-pointers">NULL Pointers</h3>
+      <p>A <strong>NULL pointer</strong> is a pointer that doesn&#39;t point anywhere — it&#39;s a special value (usually 0)
+        that means &quot;no address.&quot;</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p = <span class="hljs-literal">NULL</span>;  <span class="hljs-comment">// p doesn't point to anything</span>
+      *p = <span class="hljs-number">5</span>;         <span class="hljs-comment">// CRASH! You can't dereference a NULL pointer</span>
+      </code></pre>
+      <p>Always check for NULL before dereferencing:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">if</span> (p != <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *p);
+      }
+      </code></pre>
+      <h3 id="printing-pointers">Printing Pointers</h3>
+      <p>Use the <code>%p</code> format specifier to print a pointer&#39;s address:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">42</span>;
+      <span class="hljs-keyword">int</span> *p = &amp;x;
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Address: %p\n"</span>, p);  <span class="hljs-comment">// prints something like: Address: 0x7ffe00ff</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Value: %d\n"</span>, *p);   <span class="hljs-comment">// prints: Value: 42</span>
+      </code></pre>
+      <h3 id="size-of-pointers">Size of Pointers</h3>
+      <p><strong>On 64-bit systems, every pointer is 8 bytes</strong>, regardless of what it points to:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p;
+      <span class="hljs-keyword">char</span> *q;
+      <span class="hljs-keyword">double</span> *r;
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%ld\n"</span>, <span class="hljs-keyword">sizeof</span>(p));      <span class="hljs-comment">// 8 bytes</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%ld\n"</span>, <span class="hljs-keyword">sizeof</span>(q));      <span class="hljs-comment">// 8 bytes</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%ld\n"</span>, <span class="hljs-keyword">sizeof</span>(r));      <span class="hljs-comment">// 8 bytes</span>
+      </code></pre>
+      <p>This is a <strong>critical exam fact</strong> — the type a pointer points to doesn&#39;t affect the pointer&#39;s
+        size.</p>
+      <hr>
+      <h2 id="memory-diagrams-memory-diagrams-">Memory Diagrams {#memory-diagrams}</h2>
+      <p>Let&#39;s visualize what&#39;s happening in memory. Memory diagrams are essential for understanding pointers.</p>
+      <h3 id="simple-pointer-example">Simple Pointer Example</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">42</span>;
+      <span class="hljs-keyword">int</span> *p = &amp;x;
+      </code></pre>
+      <p>Memory diagram:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x1000</span>    <span class="hljs-number">0x1008</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">42</span>        <span class="hljs-number">0x1000</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>         p
+      </code></pre>
+      <p>Here:</p>
+      <ul>
+        <li>Variable <code>x</code> is stored at address 0x1000 and contains the value 42</li>
+        <li>Variable <code>p</code> is stored at address 0x1008 and contains 0x1000 (the address of x)</li>
+        <li>When we write <code>*p</code>, we follow the pointer: start at p&#39;s value (0x1000), and read the value there
+          (42)</li>
+      </ul>
+      <h3 id="modifying-through-a-pointer">Modifying Through a Pointer</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">42</span>;
+      <span class="hljs-keyword">int</span> *p = &amp;x;
+      *p = <span class="hljs-number">100</span>;  <span class="hljs-comment">// Changes x to 100</span>
+      </code></pre>
+      <p>After the assignment:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x1000</span>    <span class="hljs-number">0x1008</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">100</span>       <span class="hljs-number">0x1000</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>         p
+      </code></pre>
+      <p>The pointer <code>p</code> still stores 0x1000, but now the value at that address is 100.</p>
+      <h3 id="another-example-with-multiple-variables">Another Example with Multiple Variables</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">42</span>;
+      <span class="hljs-keyword">int</span> y = <span class="hljs-number">17</span>;
+      <span class="hljs-keyword">int</span> *p = &amp;x;
+      <span class="hljs-keyword">int</span> *q = &amp;y;
+      </code></pre>
+      <p>Memory diagram:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x1000</span>    <span class="hljs-number">0x1004</span>    <span class="hljs-number">0x1008</span>    <span class="hljs-number">0x1010</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">42</span>        <span class="hljs-number">17</span>        <span class="hljs-number">0x1000</span>    <span class="hljs-number">0x1004</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>         <span class="hljs-built_in">y</span>         p         q
+      </code></pre>
+      <p>Notice:</p>
+      <ul>
+        <li><code>p</code> points to <code>x</code> (0x1000)</li>
+        <li><code>q</code> points to <code>y</code> (0x1004)</li>
+        <li><code>*p</code> gives us 42</li>
+        <li><code>*q</code> gives us 17</li>
+      </ul>
+      <hr>
+      <h2 id="pointers-and-parameters-pass-by-value-pointers-and-parameters-">Pointers and Parameters: Pass by Value
+        {#pointers-and-parameters}</h2>
+      <h3 id="the-problem-pass-by-value">The Problem: Pass by Value</h3>
+      <p>C <strong>always</strong> passes parameters by value. This means the function receives a <em>copy</em> of the value,
+        not the original variable:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">increment</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>{
+          x++;  <span class="hljs-comment">// Increments the COPY, not the original</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> num = <span class="hljs-number">5</span>;
+          increment(num);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, num);  <span class="hljs-comment">// Still prints 5!</span>
+      }
+      </code></pre>
+      <p>After calling <code>increment(num)</code>:</p>
+      <ul>
+        <li>The function creates a local copy of <code>num</code> (the copy starts as 5)</li>
+        <li>It increments the copy to 6</li>
+        <li>The copy is destroyed when the function returns</li>
+        <li>The original <code>num</code> is still 5</li>
+      </ul>
+      <h3 id="the-solution-pass-a-pointer">The Solution: Pass a Pointer</h3>
+      <p>To let a function modify a variable, pass the address of that variable:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">increment</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *x)</span> </span>{
+          *x = *x + <span class="hljs-number">1</span>;  <span class="hljs-comment">// Increments the VALUE at address x</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> num = <span class="hljs-number">5</span>;
+          increment(&amp;num);  <span class="hljs-comment">// Pass the address of num</span>
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, num);  <span class="hljs-comment">// Prints 6!</span>
+      }
+      </code></pre>
+      <p>Now:</p>
+      <ul>
+        <li>We pass the address of <code>num</code> (e.g., 0xffed)</li>
+        <li>The function receives a copy of that address</li>
+        <li>But both copies point to the same memory location (the original <code>num</code>)</li>
+        <li>When we dereference with <code>*x</code>, we modify the original</li>
+      </ul>
+      <h3 id="memory-diagram-the-swap-problem">Memory Diagram: The Swap Problem</h3>
+      <p><strong>Broken version</strong> (doesn&#39;t work):</p>
+      <pre><code class="lang-c">void <span class="hljs-keyword">swap(int </span>a, int <span class="hljs-keyword">b) </span>{
+          int temp = a<span class="hljs-comment">;</span>
+          a = <span class="hljs-keyword">b;
+      </span>    <span class="hljs-keyword">b </span>= temp<span class="hljs-comment">;</span>
+      }
+      </code></pre>
+      <p>Why it doesn&#39;t work: When we call <code>swap(x, y)</code>, the function receives <em>copies</em> of x and y.
+        Swapping the copies doesn&#39;t affect the originals.</p>
+      <p>Memory during <code>swap(5, 10)</code>:</p>
+      <pre><code>main<span class="hljs-string">'s stack:           swap'</span>s <span class="hljs-string">stack:</span>
+      <span class="hljs-string">Address:</span> <span class="hljs-number">0x100</span>          <span class="hljs-string">Address:</span> <span class="hljs-number">0x200</span>
+      <span class="hljs-string">Value:</span> <span class="hljs-number">5</span> (x)           <span class="hljs-string">Value:</span> <span class="hljs-number">5</span> (a, copy of x)
+              <span class="hljs-number">0x104</span>                   <span class="hljs-number">0x204</span>
+      <span class="hljs-string">Value:</span> <span class="hljs-number">10</span> (y)          <span class="hljs-string">Value:</span> <span class="hljs-number">10</span> (b, copy of y)
+      </code></pre>
+      <p><strong>Correct version</strong> (using pointers):</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *a, <span class="hljs-keyword">int</span> *b)</span> </span>{
+          <span class="hljs-keyword">int</span> temp = *a;
+          *a = *b;
+          *b = temp;
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> x = <span class="hljs-number">5</span>, y = <span class="hljs-number">10</span>;
+          swap(&amp;x, &amp;y);  <span class="hljs-comment">// Pass addresses</span>
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d %d\n"</span>, x, y);  <span class="hljs-comment">// Prints: 10 5</span>
+      }
+      </code></pre>
+      <p>Now when we dereference <code>*a</code> and <code>*b</code>, we&#39;re working with the actual memory locations of
+        the originals.</p>
+      <hr>
+      <h2 id="double-pointers-double-pointers-">Double Pointers {#double-pointers}</h2>
+      <p>A <strong>double pointer</strong> is a pointer to a pointer. It&#39;s written as <code>int **pp</code> (read as
+        &quot;pp is a pointer to a pointer to int&quot;).</p>
+      <h3 id="what-is-a-double-pointer-">What is a Double Pointer?</h3>
+      <p>Think of it as a two-level indirection:</p>
+      <ul>
+        <li>A single pointer <code>*p</code> stores an address</li>
+        <li>A double pointer <code>**pp</code> stores the address of a pointer</li>
+      </ul>
+      <h3 id="example">Example</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">5</span>;
+      <span class="hljs-keyword">int</span> *p = &amp;x;        <span class="hljs-comment">// p points to x</span>
+      <span class="hljs-keyword">int</span> **pp = &amp;p;      <span class="hljs-comment">// pp points to p</span>
+      </code></pre>
+      <p>Memory diagram:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x1000</span>    <span class="hljs-number">0x1008</span>    <span class="hljs-number">0x1010</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">5</span>         <span class="hljs-number">0x1000</span>    <span class="hljs-number">0x1008</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>         p         pp
+      </code></pre>
+      <p>Walking through the pointers:</p>
+      <ul>
+        <li><code>pp</code> contains 0x1008 (the address of p)</li>
+        <li><code>*pp</code> contains 0x1000 (the address of x, since pp points to p)</li>
+        <li><code>**pp</code> contains 5 (the value at x, since *pp points to x)</li>
+      </ul>
+      <h3 id="when-do-you-need-double-pointers-">When Do You Need Double Pointers?</h3>
+      <p>The most common use is when a function needs to <strong>modify a pointer variable</strong>. For example, allocating
+        memory in a function:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">allocateArray</span><span class="hljs-params">(<span class="hljs-keyword">int</span> **arr, <span class="hljs-keyword">int</span> size)</span> </span>{
+          *arr = (<span class="hljs-keyword">int</span> *)<span class="hljs-built_in">malloc</span>(size * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+          <span class="hljs-comment">// *arr now points to the allocated memory</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> *myArray;
+          allocateArray(&amp;myArray, <span class="hljs-number">10</span>);  <span class="hljs-comment">// Pass address of the pointer</span>
+          <span class="hljs-comment">// Now myArray points to dynamically allocated memory</span>
+          <span class="hljs-built_in">free</span>(myArray);
+      }
+      </code></pre>
+      <p>Why this works:</p>
+      <ul>
+        <li>We pass <code>&amp;myArray</code> (the address of the pointer)</li>
+        <li>Inside the function, <code>arr</code> is a pointer to <code>myArray</code></li>
+        <li>When we assign <code>*arr = ...</code>, we&#39;re modifying the original <code>myArray</code></li>
+      </ul>
+      <h3 id="dereferencing-double-pointers">Dereferencing Double Pointers</h3>
+      <p>When you have <code>int **pp</code>:</p>
+      <ul>
+        <li><code>pp</code> is the address of a pointer</li>
+        <li><code>*pp</code> is the pointer itself (one level of dereferencing)</li>
+        <li><code>**pp</code> is the value (two levels of dereferencing)</li>
+      </ul>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">5</span>;
+      <span class="hljs-keyword">int</span> *p = &amp;x;
+      <span class="hljs-keyword">int</span> **pp = &amp;p;
+      
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%p\n"</span>, pp);   <span class="hljs-comment">// Address of p (e.g., 0x1008)</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%p\n"</span>, *pp);  <span class="hljs-comment">// Value of p, which is address of x (e.g., 0x1000)</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, **pp); <span class="hljs-comment">// Value at address *pp, which is x (5)</span>
+      </code></pre>
+      <h3 id="complex-double-pointer-expressions">Complex Double Pointer Expressions</h3>
+      <p>The key to reading these is to work <strong>from right to left</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> **pp = ...;
+      <span class="hljs-keyword">int</span> val = **pp;        <span class="hljs-comment">// Dereference twice</span>
+      <span class="hljs-keyword">int</span> *q = *pp;          <span class="hljs-comment">// Dereference once, get a pointer</span>
+      pp++;                  <span class="hljs-comment">// Move pp itself forward (pointer to pointer arithmetic)</span>
+      (*pp)++;               <span class="hljs-comment">// Increment the pointer that pp points to</span>
+      (**pp)++;              <span class="hljs-comment">// Increment the value that *pp points to</span>
+      </code></pre>
+      <hr>
+      <h2 id="arrays-in-memory-arrays-in-memory-">Arrays in Memory {#arrays-in-memory}</h2>
+      <h3 id="arrays-are-contiguous-memory">Arrays Are Contiguous Memory</h3>
+      <p>When you declare an array, the compiler allocates a <strong>contiguous block of memory</strong>:</p>
+      <pre><code class="lang-c">int arr[5];  // Allocates<span class="hljs-number"> 5 </span>*<span class="hljs-number"> 4 </span>=<span class="hljs-number"> 20 </span>bytes (assuming 4-byte ints)
+      </code></pre>
+      <p>Memory diagram:</p>
+      <pre><code>Address:  0x1000   0x1004   0x1008   0x100C   0x1010
+      Index:    <span class="hljs-string">[0]</span>      <span class="hljs-string">[1]</span>      <span class="hljs-string">[2]</span>      <span class="hljs-string">[3]</span>      <span class="hljs-string">[4]</span>
+      Content:  ???      ???      ???      ???      ???
+      </code></pre>
+      <p>Each element is 4 bytes apart (because <code>sizeof(int) == 4</code>).</p>
+      <h3 id="arrays-as-pointers">Arrays as Pointers</h3>
+      <p>Here&#39;s a crucial fact: <strong>an array name is a pointer to its first element</strong>. You can&#39;t reassign
+        this pointer, but you can treat it like one:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      int *p = arr;  <span class="hljs-comment">// arr automatically converts to a pointer to arr[0]</span>
+      </code></pre>
+      <p>This is <strong>equivalent</strong> to:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      int *p = &amp;arr[<span class="hljs-number">0</span>];  <span class="hljs-comment">// Explicitly take address of first element</span>
+      </code></pre>
+      <h3 id="key-difference-arrays-vs-pointers">Key Difference: Arrays vs Pointers</h3>
+      <p><strong>Arrays</strong> are NOT pointer variables:</p>
+      <pre><code class="lang-c">int arr[5] = {1, 2, 3, 4, 5};
+      arr = someOtherArray;  // COMPILE ERROR! Can't reassign<span class="hljs-built_in"> array </span>name
+      arr++;                 // COMPILE ERROR! Can't increment<span class="hljs-built_in"> array </span>name
+      </code></pre>
+      <p><strong>Pointers</strong> are variables:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p = arr;
+      p = someOtherArray;  <span class="hljs-comment">// OK! Pointers can be reassigned</span>
+      p++;                 <span class="hljs-comment">// OK! Pointers can be incremented</span>
+      </code></pre>
+      <h3 id="size-of-arrays-vs-pointers">Size of Arrays vs Pointers</h3>
+      <p>This is a <strong>critical exam trap</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> arr[<span class="hljs-number">5</span>];
+      <span class="hljs-keyword">int</span> *p = arr;
+      
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%ld\n"</span>, <span class="hljs-keyword">sizeof</span>(arr));  <span class="hljs-comment">// 20 (5 elements * 4 bytes each)</span>
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%ld\n"</span>, <span class="hljs-keyword">sizeof</span>(p));    <span class="hljs-comment">// 8 (pointer size on 64-bit system)</span>
+      </code></pre>
+      <p>When you pass an array to a function, it <strong>decays to a pointer</strong>:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">printArray</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arr[])</span> </span>{
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%ld\n"</span>, <span class="hljs-keyword">sizeof</span>(arr));  <span class="hljs-comment">// 8, NOT the array size!</span>
+                                         <span class="hljs-comment">// arr has decayed to a pointer</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> arr[<span class="hljs-number">5</span>];
+          printArray(arr);  <span class="hljs-comment">// arr decays to int *</span>
+      }
+      </code></pre>
+      <hr>
+      <h2 id="pointer-array-equivalence-pointer-array-equivalence-">Pointer-Array Equivalence {#pointer-array-equivalence}
+      </h2>
+      <h3 id="array-indexing-is-pointer-arithmetic">Array Indexing is Pointer Arithmetic</h3>
+      <p>The fundamental equivalence in C:</p>
+      <pre><code class="lang-c"><span class="hljs-attr">arr[i]</span> == *(arr + i)
+      </code></pre>
+      <p>These two expressions are <strong>exactly the same</strong>:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, arr[<span class="hljs-number">2</span>]);       <span class="hljs-comment">// prints 30</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, *(arr + <span class="hljs-number">2</span>));   <span class="hljs-comment">// also prints 30</span>
+      </code></pre>
+      <h3 id="how-pointer-arithmetic-works">How Pointer Arithmetic Works</h3>
+      <p>When you do <code>arr + i</code>, the compiler adds <code>i * sizeof(element)</code> bytes:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      <span class="hljs-comment">// Assume arr starts at 0x1000</span>
+      
+      arr + <span class="hljs-number">0</span>  <span class="hljs-comment">// 0x1000 (0 * 4)</span>
+      arr + <span class="hljs-number">1</span>  <span class="hljs-comment">// 0x1004 (1 * 4)</span>
+      arr + <span class="hljs-number">2</span>  <span class="hljs-comment">// 0x1008 (2 * 4)</span>
+      arr + <span class="hljs-number">3</span>  <span class="hljs-comment">// 0x100C (3 * 4)</span>
+      arr + <span class="hljs-number">4</span>  <span class="hljs-comment">// 0x1010 (4 * 4)</span>
+      </code></pre>
+      <h3 id="using-pointers-for-array-access">Using Pointers for Array Access</h3>
+      <p>You can use any pointer like an array:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      int *p = arr;
+      
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">0</span>]);  <span class="hljs-comment">// 10</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">1</span>]);  <span class="hljs-comment">// 20</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">2</span>]);  <span class="hljs-comment">// 30</span>
+      </code></pre>
+      <p>This works because array indexing <code>p[i]</code> is automatically converted to <code>*(p + i)</code>.</p>
+      <h3 id="negative-indexing">Negative Indexing</h3>
+      <p>You can even use negative indices with pointers:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      int *p = &amp;arr[<span class="hljs-number">3</span>];  <span class="hljs-comment">// Point to arr[3] (40)</span>
+      
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">0</span>]);   <span class="hljs-comment">// 40 (arr[3])</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">1</span>]);   <span class="hljs-comment">// 50 (arr[4])</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">-1</span>]);  <span class="hljs-comment">// 30 (arr[2]) — VALID!</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">-2</span>]);  <span class="hljs-comment">// 20 (arr[1]) — VALID!</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">-3</span>]);  <span class="hljs-comment">// 10 (arr[0]) — VALID!</span>
+      </code></pre>
+      <p>This is valid as long as you don&#39;t go out of bounds. Exam questions love this!</p>
+      <hr>
+      <h2 id="pointer-arithmetic-pointer-arithmetic-">Pointer Arithmetic {#pointer-arithmetic}</h2>
+      <h3 id="adding-integers-to-pointers">Adding Integers to Pointers</h3>
+      <p>When you add an integer <code>n</code> to a pointer, the pointer advances by <code>n * sizeof(element)</code> bytes:
+      </p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      int *p = arr;
+      
+      p + <span class="hljs-number">0</span>  <span class="hljs-comment">// Points to arr[0]</span>
+      p + <span class="hljs-number">1</span>  <span class="hljs-comment">// Points to arr[1]</span>
+      p + <span class="hljs-number">2</span>  <span class="hljs-comment">// Points to arr[2]</span>
+      </code></pre>
+      <h3 id="char-pointer-arithmetic-byte-level-">Char Pointer Arithmetic (Byte-Level)</h3>
+      <p>With <code>char *</code>, arithmetic moves 1 byte at a time:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> <span class="hljs-keyword">str</span>[<span class="hljs-number">10</span>] = <span class="hljs-string">"hello"</span>;
+      <span class="hljs-keyword">char</span> *p = <span class="hljs-keyword">str</span>;
+      
+      *(p + <span class="hljs-number">0</span>)  <span class="hljs-comment">// 'h'</span>
+      *(p + <span class="hljs-number">1</span>)  <span class="hljs-comment">// 'e'</span>
+      *(p + <span class="hljs-number">2</span>)  <span class="hljs-comment">// 'l'</span>
+      </code></pre>
+      <p>This is why <code>char *</code> is often used for generic byte-level memory operations.</p>
+      <h3 id="pointer-subtraction">Pointer Subtraction</h3>
+      <p>You can subtract two pointers to find the number of elements between them:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>};
+      int *p = &amp;arr[<span class="hljs-number">1</span>];
+      int *q = &amp;arr[<span class="hljs-number">4</span>];
+      
+      int diff = q - p;  <span class="hljs-comment">// 3 (not 12 bytes, but 3 elements)</span>
+      </code></pre>
+      <p><strong>Important:</strong> Subtraction gives the number of elements, not bytes. This is different from addition!</p>
+      <h3 id="practical-example-pointer-arithmetic">Practical Example: Pointer Arithmetic</h3>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">6</span>] = {<span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>, <span class="hljs-number">42</span>};
+      int *p = arr;
+      
+      <span class="hljs-comment">// These are all equivalent:</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, arr[<span class="hljs-number">2</span>]);      <span class="hljs-comment">// 15</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, *(arr + <span class="hljs-number">2</span>));  <span class="hljs-comment">// 15</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, p[<span class="hljs-number">2</span>]);        <span class="hljs-comment">// 15</span>
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, *(p + <span class="hljs-number">2</span>));    <span class="hljs-comment">// 15</span>
+      
+      <span class="hljs-comment">// Moving the pointer</span>
+      p = arr + <span class="hljs-number">3</span>;
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, *p);          <span class="hljs-comment">// 16</span>
+      p++;
+      printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, *p);          <span class="hljs-comment">// 23</span>
+      </code></pre>
+      <hr>
+      <h2 id="arrays-of-pointers-arrays-of-pointers-">Arrays of Pointers {#arrays-of-pointers}</h2>
+      <h3 id="what-is-an-array-of-pointers-">What is an Array of Pointers?</h3>
+      <p>An <strong>array of pointers</strong> is an array where each element is a pointer:</p>
+      <pre><code class="lang-c"><span class="hljs-built_in">char</span> *words[<span class="hljs-number">5</span>];  // <span class="hljs-type">Array</span> <span class="hljs-keyword">of</span> <span class="hljs-number">5</span> <span class="hljs-built_in">char</span> pointers (e.g., <span class="hljs-number">5</span> strings)
+      <span class="hljs-built_in">int</span> *ptrs[<span class="hljs-number">10</span>];   // <span class="hljs-type">Array</span> <span class="hljs-keyword">of</span> <span class="hljs-number">10</span> <span class="hljs-built_in">int</span> pointers
+      </code></pre>
+      <h3 id="common-use-array-of-strings">Common Use: Array of Strings</h3>
+      <pre><code class="lang-c">char *words<span class="hljs-string">[3]</span> = {
+          <span class="hljs-string">"apple"</span>,
+          <span class="hljs-string">"banana"</span>,
+          <span class="hljs-string">"cherry"</span>
+      };
+      </code></pre>
+      <p>Memory diagram:</p>
+      <pre><code>words array (on stack):
+      <span class="hljs-function"><span class="hljs-title">words</span>[0]: 0x2000 ---&gt;</span> <span class="hljs-string">'a'</span> <span class="hljs-string">'p'</span> <span class="hljs-string">'p'</span> <span class="hljs-string">'l'</span> <span class="hljs-string">'e'</span> <span class="hljs-string">'\0'</span> (<span class="hljs-keyword">data</span> segment)
+      <span class="hljs-function"><span class="hljs-title">words</span>[1]: 0x3000 ---&gt;</span> <span class="hljs-string">'b'</span> <span class="hljs-string">'a'</span> <span class="hljs-string">'n'</span> <span class="hljs-string">'a'</span> <span class="hljs-string">'n'</span> <span class="hljs-string">'a'</span> <span class="hljs-string">'\0'</span> (<span class="hljs-keyword">data</span> segment)
+      <span class="hljs-function"><span class="hljs-title">words</span>[2]: 0x4000 ---&gt;</span> <span class="hljs-string">'c'</span> <span class="hljs-string">'h'</span> <span class="hljs-string">'e'</span> <span class="hljs-string">'r'</span> <span class="hljs-string">'r'</span> <span class="hljs-string">'y'</span> <span class="hljs-string">'\0'</span> (<span class="hljs-keyword">data</span> segment)
+      </code></pre>
+      <p>Each element of the array is a pointer. The actual strings live in read-only memory (data segment).</p>
+      <h3 id="accessing-elements">Accessing Elements</h3>
+      <pre><code class="lang-c">char *words[3] = {"apple", "banana", "cherry"};
+      
+      printf("%s\n", words[0]);      // apple
+      printf("%c\n", words[<span class="hljs-string">0</span>][<span class="hljs-symbol">0</span>]);   // a (first char of first string)
+      printf("%c\n", words[<span class="hljs-string">1</span>][<span class="hljs-symbol">2</span>]);   // n (third char of "banana")
+      </code></pre>
+      <h3 id="argc-argv-command-line-arguments">argc/argv: Command-Line Arguments</h3>
+      <p>The classic example is the <code>main</code> function:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> main(<span class="hljs-keyword">int</span> <span class="hljs-built_in">argc</span>, char *<span class="hljs-built_in">argv</span>[])
+      </code></pre>
+      <p>Here:</p>
+      <ul>
+        <li><code>argc</code> is the number of arguments</li>
+        <li><code>argv</code> is an array of strings (char pointers)</li>
+        <li><code>argv[0]</code> is the program name</li>
+        <li><code>argv[1]</code>, <code>argv[2]</code>, etc. are the actual arguments</li>
+      </ul>
+      <p>Example run:</p>
+      <pre><code class="lang-bash">./myprogram hello world
+      </code></pre>
+      <p>Inside main:</p>
+      <ul>
+        <li><code>argc</code> is 3</li>
+        <li><code>argv[0]</code> is &quot;./myprogram&quot;</li>
+        <li><code>argv[1]</code> is &quot;hello&quot;</li>
+        <li><code>argv[2]</code> is &quot;world&quot;</li>
+      </ul>
+      <hr>
+      <h2 id="strings-in-memory-strings-in-memory-">Strings in Memory {#strings-in-memory}</h2>
+      <h3 id="what-is-a-string-in-c-">What is a String in C?</h3>
+      <p>A string in C is just characters stored in memory, ending with a <strong>null terminator</strong>
+        (<code>&#39;\0&#39;</code>). The null terminator is how C knows when the string ends.</p>
+      <p>Memory representation of &quot;hello&quot;:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x1000</span>   <span class="hljs-number">0x1001</span>   <span class="hljs-number">0x1002</span>   <span class="hljs-number">0x1003</span>   <span class="hljs-number">0x1004</span>   <span class="hljs-number">0x1005</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-string">'h'</span>      <span class="hljs-string">'e'</span>      <span class="hljs-string">'l'</span>      <span class="hljs-string">'l'</span>      <span class="hljs-string">'o'</span>      <span class="hljs-string">'\0'</span>
+      </code></pre>
+      <h3 id="stack-strings-modifiable-">Stack Strings (Modifiable)</h3>
+      <p>When you create a string with <code>char[]</code>, it lives on the stack and you own it:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> <span class="hljs-keyword">str</span>[<span class="hljs-number">6</span>] = <span class="hljs-string">"hello"</span>;  <span class="hljs-comment">// Allocates 6 bytes on stack</span>
+      <span class="hljs-keyword">str</span>[<span class="hljs-number">0</span>] = <span class="hljs-string">'H'</span>;           <span class="hljs-comment">// OK! You can modify it</span>
+      printf(<span class="hljs-string">"%s\n"</span>, <span class="hljs-keyword">str</span>);    <span class="hljs-comment">// Hllo</span>
+      </code></pre>
+      <p>Memory diagram:</p>
+      <pre><code>STACK:
+      Address:  <span class="hljs-number">0x7ffd</span>   <span class="hljs-number">0x7ffe</span>   <span class="hljs-number">0x7fff</span>   <span class="hljs-number">0x8000</span>   <span class="hljs-number">0x8001</span>   <span class="hljs-number">0x8002</span>
+      Content:  <span class="hljs-string">'H'</span>      <span class="hljs-string">'e'</span>      <span class="hljs-string">'l'</span>      <span class="hljs-string">'l'</span>      <span class="hljs-string">'o'</span>      <span class="hljs-string">'\0'</span>
+      Variable: <span class="hljs-keyword">str</span>[<span class="hljs-number">0</span>]   <span class="hljs-keyword">str</span>[<span class="hljs-number">1</span>]   <span class="hljs-keyword">str</span>[<span class="hljs-number">2</span>]   <span class="hljs-keyword">str</span>[<span class="hljs-number">3</span>]   <span class="hljs-keyword">str</span>[<span class="hljs-number">4</span>]   <span class="hljs-keyword">str</span>[<span class="hljs-number">5</span>]
+      </code></pre>
+      <h3 id="string-literals-read-only-">String Literals (Read-Only)</h3>
+      <p>When you create a pointer to a string literal, it points to read-only memory (data segment):</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span> = <span class="hljs-string">"hello"</span>;  <span class="hljs-comment">// Points to string constant</span>
+      <span class="hljs-keyword">str</span>[<span class="hljs-number">0</span>] = <span class="hljs-string">'H'</span>;         <span class="hljs-comment">// CRASH! Segmentation fault</span>
+      </code></pre>
+      <p>Memory diagram:</p>
+      <pre><code><span class="hljs-string">STACK:</span>                        DATA <span class="hljs-string">SEGMENT:</span>
+      <span class="hljs-string">Address:</span>  <span class="hljs-number">0x7ffd</span>             <span class="hljs-string">Address:</span>  <span class="hljs-number">0x2000</span>
+      <span class="hljs-string">Content:</span>  <span class="hljs-number">0x2000</span>             <span class="hljs-string">Content:</span>  <span class="hljs-string">'h'</span> <span class="hljs-string">'e'</span> <span class="hljs-string">'l'</span> <span class="hljs-string">'l'</span> <span class="hljs-string">'o'</span> <span class="hljs-string">'\0'</span>
+      <span class="hljs-string">Variable:</span> str                <span class="hljs-string">Variable:</span> string constant
+      </code></pre>
+      <h3 id="key-string-behaviors">Key String Behaviors</h3>
+      <ol>
+        <li><strong><code>char []</code> (array):</strong> You own the memory, you can modify it. Cannot reassign.</li>
+        <li><strong><code>char *</code> (pointer to literal):</strong> Points to read-only memory. Cannot modify. Can
+          reassign.</li>
+        <li><strong><code>char *</code> (pointer to stack array):</strong> Points to stack memory you own. Can modify. Can
+          reassign.</li>
+      </ol>
+      <p>Example:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> buf[<span class="hljs-number">10</span>];
+      strcpy(buf, <span class="hljs-string">"hello"</span>);      <span class="hljs-comment">// OK! buf is stack memory</span>
+      <span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span> = buf;
+      <span class="hljs-keyword">str</span>[<span class="hljs-number">0</span>] = <span class="hljs-string">'H'</span>;              <span class="hljs-comment">// OK! Modifying stack memory</span>
+      <span class="hljs-keyword">str</span> = <span class="hljs-string">"world"</span>;             <span class="hljs-comment">// OK! str is reassigned</span>
+      <span class="hljs-keyword">str</span>[<span class="hljs-number">0</span>] = <span class="hljs-string">'W'</span>;              <span class="hljs-comment">// CRASH! "world" is a string literal</span>
+      </code></pre>
+      <h3 id="strings-as-parameters">Strings as Parameters</h3>
+      <p>When you pass a <code>char *</code> to a function, the function sees the same memory:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">modifyString</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *str)</span> </span>{
+          str[<span class="hljs-number">0</span>] = <span class="hljs-string">'X'</span>;
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">char</span> buf[<span class="hljs-number">10</span>] = <span class="hljs-string">"hello"</span>;
+          modifyString(buf);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s\n"</span>, buf);  <span class="hljs-comment">// Xello</span>
+      }
+      </code></pre>
+      <p>Changes in the function persist because both the caller and the function point to the same memory.</p>
+      <hr>
+      <h2 id="practice-problems-practice-problems-">Practice Problems {#practice-problems}</h2>
+      <h3 id="problem-1-memory-diagram-tracing">Problem 1: Memory Diagram Tracing</h3>
+      <p><strong>Question:</strong> Trace through this code and draw the memory state after each line. What is the final
+        output?</p>
+      <pre><code class="lang-c">int x = <span class="hljs-number">10</span><span class="hljs-comment">;</span>
+      int y = <span class="hljs-number">20</span><span class="hljs-comment">;</span>
+      int *p = &amp;x<span class="hljs-comment">;</span>
+      int *q = &amp;y<span class="hljs-comment">;</span>
+      *p = <span class="hljs-number">15</span><span class="hljs-comment">;</span>
+      p = q<span class="hljs-comment">;</span>
+      *p = <span class="hljs-number">25</span><span class="hljs-comment">;</span>
+      printf(<span class="hljs-string">"%d %d\n"</span>, x, y)<span class="hljs-comment">;</span>
+      </code></pre>
+      <p><strong>Solution:</strong></p>
+      <p>Line by line:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">10</span>;      <span class="hljs-comment">// x @ 0x100 = 10</span>
+      <span class="hljs-keyword">int</span> y = <span class="hljs-number">20</span>;      <span class="hljs-comment">// y @ 0x104 = 20</span>
+      <span class="hljs-keyword">int</span> *p = &amp;x;     <span class="hljs-comment">// p @ 0x108 = 0x100</span>
+      <span class="hljs-keyword">int</span> *q = &amp;y;     <span class="hljs-comment">// q @ 0x110 = 0x104</span>
+      </code></pre>
+      <p>Memory state after declarations:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x100</span>   <span class="hljs-number">0x104</span>   <span class="hljs-number">0x108</span>   <span class="hljs-number">0x110</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">10</span>      <span class="hljs-number">20</span>      <span class="hljs-number">0x100</span>   <span class="hljs-number">0x104</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>       <span class="hljs-built_in">y</span>       p       q
+      </code></pre>
+      <p>Continuing:</p>
+      <pre><code class="lang-c">*p = <span class="hljs-number">15</span>;         <span class="hljs-comment">// x = 15 (dereference p, which points to x)</span>
+      </code></pre>
+      <p>Memory after <code>*p = 15</code>:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x100</span>   <span class="hljs-number">0x104</span>   <span class="hljs-number">0x108</span>   <span class="hljs-number">0x110</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">15</span>      <span class="hljs-number">20</span>      <span class="hljs-number">0x100</span>   <span class="hljs-number">0x104</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>       <span class="hljs-built_in">y</span>       p       q
+      </code></pre>
+      <pre><code class="lang-c">p = q;           // p <span class="hljs-keyword">is</span> reassigned <span class="hljs-keyword">to</span> point <span class="hljs-keyword">to</span> y
+      </code></pre>
+      <p>Memory after <code>p = q</code>:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x100</span>   <span class="hljs-number">0x104</span>   <span class="hljs-number">0x108</span>   <span class="hljs-number">0x110</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">15</span>      <span class="hljs-number">20</span>      <span class="hljs-number">0x104</span>   <span class="hljs-number">0x104</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>       <span class="hljs-built_in">y</span>       p       q
+      </code></pre>
+      <pre><code class="lang-c">*p = <span class="hljs-number">25</span>;         <span class="hljs-comment">// y = 25 (dereference p, which now points to y)</span>
+      </code></pre>
+      <p>Memory after <code>*p = 25</code>:</p>
+      <pre><code><span class="hljs-symbol">Address:</span>  <span class="hljs-number">0x100</span>   <span class="hljs-number">0x104</span>   <span class="hljs-number">0x108</span>   <span class="hljs-number">0x110</span>
+      <span class="hljs-symbol">Content:</span>  <span class="hljs-number">15</span>      <span class="hljs-number">25</span>      <span class="hljs-number">0x104</span>   <span class="hljs-number">0x104</span>
+      <span class="hljs-symbol">Variable:</span> <span class="hljs-built_in">x</span>       <span class="hljs-built_in">y</span>       p       q
+      </code></pre>
+      <p><strong>Final Output:</strong> <code>15 25</code></p>
+      <hr>
+      <h3 id="problem-2-double-pointer-tracing">Problem 2: Double Pointer Tracing</h3>
+      <p><strong>Question:</strong> What does this code print?</p>
+      <pre><code class="lang-c">int a = <span class="hljs-number">5</span><span class="hljs-comment">;</span>
+      int *<span class="hljs-keyword">b </span>= &amp;a<span class="hljs-comment">;</span>
+      int **c = &amp;<span class="hljs-keyword">b;
+      </span>*<span class="hljs-keyword">b </span>= <span class="hljs-number">10</span><span class="hljs-comment">;</span>
+      **c = <span class="hljs-number">20</span><span class="hljs-comment">;</span>
+      (*<span class="hljs-keyword">b)++;
+      </span>printf(<span class="hljs-string">"%d %d %d\n"</span>, a, *<span class="hljs-keyword">b, </span>**c)<span class="hljs-comment">;</span>
+      </code></pre>
+      <p><strong>Solution:</strong></p>
+      <p>Line by line:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> a = <span class="hljs-number">5</span>;
+      <span class="hljs-keyword">int</span> *b = &amp;a;      <span class="hljs-comment">// b points to a</span>
+      <span class="hljs-keyword">int</span> **c = &amp;b;     <span class="hljs-comment">// c points to b</span>
+      </code></pre>
+      <p>Memory state:</p>
+      <pre><code>Address:  <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108   <span class="hljs-number">0</span>x110
+      Content:  <span class="hljs-number">5</span>       <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108
+      Variable: <span class="hljs-selector-tag">a</span>       <span class="hljs-selector-tag">b</span>       c
+      </code></pre>
+      <p>Continuing:</p>
+      <pre><code class="lang-c">*b = <span class="hljs-number">10</span>;          <span class="hljs-comment">// Follow b to get a, set a = 10</span>
+      </code></pre>
+      <p>Memory:</p>
+      <pre><code>Address:  <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108   <span class="hljs-number">0</span>x110
+      Content:  <span class="hljs-number">10</span>      <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108
+      Variable: <span class="hljs-selector-tag">a</span>       <span class="hljs-selector-tag">b</span>       c
+      </code></pre>
+      <pre><code class="lang-c">**c = <span class="hljs-number">20</span>;         <span class="hljs-comment">// Follow c to b, then follow b to a, set a = 20</span>
+      </code></pre>
+      <p>Memory:</p>
+      <pre><code>Address:  <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108   <span class="hljs-number">0</span>x110
+      Content:  <span class="hljs-number">20</span>      <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108
+      Variable: <span class="hljs-selector-tag">a</span>       <span class="hljs-selector-tag">b</span>       c
+      </code></pre>
+      <pre><code class="lang-c"><span class="hljs-comment">(*b)</span>++;           <span class="hljs-comment">// Follow b to get a, increment a to 21</span>
+      </code></pre>
+      <p>Memory:</p>
+      <pre><code>Address:  <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108   <span class="hljs-number">0</span>x110
+      Content:  <span class="hljs-number">21</span>      <span class="hljs-number">0</span>x100   <span class="hljs-number">0</span>x108
+      Variable: <span class="hljs-selector-tag">a</span>       <span class="hljs-selector-tag">b</span>       c
+      </code></pre>
+      <p><strong>Final Output:</strong> <code>21 21 21</code></p>
+      <p>All three expressions evaluate to the same value because:</p>
+      <ul>
+        <li><code>a</code> is 21</li>
+        <li><code>*b</code> is 21 (b points to a)</li>
+        <li><code>**c</code> is 21 (c points to b, which points to a)</li>
+      </ul>
+      <hr>
+      <h3 id="problem-3-pointer-arithmetic">Problem 3: Pointer Arithmetic</h3>
+      <p><strong>Question:</strong> Given this array and pointers, evaluate each expression:</p>
+      <pre><code class="lang-c">int arr[] = {<span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>, <span class="hljs-number">42</span>};
+      int *p = arr;
+      int *q = &amp;arr[<span class="hljs-number">3</span>];
+      </code></pre>
+      <p>Evaluate:</p>
+      <ol>
+        <li><code>arr[2]</code></li>
+        <li><code>*(p + 2)</code></li>
+        <li><code>*(arr + 4)</code></li>
+        <li><code>q[-1]</code></li>
+        <li><code>*(q + 1)</code></li>
+        <li><code>q - p</code></li>
+      </ol>
+      <p><strong>Solution:</strong></p>
+      <p>Memory diagram (assuming arr starts at 0x1000):</p>
+      <pre><code>Address:  0x1000   0x1004   0x1008   0x100C   0x1010   0x1014
+      Index:    <span class="hljs-string">[0]</span>      <span class="hljs-string">[1]</span>      <span class="hljs-string">[2]</span>      <span class="hljs-string">[3]</span>      <span class="hljs-string">[4]</span>      <span class="hljs-string">[5]</span>
+      Content:  <span class="hljs-number">4</span>        <span class="hljs-number">8</span>        <span class="hljs-number">15</span>       <span class="hljs-number">16</span>       <span class="hljs-number">23</span>       <span class="hljs-number">42</span>
+      </code></pre>
+      <p>Pointer positions:</p>
+      <ul>
+        <li><code>p = 0x1000</code> (points to arr[0])</li>
+        <li><code>q = 0x100C</code> (points to arr[3])</li>
+      </ul>
+      <p>Evaluating:</p>
+      <ol>
+        <li><code>arr[2]</code> = <code>15</code> (array indexing)</li>
+        <li><code>*(p + 2)</code> = <code>*(0x1000 + 2*4)</code> = <code>*(0x1008)</code> = <code>15</code></li>
+        <li><code>*(arr + 4)</code> = <code>*(0x1000 + 4*4)</code> = <code>*(0x1010)</code> = <code>23</code></li>
+        <li><code>q[-1]</code> = <code>*(q - 1)</code> = <code>*(0x100C - 4)</code> = <code>*(0x1008)</code> = <code>15</code>
+        </li>
+        <li><code>*(q + 1)</code> = <code>*(0x100C + 4)</code> = <code>*(0x1010)</code> = <code>23</code></li>
+        <li><code>q - p</code> = <code>(0x100C - 0x1000) / 4</code> = <code>3</code> (number of elements, not bytes)</li>
+      </ol>
+      <hr>
+      <h3 id="problem-4-find-and-fix-the-bug">Problem 4: Find and Fix the Bug</h3>
+      <p><strong>Question:</strong> This function is supposed to increment a number, but it doesn&#39;t work. Find the bug and
+        fix it.</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">increment</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>{
+          x = x + <span class="hljs-number">1</span>;
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> num = <span class="hljs-number">5</span>;
+          increment(num);
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, num);  <span class="hljs-comment">// Prints 5, should print 6!</span>
+      }
+      </code></pre>
+      <p><strong>Problem:</strong> The function receives a <em>copy</em> of <code>num</code>, not the original. Incrementing
+        the copy doesn&#39;t affect the original.</p>
+      <p><strong>Fix:</strong> Pass a pointer to the variable:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">increment</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *x)</span> </span>{
+          *x = *x + <span class="hljs-number">1</span>;  <span class="hljs-comment">// Dereference to modify the original</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> num = <span class="hljs-number">5</span>;
+          increment(&amp;num);  <span class="hljs-comment">// Pass the address</span>
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, num);  <span class="hljs-comment">// Now prints 6!</span>
+      }
+      </code></pre>
+      <p><strong>Explanation:</strong></p>
+      <ul>
+        <li>In the broken version, <code>increment(num)</code> passes 5 (the value)</li>
+        <li>In the fixed version, <code>increment(&amp;num)</code> passes the address of <code>num</code></li>
+        <li>Inside the function, <code>*x</code> dereferences the pointer to modify the actual <code>num</code></li>
+      </ul>
+      <hr>
+      <h2 id="common-exam-traps-common-exam-traps-">Common Exam Traps {#common-exam-traps}</h2>
+      <h3 id="trap-1-sizeof-array-vs-sizeof-pointer-">Trap 1: sizeof(array) vs sizeof(pointer)</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> arr[<span class="hljs-number">10</span>];
+      <span class="hljs-keyword">int</span> *p = arr;
+      
+      <span class="hljs-keyword">sizeof</span>(arr);  <span class="hljs-comment">// 40 (10 * 4 bytes) — THE SIZE OF THE ARRAY</span>
+      <span class="hljs-keyword">sizeof</span>(p);    <span class="hljs-comment">// 8 (pointer size) — ALWAYS 8 on 64-bit systems</span>
+      </code></pre>
+      <p>When passed to a function, arrays decay to pointers:</p>
+      <pre><code class="lang-c">void func(int arr[]) {
+          sizeof(arr);  // 8, NOT 40! The<span class="hljs-built_in"> array </span>has decayed to a pointer
+      }
+      </code></pre>
+      <h3 id="trap-2-array-names-are-not-assignable">Trap 2: Array Names Are Not Assignable</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> arr[<span class="hljs-number">5</span>];
+      <span class="hljs-keyword">int</span> other[<span class="hljs-number">5</span>];
+      arr = other;   <span class="hljs-comment">// COMPILE ERROR!</span>
+      arr++;          <span class="hljs-comment">// COMPILE ERROR!</span>
+      </code></pre>
+      <p>Array names refer to fixed blocks of memory; they can&#39;t be reassigned.</p>
+      <h3 id="trap-3-returning-pointers-to-local-variables">Trap 3: Returning Pointers to Local Variables</h3>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">int</span> *<span class="hljs-title">makeArray</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> arr[<span class="hljs-number">5</span>] = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>};
+          <span class="hljs-keyword">return</span> arr;  <span class="hljs-comment">// DANGEROUS! arr is on the stack</span>
+      }
+      
+      <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> *p = makeArray();
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *p);  <span class="hljs-comment">// p points to deallocated memory (dangling pointer)</span>
+      }
+      </code></pre>
+      <p>The array <code>arr</code> is local to <code>makeArray</code>. When the function returns, the stack frame is
+        destroyed, and <code>arr</code> no longer exists. The pointer is <strong>dangling</strong>.</p>
+      <p><strong>Fix:</strong> Allocate on the heap:</p>
+      <pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">int</span> *<span class="hljs-title">makeArray</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">int</span> *arr = (<span class="hljs-keyword">int</span> *)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">5</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+          arr[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
+          arr[<span class="hljs-number">1</span>] = <span class="hljs-number">2</span>;
+          <span class="hljs-comment">// ... etc</span>
+          <span class="hljs-keyword">return</span> arr;  <span class="hljs-comment">// OK! Memory persists</span>
+      }
+      </code></pre>
+      <h3 id="trap-4-off-by-one-in-pointer-arithmetic">Trap 4: Off-by-One in Pointer Arithmetic</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> <span class="hljs-keyword">str</span>[<span class="hljs-number">6</span>] = <span class="hljs-string">"hello"</span>;  <span class="hljs-comment">// Includes null terminator</span>
+      <span class="hljs-keyword">char</span> *p = <span class="hljs-keyword">str</span>;
+      
+      p + <span class="hljs-number">5</span>;   <span class="hljs-comment">// Points to the null terminator</span>
+      p + <span class="hljs-number">6</span>;   <span class="hljs-comment">// OUT OF BOUNDS!</span>
+      </code></pre>
+      <p>Array bounds:</p>
+      <pre><code><span class="hljs-symbol">Address</span>:  <span class="hljs-number">0x100</span>   <span class="hljs-number">0x101</span>   <span class="hljs-number">0x102</span>   <span class="hljs-number">0x103</span>   <span class="hljs-number">0x104</span>   <span class="hljs-number">0x105</span>
+      <span class="hljs-symbol">Content</span>:  <span class="hljs-string">'h'</span>     <span class="hljs-string">'e'</span>     <span class="hljs-string">'l'</span>     <span class="hljs-string">'l'</span>     <span class="hljs-string">'o'</span>     <span class="hljs-string">'\0'</span>
+      <span class="hljs-symbol">Index</span>:    [<span class="hljs-number">0</span>]     [<span class="hljs-number">1</span>]     [<span class="hljs-number">2</span>]     [<span class="hljs-number">3</span>]     [<span class="hljs-number">4</span>]     [<span class="hljs-number">5</span>]
+      </code></pre>
+      <p>Valid pointers: <code>p + 0</code> through <code>p + 5</code>. Accessing <code>p + 6</code> is undefined behavior.
+      </p>
+      <h3 id="trap-5-p-vs-p-">Trap 5: <code>*p++</code> vs <code>(*p)++</code></h3>
+      <p>These are different!</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">3</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>};
+      int *p = arr;
+      
+      *p++;       <span class="hljs-comment">// Same as *(p++), increments p, then dereferences</span>
+                  <span class="hljs-comment">// Because ++ has higher precedence, binds tighter</span>
+      
+      (*p)++;     <span class="hljs-comment">// Increments the value p points to</span>
+      </code></pre>
+      <p>Example:</p>
+      <pre><code class="lang-c">int arr[<span class="hljs-number">3</span>] = {<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>};
+      int *p = arr;
+      
+      (*p)++;     <span class="hljs-comment">// Increments arr[0] to 11, p still points to arr[0]</span>
+      *p++;       <span class="hljs-comment">// Returns arr[0], then p moves to arr[1]</span>
+      </code></pre>
+      <h3 id="trap-6-string-literals-vs-arrays">Trap 6: String Literals vs Arrays</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">char</span> *<span class="hljs-keyword">str</span> = <span class="hljs-string">"hello"</span>;      <span class="hljs-comment">// Points to read-only memory</span>
+      <span class="hljs-keyword">str</span>[<span class="hljs-number">0</span>] = <span class="hljs-string">'H'</span>;             <span class="hljs-comment">// CRASH!</span>
+      
+      <span class="hljs-keyword">char</span> str2[<span class="hljs-number">6</span>] = <span class="hljs-string">"hello"</span>;   <span class="hljs-comment">// Array on stack</span>
+      str2[<span class="hljs-number">0</span>] = <span class="hljs-string">'H'</span>;            <span class="hljs-comment">// OK!</span>
+      </code></pre>
+      <p>String literals (<code>&quot;hello&quot;</code>) are const. Pointers to them point to read-only memory.</p>
+      <h3 id="trap-7-pointer-size-is-independent-of-type">Trap 7: Pointer Size is Independent of Type</h3>
+      <p>A common misconception:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p;       <span class="hljs-comment">// sizeof(p) == 8</span>
+      <span class="hljs-keyword">char</span> *q;      <span class="hljs-comment">// sizeof(q) == 8</span>
+      <span class="hljs-keyword">double</span> *r;    <span class="hljs-comment">// sizeof(r) == 8</span>
+      </code></pre>
+      <p><strong>All pointers are 8 bytes on 64-bit systems</strong>, regardless of what they point to. The type only matters
+        for arithmetic.</p>
+      <h3 id="trap-8-null-check-before-dereferencing">Trap 8: NULL Check Before Dereferencing</h3>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p = <span class="hljs-literal">NULL</span>;
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *p);  <span class="hljs-comment">// CRASH! Dereferencing NULL is undefined</span>
+      </code></pre>
+      <p>Always check:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">int</span> *p = <span class="hljs-literal">NULL</span>;
+      <span class="hljs-keyword">if</span> (p != <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, *p);
+      }
+      </code></pre>
+      <p>A safe pattern:</p>
+      <pre><code class="lang-c"><span class="hljs-keyword">if</span> (p == <span class="hljs-literal">NULL</span>) {
+          <span class="hljs-comment">// Handle error</span>
+          <span class="hljs-keyword">return</span>;
+      }
+      <span class="hljs-comment">// Use p safely</span>
+      </code></pre>
+      <hr>
+      <h2 id="final-summary">Final Summary</h2>
+      <p><strong>Key Takeaways:</strong></p>
+      <ol>
+        <li><strong>Pointers store addresses</strong>, not values.</li>
+        <li><strong><code>&amp;</code> gets the address</strong>, <code>*</code> dereferences (follows the pointer).</li>
+        <li><strong>C is always pass-by-value</strong>; use pointers to modify original variables.</li>
+        <li><strong>Double pointers</strong> are pointers to pointers; use when a function needs to modify a pointer.</li>
+        <li><strong>Arrays are contiguous memory</strong>; the array name is a pointer to the first element.</li>
+        <li><strong>Array indexing and pointer arithmetic are equivalent</strong>: <code>arr[i] == *(arr + i)</code>.</li>
+        <li><strong>Pointer arithmetic scales by element size</strong>: <code>p + i</code> moves <code>i * sizeof(*p)</code>
+          bytes.</li>
+        <li><strong>Watch your memory locations</strong>: strings in the data segment are read-only; stack arrays you own.
+        </li>
+        <li><strong>Sizes matter for exams</strong>: <code>sizeof(arr)</code> is the total size; <code>sizeof(ptr)</code> is
+          always 8 on 64-bit systems.</li>
+        <li><strong>Arrays decay to pointers</strong> when passed to functions.</li>
+      </ol>
+      <p>Good luck with your midterm!</p>
+
+    </article>
+  </main>
+
+  <!-- Base Scripts -->
+  <script src="../script.js"></script>
+
+  <!-- Blog Specific Theme Switcher for Markdown -->
+  <script>
+    // Observe theme changes on the html tag to swap out the markdown CSS accordingly
+    const htmlElement = document.documentElement;
+    const markdownStyleLink = document.getElementById('markdown-theme-style');
+
+    function updateMarkdownTheme() {
+      const currentTheme = htmlElement.getAttribute('data-theme') || 'dark';
+      if (currentTheme === 'dark') {
+        markdownStyleLink.href = '../github-markdown-dark.css';
+      } else {
+        markdownStyleLink.href = '../github-markdown-light.css';
+      }
+    }
+
+    // Run once on initial load
+    updateMarkdownTheme();
+
+    // Watch for 'data-theme' attribute changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          updateMarkdownTheme();
+        }
+      });
+    });
+
+    observer.observe(htmlElement, { attributes: true });
+  </script>
+</body>
+
+</html>
