@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Beers: A Century of Diamonds & Antitrust — Interactive Timeline</title>
+
+<!-- Google Fonts: Inter and Roboto Mono -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Main Stylesheet -->
+<link rel="stylesheet" href="../../style.css">
+
+<style>
+  html { scroll-behavior: smooth; }
+
+  /* ── Page Header ── */
+  .page-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .page-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .page-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+  }
+  .tagline {
+    font-style: italic;
+    color: var(--accent-color);
+    font-size: 1rem;
+    margin-top: 0.8rem;
+    font-family: var(--font-main);
+    letter-spacing: 0;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
+    justify-content: center;
+    padding: 1rem 2rem;
+    background: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    z-index: 1;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Timeline Container ── */
+  .timeline-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* vertical spine */
+  .timeline-wrap::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, var(--border-color) 5%, var(--border-color) 95%, transparent);
+  }
+
+  /* ── Era Labels ── */
+  .era-label {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin: 2.5rem 0 1.5rem;
+  }
+  .era-label span {
+    display: inline-block;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 1.1rem;
+    border-radius: 20px;
+  }
+
+  /* ── Single Event Card ── */
+  .event {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.2rem;
+    position: relative;
+    cursor: pointer;
+  }
+  .event.left  { flex-direction: row; }
+  .event.right { flex-direction: row-reverse; }
+
+  /* dot on spine */
+  .event::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    border: 2px solid var(--surface-color);
+    z-index: 3;
+    top: 1.25rem;
+    transition: transform 0.2s;
+  }
+  .event:hover::before { transform: translateX(-50%) scale(1.4); }
+
+  .event-card {
+    width: calc(50% - 2.5rem);
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 1rem 1.2rem;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .event:hover .event-card {
+    border-color: rgba(2, 132, 199, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  }
+  /* connector line to spine */
+  .event.left  .event-card::after,
+  .event.right .event-card::after {
+    content: '';
+    position: absolute;
+    top: 1.65rem;
+    height: 1px;
+    background: var(--border-color);
+    width: 2.5rem;
+  }
+  .event.left  .event-card::after { right: -2.5rem; }
+  .event.right .event-card::after { left: -2.5rem; }
+
+  .event-year {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    margin-bottom: 0.3rem;
+    color: var(--accent-color);
+  }
+  .event-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 0.35rem;
+    color: var(--text-primary);
+  }
+  .event-summary {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .event-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.6rem;
+    border-radius: 9999px;
+    margin-top: 0.5rem;
+    border: 1px solid transparent;
+  }
+  .click-hint {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-top: 0.4rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+    opacity: 0.6;
+  }
+
+  /* Category border accents */
+  .cat-origin    { border-left: 3px solid #7c3aed; }
+  .cat-monopoly  { border-left: 3px solid var(--accent-color); }
+  .cat-legal     { border-left: 3px solid #dc2626; }
+  .cat-crisis    { border-left: 3px solid #ea580c; }
+  .cat-strategy  { border-left: 3px solid #059669; }
+  .cat-law       { border-left: 3px solid #2563eb; }
+
+  /* Category tags — matching site's skill-tag pattern */
+  .tag-origin   { color: #7c3aed; background: rgba(124, 58, 237, 0.08); border-color: rgba(124, 58, 237, 0.2); }
+  .tag-monopoly { color: #0284c7; background: rgba(2, 132, 199, 0.08);  border-color: rgba(2, 132, 199, 0.2); }
+  .tag-legal    { color: #dc2626; background: rgba(220, 38, 38, 0.08);  border-color: rgba(220, 38, 38, 0.2); }
+  .tag-crisis   { color: #ea580c; background: rgba(234, 88, 12, 0.08);  border-color: rgba(234, 88, 12, 0.2); }
+  .tag-strategy { color: #059669; background: rgba(5, 150, 105, 0.08);  border-color: rgba(5, 150, 105, 0.2); }
+  .tag-law      { color: #2563eb; background: rgba(37, 99, 235, 0.08);  border-color: rgba(37, 99, 235, 0.2); }
+
+  /* ── Modal Overlay ── */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+  }
+  .overlay.active { display: flex; }
+
+  .modal {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    animation: pop-in 0.25s ease;
+  }
+  @keyframes pop-in {
+    from { transform: scale(0.95); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+  .modal-header {
+    padding: 1.6rem 1.8rem 1.1rem;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background: var(--surface-color);
+    z-index: 2;
+  }
+  .modal-year {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--accent-color);
+    margin-bottom: 0.3rem;
+  }
+  .modal-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1.1rem; right: 1.2rem;
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.15s;
+  }
+  .modal-close:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+    border-color: rgba(2, 132, 199, 0.3);
+  }
+
+  .modal-body {
+    padding: 1.4rem 1.8rem 1.8rem;
+  }
+  .modal-body h3 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--accent-color);
+    margin: 1.2rem 0 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3rem;
+  }
+  .modal-body h3:first-child { margin-top: 0; }
+  .modal-body p {
+    font-size: 0.91rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 0.7rem;
+  }
+  .modal-body ul {
+    padding-left: 1.3rem;
+    margin-bottom: 0.7rem;
+  }
+  .modal-body li {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  .highlight-box {
+    background: rgba(2, 132, 199, 0.06);
+    border-left: 3px solid var(--accent-color);
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+    padding: 0.8rem 1rem;
+    margin: 0.8rem 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .law-box {
+    background: rgba(220, 38, 38, 0.06);
+    border-left: 3px solid #dc2626;
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+    padding: 0.8rem 1rem;
+    margin: 0.8rem 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .econ-box {
+    background: rgba(37, 99, 235, 0.06);
+    border-left: 3px solid #2563eb;
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+    padding: 0.8rem 1rem;
+    margin: 0.8rem 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .modal-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.7rem;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    margin-bottom: 1rem;
+  }
+
+  /* ── Scrollbar ── */
+  .modal::-webkit-scrollbar { width: 6px; }
+  .modal::-webkit-scrollbar-track { background: transparent; }
+  .modal::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .timeline-wrap::before { left: 1.3rem; }
+    .event { flex-direction: column !important; padding-left: 3rem; }
+    .event-card { width: 100%; }
+    .event::before { left: 1.3rem; transform: none; }
+    .event:hover::before { transform: scale(1.4); }
+    .event.left  .event-card::after,
+    .event.right .event-card::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background Canvas for Constellations -->
+<canvas id="bg-canvas"></canvas>
+
+<nav class="main-nav">
+    <div class="nav-content">
+        <div class="nav-name">Umut Yalçın Baki</div>
+        <div class="header-controls" style="display: flex; gap: 1rem; align-items: center;">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+            <button id="lang-toggle" class="lang-toggle" aria-label="Toggle Language">
+                <div class="lang-slider"></div>
+                <span class="lang-label en">EN</span>
+                <span class="lang-label tr">TR</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<header class="page-header">
+  <h1>De Beers & U.S. Antitrust Law</h1>
+  <p>ECON 499 · Module 2 · Antitrust Economics · Koç University</p>
+  <p class="tagline">"A Diamond is Forever" — and so was the cartel, until it wasn't.</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div> Origins &amp; Rise</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#0284c7"></div> Monopoly Mechanics</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div> Legal Battles</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ea580c"></div> Crises &amp; Defections</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#059669"></div> Strategic Pivot</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div> Law &amp; Policy</div>
+</div>
+
+<div class="timeline-wrap" id="timeline">
+
+  <!-- ═══════════ ERA 1 ═══════════ -->
+  <div class="era-label"><span>The Discovery Era · 1866–1890</span></div>
+
+  <div class="event left" onclick="openModal('e1866')">
+    <div class="event-card cat-origin">
+      <div class="event-year">1866</div>
+      <div class="event-title">A Boy Finds a Shiny Stone</div>
+      <div class="event-summary">First diamond discovered on the Gariep (Vaal) River banks in South Africa.</div>
+      <span class="event-tag tag-origin">Origins</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1869')">
+    <div class="event-card cat-origin">
+      <div class="event-year">1869</div>
+      <div class="event-title">83.5 Carats — Diamond Fever Begins</div>
+      <div class="event-summary">A 83.5-carat diamond find ignites a rush. By 1872, 10,000 prospectors flood Kimberley.</div>
+      <span class="event-tag tag-origin">Origins</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1874')">
+    <div class="event-card cat-origin">
+      <div class="event-year">1874</div>
+      <div class="event-title">Cecil Rhodes Arrives with a Pump</div>
+      <div class="event-summary">Rhodes brings a steam-powered water pump to Kimberley, beginning his path to total consolidation.</div>
+      <span class="event-tag tag-origin">Origins</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1880')">
+    <div class="event-card cat-origin">
+      <div class="event-year">1880</div>
+      <div class="event-title">De Beers Mining Company Founded</div>
+      <div class="event-summary">Rhodes formally establishes the De Beers Mining Company, setting the stage for monopoly.</div>
+      <span class="event-tag tag-origin">Origins</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1887')">
+    <div class="event-card cat-monopoly">
+      <div class="event-year">1887</div>
+      <div class="event-title">Rhodes Buys Out Every Competitor</div>
+      <div class="event-summary">Rhodes consolidates all major South African diamond mines under De Beers ownership — the first true diamond monopoly.</div>
+      <span class="event-tag tag-monopoly">Monopoly</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1890a')">
+    <div class="event-card cat-monopoly">
+      <div class="event-year">1890</div>
+      <div class="event-title">The Diamond Syndicate Formalized</div>
+      <div class="event-summary">Rhodes formalizes the Diamond Syndicate. Diamond prices rise from 18 to 32 shillings through coordinated supply control — not through scarcity but coordination.</div>
+      <span class="event-tag tag-monopoly">Monopoly</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1890b')">
+    <div class="event-card cat-law">
+      <div class="event-year">1890</div>
+      <div class="event-title">Sherman Act Passed — Same Year</div>
+      <div class="event-summary">U.S. Congress passes the Sherman Antitrust Act, making "every contract, combination or conspiracy in restraint of trade" illegal. The very year De Beers's cartel is born.</div>
+      <span class="event-tag tag-law">U.S. Law</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ ERA 2 ═══════════ -->
+  <div class="era-label"><span>Oppenheimer's Empire · 1902–1940s</span></div>
+
+  <div class="event right" onclick="openModal('e1902')">
+    <div class="event-card cat-monopoly">
+      <div class="event-year">1902</div>
+      <div class="event-title">Rhodes Dies — Oppenheimer Rises</div>
+      <div class="event-summary">Cecil Rhodes dies. Ernest Oppenheimer, a German-born diamond buyer, begins his ascent to control De Beers, with an even more sophisticated vision of monopoly.</div>
+      <span class="event-tag tag-monopoly">Monopoly</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1914')">
+    <div class="event-card cat-law">
+      <div class="event-year">1914</div>
+      <div class="event-title">Clayton Act Passed</div>
+      <div class="event-summary">U.S. Congress strengthens antitrust law. The Clayton Act prohibits even "attempts" to monopolize — making De Beers's conduct more clearly illegal under U.S. law.</div>
+      <span class="event-tag tag-law">U.S. Law</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1925')">
+    <div class="event-card cat-monopoly">
+      <div class="event-year">1925–1929</div>
+      <div class="event-title">Oppenheimer Seizes Total Control</div>
+      <div class="event-summary">Oppenheimer buys out the old Syndicate (1925), then becomes chairman of both De Beers and the Diamond Corporation (1929). The modern cartel is complete.</div>
+      <span class="event-tag tag-monopoly">Monopoly</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1938')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">1938</div>
+      <div class="event-title">De Beers Hires N.W. Ayer — Inventing Diamond Culture</div>
+      <div class="event-summary">De Beers hires U.S. ad agency N.W. Ayer to create demand for diamonds in America. The beginning of one of history's greatest marketing campaigns.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ ERA 3 ═══════════ -->
+  <div class="era-label"><span>The CSO System &amp; Legal Battles · 1945–1980</span></div>
+
+  <div class="event right" onclick="openModal('e1945')">
+    <div class="event-card cat-legal">
+      <div class="event-year">1945</div>
+      <div class="event-title">First DOJ Prosecution — Dismissed</div>
+      <div class="event-summary">The DOJ launches its first major prosecution of De Beers. The case is dismissed on jurisdictional grounds — De Beers has no sufficient "contacts" with the U.S.</div>
+      <span class="event-tag tag-legal">Legal Battle</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1947')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">1947</div>
+      <div class="event-title">"A Diamond is Forever" — Slogan of the Century</div>
+      <div class="event-summary">N.W. Ayer crafts the iconic slogan "A Diamond is Forever," transforming engagement rings from a custom to a near-universal ritual. De Beers spends less than 1% of revenue on ads yet achieves global brand dominance.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1957')">
+    <div class="event-card cat-monopoly">
+      <div class="event-year">1957</div>
+      <div class="event-title">Ernest Oppenheimer Dies</div>
+      <div class="event-summary">Ernest Oppenheimer, who built the modern De Beers empire, dies. His son Harry and later grandson Nicky carry on the family tradition of cartel management.</div>
+      <span class="event-tag tag-monopoly">Monopoly</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1960')">
+    <div class="event-card cat-crisis">
+      <div class="event-year">1960s</div>
+      <div class="event-title">South Africa's Share Drops to 19%</div>
+      <div class="event-summary">New diamond sources emerge worldwide. South Africa, once virtually the only source, falls to just 19% of world production. De Beers pivots: instead of owning mines, it buys supply contracts from new producers.</div>
+      <span class="event-tag tag-crisis">Crisis</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1973')">
+    <div class="event-card cat-legal">
+      <div class="event-year">1973</div>
+      <div class="event-title">DOJ Finds U.S. Subsidiary — De Beers Divests Instantly</div>
+      <div class="event-summary">DOJ discovers De Beers owns 50% of Christensen Diamond Products, an American company. De Beers immediately divests its stake before formal proceedings begin — legal judo.</div>
+      <span class="event-tag tag-legal">Legal Battle</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1976')">
+    <div class="event-card cat-legal">
+      <div class="event-year">1976</div>
+      <div class="event-title">Industrial Diamond Case — De Beers Pleads No Contest</div>
+      <div class="event-summary">The DOJ's only partial success: industrial diamond price-fixing. De Beers Ireland pleads no contest and pays a small fine. Gem diamonds remain untouched.</div>
+      <span class="event-tag tag-legal">Legal Battle</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1977')">
+    <div class="event-card cat-monopoly">
+      <div class="event-year">1977</div>
+      <div class="event-title">Israeli Sightholder Purge</div>
+      <div class="event-summary">Israeli dealers hoard diamonds during inflation, trying to profit from price increases. De Beers retaliates by purging over 100 Israeli sightholders from the system — a dramatic show of cartel enforcement power.</div>
+      <span class="event-tag tag-monopoly">Monopoly</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ ERA 4 ═══════════ -->
+  <div class="era-label"><span>Cracks in the Foundation · 1981–1995</span></div>
+
+  <div class="event left" onclick="openModal('e1981')">
+    <div class="event-card cat-crisis">
+      <div class="event-year">1981</div>
+      <div class="event-title">Demand Crisis — Sales Fall 46%</div>
+      <div class="event-summary">Rising interest rates and a slumping economy crush diamond demand. De Beers adds a year's worth of diamonds to stockpile ($700M–$1B), refusing to let prices collapse. A historic demonstration of cartel power.</div>
+      <span class="event-tag tag-crisis">Crisis</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1990')">
+    <div class="event-card cat-crisis">
+      <div class="event-year">1990</div>
+      <div class="event-title">$1 Billion Loan to the Soviet Union</div>
+      <div class="event-summary">The USSR is collapsing. De Beers offers Gorbachev's government a $1 billion loan in exchange for control of Russia's vast diamond stockpile and an exclusive supply arrangement — geopolitics meets cartel maintenance.</div>
+      <span class="event-tag tag-crisis">Geopolitics</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1992')">
+    <div class="event-card cat-crisis">
+      <div class="event-year">1992</div>
+      <div class="event-title">Russia and Angola Defect</div>
+      <div class="event-summary">Both Russia and Angola exit De Beers's supply system, opening uncontrolled channels for diamonds to flood the market. Angola's "conflict diamonds" also draw global attention to informal diamond channels funding civil wars.</div>
+      <span class="event-tag tag-crisis">Crisis</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1993')">
+    <div class="event-card cat-law">
+      <div class="event-year">1993</div>
+      <div class="event-title">Hartford Fire Insurance — Effects Doctrine Crystallized</div>
+      <div class="event-summary">The U.S. Supreme Court rules in Hartford Fire Insurance Co. v. California: U.S. antitrust law applies to "foreign conduct that was meant to produce and did in fact produce some substantial effect in the United States." De Beers's legal shield begins to crack.</div>
+      <span class="event-tag tag-law">U.S. Law</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1994')">
+    <div class="event-card cat-legal">
+      <div class="event-year">1994</div>
+      <div class="event-title">GE-De Beers Price Fixing Case — GE Acquitted</div>
+      <div class="event-summary">DOJ sues De Beers and GE for coordinating industrial diamond prices through Belgian middleman Phillippe Loitier. GE is acquitted in six weeks. De Beers never appears in court — still beyond reach.</div>
+      <span class="event-tag tag-legal">Legal Battle</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1995')">
+    <div class="event-card cat-law">
+      <div class="event-year">1995</div>
+      <div class="event-title">DOJ Codifies Effects Doctrine in Guidelines</div>
+      <div class="event-summary">The DOJ publishes Antitrust Enforcement Guidelines for International Operations, formally extending U.S. jurisdiction to foreign conduct affecting U.S. commerce. De Beers's geographic shield is now legally obsolete.</div>
+      <span class="event-tag tag-law">U.S. Law</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ ERA 5 ═══════════ -->
+  <div class="era-label"><span>Strategic Reckoning · 1997–1999</span></div>
+
+  <div class="event left" onclick="openModal('e1997')">
+    <div class="event-card cat-crisis">
+      <div class="event-year">1997</div>
+      <div class="event-title">Asian Financial Crisis — Japan Collapses</div>
+      <div class="event-summary">Japan's diamond market crashes from 33% to 18% of global retail sales in a single year. The U.S., at 46% of global retail, becomes even more essential — and legally treacherous — for De Beers.</div>
+      <span class="event-tag tag-crisis">Crisis</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1998a')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">March 1998</div>
+      <div class="event-title">De Beers &amp; Anglo-American Separate</div>
+      <div class="event-summary">A historic structural change: De Beers and Anglo-American formally split into two independent entities. The family holding structure that sheltered De Beers for decades is dissolved.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1998b')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">1998</div>
+      <div class="event-title">Nicky Oppenheimer + Bain &amp; Co. — The Strategic Review</div>
+      <div class="event-summary">Nicky Oppenheimer becomes chairman; Gary Ralfe is brought in as MD from outside the family for the first time. Bain & Company is hired — the first time De Beers has ever used external consultants. Share price: ~$15 (from $35). Stockpile: $4.8 billion.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1998c')">
+    <div class="event-card cat-crisis">
+      <div class="event-year">1998</div>
+      <div class="event-title">American Value Investors Circle De Beers</div>
+      <div class="event-summary">U.S. value investors accumulate De Beers stock, reaching 21% ownership. Unlike the Oppenheimer family, they want short-term returns, not long-term cartel stability. Pressure to liquidate the $4.8B stockpile intensifies.</div>
+      <span class="event-tag tag-crisis">Crisis</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1999a')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">1999</div>
+      <div class="event-title">UK Branding Pilot: 15% Premium Confirmed</div>
+      <div class="event-summary">De Beers tests branded diamonds in England, etching a microscopic logo onto stones. Consumers pay 15% more for "De Beers" diamonds vs. identical unbranded stones. Bain values brand potential at up to $1.25B at retail.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1999b')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">March 1999</div>
+      <div class="event-title">Oppenheimer's HBS Speech — "I Am the Devil Incarnate"</div>
+      <div class="event-summary">Nicky Oppenheimer addresses Harvard Business School alumni. He openly admits De Beers violated antitrust commandments "as a matter of policy" — but argues the cartel honored the consumer through stability and quality. An implicit plea for exemption from U.S. antitrust law.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e1999c')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">1999</div>
+      <div class="event-title">The Millennium Campaign — 68/72 Diamonds Sold Before Lunch</div>
+      <div class="event-summary">De Beers launches its millennium campaign. The "De Beers Millennium Star" (203 carats) is displayed in London. In Japan, one dealer sells 68 of his 72 millennium diamonds on the first morning of the campaign.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e1999d')">
+    <div class="event-card cat-legal">
+      <div class="event-year">1999</div>
+      <div class="event-title">Deutsche Bank: Antitrust Is a "Poison Pill"</div>
+      <div class="event-summary">Deutsche Bank Securities publishes an analysis warning that De Beers's antitrust exposure is "indeed a poison pill" for the branding strategy. The company cannot market itself in the U.S. without inviting prosecution. The central dilemma is fully visible.</div>
+      <span class="event-tag tag-legal">Legal Risk</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ ERA 6 ═══════════ -->
+  <div class="era-label"><span>Resolution &amp; Legacy · 2000–2004+</span></div>
+
+  <div class="event left" onclick="openModal('e2000')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">2000</div>
+      <div class="event-title">Ad Age: "A Diamond is Forever" — Slogan of the Century</div>
+      <div class="event-summary">Advertising Age magazine names "A Diamond is Forever" the most recognized advertising slogan of the 20th century. De Beers had achieved unparalleled brand recognition while spending less than 1% of revenue on advertising.</div>
+      <span class="event-tag tag-strategy">Strategy</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event right" onclick="openModal('e2004')">
+    <div class="event-card cat-legal">
+      <div class="event-year">2004</div>
+      <div class="event-title">De Beers Settles with the DOJ — Cartel Era Ends</div>
+      <div class="event-summary">Facing the effects doctrine and the need to enter the U.S. market for its branding strategy, De Beers settles with the U.S. Department of Justice. The company pays a fine and is allowed to enter the American market legally. Over 100 years of evasion ends.</div>
+      <span class="event-tag tag-legal">Legal Battle</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+  <div class="event left" onclick="openModal('e2018')">
+    <div class="event-card cat-strategy">
+      <div class="event-year">2018+</div>
+      <div class="event-title">Lightbox: De Beers Launches Synthetic Diamonds</div>
+      <div class="event-summary">De Beers launches "Lightbox," its own line of lab-grown synthetic diamonds — at prices far below natural diamonds. A stunning strategic pivot: the company that built a monopoly on natural diamonds now sells lab-grown ones to segment the market and protect its premium natural diamond brand.</div>
+      <span class="event-tag tag-strategy">Modern Era</span>
+      <span class="click-hint">Click to learn more ▸</span>
+    </div>
+  </div>
+
+</div><!-- .timeline-wrap -->
+
+<!-- ══════════════════════════════════════════ MODAL OVERLAY ══════════════════════════════════════════ -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-year" id="modal-year"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeAll()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- Base Scripts -->
+<script src="../../script.js"></script>
+
+<script>
+const events = {
+
+  e1866: {
+    year: '1866', title: 'A Boy Finds a Shiny Stone',
+    tag: 'Origins', tagClass: 'tag-origin',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1866, on the banks of the Gariep (Vaal) River in South Africa's Cape Province, a thirteen-year-old boy picked up a shiny stone. At the time, no one paid much attention. But this unremarkable moment was the spark that would ignite a global industry — and one of history's most extraordinary monopolies.</p>
+      <div class="highlight-box">The diamond, initially dismissed as just another rock, eventually set off a chain of events that would create the De Beers cartel, shape engagement ring culture worldwide, and generate decades of U.S. antitrust battles.</div>
+      <h3>Why It Matters for Antitrust Economics</h3>
+      <p>The origins of De Beers illustrate how <strong>commodity markets</strong> work before monopolization. Before the diamond rush, no single entity controlled supply. Multiple independent prospectors competed freely. In economic terms, this was close to <em>perfect competition</em> — many sellers, identical goods, price equal to marginal cost, zero economic profit.</p>
+      <p>The lesson: monopoly doesn't exist in nature. It is constructed, strategically, by people who understand how to exploit market structure. Cecil Rhodes and Ernest Oppenheimer understood this and spent decades building the structure that would give De Beers total control.</p>
+    `
+  },
+
+  e1869: {
+    year: '1869', title: '83.5 Carats — Diamond Fever Begins',
+    tag: 'Origins', tagClass: 'tag-origin',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1869, a second diamond of 83.5 carats was found — impossible to ignore. Within months, diamond fever gripped Cape Province. By 1872, roughly <strong>ten thousand prospectors</strong> had rushed to Kimberley. Five separate mines were producing gem-quality stones simultaneously.</p>
+      <h3>The Economic Problem This Created</h3>
+      <p>The rush created an uncoordinated, competitive market. Multiple independent producers were mining simultaneously. Diamond prices were volatile, quality was inconsistent, and underground water tables flooded the mines, making operations dangerous and expensive.</p>
+      <div class="econ-box">
+        <strong>Key Economic Concept — Perfect Competition:</strong> When many independent sellers produce an identical commodity, the market tends toward <em>perfect competition</em>. Price falls to the minimum needed to keep producers in business. No individual producer has market power. Profits trend toward zero. This is exactly what diamond producers faced in 1870 — and what Cecil Rhodes decided to fix.
+      </div>
+      <h3>Why Chaos Was Bad for Producers</h3>
+      <p>With ten thousand prospectors and five competing mines, any individual producer who tried to raise prices would simply lose customers to the others. The "race to the bottom" in pricing meant that even high-quality stone producers earned thin margins. This is the fundamental problem that drives monopolization: competitive markets are great for consumers but terrible for producers seeking profit.</p>
+    `
+  },
+
+  e1874: {
+    year: '1874', title: 'Cecil Rhodes Arrives with a Pump',
+    tag: 'Origins', tagClass: 'tag-origin',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1874, Cecil Rhodes arrived in Kimberley with a steam-powered water pump. The mines were being flooded by underground water tables, making mining increasingly dangerous and expensive. Within a year, Rhodes was servicing <em>all</em> the mines in the region.</p>
+      <div class="highlight-box">"This wasn't just about solving the flooding problem; it was about centralizing control." — De Beers Case Notes</div>
+      <h3>The Strategic Genius of the Pump</h3>
+      <p>By solving a shared problem (flooding), Rhodes created <em>dependency</em>. Mine operators who relied on his pump could be influenced. More importantly, servicing all mines gave Rhodes information about their production levels, costs, and vulnerabilities — knowledge that he would eventually use to consolidate ownership.</p>
+      <h3>Rhodes's Core Insight About Diamond Economics</h3>
+      <p>Rhodes recognized something fundamental: diamonds had a unique economic problem. Unlike oil or wheat, diamonds have no industrial use that creates baseline demand. Their value is almost entirely based on <strong>perceived scarcity and emotional symbolism</strong>. If supply could be kept below what markets would naturally produce, prices would stay elevated. But this required controlling <em>all</em> supply — not just some of it.</p>
+      <p>Even if Rhodes controlled 80% of production, the remaining 20% could undermine prices if those producers sold aggressively. Monopoly power requires near-total control of supply.</p>
+    `
+  },
+
+  e1880: {
+    year: '1880', title: 'De Beers Mining Company Founded',
+    tag: 'Origins', tagClass: 'tag-origin',
+    body: `
+      <h3>What Happened</h3>
+      <p>By 1880, Cecil Rhodes had leveraged his pump business and mining profits to formalize the <strong>De Beers Mining Company</strong>. This gave his consolidation effort a corporate identity, allowing him to raise capital, issue shares, and structure the buyout of competitors.</p>
+      <h3>Corporate Structure as a Tool of Monopoly</h3>
+      <p>The formation of a formal company was strategically important. A corporation can borrow money, acquire other companies, and pursue long-term strategies that individual prospectors cannot. Rhodes used the corporate form to raise capital for aggressive acquisition — buying out competitors at prices they couldn't refuse, then reinvesting the profits to buy more.</p>
+      <div class="econ-box">
+        <strong>Key Concept — Barriers to Entry:</strong> As De Beers acquired mines, it created barriers to entry for new competitors. Even if new diamonds were found, new miners would face an established, well-capitalized competitor willing to undercut prices temporarily to drive them out. The corporate form made these threats credible.
+      </div>
+      <h3>The Vertical Structure of Diamond Production</h3>
+      <p>The diamond supply chain consists of: (1) Mining & Extraction → (2) Sorting & Valuation → (3) Distribution via CSO → (4) Cutting & Polishing → (5) Wholesale Trading → (6) Jewelry Manufacturing → (7) Retail Consumers. De Beers controlled stages 1, 2, and 3. This vertical control was key: owning mines without controlling distribution would have been insufficient to maintain price discipline.</p>
+    `
+  },
+
+  e1887: {
+    year: '1887', title: 'Rhodes Buys Out Every Competitor',
+    tag: 'Monopoly Mechanics', tagClass: 'tag-monopoly',
+    body: `
+      <h3>What Happened</h3>
+      <p>By 1887 — just seven years after founding De Beers Mining Company — Cecil Rhodes had bought out <em>every other claim holder</em> in the Kimberley area. All major South African mines now operated under De Beers's ownership. The first true diamond monopoly was complete.</p>
+      <h3>How He Did It</h3>
+      <p>Rhodes used a combination of tactics: purchase of competitors at prices they couldn't refuse; leveraging mining service relationships (his pump business) to create leverage; and threatening price wars to demonstrate that resistance was costly. This is classic monopolization strategy — identify competitors, offer them a premium to sell, and if they refuse, threaten to drive them out through competitive pressure.</p>
+      <div class="highlight-box">Rhodes's key insight: in a commodity market with many producers, competition destroys profits for everyone. A single producer controlling all supply can raise prices and earn monopoly rents. The solution: consolidate until you're the only supplier.</div>
+      <h3>Economic Theory: Natural Monopoly vs. Constructed Monopoly</h3>
+      <p>Economists distinguish between <em>natural monopolies</em> (where a single firm can serve the market more efficiently than multiple firms, as in utilities) and <em>constructed monopolies</em> (where a firm achieves monopoly through acquisition and strategic action). De Beers was clearly a <strong>constructed monopoly</strong> — there was nothing natural about one firm controlling all diamond supply. It required decades of deliberate strategy.</p>
+      <div class="law-box"><strong>U.S. Law Relevance:</strong> Sherman Act Section 2 prohibits "monopolization" — acquiring or maintaining monopoly power through anticompetitive conduct. Rhodes's consolidation of all South African mines, if done in the U.S., would have been a paradigm Section 2 violation.</div>
+    `
+  },
+
+  e1890a: {
+    year: '1890', title: 'The Diamond Syndicate Formalized',
+    tag: 'Monopoly Mechanics', tagClass: 'tag-monopoly',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1890, Rhodes formalized what became known as the <strong>Diamond Syndicate</strong>. Merchants pledged to buy exclusively from Rhodes's mines and to sell diamonds at set prices in specific quantities. Diamond prices immediately rose from 18 to 32 shillings — not through scarcity, but through <em>coordination</em>.</p>
+      <h3>How the Syndicate Worked</h3>
+      <p>The Syndicate was a distribution control mechanism. Merchants who joined agreed to:</p>
+      <ul>
+        <li>Not offer stones below an agreed price point</li>
+        <li>Not sell outside their designated territories</li>
+        <li>Not dump excess inventory onto the market</li>
+        <li>Buy exclusively from De Beers mines</li>
+      </ul>
+      <h3>Why Price Rose 78%</h3>
+      <p>Before the Syndicate, merchants competed with each other for buyers, driving prices toward competitive levels. After the Syndicate, merchants had coordinated agreements not to undercut each other. This is textbook <strong>horizontal price-fixing</strong> — the exact conduct prohibited by Sherman Act Section 1.</p>
+      <div class="econ-box">
+        <strong>Cartel Economics:</strong> The Syndicate is an example of a cartel restricting supply to raise prices. Without coordination, price = marginal cost (competitive outcome). With coordination, price = monopoly price. The difference (18 → 32 shillings = 78% increase) represents the cartel premium extracted from consumers and the quantity lost due to restriction.
+      </div>
+      <h3>Why It Was Stable</h3>
+      <p>Most cartels collapse quickly because members cheat. Rhodes's Syndicate was stable because he had near-total ownership of South African mines — there was no major supply source outside the cartel. Merchants couldn't buy from non-Syndicate sources because there weren't any significant ones.</p>
+    `
+  },
+
+  e1890b: {
+    year: '1890', title: 'Sherman Antitrust Act Passed — The Same Year',
+    tag: 'U.S. Law', tagClass: 'tag-law',
+    body: `
+      <h3>What Happened</h3>
+      <p>In the same year that Cecil Rhodes formalized the Diamond Syndicate, the U.S. Congress passed the <strong>Sherman Antitrust Act</strong> — the foundational U.S. antitrust statute. The coincidence is historically remarkable: the cartel and the law that would eventually threaten it were born simultaneously.</p>
+      <h3>What the Sherman Act Says</h3>
+      <ul>
+        <li><strong>Section 1:</strong> "Every contract, combination in the form of trust or otherwise, or conspiracy, in restraint of trade or commerce among the several states, or with foreign nations, is declared to be illegal."</li>
+        <li><strong>Section 2:</strong> Makes illegal the monopolization, attempted monopolization, or conspiracy to monopolize any part of trade or commerce.</li>
+      </ul>
+      <div class="law-box"><strong>Key Distinction:</strong> Section 1 requires an <em>agreement</em> between two or more parties. Section 2 applies to <em>unilateral conduct</em> by a single dominant firm. De Beers potentially violates both: Section 1 through its cartel agreements with sightholders and producers; Section 2 through its unilateral monopoly maintenance via stockpiling and exclusive dealing.</div>
+      <h3>Why It Didn't Apply to De Beers for Decades</h3>
+      <p>The Sherman Act was designed with domestic U.S. corporations in mind. De Beers, a South African company with no U.S. presence, could argue that U.S. courts lacked jurisdiction over its operations. The Act's geographic ambiguity — it said "trade or commerce" but didn't specify domestic or foreign — created a loophole that De Beers would exploit for a century.</p>
+      <h3>The Philosophical Foundation</h3>
+      <p>The Sherman Act embodied a dual philosophy: (1) <strong>Consumer welfare</strong> — preventing arrangements that raise prices and restrict quantity; and (2) <strong>Preventing concentration of power</strong> — the "Magna Carta of free enterprise" that protects the competitive process itself. Justice Brandeis articulated a vision of protecting the "small businessman" from monopolistic crushing — a vision directly relevant to De Beers's effect on independent diamond dealers.</p>
+    `
+  },
+
+  e1902: {
+    year: '1902', title: 'Rhodes Dies — Oppenheimer Rises',
+    tag: 'Monopoly Mechanics', tagClass: 'tag-monopoly',
+    body: `
+      <h3>What Happened</h3>
+      <p>When Cecil Rhodes died in 1902, he left behind a powerful but incomplete monopoly. Ernest Oppenheimer — a German-born diamond buyer who had come to South Africa to seek his fortune — gradually took control. If Rhodes built the cartel, Oppenheimer perfected it.</p>
+      <h3>The Oppenheimer Insight: Control Everything</h3>
+      <p>Oppenheimer's crucial insight was that controlling diamond supply wasn't enough — you had to control the <em>entire quality spectrum</em>. Here's why:</p>
+      <p>The diamond market has a structure: wealthy consumers buy top-tier stones, middle-class consumers buy mid-range stones, and less affluent consumers buy smaller, lower-quality stones. If De Beers controlled only high-quality gems but let low-quality stones flood the market, the overall price structure would unravel. Cheap stones at the bottom would erode consumer perceptions of diamond value at all levels.</p>
+      <div class="highlight-box">Oppenheimer also recognized that even controlling supply wasn't enough if distribution was competitive. Multiple distributors competing to buy from a single supplier would bid down the wholesale price. You needed to centralize distribution as well as supply — hence the Central Selling Organisation (CSO).</div>
+      <h3>The Transition from Pure Monopoly to Hegemonic Leadership</h3>
+      <p>As new diamond sources emerged worldwide, Oppenheimer pivoted De Beers's model. Instead of owning all mines, De Beers would <em>control all distribution</em> through the CSO. Diamond-producing nations could own their mines, but they would sell exclusively through De Beers. This was a brilliant adaptation: the company went from owning supply to controlling its flow — which turned out to be even more powerful.</p>
+    `
+  },
+
+  e1914: {
+    year: '1914', title: 'Clayton Act Passed',
+    tag: 'U.S. Law', tagClass: 'tag-law',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1914, Congress passed the <strong>Clayton Antitrust Act</strong>, significantly broadening U.S. antitrust enforcement. Where the Sherman Act prohibited actual restraints of trade, the Clayton Act went further: it prohibited conduct that "may substantially lessen competition or tend to create a monopoly."</p>
+      <h3>Key Provisions Relevant to De Beers</h3>
+      <ul>
+        <li><strong>Section 2 (Robinson-Patman):</strong> Prohibits price discrimination between competing purchasers for similar goods where the effect may substantially lessen competition.</li>
+        <li><strong>Section 3:</strong> Prohibits exclusive dealing arrangements (like De Beers's sightholder exclusivity) where they substantially lessen competition.</li>
+        <li><strong>Section 7:</strong> Prohibits mergers and acquisitions where "the effect of such acquisition may be substantially to lessen competition, or to tend to create a monopoly."</li>
+      </ul>
+      <div class="law-box"><strong>Critical Addition:</strong> The Clayton Act prohibited <em>attempts</em> to monopolize — not just successful monopolization. This means De Beers's exclusive supply contracts, sightholder exclusivity arrangements, and stockpiling strategy were potentially illegal even if they hadn't fully prevented competition.</div>
+      <h3>Why This Mattered for De Beers</h3>
+      <p>Under the Clayton Act, De Beers's exclusive dealing arrangements with sightholders (who could only buy from De Beers and couldn't resell competitively) and with producer nations (who could only sell to De Beers) were potentially illegal as foreclosing competition. The CSO system, analyzed under Clayton Section 3, would likely be found to "substantially lessen competition" in the rough diamond distribution market.</p>
+    `
+  },
+
+  e1925: {
+    year: '1925–1929', title: 'Oppenheimer Seizes Total Control — The CSO Is Born',
+    tag: 'Monopoly Mechanics', tagClass: 'tag-monopoly',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1925, Oppenheimer bought out the old Diamond Syndicate and replaced it with a new arrangement linked to his Anglo-American company. By 1929, he held the chairmanship of both De Beers and the Diamond Corporation. The modern De Beers cartel — with its Central Selling Organisation (CSO) as the hub — was fully operational.</p>
+      <h3>How the CSO Worked — The "Sights" System</h3>
+      <p>The CSO operated from London. Ten times per year, it held "sights" — meetings where pre-selected wholesale merchants (sightholders) were invited to purchase rough diamonds.</p>
+      <ul>
+        <li>About five weeks before each sight, sightholders submitted preferences (quantity, color, quality)</li>
+        <li>The CSO sorted diamonds from all sources and packed them into plain brown shoeboxes — "parcels"</li>
+        <li>Sightholders could not cherry-pick: you took the entire parcel or rejected it entirely</li>
+        <li>Prices were announced, not negotiated — no haggling</li>
+        <li>Refusing a parcel risked losing sightholder status permanently</li>
+      </ul>
+      <div class="highlight-box">"The CSO was, in effect, a central planner for the diamond industry — determining exactly what goods would be offered for sale, to which buyers, at which prices, exactly ten times per year."</div>
+      <h3>Why This Was Economically Powerful</h3>
+      <p>The no-cherry-picking rule was crucial. If buyers could select only the best stones, the CSO would be left with low-quality stones it couldn't sell. By bundling all qualities into parcels, De Beers forced buyers to purchase the full quality range — maintaining price discipline across all quality levels.</p>
+      <div class="econ-box"><strong>Tying Arrangement:</strong> Under U.S. antitrust law, conditioning the sale of a desirable product (high-quality diamonds) on the purchase of a less desirable product (lower-quality stones in the same parcel) is called a "tying arrangement." This can be illegal under Clayton Act Section 3 if it forecloses competition in the tied market.</div>
+    `
+  },
+
+  e1938: {
+    year: '1938', title: 'De Beers Hires N.W. Ayer — Inventing Diamond Culture',
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1938, De Beers hired N.W. Ayer, a prominent U.S. advertising agency, to create demand for diamonds in the American market. This wasn't just advertising — it was a deliberate effort to construct a social institution: the diamond engagement ring.</p>
+      <h3>The Strategy: Manufacturing Desire</h3>
+      <p>Before De Beers's campaign, diamond engagement rings were uncommon. The company's challenge was not just to sell existing demand, but to <em>create</em> demand where little existed. N.W. Ayer's strategy:</p>
+      <ul>
+        <li>Associate diamonds with love, commitment, and permanence in popular culture</li>
+        <li>Place diamonds in films, celebrities, and news stories</li>
+        <li>Create the norm that engagement rings "should" be diamonds</li>
+        <li>Establish pricing norms (e.g., "two months' salary" as the benchmark)</li>
+      </ul>
+      <div class="highlight-box">"The concept of an engagement diamond was essentially invented and marketed into existence over roughly a century." — De Beers Case Notes. Diamonds are "timeless and natural treasures" that owe their cultural significance almost entirely to advertising.</div>
+      <h3>Economic Significance: Demand Creation as Supply Control</h3>
+      <p>Most companies manage supply to meet demand. De Beers did something more powerful: it <em>created</em> demand through advertising. By making diamonds the symbol of love, De Beers ensured that demand would be emotionally inelastic — people wouldn't substitute rubies or sapphires for engagement rings even at higher prices. This made the cartel's supply restriction even more effective.</p>
+      <h3>The Irony of Generic vs. Branded Advertising</h3>
+      <p>Crucially, De Beers advertised <em>diamonds generically</em> — not its own brand. "A Diamond is Forever" promoted the category, not De Beers specifically. This meant De Beers bore the cost of demand creation but shared the benefits with all diamond sellers. By 1999, the company realized it had been leaving money on the table — it had brand power but hadn't monetized it through its own branded products.</p>
+    `
+  },
+
+  e1945: {
+    year: '1945', title: 'First DOJ Prosecution — Dismissed on Jurisdiction',
+    tag: 'Legal Battle', tagClass: 'tag-legal',
+    body: `
+      <h3>What Happened</h3>
+      <p>Following World War II, the Roosevelt administration requested that the DOJ investigate De Beers. The resulting case centered on whether De Beers had sufficient "contacts" with the United States to be subject to U.S. jurisdiction. The case was dismissed — De Beers had successfully structured itself to be legally unreachable.</p>
+      <h3>Why the Case Failed: Minimum Contacts Doctrine</h3>
+      <p>For a U.S. court to assert personal jurisdiction over a defendant, that defendant must have sufficient "minimum contacts" with the forum state. De Beers had:</p>
+      <ul>
+        <li>An advertising agency relationship in the U.S. — but didn't execute sales through it</li>
+        <li>Occasional executive visits — but not systematic business operations</li>
+        <li>Some U.S. bank account activity — but minimal</li>
+        <li>Episodic sales contacts — not a systematic sales operation</li>
+      </ul>
+      <div class="law-box"><strong>The Minimum Contacts Doctrine</strong> (from <em>International Shoe Co. v. Washington</em>, 1945, the same year as this prosecution): A court can only assert jurisdiction over a defendant who has "minimum contacts" with the forum such that assertion of jurisdiction does not "offend traditional notions of fair play and substantial justice." De Beers's careful structuring kept it below this threshold.</div>
+      <h3>The Evasion Template</h3>
+      <p>This failed prosecution established a template De Beers would use for decades: <strong>maintain no legal presence in the United States</strong>. No offices, no officers, no directors with U.S. citizenship, no sales on U.S. soil. All diamonds were sold in London to sightholders. By the time diamonds reached U.S. consumers, they were "just anonymous bundles of stones" legally divorced from De Beers.</p>
+      <p>Within the DOJ, dislike of De Beers was described in the case as "a religion" — but religious conviction couldn't overcome the procedural barrier of jurisdiction.</p>
+    `
+  },
+
+  e1947: {
+    year: '1947', title: '"A Diamond is Forever" — The Most Recognized Slogan in History',
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1947, N.W. Ayer copywriter Frances Gerety created the line: <strong>"A Diamond is Forever."</strong> De Beers began embedding this slogan in all its advertising. Over the following decades, it would become arguably the most recognized advertising slogan ever created — and was named Slogan of the Century by Advertising Age in 2000.</p>
+      <h3>The Genius of the Slogan</h3>
+      <p>The slogan worked on multiple levels simultaneously:</p>
+      <ul>
+        <li><strong>Durability:</strong> Diamonds don't scratch or degrade — they physically last forever, making the metaphor literally true</li>
+        <li><strong>Commitment:</strong> "Forever" implied permanent romantic commitment, associating the diamond with marriage and loyalty</li>
+        <li><strong>Resale prevention:</strong> If a diamond is "forever," you don't sell it. This prevented a secondary market that might have undermined new diamond prices</li>
+        <li><strong>Emotional inelasticity:</strong> Once love was associated with diamond permanence, substituting another gem felt like questioning one's commitment</li>
+      </ul>
+      <div class="highlight-box">"The diamond industry spent less than 1% of revenues on advertising, while high-end whiskey spent approximately 10%. Yet De Beers achieved one of the world's most recognized brand identities. The slogan's efficiency was extraordinary."</div>
+      <h3>Economic Impact on Demand Elasticity</h3>
+      <p>Successful branding reduced the price elasticity of demand for diamonds. In a competitive market, consumers would substitute away from diamonds if prices rose (toward other gems or non-jewelry gifts). De Beers's advertising made this substitution emotionally costly. The result: demand became more inelastic, allowing the cartel to maintain higher prices without proportional loss of sales volume.</p>
+      <h3>The Irony Revisited</h3>
+      <p>All this advertising promoted "diamonds" — not "De Beers diamonds." The brand equity accumulated in the category, not the company. Fifty years later, this would be identified as a massive strategic error — one that Bain & Company would be hired to fix in 1998.</p>
+    `
+  },
+
+  e1957: {
+    year: '1957', title: 'Ernest Oppenheimer Dies — The Dynasty Continues',
+    tag: 'Monopoly Mechanics', tagClass: 'tag-monopoly',
+    body: `
+      <h3>What Happened</h3>
+      <p>Ernest Oppenheimer died in 1957, having presided over De Beers since 1929. Under his leadership, the cartel achieved extraordinary stability: between 1902 and 1957, De Beers had only two years of financial losses (1915 and 1932). His son Harry Oppenheimer succeeded him, followed eventually by grandson Nicky Oppenheimer.</p>
+      <h3>What Made the Cartel Uniquely Stable</h3>
+      <p>Most cartels collapse within a few years. De Beers lasted over a century. The key difference: <strong>family control and patient capital.</strong></p>
+      <ul>
+        <li>The Oppenheimer family could accept years of reduced returns because they believed in long-term value</li>
+        <li>No quarterly earnings pressure from institutional shareholders</li>
+        <li>No activist investors demanding liquidation of stockpiles</li>
+        <li>Decision-making concentrated in a family that had long-term interest in the cartel's health</li>
+      </ul>
+      <div class="econ-box"><strong>Key Insight:</strong> Most corporations cannot run a cartel because public company shareholders demand short-term profits. De Beers's family control structure was itself a barrier to entry — a public company trying to replicate De Beers's stockpiling strategy would be punished by capital markets. The cartel's persistence was partly a function of its unusual ownership structure.</div>
+      <h3>The Succession Risk</h3>
+      <p>Family dynasties can also be fragile. By the 1990s, new shareholders — American value investors with no sentimental attachment to the diamond industry — would accumulate significant stakes and demand the kind of short-term returns incompatible with cartel maintenance. The dynastic model that sustained the cartel would eventually be undermined by external ownership.</p>
+    `
+  },
+
+  e1960: {
+    year: '1960s', title: "South Africa's Share Drops to 19% — The Cartel Adapts",
+    tag: 'Crisis', tagClass: 'tag-crisis',
+    body: `
+      <h3>What Happened</h3>
+      <p>By the 1960s, new diamond sources had emerged worldwide — in Siberia (USSR), central and west Africa, and elsewhere. South African diamonds, once virtually the entire world supply, fell to just <strong>19% of global production</strong> by 1960 (and would decline further to ~11% by 1999). De Beers no longer owned most of the world's diamonds.</p>
+      <h3>The Adaptive Strategy: From Ownership to Contractual Control</h3>
+      <p>Rather than accepting defeat, Oppenheimer's successors pivoted. De Beers offered diamond-producing countries a deal:</p>
+      <ul>
+        <li>"Sell your rough diamonds exclusively to us, at prices we set, in quantities we determine"</li>
+        <li>"In exchange, we guarantee you'll have a market — we'll buy during slack periods and stabilize prices"</li>
+        <li>"You avoid the risk of deflationary competition among producing nations"</li>
+      </ul>
+      <p>Most accepted: Botswana, Namibia, Angola, Tanzania, Zaire, and eventually even the Soviet Union signed exclusive supply agreements with De Beers.</p>
+      <div class="highlight-box">"A cartel doesn't necessarily need to own all production. It needs to <em>control</em> all production — whether through ownership, through long-term contracts, or through a combination of both."</div>
+      <h3>The Legal Implications</h3>
+      <p>This pivot from ownership to contractual control created new antitrust exposure. Under Clayton Act Section 3, exclusive supply contracts that foreclose competitors from essential inputs can be illegal. De Beers's contracts with producing nations effectively prevented any competing diamond distributor from accessing supply — a classic foreclosure of competitors from essential upstream inputs.</p>
+    `
+  },
+
+  e1973: {
+    year: '1973', title: "DOJ Finds U.S. Subsidiary — De Beers Divests Instantly",
+    tag: 'Legal Battle', tagClass: 'tag-legal',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1973, the DOJ discovered that De Beers owned 50% of <strong>Christensen Diamond Products</strong>, an American company manufacturing diamond drill bits. This was direct U.S. business involvement — exactly what prosecutors needed to establish jurisdiction and prove U.S. market power. De Beers moved first: it rapidly divested its Christensen stake before the DOJ could initiate formal action.</p>
+      <h3>Legal Judo — Preemptive Divestiture</h3>
+      <p>This episode reveals sophisticated legal maneuvering. De Beers understood that if it maintained the Christensen stake, it would face:</p>
+      <ul>
+        <li>Clear U.S. jurisdiction (direct U.S. business presence)</li>
+        <li>Clayton Act Section 7 challenge (dominant firm acquiring U.S. competitor)</li>
+        <li>Sherman Act Section 2 challenge (monopolist extending power into U.S. market)</li>
+      </ul>
+      <p>By divesting before formal proceedings, De Beers eliminated the jurisdictional hook. There was no longer a U.S. asset to seize, no U.S. subsidiary to serve with process, and no direct U.S. presence to establish jurisdiction.</p>
+      <div class="law-box"><strong>Strategic Lesson:</strong> Sophisticated defendants can sometimes outmaneuver antitrust enforcement by acting before formal allegations arise. The DOJ can't challenge conduct that has already been reversed — and they cannot easily undo a voluntary divestiture that occurred before investigation began.</div>
+      <h3>What This Revealed About De Beers's Awareness</h3>
+      <p>The speed of the Christensen divestiture confirmed that De Beers fully understood its U.S. antitrust exposure and actively managed it. The company wasn't ignorant of U.S. law — it was carefully, deliberately staying just outside its reach. This knowledge made the eventual antitrust confrontation over the branding strategy all the more foreseeable.</p>
+    `
+  },
+
+  e1976: {
+    year: '1976', title: "Industrial Diamond Case — De Beers Pleads No Contest",
+    tag: 'Legal Battle', tagClass: 'tag-legal',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1976, the DOJ filed both civil and criminal suits against De Beers, ANCO Diamond Abrasives, and Diamond Abrasives for <strong>price-fixing and territorial allocation</strong> in the market for diamond "grit" — industrial abrasive diamonds used in manufacturing and cutting tools. De Beers Ireland and co-defendants pled no contest and paid a small fine, signing a consent decree.</p>
+      <h3>Why This Case Succeeded Where Others Had Failed</h3>
+      <p>Industrial diamonds had a narrower, more localized market. The conduct was more directly traceable to U.S. commerce, and the legal target was smaller and more manageable. De Beers chose to plead no contest rather than fight — a strategic decision to limit damage, accept a modest penalty, and avoid setting legal precedent that could threaten the gem diamond operation.</p>
+      <div class="highlight-box">Pleading "no contest" (nolo contendere) means the defendant accepts the penalty but does not admit guilt. Crucially, a no-contest plea cannot be used as an admission in subsequent civil litigation — so De Beers's plea couldn't be used by private plaintiffs in follow-on suits.</div>
+      <h3>The Limits of This Victory</h3>
+      <p>This was a narrow win for the DOJ. Industrial diamonds are a completely different market from gem diamonds. The consent decree covered only industrial diamond grit — leaving the gem diamond CSO system entirely intact. And De Beers's gem diamond operation, centered in London with no U.S. presence, remained outside the DOJ's practical reach.</p>
+      <h3>The Signal It Sent</h3>
+      <p>Paradoxically, De Beers's willingness to plead no contest on industrial diamonds may have made prosecutors more cautious about pursuing gem diamonds — they had just gotten a minor concession and didn't want to risk a high-profile acquittal on the more important gem case.</p>
+    `
+  },
+
+  e1977: {
+    year: '1977', title: "Israeli Sightholder Purge — Cartel Enforcement",
+    tag: 'Monopoly Mechanics', tagClass: 'tag-monopoly',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1977, during a period of high inflation, Israeli diamond dealers began hoarding diamonds — buying large quantities and holding them, betting that rising inflation would drive prices up further. This was a form of speculation that threatened the CSO's price management system. De Beers responded by <strong>purging over 100 Israeli sightholders</strong> from the system — revoking their sightholding privileges entirely.</p>
+      <h3>Why This Was Crucial for Cartel Maintenance</h3>
+      <p>Cartels require enforcement. The fundamental problem every cartel faces is that each member has an incentive to cheat (produce more, sell cheaper) while hoping others comply. De Beers's enforcement mechanism was the threat of exclusion from the sightholder system. Losing sightholder status meant losing access to De Beers supply — which was, essentially, losing access to the entire rough diamond market.</p>
+      <div class="econ-box"><strong>Cartel Theory — Punishment Mechanisms:</strong> Stable cartels typically use one or more of: (1) punitive price wars (flooding the market to punish cheaters), (2) exclusion (banning cheaters from the cartel), or (3) output controls (allocating quotas with monitoring). De Beers used all three, with sightholder exclusion being particularly powerful since De Beers controlled ~80% of supply.</div>
+      <h3>The Power Asymmetry</h3>
+      <p>The Israeli dealers had no meaningful alternative. They could try to source diamonds from non-CSO producers, but De Beers controlled 80% of the market — the remaining 20% wasn't enough to support a full business. Exclusion was effectively a death sentence for a diamond business. This is why De Beers's enforcement was so credible: the punishment was genuinely severe.</p>
+      <h3>By the 1990s, This Power Eroded</h3>
+      <p>As new sources (Russia, Angola, Australia) emerged outside CSO control, De Beers's market share fell below 60-65%. Exclusion from the CSO was no longer necessarily fatal — sightholders could potentially source diamonds elsewhere. This erosion of enforcement power was a key crack in the cartel's foundation.</p>
+    `
+  },
+
+  e1981: {
+    year: '1981', title: "Demand Crisis — Sales Fall 46%, Stockpile Grows by $700M–$1B",
+    tag: 'Crisis', tagClass: 'tag-crisis',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1981, rising interest rates and a global economic downturn crushed luxury goods demand. Diamond sales slipped <strong>46% below 1980 levels</strong>. A competitive firm would have cut prices dramatically to clear inventory. De Beers did something different: it pulled diamonds from the market and <em>added them to its stockpile</em>, spending between $700 million and $1 billion in cash reserves to absorb excess supply.</p>
+      <h3>Stockpiling as a Cartel Tool</h3>
+      <p>Stockpiling allows a cartel to separate the short-term supply-demand shock from the price response. Instead of letting excess supply drive down prices, De Beers withheld supply, keeping prices stable at the cost of holding enormous inventory. This works only if:</p>
+      <ul>
+        <li>The cartel has sufficient financial resources to buy up supply</li>
+        <li>The cartel has patient shareholders who accept temporary cash outflows</li>
+        <li>The price discipline holds among other producers (they don't sell independently)</li>
+      </ul>
+      <div class="econ-box"><strong>Consumer Welfare Effect:</strong> Stockpiling is harmful to consumers. In a competitive market, demand weakness leads to price decreases — consumers benefit from lower prices during recessions. Under De Beers's system, consumers never saw lower prices during downturns; price stability came at the cost of maintained supracompetitive prices.</div>
+      <h3>Why Most Corporations Couldn't Do This</h3>
+      <p>A public company with quarterly earnings pressure cannot stop selling for a year to support prices. Its stock price would collapse, institutional shareholders would demand management changes, and capital markets would punish value destruction. De Beers was a <strong>family-controlled enterprise</strong> with patient capital — the Oppenheimers could absorb short-term losses to protect long-term cartel value. This is why family control was itself a strategic asset for the cartel.</p>
+      <h3>The Long-Run Problem This Created</h3>
+      <p>Each time De Beers added to its stockpile, it deferred the supply problem. By 1998, the stockpile had grown to $4.8 billion — nearly doubling from $2.476 billion in 1989. The deferred supply problem was becoming acute. At some point, the stockpile would need to be sold — but selling it at once would collapse prices. The cartel had kicked the can down the road so many times that the can had become enormous.</p>
+    `
+  },
+
+  e1990: {
+    year: '1990', title: "$1 Billion Loan to the Soviet Union — Geopolitics Meets Cartel",
+    tag: 'Geopolitics / Crisis', tagClass: 'tag-crisis',
+    body: `
+      <h3>What Happened</h3>
+      <p>As the Soviet Union collapsed, the Gorbachev government faced financial crisis. The USSR held vast diamond reserves — in Siberia alone, it controlled a massive share of global rough diamond production. If these diamonds flooded onto the open market, diamond prices worldwide would collapse.</p>
+      <p>De Beers offered a solution: a <strong>$1 billion loan</strong> to the Soviet government, in exchange for a significant portion of Russia's diamond stockpile and an exclusive long-term supply arrangement. De Beers would, in effect, be acting as banker to a failing superpower — with diamond supply control as collateral.</p>
+      <div class="highlight-box">"De Beers was, in effect, acting as a geopolitical actor, providing financial support to a failing nation-state in order to secure its diamonds and prevent them from flooding the market." — De Beers Case Notes</div>
+      <h3>The Strategic Logic</h3>
+      <p>If Russia sold its diamonds independently, it would flood the market and destroy De Beers's carefully maintained price structure. By lending Russia money and securing supply agreements, De Beers converted a potential cartel defector into a supply partner — at least temporarily. The loan was a strategic investment in price stability, not a humanitarian gesture.</p>
+      <h3>Why It Ultimately Failed</h3>
+      <p>The deal bought time but not permanent control. Russia would defect from the supply agreement in 1992, selling diamonds independently as its economic crisis deepened and short-term revenue needs overwhelmed long-term deal commitments. Nations, like cartel members, have incentives to cheat when the short-term gain from cheating exceeds the long-term cost of exclusion.</p>
+      <h3>The Antitrust Dimension</h3>
+      <p>Sovereign nations have broad immunity from U.S. antitrust law for their commercial activities. De Beers's arrangement with the Soviet/Russian government was partly protected by this sovereign immunity — a further layer of legal insulation for the cartel's supply contracts.</p>
+    `
+  },
+
+  e1992: {
+    year: '1992', title: "Russia and Angola Defect — The Cartel Fractures",
+    tag: 'Crisis', tagClass: 'tag-crisis',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1992, both Russia and Angola formally exited De Beers's supply system. These were two of the world's largest diamond producers. Their exit meant significant diamond volumes could now be sold outside the CSO at whatever price they could obtain — undermining De Beers's price management system.</p>
+      <h3>The Russian Problem</h3>
+      <p>Despite the 1990 loan deal, Russia's economic crisis deepened. The new Russian government needed hard currency urgently. Selling diamonds at whatever price the market offered — even below De Beers's "official" prices — was more attractive than honoring supply agreements. Russia began selling through its own channels, creating a parallel market in rough diamonds outside CSO control.</p>
+      <h3>The Angolan Problem — "Conflict Diamonds"</h3>
+      <p>Angola's situation was even more complex. A brutal civil war was being partially financed by diamond revenues from mines controlled by rebel factions. These "conflict diamonds" or "blood diamonds" were sold outside any official channel, at whatever price rebels could get. International attention began turning to how informal diamond channels could fund armed conflict — adding a humanitarian dimension to what had been purely an economic story.</p>
+      <div class="law-box"><strong>Consequence for De Beers:</strong> The defections reduced De Beers's market share from ~80% to somewhere around 60-65% by the late 1990s. When market share falls below roughly 70-75%, a dominant firm begins losing the ability to unilaterally maintain prices — too much supply can enter outside its control. The cartel's structural foundation was weakening.</div>
+      <h3>The Broader Pattern: Cartel Instability</h3>
+      <p>Russia and Angola's defections illustrate the fundamental instability of cartels. Each member, facing its own economic pressures, eventually calculates that the short-term gain from defecting exceeds the long-term benefit of compliance. For sovereign nations in economic crisis, this calculation tilted decisively toward defection. De Beers had no effective enforcement mechanism against sovereign nation-states who chose to sell independently.</p>
+    `
+  },
+
+  e1993: {
+    year: '1993', title: "Hartford Fire Insurance — The Effects Doctrine Crystallized",
+    tag: 'U.S. Law', tagClass: 'tag-law',
+    body: `
+      <h3>What Happened</h3>
+      <p>The U.S. Supreme Court decided <strong><em>Hartford Fire Insurance Co. v. California</em></strong>, 509 U.S. 764 (1993). In this case, the Court held that the Sherman Act applies to <em>"foreign conduct that was meant to produce and did in fact produce some substantial effect in the United States."</em> This was the definitive statement of the <strong>Effects Doctrine</strong> — and it eliminated De Beers's geographic legal shield.</p>
+      <h3>What the Effects Doctrine Means</h3>
+      <p>Before <em>Hartford Fire</em>, courts debated whether the Sherman Act could reach foreign conduct by foreign entities. The traditional view was territorial: U.S. law applies in the U.S., foreign law applies abroad. <em>Hartford Fire</em> rejected this:</p>
+      <ul>
+        <li>U.S. antitrust law applies to any conduct, wherever it occurs, if that conduct <em>substantially affects</em> U.S. commerce</li>
+        <li>The defendant's nationality is irrelevant</li>
+        <li>Where the conduct occurs is irrelevant</li>
+        <li>What matters is the <em>effect</em> on U.S. markets</li>
+      </ul>
+      <div class="econ-box"><strong>Application to De Beers:</strong> By 1999, De Beers's CSO controlled ~65% of global rough diamond supply. The U.S. absorbed 46% of global retail diamond sales. Any manipulation of global diamond supply and prices by De Beers would "substantially affect" U.S. commerce. Under <em>Hartford Fire</em>, U.S. courts clearly had jurisdiction. De Beers could no longer claim it was beyond reach.</div>
+      <h3>Comity Limits</h3>
+      <p>Justice Souter added a comity caveat: courts should consider whether enforcement would be "unreasonable" given international comity concerns. But for De Beers: diamond price-fixing is illegal worldwide (not just in the U.S.); no foreign government had a legitimate interest in protecting De Beers's cartel; and enforcement would create no diplomatic friction. The comity exception did not apply.</p>
+      <h3>Why This Changed Everything</h3>
+      <p>Before <em>Hartford Fire</em>: De Beers could arguably say "we're a South African company operating through a London office — U.S. courts have no jurisdiction." After <em>Hartford Fire</em>: De Beers's conduct, wherever it occurred, was subject to U.S. law because it affected U.S. markets. The company's entire legal defense strategy was now obsolete.</p>
+    `
+  },
+
+  e1994: {
+    year: '1994', title: "GE-De Beers Industrial Diamond Case — GE Acquitted",
+    tag: 'Legal Battle', tagClass: 'tag-legal',
+    body: `
+      <h3>What Happened</h3>
+      <p>The DOJ brought a civil suit alleging that De Beers and <strong>General Electric</strong> had colluded to fix prices in the market for <em>industrial diamonds</em> — using Belgian businessman Phillippe Loitier as an intermediary. The theory: De Beers would signal intended price increases to Loitier, who would pass this to GE, and GE would respond with matching increases.</p>
+      <p>The case went to trial. GE was <strong>acquitted in six weeks</strong>. De Beers never appeared in court.</p>
+      <h3>Why GE Was Acquitted — The Evidentiary Problem</h3>
+      <p>The DOJ could not prove that Loitier was De Beers's agent rather than an independent businessman acting on his own market knowledge. Contact between two companies through a common customer, without direct evidence of agreement, is not sufficient for conspiracy. Courts require proof of:</p>
+      <ul>
+        <li>An actual agreement (not just parallel behavior)</li>
+        <li>Conscious commitment to a common scheme</li>
+        <li>Evidence beyond mere opportunity to coordinate</li>
+      </ul>
+      <div class="law-box"><strong>Conscious Parallelism:</strong> When competitors raise prices simultaneously without direct communication, this is called "conscious parallelism." Courts generally hold that parallel behavior alone, without "plus factors" indicating agreement, is not an antitrust violation. The DOJ needed direct evidence of agreement — and didn't have it.</div>
+      <h3>De Beers's Continued Evasion</h3>
+      <p>Most significantly: De Beers was never served with process. The company had no U.S. presence to serve. A criminal indictment against De Beers remained outstanding — the company was technically indicted but physically unreachable. This extraordinary situation — a company openly indicted by the U.S. government but operating freely — persisted until the 2004 settlement.</p>
+      <h3>The Lesson for Enforcement</h3>
+      <p>The 1994 failure demonstrated that even with jurisdiction (via the effects doctrine, clarified the prior year in <em>Hartford Fire</em>), the DOJ faced an evidentiary problem: proving explicit agreement without direct communications evidence is very difficult when defendants are sophisticated and communicate indirectly.</p>
+    `
+  },
+
+  e1995: {
+    year: '1995', title: "DOJ Codifies Effects Doctrine — De Beers's Shield Is Gone",
+    tag: 'U.S. Law', tagClass: 'tag-law',
+    body: `
+      <h3>What Happened</h3>
+      <p>Building on the 1993 <em>Hartford Fire</em> decision, the DOJ published its <strong>Antitrust Enforcement Guidelines for International Operations</strong> in 1995. These guidelines formally stated that U.S. antitrust laws reach "anti-competitive conduct affecting United States import commerce or import commerce involving imports from other countries, even if the conduct is arranged or organized abroad or involves only foreign nationals."</p>
+      <h3>What the Guidelines Said About De Beers's Situation</h3>
+      <p>The guidelines were explicit: conduct affecting the price and availability of goods in the U.S. market — which De Beers's cartel clearly did — brought the defendant within U.S. jurisdiction. There was no longer any legal ambiguity. De Beers's operations were subject to U.S. antitrust law, period.</p>
+      <div class="law-box"><strong>The Three-Part Test for Jurisdiction:</strong> Under the 1995 guidelines, U.S. antitrust jurisdiction applies when: (1) the conduct has a direct, substantial, and foreseeable effect on U.S. commerce; (2) the effect gives rise to the claim under the Sherman Act; and (3) it is reasonable to expect that the defendant's conduct would lead to the asserted injury in the U.S. De Beers clearly met all three prongs.</div>
+      <h3>Why This Mattered for De Beers's Strategy</h3>
+      <p>By 1995, De Beers knew with certainty that:</p>
+      <ul>
+        <li>U.S. courts had jurisdiction over its conduct under the effects doctrine</li>
+        <li>Any attempt to enter the U.S. market directly would expose it to prosecution</li>
+        <li>The branding strategy its consultants would recommend in 1998 would require a U.S. presence</li>
+        <li>These two facts were fundamentally incompatible</li>
+      </ul>
+      <p>The 1995 guidelines effectively made the 2004 settlement inevitable, even if De Beers didn't immediately recognize it.</p>
+    `
+  },
+
+  e1997: {
+    year: '1997', title: "Asian Financial Crisis — Japan's Diamond Market Collapses",
+    tag: 'Crisis', tagClass: 'tag-crisis',
+    body: `
+      <h3>What Happened</h3>
+      <p>The 1997 Asian financial crisis devastated luxury goods markets across East Asia. Japan, which had been one of the world's largest diamond markets, saw diamond sales collapse from <strong>33% to 18% of global retail sales</strong> in less than a year — a 45% reduction in Japan's share of global diamond demand.</p>
+      <h3>The Structural Consequence for De Beers</h3>
+      <p>Japan's collapse meant the U.S. market became even more dominant. By 1998, the U.S. accounted for approximately <strong>46% of all global retail diamond jewelry sales</strong>. This created an acute strategic problem:</p>
+      <ul>
+        <li>De Beers needed the U.S. market to succeed — it was now irreplaceable</li>
+        <li>The U.S. market was precisely where De Beers was most legally vulnerable</li>
+        <li>Without a U.S. presence, De Beers couldn't execute a branding strategy</li>
+        <li>With a U.S. presence, De Beers would face antitrust prosecution</li>
+      </ul>
+      <div class="econ-box"><strong>Geographic Concentration Risk:</strong> When a company's entire market becomes concentrated in one country, its dependence on that country's legal and regulatory environment increases dramatically. De Beers, which had carefully managed its exposure to U.S. law, now found itself with no choice but to engage deeply with the U.S. market — and its laws.</div>
+      <h3>The Demand Shock Hits the Stockpile</h3>
+      <p>Japan's collapse also exacerbated the stockpile problem. Less demand globally meant De Beers was buying up more supply than ever to support prices, growing the stockpile further toward its $4.8 billion peak in 1998. The financial pressure on De Beers was intensifying from multiple directions simultaneously.</p>
+    `
+  },
+
+  e1998a: {
+    year: 'March 1998', title: "De Beers & Anglo-American Formally Separate",
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>In March 1998, De Beers and <strong>Anglo-American Corporation</strong> formally separated into two distinct, independent firms. The holding structure that had linked De Beers to Anglo-American's diversified mining empire for decades was dissolved. De Beers now stood alone — without the financial cushion of Anglo-American's portfolio.</p>
+      <h3>Why This Mattered</h3>
+      <p>The Anglo-American link had provided De Beers with:</p>
+      <ul>
+        <li>Access to capital from a diversified parent</li>
+        <li>Diversification of risk (Anglo-American operated across multiple mining sectors)</li>
+        <li>Political and regulatory cover from a major multinational</li>
+        <li>A buffer against short-term shareholder pressure</li>
+      </ul>
+      <p>Without Anglo-American, De Beers was exposed directly to its own shareholders' demands — including the growing cohort of American value investors who wanted short-term returns.</p>
+      <div class="highlight-box">The separation was a turning point. De Beers had to confront its own strategic weaknesses without the shelter of a parent company. This organizational independence accelerated the urgency of the strategic review that would follow.</div>
+      <h3>Corporate Structure and Cartel Sustainability</h3>
+      <p>This event illustrates how corporate structure affects cartel sustainability. The Anglo-American relationship had provided structural protection for patient capital — exactly what the cartel needed. When that structure changed, the cartel's institutional foundations weakened. Antitrust economists studying De Beers should note that organizational form matters as much as market position for cartel durability.</p>
+    `
+  },
+
+  e1998b: {
+    year: '1998', title: "Nicky Oppenheimer, Bain & Co., and the Strategic Crisis",
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 1998, a confluence of historic changes shook De Beers's management to its core:</p>
+      <ul>
+        <li><strong>Nicky Oppenheimer</strong> (Ernest's grandson) became chairman</li>
+        <li><strong>Gary Ralfe</strong> was brought in as Managing Director — the first non-family executive in the company's history</li>
+        <li>For the first time ever, De Beers hired external management consultants: <strong>Bain & Company</strong></li>
+        <li>Share price had fallen from ~$35 to ~$15 — a 57% decline</li>
+        <li>The diamond stockpile reached $4.8 billion, nearly double its 1989 level</li>
+      </ul>
+      <div class="highlight-box">"For the first time in the company's history, De Beers hired external management consultants. This was described as revolutionary — the Oppenheimer family had traditionally viewed external consultants as heresy."</div>
+      <h3>What Bain Found: The Two-Sided Problem</h3>
+      <p><strong>The Bad News:</strong> The $4.8B stockpile was destroying value. Returns on capital were below the weighted average cost of capital — De Beers would have earned more by investing in Treasury bonds. The cartel model of buying up supply to support prices was financially unsustainable.</p>
+      <p><strong>The Good News:</strong> De Beers possessed one of the world's most valuable brand names. "A Diamond is Forever" was universally recognized, yet had been used only to promote diamonds generically. De Beers had enormous brand equity that it had never monetized for its own products.</p>
+      <div class="econ-box"><strong>Brand Value as an Asset:</strong> Bain valued the De Beers brand at potentially $175M in rough diamond terms or up to $1.25B at retail — representing the premium consumers would pay for branded De Beers diamonds vs. identical unbranded stones. This was an enormous unrealized asset.</div>
+      <h3>The Solution Bain Proposed</h3>
+      <p>Brand "De Beers diamonds" specifically. Etch a microscopic logo onto stones. Advertise "De Beers diamonds" as premium products commanding a price premium over Russian, Australian, or Angolan diamonds. This would allow De Beers to sell its stockpile at premium prices without collapsing the market.</p>
+      <p>The problem: this required a major U.S. marketing presence. And a U.S. presence meant antitrust exposure.</p>
+    `
+  },
+
+  e1998c: {
+    year: '1998', title: "American Value Investors Circle De Beers — 21% Stake",
+    tag: 'Crisis', tagClass: 'tag-crisis',
+    body: `
+      <h3>What Happened</h3>
+      <p>American value investors — institutional funds and managers who specialize in identifying undervalued companies — recognized De Beers's depressed share price and began accumulating shares. By 1999, U.S. value investors controlled approximately <strong>21% of De Beers stock</strong>.</p>
+      <h3>The Conflict of Perspectives</h3>
+      <p>Traditional De Beers shareholders (the Oppenheimer family, long-term South African investors) had always accepted the cartel's logic: maintain prices through stockpiling, accept short-term losses for long-term industry health. They saw the $4.8B stockpile as essential to price stability.</p>
+      <p>American value investors saw the same stockpile as a <strong>value-destroying drag on returns</strong>. Their logic:</p>
+      <ul>
+        <li>$4.8B in capital tied up in diamonds earning zero return</li>
+        <li>That capital could be returned to shareholders as dividends</li>
+        <li>Or deployed in productive investments</li>
+        <li>The company was creating value for the diamond industry, not for its shareholders</li>
+      </ul>
+      <div class="econ-box"><strong>Principal-Agent Problem:</strong> Shareholders are the principals; management (representing the Oppenheimer family's vision) are the agents. When external shareholders' interests diverge from management's strategy, corporate governance pressure builds. American investors' 21% stake was large enough to put pressure on management without being large enough to force a takeover — creating destabilizing board-level tension.</div>
+      <h3>The Shareholder Pressure's Strategic Effect</h3>
+      <p>To satisfy these shareholders, De Beers needed either to: (a) sell through the stockpile (but that would collapse prices), or (b) find a way to command higher prices per stone (the branding strategy). The shareholder pressure thus reinforced Bain's recommendation — and pushed De Beers further toward the U.S. market confrontation.</p>
+    `
+  },
+
+  e1999a: {
+    year: '1999', title: "UK Branding Pilot — 15% Premium Confirmed",
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>De Beers tested its branding hypothesis in England, where antitrust risk was lower than in the U.S. The company promoted "De Beers diamonds" specifically, etching a microscopic De Beers logo directly onto stones. The results were striking: <strong>consumers paid approximately 15% more</strong> for De Beers branded diamonds compared to unbranded diamonds of identical quality and carat weight.</p>
+      <h3>The Economic Significance of 15%</h3>
+      <p>A 15% retail premium is enormous in the diamond business. At retail margins of 40-50%, a 15% price premium can nearly double profit margins per stone. Bain's analysis:</p>
+      <ul>
+        <li>Brand value conservatively at $175M in rough diamond terms</li>
+        <li>Potentially up to $1.25B at retail level</li>
+        <li>15% premium across De Beers's volume would generate hundreds of millions in incremental revenue</li>
+      </ul>
+      <div class="highlight-box">"De Beers had been leaving money on the table by not monetizing its brand. It had achieved brand recognition by promoting diamonds generically — now it could capture that value for itself."</div>
+      <h3>How Branding Changes Competition</h3>
+      <p>In a competitive market, diamonds are commodities — a Russian diamond and a De Beers diamond of identical quality are perfect substitutes. Branding creates product differentiation: consumers come to believe that De Beers diamonds are superior (perhaps through perceived quality assurance, ethical sourcing, or simply the prestige of the name). This shifts competition from price competition to brand competition.</p>
+      <div class="econ-box"><strong>Monopolistic Competition:</strong> Branded markets are analyzed as "monopolistic competition" — many sellers, differentiated products, some price-setting power for each seller based on brand loyalty. Unlike pure monopoly (one seller) or perfect competition (many sellers, identical products), monopolistic competition allows premium pricing based on perceived differentiation. De Beers's branding strategy was moving it from commodity supplier to monopolistically competitive branded firm.</div>
+      <h3>The Fatal Flaw</h3>
+      <p>The branding strategy worked beautifully — in England. But to scale globally, De Beers needed a U.S. presence. The pilot proved the concept. The question was whether De Beers could execute it in America without triggering prosecution.</p>
+    `
+  },
+
+  e1999b: {
+    year: 'March 1999', title: "Oppenheimer's HBS Speech — 'I Am the Devil Incarnate'",
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>In March 1999, Nicky Oppenheimer addressed Harvard Business School alumni. It was a remarkable speech — part business strategy, part philosophical brief, part implicit plea for legal exemption. Before an audience of the world's most sophisticated business minds, Oppenheimer did something extraordinary: he admitted everything.</p>
+      <h3>The Confession</h3>
+      <p>Oppenheimer compared U.S. antitrust law to religious commandments: <em>"Thou shalt not monopolize. Thou shalt not fix prices. Thou shalt not allocate markets. Thou shalt not restrict output."</em> Then he called himself: <em>"the devil incarnate, the anti-Christ"</em> from the perspective of antitrust law believers. And he confirmed: De Beers had violated virtually every commandment — <strong>"as a matter of policy."</strong></p>
+      <div class="highlight-box">This was an extraordinary public confession by the leader of the world's most notorious cartel. No lawyer in the room could have approved this statement. Yet Oppenheimer was making a calculated bet — that admitting violations while arguing they were justified would be more persuasive than denial.</div>
+      <h3>The Defense: "Thou Shalt Honor the Consumer"</h3>
+      <p>Oppenheimer argued one commandment De Beers did follow: honoring the consumer. His data:</p>
+      <ul>
+        <li>Diamond prices rose only 5.4% per annum (1985-1996) vs. 3.5% CPI — only modestly above inflation</li>
+        <li>Diamond prices were far more stable than gold, oil, or aluminum</li>
+        <li>The cartel prevented boom-bust cycles that plague commodity markets</li>
+        <li>De Beers's system had created stable markets for African diamond producers, supporting development</li>
+      </ul>
+      <h3>The OPEC Analogy</h3>
+      <p>Oppenheimer drew a parallel to OPEC. The oil cartel fixes prices and restricts production — yet is largely tolerated because oil-producing nations have sovereign rights over their resources. Why, he asked implicitly, should De Beers be treated differently when managing diamonds on behalf of diamond-producing nations?</p>
+      <div class="econ-box"><strong>The Central Antitrust Question This Raised:</strong> Can a cartel that provides genuine efficiency benefits (stability, quality assurance, development support for producing nations) be justified under antitrust law? U.S. law answers categorically "no" — per se rules don't allow efficiency defenses for price-fixing. But Oppenheimer was trying to make the political and ethical case for exemption.</div>
+      <h3>Why It Didn't Work</h3>
+      <p>Per se rules exist precisely to prevent this argument. If cartels could justify themselves through claimed stability benefits, every cartel would make the same argument. The rule of law requires categorical prohibitions that can be consistently enforced — not case-by-case balancing that invites self-serving claims of consumer benefit.</p>
+    `
+  },
+
+  e1999c: {
+    year: '1999', title: "The Millennium Campaign — 68 of 72 Diamonds Sold Before Lunch",
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>De Beers launched an ambitious millennium branding campaign. The centerpiece: the <strong>"De Beers Millennium Star"</strong> — a 203-carat diamond, described as the world's largest internally and externally flawless pear-shaped diamond, displayed in London's Millennium Dome. Surrounding it were 11 blue diamonds of extraordinary rarity. The collection was branded, insured for £350 million, and targeted at ultra-high-net-worth consumers.</p>
+      <p>The results were extraordinary. In Japan — which had been a troubled market since the 1997 crisis — <strong>one dealer sold 68 out of his 72 millennium diamonds on the first day of the campaign</strong>. Essentially his entire allocation was sold before lunch.</p>
+      <div class="highlight-box">"The stones were selling because they had the De Beers brand attached to them. Brand value was translating into pricing power and sales volume." — De Beers Case Notes</div>
+      <h3>What This Proved</h3>
+      <p>The millennium campaign confirmed what the UK pilot had suggested: the De Beers brand was extraordinarily powerful. Consumers who had hesitated at unbranded diamonds purchased readily when the De Beers name was attached. This wasn't just about quality assurance — it was about the prestige and signaling value of the brand.</p>
+      <h3>The Stockpile Opportunity</h3>
+      <p>If De Beers could sell branded diamonds at 15%+ premiums, it could reduce its $4.8B stockpile without collapsing prices. Instead of flooding the market with cheap inventory, it could sell smaller quantities at higher prices, gradually reducing inventory while maintaining (or even improving) margins. The branding strategy was the financial solution to the stockpile crisis.</p>
+      <h3>The Legal Problem It Created</h3>
+      <p>The more successful the branding campaign, the more it required a U.S. presence. Marketing "De Beers diamonds" in the U.S. meant U.S. offices, U.S. advertising, U.S. retail relationships — all of which would give the DOJ exactly what it needed to establish jurisdiction and proceed with prosecution. Success made the legal confrontation inevitable.</p>
+    `
+  },
+
+  e1999d: {
+    year: '1999', title: "Deutsche Bank: Antitrust Is a 'Poison Pill'",
+    tag: 'Legal Risk', tagClass: 'tag-legal',
+    body: `
+      <h3>What Happened</h3>
+      <p>In November 1999, Deutsche Bank Securities published a financial analysis of De Beers that captured the central strategic dilemma in stark terms: <em>"the Antitrust ruling is indeed a poison pill... The impact of a resolution of the Anti-Trust issue should not be underestimated."</em></p>
+      <h3>What "Poison Pill" Means Here</h3>
+      <p>In corporate finance, a "poison pill" is a defense mechanism that makes a company very costly to acquire. Deutsche Bank was using the term metaphorically: De Beers's antitrust exposure was a poison pill for its branding strategy — it made the strategy simultaneously necessary and potentially fatal.</p>
+      <ul>
+        <li>De Beers needed the U.S. market for branding to succeed</li>
+        <li>Entering the U.S. market exposed De Beers to antitrust prosecution</li>
+        <li>The prosecution, if successful, could dismantle the entire CSO system</li>
+        <li>Dismantling the CSO system would eliminate De Beers's pricing power</li>
+        <li>Without pricing power, the stockpile problem had no solution</li>
+      </ul>
+      <div class="law-box"><strong>The Dilemma Formalized:</strong> De Beers faced a choice between two fatal options: (A) Stay out of the U.S. → branding strategy fails, stockpile crisis continues, shareholders revolt, value destruction; or (B) Enter the U.S. → DOJ prosecutes, CSO system faces injunction, cartel potentially dismantled, but at least the brand strategy might work. Option B was ultimately chosen — leading to the 2004 settlement.</div>
+      <h3>The Market's Verdict</h3>
+      <p>Deutsche Bank's analysis reflected the market's understanding that De Beers was at an inflection point. The cartel model was unsustainable; the branding model was legally risky; and the status quo was financially destructive. The share price at ~$15 reflected this uncertainty. De Beers needed to resolve the antitrust issue to unlock the brand value — but resolution likely meant paying a substantial penalty and accepting constraints on its behavior.</p>
+    `
+  },
+
+  e2000: {
+    year: '2000', title: "'A Diamond is Forever' — Advertising Age's Slogan of the Century",
+    tag: 'Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>At the turn of the millennium, <strong>Advertising Age</strong> magazine named <em>"A Diamond is Forever"</em> the most recognized advertising slogan of the 20th century — Slogan of the Century. Created in 1947 by Frances Gerety at N.W. Ayer, this four-word phrase had reshaped global cultural norms around marriage, commitment, and luxury goods.</p>
+      <h3>The Astonishing Economics of the Campaign</h3>
+      <p>Consider what De Beers achieved:</p>
+      <ul>
+        <li>Less than 1% of revenues spent on advertising (vs. ~10% for luxury spirits)</li>
+        <li>Created the norm that engagement rings should be diamonds (from near-zero prevalence in the 1930s to near-universal by 2000)</li>
+        <li>Established the "two months' salary" pricing norm — engineering consumer price expectations</li>
+        <li>Discouraged resale by associating diamonds with permanent commitment ("forever")</li>
+        <li>Made diamonds emotionally inelastic — virtually no substitute good could replace the social signal of a diamond</li>
+      </ul>
+      <div class="highlight-box">Advertising Age's recognition is extraordinary: the slogan that defined a century of marketing was created not to sell a specific brand, but to sell a commodity category — on behalf of a cartel that could then charge monopoly prices for that commodity.</div>
+      <h3>The Irony at the Millennium</h3>
+      <p>As De Beers was being recognized for the Slogan of the Century, it was simultaneously confronting an existential strategic crisis: it had built global brand awareness for "diamonds" but not for "De Beers." The brand equity was in the category, not the company. Now, in 2000, De Beers was trying to capture some of that equity for itself — at the cost of enormous legal risk.</p>
+      <h3>The Lesson for Brand Strategy</h3>
+      <p>De Beers's generic advertising strategy was brilliant for building the category (and thus supporting prices for all of De Beers's production). But it was sub-optimal for De Beers specifically — as a firm facing new competition from Russian, Australian, and synthetic diamonds, it needed differentiation, not category promotion. The decision to brand was, in retrospect, decades overdue.</p>
+    `
+  },
+
+  e2004: {
+    year: '2004', title: "De Beers Settles with the DOJ — A Century of Evasion Ends",
+    tag: 'Legal Battle', tagClass: 'tag-legal',
+    body: `
+      <h3>What Happened</h3>
+      <p>In 2004, De Beers reached a settlement with the U.S. Department of Justice. The company:</p>
+      <ul>
+        <li>Paid a fine (reported at approximately $10 million — modest relative to De Beers's size)</li>
+        <li>Agreed to certain constraints on its conduct</li>
+        <li>Was permitted to enter the U.S. market directly for the first time</li>
+        <li>Could now market "De Beers" branded diamonds to American consumers</li>
+      </ul>
+      <p>For the first time in the company's history, De Beers had legal standing in the United States. Over 100 years of deliberate evasion ended with a settlement — and the company emerged free to pursue the branding strategy it desperately needed.</p>
+      <div class="highlight-box">The settlement was, in effect, De Beers buying its way into the U.S. market. The fine was the price of legal legitimacy — and given the brand opportunity worth potentially $1.25B at retail, it was a bargain.</div>
+      <h3>Why the Settlement Made Sense for Both Sides</h3>
+      <p><strong>For De Beers:</strong> The branding strategy required U.S. presence. Settling removed the legal obstacle, allowed market entry, and converted a chronic legal liability into a resolved matter. The alternative — fighting prosecution while trying to market in the U.S. — was untenable.</p>
+      <p><strong>For the DOJ:</strong> A negotiated settlement guaranteed some accountability and behavioral constraints, without the uncertainty of litigation. Proving conspiracy charges against a foreign company operating through intermediaries remained difficult even after <em>Hartford Fire</em>.</p>
+      <h3>What the Settlement Didn't Resolve</h3>
+      <p>The settlement addressed De Beers's legal exposure for past conduct. It did not necessarily dismantle the CSO system or restore competitive markets in rough diamonds. De Beers remained a dominant force in the industry. The structural features that enabled the cartel — control of distribution, exclusive supply contracts, the sightholder system — were not eliminated overnight.</p>
+      <h3>The Broader Lesson: Law Eventually Catches Monopoly</h3>
+      <p>The De Beers settlement illustrates a fundamental truth about antitrust enforcement: it may take decades, but law eventually constrains even the most sophisticated monopolists. De Beers evaded prosecution for 60 years. But strategic imperatives (the branding strategy) ultimately required entering U.S. jurisdiction — and that required legal resolution. No monopoly is permanent.</p>
+    `
+  },
+
+  e2018: {
+    year: '2018+', title: "Lightbox — De Beers Sells Synthetic Diamonds",
+    tag: 'Modern Strategy', tagClass: 'tag-strategy',
+    body: `
+      <h3>What Happened</h3>
+      <p>In one of the most stunning strategic pivots in business history, De Beers launched <strong>Lightbox</strong> — its own line of <em>lab-grown synthetic diamonds</em> — priced at a fraction of natural diamond prices ($800/carat for synthetics vs. thousands for comparable naturals).</p>
+      <h3>The Strategic Logic</h3>
+      <p>This appears paradoxical: the company that built its entire empire on the premise that diamonds are rare and precious is now selling abundant, factory-made alternatives. But the logic is sophisticated:</p>
+      <ul>
+        <li><strong>Market segmentation:</strong> Position lab-grown diamonds as fashion jewelry (affordable, trendy, replaceable) separate from natural diamonds as investment/heirloom pieces</li>
+        <li><strong>Preemption:</strong> By entering the synthetic market itself, De Beers prevents competitors from using synthetics to undermine natural diamond prices</li>
+        <li><strong>Price discipline:</strong> By pricing synthetics deliberately low, De Beers establishes that they are "not natural diamonds" — creating and maintaining the price gap</li>
+        <li><strong>Brand protection:</strong> Controlling the synthetic narrative allows De Beers to define the categories</li>
+      </ul>
+      <div class="econ-box"><strong>Market Definition Revisited:</strong> The synthetic diamond threat raises a fundamental antitrust question: are synthetic and natural diamonds in the same market? If consumers treat them as substitutes, synthetic entry expands the relevant market, reducing De Beers's market share and power. If consumers treat them as distinct products (fashion vs. investment), the markets remain separate. Lightbox's pricing strategy is designed to maintain the distinction.</div>
+      <h3>The Information Asymmetry Problem</h3>
+      <p>A key concern with synthetic diamonds is the <strong>lemons problem</strong> (Akerlof, 1970): if consumers can't distinguish natural from synthetic diamonds, high-quality sellers (natural diamond dealers) are driven out of the market. De Beers's response: invest in technology to identify lab-grown diamonds, support certification systems, and maintain clear market separation through pricing and branding.</p>
+      <h3>Discussion Question Connection</h3>
+      <p>The synthetic diamond emergence raises the course's key question: how does technological disruption reshape market definition and monopoly power? If lab-grown diamonds are perfect substitutes for natural ones, De Beers's market share collapses from ~30-35% of natural diamonds to a fraction of all diamonds (natural + synthetic). The cartel that once controlled 80%+ of supply now faces competition from an unlimited supply source: chemistry labs worldwide.</p>
+    `
+  }
+
+};
+
+function openModal(id) {
+  const e = events[id];
+  if (!e) return;
+  document.getElementById('modal-year').textContent = e.year;
+  document.getElementById('modal-title').textContent = e.title;
+  document.getElementById('modal-body').innerHTML =
+    `<span class="modal-tag ${e.tagClass}">${e.tag}</span>` + e.body;
+  document.getElementById('overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAll() {
+  document.getElementById('overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('overlay')) closeAll();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeAll();
+});
+</script>
+</body>
+</html>
