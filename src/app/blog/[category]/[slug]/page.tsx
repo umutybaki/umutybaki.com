@@ -33,7 +33,7 @@ export default async function PostPage({ params }: Props) {
       </aside>
 
       <main className="blog-container">
-        <Link href="/blog" className="back-link">
+        <Link href={`/blog/${category}`} className="back-link">
           <svg
             width="16"
             height="16"
@@ -46,7 +46,7 @@ export default async function PostPage({ params }: Props) {
           >
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          Back to Lecture Notes
+          Back to Category
         </Link>
 
         <article

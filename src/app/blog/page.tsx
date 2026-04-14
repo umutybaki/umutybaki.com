@@ -19,28 +19,20 @@ export default function BlogPage() {
     <main className="container">
       <h1 className="section-title reveal active">Lecture Notes</h1>
 
-      {Object.entries(postsByCategory).map(([category, posts]) => (
-        <div key={category} className="blog-category reveal active">
-          <p className="blog-category-title">
-            {CATEGORY_LABELS[category] ?? category}
-          </p>
-          <ul className="blog-post-list">
-            {posts.map((post) => (
-              <li key={post.slug} className="blog-post-item">
-                <Link
-                  href={`/blog/${category}/${post.slug}`}
-                  className="blog-post-link"
-                >
-                  <span className="blog-post-title">{post.title}</span>
-                  {post.date && (
-                    <span className="blog-post-date">{post.date}</span>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <ul className="blog-post-list">
+        {Object.keys(postsByCategory).map((category) => (
+          <li key={category} className="blog-post-item">
+            <Link href={`/blog/${category}`} className="blog-post-link">
+              <span className="blog-post-title">
+                {CATEGORY_LABELS[category] ?? category}
+              </span>
+              <span className="blog-post-date">
+                {postsByCategory[category].length} notes
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </main>
   )
 }

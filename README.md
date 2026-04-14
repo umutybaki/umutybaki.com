@@ -1,56 +1,90 @@
-# Umut Yalçın Baki - Personal Portfolio
+# Umut Yalçın Baki — Personal Portfolio & Blog
 
-A simple, high-performance, and bilingual personal portfolio website.
+A high-performance, bilingual personal portfolio and blog built with **Next.js 15**, **React 19**, and **Tailwind CSS 4**. Deployed on **AWS** using **SST**.
 
-[![Website](https://img.shields.io/badge/Website-umutybaki.com-blue)](https://umutybaki.com)
-[![GitHub](https://img.shields.io/badge/GitHub-umutybaki-black?logo=github)](https://github.com/umutybaki)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Umut%20Yalçın%20Baki-blue?logo=linkedin)](https://www.linkedin.com/in/umutybaki)
+[![Website](https://img.shields.io/badge/Website-umutybaki.com-3b82f6)](https://umutybaki.com)
+[![Tech Stack](https://img.shields.io/badge/Stack-Next.js%2015%20|%20React%2019%20|%20Tailwind%204-black)](https://nextjs.org)
+[![Deployment](https://img.shields.io/badge/Deployment-SST%20|%20AWS-orange)](https://sst.dev)
 
 ---
 
 ## 🚀 Overview
 
-This repository contains the source code for my personal portfolio website, hosted at [umutybaki.com](https://umutybaki.com). The site is designed to showcase my experience, education, and skills in a clean, interactive, and bilingual interface.
+This repository contains the source code for my personal digital garden, hosted at [umutybaki.com](https://umutybaki.com). It serves as a hub for my professional experience, academic notes, and technical blog posts.
+
+The project recently migrated from a vanilla HTML/JS structure to a modern **Next.js App Router** architecture to support better content management, dynamic routing, and improved performance.
 
 ## ✨ Key Features
 
--   **🌍 Bilingual Support**: Seamlessly toggle between **English** and **Turkish** with a persistent language switcher.
--   **🌓 Theme Toggle**: Switch between **Dark** and **Light** modes, with system preference detection and local storage persistence.
--   **✨ Constellation Animation**: A custom background animation using the **HTML5 Canvas API**.
--   **📱 Fully Responsive**: Optimized for all screen sizes, from mobile devices to high-resolution desktops.
+- **✍️ Markdown Blog**: A custom-built blog engine using `remark` and `rehype` with support for:
+  - Syntax highlighting via `rehype-highlight`.
+  - Math equations via `KaTeX`.
+  - Auto-generated slugs and optimized head tags.
+- **🌍 Bilingual Support**: Core pages support both **English** and **Turkish** content.
+- **📄 Interactive CV**: A dedicated CV section with a custom timeline component and detailed experience tracking.
+- **🌓 Theme Support**: Seamless dark and light mode transitions, styled with **Tailwind CSS 4**.
+- **⚡ Serverless Deployment**: Fully automated CI/CD and hosting on AWS using **SST Ion**.
 
 ## 🛠️ Tech Stack
 
-Built with a focus on simplicity and performance using core web technologies:
-
--   **HTML**: Semantic structure for accessibility and SEO.
--   **CSS**: Custom props and Grid for dynamic and responsive layouts.
--   **JavaScript**: Modern script for all logic, animations, and state management (no framework, only vanilla JS).
--   **Google Fonts**: Inter for typography and Roboto Mono for technical details.
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Library**: [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Content**: Markdown/MDX with [Unified](https://unifiedjs.com/) (Remark/Rehype)
+- **Infrastructure**: [SST v3](https://sst.dev/) (Ion)
+- **Cloud**: [AWS](https://aws.amazon.com/) (Lambda, CloudFront, S3)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 
 ## 📂 Project Structure
 
 ```text
 .
-├── index.html   # Main layout and bilingual content
-├── style.css    # Core design system and responsive styles
-└── script.js    # Interactive logic and background animations
+├── posts/              # Markdown blog posts (.md)
+├── public/             # Static assets (images, icons)
+├── src/
+│   ├── app/            # Next.js App Router (blog, cv, landing)
+│   ├── components/     # Reusable React components (Timeline, Navigation)
+│   └── lib/            # Utility functions and Markdown processing
+├── sst.config.ts       # Infrastructure as Code (SST)
+└── package.json        # Dependencies and scripts
 ```
 
 ## 🛠️ Local Development
 
-To run this project locally, simply clone the repository and open `index.html` in your browser. No build steps or dependencies are required.
+This project uses **pnpm** as the package manager.
 
-```bash
-git clone https://github.com/umutybaki/umutybaki.com.git
-cd umutybaki.com
-# Open index.html in your preferred browser
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/umutybaki/umutybaki.com.git
+   cd umutybaki.com
+   ```
 
-## 📄 License
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-This project is open-source. Feel free to use it as inspiration for your own portfolio.
+3. **Run the development server:**
+   ```bash
+   pnpm dev
+   ```
+
+4. **Open the local site:**
+   Navigate to [http://localhost:3000](http://localhost:3000).
+
+## 🚢 Deployment
+
+Deployment is handled via [SST](https://sst.dev/).
+
+- **Preview / Development Stage**:
+  ```bash
+  npx sst dev
+  ```
+- **Production Deployment**:
+  ```bash
+  pnpm deploy
+  ```
 
 ---
 
-Built with ❤️ by [Umut Yalçın Baki](https://umutybaki.com).
+Built with ⚡ by [Umut Yalçın Baki](https://umutybaki.com).
