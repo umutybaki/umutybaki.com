@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import './globals.css'
 import 'katex/dist/katex.min.css'
 import Nav from '@/components/Nav'
-import ConstellationCanvas from '@/components/ConstellationCanvas'
+import NextTopLoader from 'nextjs-toploader'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const robotoMono = Roboto_Mono({ subsets: ['latin'], variable: '--font-roboto-mono' })
@@ -35,8 +35,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className={`${inter.variable} ${robotoMono.variable}`}>
-        <ConstellationCanvas />
-        <div className="glow-overlay" />
+        <NextTopLoader
+          color="#ff6400"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #ff6400,0 0 5px #ff6400"
+        />
         <Nav />
         {children}
       </body>
