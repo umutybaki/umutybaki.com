@@ -16,6 +16,7 @@ export default function Nav() {
     const next = current === 'dark' ? 'light' : 'dark'
     document.documentElement.setAttribute('data-theme', next)
     localStorage.setItem('theme', next)
+    document.cookie = `theme=${next}; path=/; max-age=31536000; SameSite=Lax`
   }
 
   function toggleLang() {

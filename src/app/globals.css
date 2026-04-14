@@ -338,7 +338,6 @@ html[lang="tr"] .lang-label.tr {
 .blog-page {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
   gap: 2rem;
   padding: 0 1rem;
   position: relative;
@@ -351,11 +350,12 @@ html[lang="tr"] .lang-label.tr {
   padding: 2rem 0;
   flex: 1 1 auto;
   min-width: 0;
+  align-self: flex-start;
 }
 
 .blog-toc-sidebar {
   flex: 0 0 220px;
-  padding-top: 2rem;
+  align-self: stretch;
 }
 
 .back-link {
@@ -383,10 +383,11 @@ html[lang="tr"] .lang-label.tr {
 /* Table of contents */
 .toc {
   position: sticky;
-  top: 5rem;
-  max-height: calc(100vh - 6rem);
+  top: 4.5rem;
+  max-height: calc(100vh - 4.5rem);
   overflow-y: auto;
   scrollbar-width: none;
+  padding-top: 1.5rem;
 }
 
 .toc::-webkit-scrollbar {

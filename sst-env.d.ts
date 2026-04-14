@@ -7,7 +7,7 @@
 declare module "sst" {
   export interface Resource {
     "Web": {
-      "type": "sst.aws.StaticSite"
+      "type": "sst.aws.Nextjs"
       "url": string
     }
   }
