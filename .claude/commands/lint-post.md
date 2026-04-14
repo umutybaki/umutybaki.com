@@ -32,7 +32,7 @@ The file must contain exactly one `#` heading. Its text must exactly match the `
 - Only one `#` (H1) is allowed per file.
 - `##` is for major sections, `###` for subsections, `####` for deep subsections.
 - `####` or deeper should be flagged as a warning (report but do not auto-remove).
-- No two headings at the same level may have identical text within the same file.
+- No two headings at the same level may have identical text within the same file. Change them with fitting heading names yourself.
 - Bold text used as a visual heading substitute must be flagged. The pattern to look for: a paragraph that consists of nothing but `**some text**` or `**some text:**` with no other content on that line, appearing where a heading would be expected (before a block of content). Report these for manual conversion to the appropriate heading level.
 
 **Fix:** Duplicate headings and `####` usage are reported for manual action. Bold-as-heading patterns are reported for manual action.
@@ -82,9 +82,7 @@ Alignment rules:
 ---
 
 ### 8. Horizontal rules — normalize
-Any horizontal rule that is not exactly `---` (e.g., `-----`, `***`, `___`) must be normalized to `---`.
-
-**Fix:** Auto-replace all non-standard horizontal rules with `---`.
+Remove all horizontal rules (e.g., `-----`, `***`, `___`, `---`).
 
 ---
 

@@ -8,7 +8,7 @@ description: "Comprehensive guide to memory, pointers, and arrays in C for the C
 
 **A comprehensive guide to understanding memory, pointers, and arrays in C — everything you need for the midterm.**
 
----
+
 
 
 ## Introduction: Why Pointers Matter {#introduction}
@@ -17,7 +17,7 @@ Pointers are one of the most fundamental concepts in C, and they're essential fo
 
 **Key insight:** C uses **pass-by-value semantics**. This means when you pass a variable to a function, the function gets a copy, not the original. If you want a function to modify the original variable, you must pass the **address** of that variable using pointers.
 
----
+
 
 ## Pointers Fundamentals {#pointers-fundamentals}
 
@@ -108,7 +108,7 @@ printf("%ld\n", sizeof(r));      // 8 bytes
 
 This is a **critical exam fact** — the type a pointer points to doesn't affect the pointer's size.
 
----
+
 
 ## Memory Diagrams {#memory-diagrams}
 
@@ -175,7 +175,7 @@ Notice:
 - `*p` gives us 42
 - `*q` gives us 17
 
----
+
 
 ## Pointers and Parameters: Pass by Value {#pointers-and-parameters}
 
@@ -265,7 +265,7 @@ int main() {
 
 Now when we dereference `*a` and `*b`, we're working with the actual memory locations of the originals.
 
----
+
 
 ## Double Pointers {#double-pointers}
 
@@ -351,7 +351,7 @@ pp++;                  // Move pp itself forward (pointer to pointer arithmetic)
 (**pp)++;              // Increment the value that *pp points to
 ```
 
----
+
 
 ## Arrays in Memory {#arrays-in-memory}
 
@@ -433,7 +433,7 @@ int main() {
 }
 ```
 
----
+
 
 ## Pointer-Array Equivalence {#pointer-array-equivalence}
 
@@ -500,7 +500,7 @@ printf("%d\n", p[-3]);  // 10 (arr[0]) — VALID!
 
 This is valid as long as you don't go out of bounds. Exam questions love this!
 
----
+
 
 ## Pointer Arithmetic {#pointer-arithmetic}
 
@@ -565,7 +565,7 @@ p++;
 printf("%d\n", *p);          // 23
 ```
 
----
+
 
 ## Arrays of Pointers {#arrays-of-pointers}
 
@@ -592,9 +592,9 @@ Memory diagram:
 
 ```
 words array (on stack):
-words[0]: 0x2000 ---> 'a' 'p' 'p' 'l' 'e' '\0' (data segment)
-words[1]: 0x3000 ---> 'b' 'a' 'n' 'a' 'n' 'a' '\0' (data segment)
-words[2]: 0x4000 ---> 'c' 'h' 'e' 'r' 'r' 'y' '\0' (data segment)
+words[0]: 0x2000 > 'a' 'p' 'p' 'l' 'e' '\0' (data segment)
+words[1]: 0x3000 > 'b' 'a' 'n' 'a' 'n' 'a' '\0' (data segment)
+words[2]: 0x4000 > 'c' 'h' 'e' 'r' 'r' 'y' '\0' (data segment)
 ```
 
 Each element of the array is a pointer. The actual strings live in read-only memory (data segment).
@@ -635,7 +635,7 @@ Inside main:
 - `argv[1]` is "hello"
 - `argv[2]` is "world"
 
----
+
 
 ## Strings in Memory {#strings-in-memory}
 
@@ -722,7 +722,7 @@ int main() {
 
 Changes in the function persist because both the caller and the function point to the same memory.
 
----
+
 
 ## Practice Problems {#practice-problems}
 
@@ -800,7 +800,7 @@ Variable: x       y       p       q
 
 **Final Output:** `15 25`
 
----
+
 
 ### Problem 2: Double Pointer Tracing
 
@@ -879,7 +879,7 @@ All three expressions evaluate to the same value because:
 - `*b` is 21 (b points to a)
 - `**c` is 21 (c points to b, which points to a)
 
----
+
 
 ### Problem 3: Pointer Arithmetic
 
@@ -922,7 +922,7 @@ Evaluating:
 5. `*(q + 1)` = `*(0x100C + 4)` = `*(0x1010)` = `23`
 6. `q - p` = `(0x100C - 0x1000) / 4` = `3` (number of elements, not bytes)
 
----
+
 
 ### Problem 4: Find and Fix the Bug
 
@@ -961,7 +961,7 @@ int main() {
 - In the fixed version, `increment(&num)` passes the address of `num`
 - Inside the function, `*x` dereferences the pointer to modify the actual `num`
 
----
+
 
 ## Common Exam Traps {#common-exam-traps}
 
@@ -1115,7 +1115,7 @@ if (p == NULL) {
 // Use p safely
 ```
 
----
+
 
 ## Final Summary
 

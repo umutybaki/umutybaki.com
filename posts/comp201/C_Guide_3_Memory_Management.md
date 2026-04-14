@@ -4,7 +4,7 @@ date: "2026-04-14"
 description: "Comprehensive guide to stack, heap, dynamic allocation, and memory bug categories for the COMP 201 midterm."
 ---
 
-# Guide 3: Memory Management — Stack, Heap, and Memory Bugs
+# Memory Management — Stack, Heap, and Memory Bugs
 
 ## Introduction
 
@@ -14,14 +14,10 @@ Memory management is one of the most heavily tested topics on COMP201 midterms. 
 
 ## Part 1: The Stack
 
-### Overview
-
 The **stack** is the portion of memory automatically managed by the processor. It stores:
 - Local variables declared inside functions
 - Function parameters
 - Return addresses for function calls
-
-### Key Properties
 
 **Automatic Management**: When you declare a local variable in C, it automatically gets allocated when the function is called and deallocated when the function returns.
 
@@ -44,7 +40,7 @@ void example() {
 
 When a function is called, a new frame is pushed onto the stack:
 
-```
+```text
 STACK MEMORY (grows downward)
 ┌─────────────────┐
 │     main        │ ← main's frame
@@ -94,11 +90,7 @@ int main() {
 
 ## Part 2: The Heap
 
-### Overview
-
 The **heap** is a portion of memory that you (the programmer) manage explicitly. The operating system provides memory blocks when requested via `malloc()`, `calloc()`, and `realloc()`. You're responsible for freeing memory with `free()`.
-
-### Key Properties
 
 **Manual Management**: You control when memory is allocated and freed.
 
@@ -114,7 +106,7 @@ The **heap** is a portion of memory that you (the programmer) manage explicitly.
 
 ### Memory Layout (Simplified 64-bit Linux)
 
-```
+```text
 HIGH ADDRESSES
     (reserved)
 
@@ -410,7 +402,7 @@ For the exam, understand the **concept**: Valgrind is tracking whether every all
 ## Part 5: Stack vs Heap Comparison
 
 | Characteristic | Stack | Heap |
-|---|---|---|
+| :--- | :--- | :--- |
 | **Management** | Automatic | Manual (programmer) |
 | **Speed** | Very fast | Slower |
 | **Size** | Fixed (~8MB default) | Large (limited by RAM) |

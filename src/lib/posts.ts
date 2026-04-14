@@ -8,6 +8,7 @@ import remarkRehype from 'remark-rehype'
 import rehypeKatex from 'rehype-katex'
 import rehypeSlug from 'rehype-slug'
 import rehypeStringify from 'rehype-stringify'
+import rehypeHighlight from 'rehype-highlight'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
@@ -102,6 +103,7 @@ export async function getPost(category: string, slug: string): Promise<Post> {
     .use(remarkGfm)
     .use(remarkMath)
     .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeHighlight)
     .use(rehypeKatex)
     .use(rehypeSlug)
     .use(rehypeStringify, { allowDangerousHtml: true })
