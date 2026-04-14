@@ -51,7 +51,7 @@ export default function Timeline({ items }: TimelineProps) {
 
           {/* Right column: content card */}
           <div
-            className="flex-1 mb-8 rounded-xl p-5 sm:p-6 transition-all duration-300 hover:translate-x-0.5"
+            className="flex-1 mb-8 rounded-xl p-5 sm:p-6"
             style={{
               backgroundColor: 'var(--surface-color)',
               border: '1px solid var(--card-border)',

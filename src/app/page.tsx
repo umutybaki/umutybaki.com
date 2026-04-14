@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main className="container">
-      <section className="home-hero reveal active">
+      <section className="home-hero">
         <h1 className="hero-name">Umut Yalçın Baki</h1>
         <p className="home-tagline">
           <span className="lang-en">Koç University — Computer Engineering &amp; Economics DM</span>
