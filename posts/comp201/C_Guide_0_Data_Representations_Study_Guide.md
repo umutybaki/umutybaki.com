@@ -1,17 +1,15 @@
 ---
-title: "Data Representations — Complete Midterm Study Guide"
+title: "0 - Data Representations — Complete Midterm Study Guide"
 date: "2026-04-14"
 description: "Complete midterm study guide covering bits & bytes, integers, bitwise operators, and floating point for COMP 201."
 ---
 
-# Data Representations — Complete Midterm Study Guide
+# 0 - Data Representations — Complete Midterm Study Guide
 > **Course:** COMP201: Computer Systems & Programming — KOÇ University, Spring 2026
 >
 > **Coverage:** Lectures 2, 3, 4 — Bits & Bytes, Integers, Bitwise Operators, Floating Point
 >
 > This guide is written to be **fully self-contained**. You should be able to sit the midterm having studied only this document. Exam-style worked examples are included throughout, drawn from past COMP201 midterms.
-
----
 
 
 ## 1. Bits, Bytes, and Hexadecimal
@@ -26,7 +24,7 @@ A single bit can represent only 2 values. To represent richer data, we group bit
 
 In binary, each digit position represents a power of 2 (just as decimal uses powers of 10):
 
-```
+```text
 Binary:   1  0  1  1
 Position: 3  2  1  0
 Value:    8  0  2  1  → 8 + 2 + 1 = 11 (decimal)
@@ -49,7 +47,7 @@ Value:    8  0  2  1  → 8 + 2 + 1 = 11 (decimal)
 When working with 32 or 64 bits, binary is unwieldy. **Hexadecimal (hex)** groups bits in blocks of 4, reducing length by 4×. Each hex digit represents exactly 4 bits.
 
 | Hex | Decimal | Binary |
-|-----|---------|--------|
+|:----|--------:|:-------|
 | 0   | 0       | 0000   |
 | 1   | 1       | 0001   |
 | 2   | 2       | 0010   |
@@ -77,14 +75,12 @@ In C, hex numbers are prefixed with `0x` (e.g., `0xf5`). Binary is prefixed with
 
 > **Example:** `0x173A` → `0001 0111 0011 1010`
 
----
-
 ## 2. Integer Representations
 
 ### C Type Sizes (64-bit system)
 
 | C Type          | Size (Bytes) | Size (Bits) |
-|-----------------|--------------|-------------|
+|:----------------|-------------:|------------:|
 | `char`          | 1            | 8           |
 | `short`         | 2            | 16          |
 | `int`           | 4            | 32          |
@@ -108,7 +104,7 @@ $$x = \sum_{i=0}^{w-1} b_i \cdot 2^i$$
 where $b_i$ is bit $i$ (0-indexed from the right).
 
 | Type            | Min | Max            |
-|-----------------|-----|----------------|
+|:----------------|----:|---------------:|
 | `unsigned char`  | 0   | 255            |
 | `unsigned short` | 0   | 65,535         |
 | `unsigned int`   | 0   | 4,294,967,295  |
@@ -162,7 +158,7 @@ With $w$ bits:
 Notice: $|TMin| = |TMax| + 1$. There is **one more negative value than positive**.
 
 | Type    | TMin          | TMax          |
-|---------|---------------|---------------|
+|:--------|---------------:|---------------:|
 | `char`  | −128          | 127           |
 | `short` | −32,768       | 32,767        |
 | `int`   | −2,147,483,648 | 2,147,483,647 |
@@ -173,7 +169,7 @@ These are accessible in C via `<limits.h>` as `INT_MIN`, `INT_MAX`, `UINT_MAX`, 
 #### 4-bit Two's Complement — Full Table
 
 | Binary | Unsigned Value | Signed (Two's Comp) Value |
-|--------|---------------|--------------------------|
+|:-------|---------------:|-------------------------:|
 | 0000   | 0             | 0                        |
 | 0001   | 1             | 1                        |
 | 0010   | 2             | 2                        |
@@ -208,7 +204,7 @@ Addition works identically for signed and unsigned — just add the bits and dis
 
 **Unsigned overflow:** If you add 1 to the maximum value, you wrap around to 0. If you subtract 1 from 0, you wrap around to the maximum.
 
-```
+```text
 0b1111 + 0b0001 = 0b10000 → (drop the carry) 0b0000
 0b0000 - 0b0001 = 0b1111 (wraps to 15 for 4-bit unsigned)
 ```
@@ -227,8 +223,6 @@ Overflow for signed integers occurs **only** when two numbers of the **same sign
 - **Windows 95 crash after 49.7 days:** The `GetTickCount()` function returned milliseconds as a 32-bit unsigned int. $2^{32}$ ms / 86,400,000 ms per day ≈ 49.7 days.
 - **Civilization / Gandhi bug:** Gandhi's aggression score was 1. Adopting democracy reduced it by 2, causing unsigned underflow to 255 — making Gandhi very aggressive.
 - **Ariane 5 rocket (1996):** $500M rocket exploded 37 seconds after launch due to overflow when converting a 64-bit float to a 16-bit signed integer.
-
----
 
 ## 3. Casting and Combining Types
 
@@ -297,7 +291,7 @@ For signed truncation: similar behavior, but the result is then reinterpreted as
 **Critical rule:** When C compares a signed and an unsigned integer, it **implicitly casts the signed value to unsigned**, then compares both as non-negative. This leads to very surprising results:
 
 | Expression                       | Type     | Result | Expected? |
-|----------------------------------|----------|--------|-----------|
+|:---|:---|:---:|:---:|
 | `0 == 0U`                        | unsigned | 1      | ✓         |
 | `-1 < 0`                         | signed   | 1      | ✓         |
 | `-1 < 0U`                        | unsigned | **0**  | ✗ (-1 cast to unsigned = huge number) |
@@ -306,8 +300,6 @@ For signed truncation: similar behavior, but the result is then reinterpreted as
 | `(unsigned)-1 > -2`              | unsigned | 1      | ✓         |
 
 **The danger:** Any function or comparison that mixes `int` and `unsigned int` may behave incorrectly. Always be intentional about types.
-
----
 
 ## 4. Byte Ordering (Endianness)
 
@@ -320,15 +312,13 @@ Multi-byte values (e.g., a 4-byte `int`) must be stored somewhere in memory. The
 > **Example:** `int x = 0x01234567` at address `0x100`:
 >
 > | Address | Big Endian | Little Endian |
-> |---------|-----------|---------------|
+> |:--------|:---------:|:------------:|
 > | 0x100   | 01        | 67            |
 > | 0x101   | 23        | 45            |
 > | 0x102   | 45        | 23            |
 > | 0x103   | 67        | 01            |
 
 **Why it matters:** When you send data over a network, or read a binary file from a different architecture, you must handle byte order. Network protocols use Big Endian ("network byte order").
-
----
 
 ## 5. Bitwise Operators
 
@@ -340,7 +330,7 @@ These operators work **bit by bit** on the binary representation of integers.
 Output is 1 only if **both** bits are 1.
 
 | a | b | a & b |
-|---|---|-------|
+|:---:|:---:|:-----:|
 | 0 | 0 | 0     |
 | 0 | 1 | 0     |
 | 1 | 0 | 0     |
@@ -352,7 +342,7 @@ Mnemonic: `& 1` lets a bit through; `& 0` forces it to 0 ("zeroing out").
 Output is 1 if **either** bit is 1.
 
 | a | b | a \| b |
-|---|---|--------|
+|:---:|:---:|:------:|
 | 0 | 0 | 0      |
 | 0 | 1 | **1**  |
 | 1 | 0 | **1**  |
@@ -364,7 +354,7 @@ Mnemonic: `| 1` forces a bit to 1 ("turning on"); `| 0` lets a bit through.
 Unary operator. Flips every bit.
 
 | a | ~a |
-|---|----|
+|:---:|:---:|
 | 0 | 1  |
 | 1 | 0  |
 
@@ -372,7 +362,7 @@ Unary operator. Flips every bit.
 Output is 1 if **exactly one** bit is 1.
 
 | a | b | a ^ b |
-|---|---|-------|
+|:---:|:---:|:-----:|
 | 0 | 0 | 0     |
 | 0 | 1 | **1** |
 | 1 | 0 | **1** |
@@ -382,7 +372,7 @@ Mnemonic: `^ 1` flips a bit; `^ 0` leaves a bit unchanged.
 
 #### Multi-bit Example
 
-```
+```text
 AND:          OR:           XOR:          NOT:
   0110 1100     0110 1100     0110 1100    ~1100
 & 1010 1010   | 1010 1010   ^ 1010 1010   ------
@@ -395,7 +385,7 @@ AND:          OR:           XOR:          NOT:
 This is a **very common source of bugs** and exam questions. Do not confuse:
 
 | Bitwise | Logical | Behavior |
-|---------|---------|----------|
+|:--------|:--------|:---------|
 | `&`     | `&&`    | Bitwise AND vs. "both are nonzero?" |
 | `\|`    | `\|\|`  | Bitwise OR vs. "either is nonzero?" |
 | `~`     | `!`     | Flip all bits vs. "is this zero?" |
@@ -421,7 +411,7 @@ A **bitmask** is a carefully crafted bit pattern used with bitwise operators to 
 **Common operations:**
 
 | Operation                  | How to do it        | Example                      |                   |         |
-| -------------------------- | ------------------- | ---------------------------- | ----------------- | ------- |
+|:---|:---|:---|:---|:---|
 | **Set** bit $k$ to 1       | `x`                 | `= (1 << k)`                 | Turn on bit 3: `x | = 0x08` |
 | **Clear** bit $k$ to 0     | `x &= ~(1 << k)`    | Turn off bit 3: `x &= ~0x08` |                   |         |
 | **Test** if bit $k$ is set | `if (x & (1 << k))` | Check bit 3: `if (x & 0x08)` |                   |         |
@@ -525,8 +515,6 @@ short x = -2;           // 1111 1111 1111 1110
 
 3. **Left shift and overflow:** If a left shift causes bits to be lost (overflow), the result is undefined for signed integers.
 
----
-
 ## 6. Floating Point Numbers
 
 ### 6.1 Why Integers Are Not Enough
@@ -545,7 +533,7 @@ So even numbers we can write exactly in decimal (like 0.1) often can't be stored
 
 **Fixed point idea:** Designate some bits for the integer part and some for the fractional part, like a decimal point that never moves.
 
-```
+```text
 1 0 1 1 . 0 1 1
 8s 4s 2s 1s  1/2s 1/4s 1/8s
 = 8 + 2 + 1 + 1/4 + 1/8 = 11.375
@@ -566,14 +554,14 @@ where:
 
 #### IEEE 754 Single Precision (32-bit `float`)
 
-```
+```text
 [ s | exponent (8 bits) | fraction (23 bits) ]
   1        8                    23             = 32 bits total
 ```
 
 #### IEEE 754 Double Precision (64-bit `double`)
 
-```
+```text
 [ s | exponent (11 bits) | fraction (52 bits) ]
   1        11                    52            = 64 bits total
 ```
@@ -593,7 +581,7 @@ So if the stored exponent bits are `10000000` (= 128 in decimal), the actual exp
 The stored values `00000000` (0) and `11111111` (255) are **reserved** for special cases (see below), so the range of actual exponents for normalized numbers is **−126 to +127**.
 
 | Stored Exponent | Actual Exponent ($E_{stored} - 127$) |
-|-----------------|--------------------------------------|
+|:---|:---|
 | 11111110 = 254  | +127                                 |
 | 11111101 = 253  | +126                                 |
 | ...             | ...                                  |
@@ -661,7 +649,7 @@ If the fraction is also all 0s, the value is **±0** (both positive and negative
 ### 6.5 Special Values (±∞, NaN, ±0)
 
 | Exponent | Fraction | Value |
-|----------|----------|-------|
+|:---|:---|:---|
 | 0 (all zeros) | 0 (all zeros) | ±0 (based on sign bit) |
 | 0 (all zeros) | nonzero | Denormalized number |
 | 1–254 | anything | Normalized number |
@@ -694,7 +682,7 @@ Layout: `[s | e3 e2 e1 e0 | f2 f1 f0]`
 Let's work out a few values:
 
 | s | exp  | frac | Type         | Value |
-|---|------|------|--------------|-------|
+|:---:|:----:|:----:|:-------------|:------|
 | 0 | 0000 | 000  | +Zero        | 0     |
 | 0 | 0000 | 001  | Denormalized | $0.001 \times 2^{-6} = 1/512$ |
 | 0 | 0001 | 000  | Normalized   | $1.000 \times 2^{1-7} = 1 \times 2^{-6} = 1/64$ |
@@ -756,7 +744,7 @@ if (fabs(a - b) < 1e-9) { ... }
 Assume `int x`, `float f`, `double d` (neither d nor f is NaN):
 
 | Expression | True/False? | Why |
-|---|---|---|
+|:---|:---:|:---|
 | `x == (int)(float)x` | **Sometimes False** | int → float may round (float has only 24 bits of mantissa) |
 | `x == (int)(double)x` | **Always True** | double has 53 mantissa bits, enough for any 32-bit int |
 | `f == (float)(double)f` | **Always True** | widening then narrowing float is lossless |
@@ -775,21 +763,19 @@ Assume `int x`, `float f`, `double d` (neither d nor f is NaN):
 **Casting behavior:**
 
 | Conversion | Behavior |
-|---|---|
+|:---|:---|
 | `double`/`float` → `int` | Truncates (rounds toward zero). Undefined if out of range or NaN — typically gives TMin |
 | `int` → `double` | Exact if int has ≤ 53 bits (always true for 32-bit int) |
 | `int` → `float` | May round — float only has 24 bits of mantissa |
 
 **Real-world example:** The Ariane 5 rocket crash (1996) was caused by converting a 64-bit double to a 16-bit signed integer. The value exceeded the 16-bit range, causing overflow and a hardware exception. The software was reused from Ariane 4, which flew slower and never triggered the overflow.
 
----
-
 ## 7. Key Formulas & Quick Reference
 
 ### Integer Quick Reference
 
 | Concept | Formula |
-|---|---|
+|:---|:---|
 | Unsigned range ($w$ bits) | $0$ to $2^w - 1$ |
 | Signed range ($w$ bits) | $-2^{w-1}$ to $2^{w-1} - 1$ |
 | TMax ($w$ bits) | $2^{w-1} - 1$ |
@@ -800,7 +786,7 @@ Assume `int x`, `float f`, `double d` (neither d nor f is NaN):
 ### Floating Point Quick Reference
 
 | Field | 32-bit float | 64-bit double |
-|---|---|---|
+|:---|:---|:---|
 | Sign bits | 1 | 1 |
 | Exponent bits | 8 | 11 |
 | Fraction bits | 23 | 52 |
@@ -811,7 +797,7 @@ Assume `int x`, `float f`, `double d` (neither d nor f is NaN):
 ### Encoding Summary
 
 | Case | Exponent | Fraction | Value Formula |
-|---|---|---|---|
+|:---|:---|:---|:---|
 | Normalized | $1$ to max-1 | any | $(-1)^s \times 1.\text{frac} \times 2^{E-\text{bias}}$ |
 | Denormalized | all 0s | nonzero | $(-1)^s \times 0.\text{frac} \times 2^{1-\text{bias}}$ |
 | ±0 | all 0s | all 0s | $\pm 0$ |
@@ -821,15 +807,13 @@ Assume `int x`, `float f`, `double d` (neither d nor f is NaN):
 ### Bitwise Operator Summary
 
 | Operator | Symbol | Effect |
-|---|---|---|
+|:---|:---|:---|
 | AND | `&` | Both bits must be 1 |
 | OR | `\|` | At least one bit is 1 |
 | XOR | `^` | Exactly one bit is 1 |
 | NOT | `~` | Flip all bits |
 | Left shift | `<<` | Shift left, fill 0s (× $2^k$) |
 | Right shift | `>>` | Shift right (÷ $2^k$), fill 0s (unsigned) or sign bit (signed) |
-
----
 
 ## 8. Exam-Style Practice Problems
 
@@ -852,7 +836,7 @@ unsigned short ua = a + 28;
 Fill in the table:
 
 | Expression | Decimal | Hex |
-|---|---|---|
+|:---|---:|:---|
 | Zero | 0 | 0x000 |
 | `(short) 1` | 1 | 0x001 |
 | `sa` | −7 | ? |
@@ -894,7 +878,7 @@ Given `a` is a **32-bit signed int**, classify each expression:
 - **Always zero** — always evaluates to zero
 
 | Expression | Answer | Reason |
-|---|---|---|
+|:---|:---:|:---|
 | `(~a) \| a` | **Never zero** | Every bit of `~a \| a` is 1, regardless of `a`. Result = `0xFFFFFFFF`. |
 | `(a << 1) & !!a` | **Sometimes zero** | If `a=0`, then `!!a = 0` → result is 0. If `a=1` (odd), `a<<1=2`, `!!a=1`, result = `2 & 1 = 0`. If `a=2`, result = `4 & 1 = 0`. Hmm. `!!a` is 0 or 1. `(a<<1) & 0 = 0` always when `a=0`. When `a≠0`, `!!a=1`, so result = `(a<<1) & 1`. Left-shifting by 1 makes LSB 0, so `(a<<1) & 1 = 0` always. So this is **always zero**. |
 | `(a & 0x00ff) ^ (a & 0xff00)` | **Sometimes zero** | Zero when `a`'s byte 0 equals byte 1 (after XOR). For example, `a = 0x0101` → `(0x01) ^ (0x01<<8)` ... wait, byte masking: `a & 0x00ff` = lowest byte, `a & 0xff00` = second byte. XOR of two different-position values is 0 only when both are 0, i.e., when byte 0 and byte 1 of `a` are both 0. **Sometimes zero** (when `a`'s lowest two bytes are 0). |
@@ -908,7 +892,7 @@ Given `a` is a **32-bit signed int**, classify each expression:
 Encode the following values:
 
 | Value | Sign | Stored Exp | Fraction | Binary |
-|---|---|---|---|---|
+|:---|:---:|:---|:---|:---|
 | 0.0 (positive) | 0 | 000 | 0000 | `0 000 0000` |
 | 1.0 | 0 | 011 (=3, actual E=0) | 0000 | `0 011 0000` |
 | −0.75 | 1 | 010 (=2, actual E=−1) | 1000 (= 0.5) | `1 010 1000` |
@@ -974,8 +958,6 @@ x == ux       → 1   (same bits, == compares bits after type promotion)
 ux == UINT_MAX → 1
 ```
 
----
-
 ## Common Exam Traps — Watch Out For These!
 
 1. **TMin is its own negation.** In 32-bit: `~(-2147483648) + 1 = 2147483647 + 1` which overflows back to −2147483648. So `−INT_MIN = INT_MIN`.
@@ -997,7 +979,5 @@ ux == UINT_MAX → 1
 9. **NaN is not equal to anything, including itself.** The only way to test for NaN is `isnan(x)` or `x != x`.
 
 10. **Shift by $k \geq$ word size is undefined.** Don't shift a 32-bit int by 32 or more bits.
-
----
 
 *These notes cover all material from Lectures 2, 3, and 4 of COMP201. Combined with working through past midterm problems, you should be fully prepared for the Data Representations portion of the exam. Good luck!*

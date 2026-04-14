@@ -14,10 +14,9 @@ description: "Self-contained study notes on the De Beers HBS case covering antit
 >
 > **Purpose:** These notes are written to be **self-contained**. You should be able to learn every concept in this case from scratch just by reading them. They explain not only *what* happened in the De Beers story, but *why* it matters for understanding competition law, strategy, and global commerce.
 
----
 
 
-## Introduction: The Paradox at the Millennium {#introduction}
+## Introduction: The Paradox at the Millennium
 
 Imagine this scene: it is 1999, and a global company is launching one of the most ambitious marketing campaigns in history. The company is De Beers, the South African diamond company. The campaign is carefully timed for the millennium, flooding major American cities with spectacular advertisements. The message is ancient but the medium is cutting-edge: diamonds are "eternal gifts," symbols of love and commitment that will last forever.
 
@@ -31,9 +30,8 @@ This created a fundamental problem. The campaign had to be centered in the Unite
 
 Either De Beers would have to change, or the U.S. legal system would have to change. The case gives us a window into this collision between one of history's most successful cartels and the legal system designed precisely to prevent cartels from existing.
 
----
 
-## The Diamond Cartel: From Rhodes to Oppenheimer {#history}
+## The Diamond Cartel: From Rhodes to Oppenheimer
 
 To understand De Beers, we need to travel back to 1866 in southern Africa, to a moment when a thirteen-year-old boy found something shiny on the banks of the Gariep (Vaal) River. Nobody paid much attention at first—just another rock. But a few years later, in 1869, a second find of 83.5 carats was impossible to ignore. Within months, diamond fever gripped Cape Province. By 1872, roughly ten thousand prospectors had rushed to Kimberley to seek their fortunes. Five separate mines were producing gem-quality stones.
 
@@ -59,9 +57,8 @@ Furthermore, Oppenheimer recognized that even controlling supply isn't enough if
 
 In 1925, Oppenheimer bought out the old Syndicate and replaced it with a new arrangement linked to his company Anglo-American. By 1929, he held the chairmanship of both De Beers and the Diamond Corporation, and he maintained this position until his death in 1957. The stage was now set for the creation of what would become one of history's most effective and long-lasting cartels.
 
----
 
-## How De Beers Built the Perfect Cartel {#perfect-cartel}
+## How De Beers Built the Perfect Cartel
 
 A cartel, in the economic sense, is an explicit agreement among competitors to coordinate on price, quantity, or other competitive dimensions. The goal is typically to raise price above the competitive level and restrict quantity below the competitive level, allowing cartel members to earn economic profits. Cartels are illegal in most jurisdictions precisely because they reduce output, raise prices, and create **deadweight loss**—the loss of economic efficiency that occurs when the market is no longer in competitive equilibrium.
 
@@ -113,9 +110,8 @@ By the end of the century, De Beers had presided over the diamond industry for o
 
 But this perfect cartel had one critical vulnerability: it was built on a foundation of illegality in its largest market.
 
----
 
-## U.S. Antitrust Law: The Legal Minefield {#antitrust-law}
+## U.S. Antitrust Law: The Legal Minefield
 
 To understand why De Beers's success was threatened in 1999, we need to understand the U.S. antitrust legal system. This system is rooted in a fundamentally different philosophy than the one that permitted De Beers to operate in most of the world.
 
@@ -153,9 +149,8 @@ The alternative is the **rule of reason**, which applies to conduct whose antico
 
 For most of De Beers's conduct, per se illegality would likely apply, which meant there was little room for the company to argue justifications.
 
----
 
-## De Beers vs. U.S. Law: Cat and Mouse {#evasion}
+## De Beers vs. U.S. Law: Cat and Mouse
 
 Given this legal landscape, how did De Beers operate for so long without being shut down in the United States? The answer is remarkable: the company simply *wasn't in* the United States. It maintained no legal presence. It had no offices, no employees, no directors, no bank accounts in America. It sold no diamonds directly to American consumers or retailers. Instead, it sold rough diamonds to sightholders in London, and those sightholders then exported diamonds to the United States and sold them. By the time diamonds reached American consumers, they were "just an anonymous bundle of stones"—completely divorced from De Beers legally, even if they originated in De Beers's mines or were controlled by De Beers's distribution system.
 
@@ -197,9 +192,8 @@ All diamonds were sold in London to sightholders. Once diamonds left London, the
 
 De Beers was, in the words of the case, "dancing infuriatingly just beyond the grasp of U.S. law." The company understood the legal risk, accepted certain constraints to manage that risk, but ultimately was able to operate a global cartel while maintaining just enough distance from the U.S. market to avoid direct prosecution.
 
----
 
-## Cracks in the Foundation: Challenges to Dominance {#challenges}
+## Cracks in the Foundation: Challenges to Dominance
 
 By the late 1990s, De Beers's dominance was under unprecedented pressure. The company had survived for over a century, but the final decade of the 20th century exposed serious vulnerabilities.
 
@@ -241,9 +235,8 @@ By 1998, the financial results were sobering. De Beers's diamond-specific turnov
 
 Share price performance tells the story starkly. De Beers's shares had peaked at around $35 but had fallen to approximately $15 by mid-1998 despite a partial recovery late in the year. The company had watched its market value halved in less than a decade.
 
----
 
-## The Strategic Turning Point: 1998–1999 {#strategic-review}
+## The Strategic Turning Point: 1998–1999
 
 In March 1998, De Beers and Anglo-American separated into two distinct firms. This was a significant symbolic moment; the holding structure that had linked De Beers to its parent company for decades was broken. De Beers was now an independent entity, and it faced its challenges directly without the shelter of Anglo-American's diversified portfolio.
 
@@ -287,9 +280,8 @@ But operating in the United States meant direct exposure to U.S. antitrust law. 
 
 Deutsche Bank Securities, in a November 1999 analysis, captured the essence of the dilemma: "the Antitrust ruling is indeed a poison pill... The impact of a resolution of the Anti-Trust issue should not be underestimated." Translation: either the antitrust issue would be resolved (likely against De Beers), or the branding strategy would fail. De Beers couldn't do both simultaneously—it couldn't market itself aggressively in the U.S. while maintaining enough legal distance to avoid antitrust prosecution.
 
----
 
-## The Branding Solution and Its Problem {#branding}
+## The Branding Solution and Its Problem
 
 Let's think more carefully about the economics of the branding strategy and why it created such a fundamental contradiction with U.S. antitrust law.
 
@@ -351,9 +343,8 @@ The counterargument is equally strong: a cartel that overcharges consumers and r
 
 Furthermore, the "benevolent monopoly" argument has a dangerous implication: if monopolies are justified whenever they claim to produce stability or efficiency, then antitrust law loses all force. Every cartel claims efficiency justifications. The oil cartel claims its pricing prevents wasteful exploration. Bank cartels claim their pricing prevents ruinous competition. The only defense against this reasoning is a categorical rule: **cartels and monopolies are illegal regardless of their claimed efficiency benefits**.
 
----
 
-## Economic Analysis: Why This Case Matters {#economic-analysis}
+## Economic Analysis: Why This Case Matters
 
 The De Beers case offers rich material for economic analysis. Let's explore some key concepts.
 
@@ -429,9 +420,8 @@ The CSO system was arguably an example of how vertical integration could facilit
 
 This raises a key question in antitrust economics: **when is vertical integration a legitimate efficiency strategy, and when is it anticompetitive integration designed to facilitate collusion?** The answer typically involves examining whether the integration offers efficiencies (lower cost, better quality) or whether it primarily serves to foreclose competition.
 
----
 
-## Key Takeaways for Antitrust Economics {#takeaways}
+## Key Takeaways for Antitrust Economics
 
 The De Beers case illuminates several fundamental issues in antitrust economics and policy:
 
@@ -471,7 +461,6 @@ De Beers operated for over a century in flagrant violation of U.S. antitrust law
 
 The DOJ understood the threat De Beers posed. It attempted prosecution multiple times. But the cases failed, not because the law lacked force, but because the company's jurisdictional positioning made prosecution difficult. A company entirely outside U.S. jurisdiction is hard to bring to trial, especially when it maintains no legal presence. **Effective enforcement of antitrust law requires not just legal tools but practical ability to reach and prosecute defendants**. The era of the multinational corporation has made this enforcement challenge more complex.
 
----
 
 ## Conclusion: The Diamond Forever, But Not the Cartel
 
@@ -485,7 +474,6 @@ For students of economics, the De Beers case offers a window into how cartels wo
 
 The diamonds are indeed "forever," but the cartel was not.
 
----
 
 ## Key Definitions and Concepts
 
@@ -511,7 +499,6 @@ The diamonds are indeed "forever," but the cartel was not.
 
 **Monopoly Power:** The ability of a firm to raise prices above competitive levels without losing sales so large that profit falls.
 
----
 
 **Document prepared:** April 2026
 **For:** ECON 499, Module 2: Antitrust Economics, Koç University

@@ -10,7 +10,6 @@ description: "Self-contained notes on local search algorithms including hill cli
 > 
 > These notes are written to be **self-contained**: you should be able to learn every concept from scratch just by reading them. Every algorithm includes intuition, formal pseudocode, annotated Python code, and a discussion of where it is used in the real world.
 
----
 
 ## 1. What Is Local Search? (The Big Picture)
 
@@ -38,7 +37,6 @@ Local search is everywhere in real-world AI and engineering:
 
 In all these cases, you have some configuration (state) and you want to find the **best** configuration, or at least a **good enough** one.
 
----
 
 ## 2. How Local Search Differs from Classical Search
 
@@ -52,7 +50,6 @@ In all these cases, you have some configuration (state) and you want to find the
 
 **Think of it this way:** classical search is like getting turn-by-turn driving directions. Local search is like trying to find the best seat in a crowded stadium — you don’t care how you walked there, you just want the best spot.
 
----
 
 ## 3. Formulating a Local Search Problem
 
@@ -75,7 +72,6 @@ This is a function that tells you **how good** a state is — it assigns a numer
 - **Complete:** Does the algorithm find a solution if one exists?
 - **Optimal:** Does it find the *best* solution?
 
----
 
 ## 4. The State-Space Landscape
 
@@ -91,7 +87,6 @@ Imagine plotting every possible state on the x-axis and the value of the evaluat
 
 Think of the landscape as a mountain range: you want to find the tallest peak (global max), but you might get stuck on a smaller hill (local max) or a flat field (plateau).
 
----
 
 ## 5. Hill-Climbing Search
 
@@ -108,7 +103,7 @@ At each step, you look at all your neighbors, pick the one with the highest valu
 
 ### 5.2 Pseudocode (from the lecture)
 
-```
+```text
 function HILL-CLIMBING(problem) returns a state that is a local maximum
     current ← MAKE-NODE(problem.INITIAL-STATE)
     loop do
@@ -125,7 +120,7 @@ function HILL-CLIMBING(problem) returns a state that is a local maximum
 4. If that best neighbor is **not better** than where you are now (≤), you’re at a local maximum — stop and return the current state.
 5. Otherwise, move to that neighbor and repeat.
 
-### 5.3 Python Implementation
+### 5.3 Hill-Climbing Python Implementation
 
 ```python
 import random
@@ -285,7 +280,6 @@ Hill climbing is **too greedy**. It always moves uphill, which means it can neve
 
 This leads us to Simulated Annealing.
 
----
 
 ## 6. Simulated Annealing
 
@@ -325,7 +319,7 @@ When $\Delta E$ is very negative (the move is really bad) or $T$ is very low (te
 
 ### 6.3 Pseudocode (from the lecture)
 
-```
+```text
 function SIMULATED-ANNEALING(problem, schedule) returns a solution state
     # schedule: a mapping from time to "temperature"
     current ← MAKE-NODE(problem.INITIAL-STATE)
@@ -363,7 +357,7 @@ For example, $\alpha = 0.99$ means the temperature decreases by 1% each step.
 **Linear cooling (simplest):**
 $$T(t) = T(t-1) - k, \quad k > 0$$
 
-### 6.5 Python Implementation
+### 6.5 Simulated Annealing Python Implementation
 
 ```python
 import random
@@ -438,7 +432,6 @@ This is a theoretical guarantee: given infinite time and a slow enough cooling s
 
 Think of it like exploring a cave system. If you only go downhill (toward lower ground), you might get stuck in a shallow pit. But if you’re willing to climb back up a bit, you might discover a passage that leads to a much deeper cave. Early on, you’re willing to climb a lot. Later, you settle for where you are.
 
----
 
 ## 7. Local Beam Search
 
@@ -459,7 +452,7 @@ It’s like a group of hikers on a mountain. Instead of each hiking alone, they 
 
 ### 7.3 Pseudocode
 
-```
+```text
 function LOCAL-BEAM-SEARCH(problem, k) returns a state
     states ← k randomly generated initial states
     loop do
@@ -472,7 +465,7 @@ function LOCAL-BEAM-SEARCH(problem, k) returns a state
         states ← the top k states from all_successors (by evaluation value)
 ```
 
-### 7.4 Python Implementation
+### 7.4 Local Beam Search Python Implementation
 
 ```python
 import random
@@ -532,7 +525,6 @@ This preserves diversity: bad successors still have some chance of surviving, wh
 
 > “Natural selection, anyone?” — this directly leads to the idea of Genetic Algorithms.
 
----
 
 ## 8. Genetic Algorithms
 
@@ -627,7 +619,7 @@ The children become the new population. Go back to Step 2.
 
 ### 8.4 Pseudocode
 
-```
+```text
 function GENETIC-ALGORITHM(problem, population_size, mutation_rate, max_generations):
     population ← generate population_size random states
     
@@ -784,7 +776,6 @@ print(f"Found at generation: {gen}")
 
 From the lecture’s visual: two parent boards are combined at a crossover point (a vertical line splitting the columns). The child inherits the left columns from one parent and the right columns from the other. This is exactly what a crossover point does on the string encoding: `24748552` + `32752411` with crossover after column 3 gives `247|52411` → child `24752411`.
 
----
 
 ## 9. Gradient Descent / Ascent
 
@@ -829,7 +820,7 @@ You keep iterating until:
 - The change is very small: $|x(t+1) - x(t)| < \epsilon$ for some tiny $\epsilon$, OR
 - The gradient is very small: $|\nabla f(x)| < \epsilon$
 
-### 9.5 Python Implementation
+### 9.5 Gradient Descent Python Implementation
 
 ```python
 import numpy as np
@@ -926,7 +917,6 @@ print(f"f(x_min) = {f2(x_min2)}")
 
 This is **the** optimization algorithm of modern machine learning. Every time you hear about “training a neural network,” gradient descent (or a variant like Adam, SGD, RMSProp) is what’s happening under the hood. It’s also used in robotics (trajectory optimization), physics (energy minimization), finance (portfolio optimization), and countless engineering applications.
 
----
 
 ## 10. Online Search (Brief Overview)
 
@@ -953,7 +943,6 @@ This is **the** optimization algorithm of modern machine learning. Every time yo
 
 A variant of A* designed for online search. It follows f(n) locally and **updates its heuristic values** based on experience, so it learns to avoid dead ends and local minima over time.
 
----
 
 ## 11. Beyond Classical Search
 
@@ -964,7 +953,6 @@ The lectures briefly mention that the real world is messier than what classical 
 
 These topics are beyond the scope of this course but are central to planning under uncertainty (covered in more advanced AI courses).
 
----
 
 ## 12. Summary & Comparison Table
 
@@ -990,6 +978,5 @@ These topics are beyond the scope of this course but are central to planning und
 7. **Gradient descent leverages calculus** — when you can compute derivatives, it’s the tool of choice.
 8. **All of these (except SA with perfect schedule) lack completeness and optimality guarantees** in practice. But they work remarkably well on real problems!
 
----
 
 *These notes cover all material from the COMP 341 Local Search lecture slides (Slides 1–44). Good luck studying!*

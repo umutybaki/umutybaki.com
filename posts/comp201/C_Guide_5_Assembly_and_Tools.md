@@ -1,14 +1,13 @@
 ---
-title: "Tools & x86-64 Assembly — Study Guide"
+title: "5 - Tools & x86-64 Assembly — Study Guide"
 date: "2026-04-14"
 description: "Comprehensive guide to GDB, Valgrind, Make, and x86-64 assembly for the COMP 201 midterm."
 ---
 
-# COMP201 Guide 5: Tools & x86-64 Assembly
+# 5 - Tools & x86-64 Assembly — Study Guide
 
 **For COMP201: Computer Systems & Programming at Koç University**
 
----
 
 
 ## GCC Compilation Pipeline
@@ -84,7 +83,7 @@ The **linker** (`ld`) takes your object files and the system libraries (like `li
 
 ### Full Pipeline Visualization
 
-```
+```text
 hello.c
   ↓ [gcc -E] Preprocessor (cpp)
 hello.i (expanded C)
@@ -116,7 +115,6 @@ gcc -Wall -g -O2 hello.c      # All of the above
 
 **Why should you care?** When you see an error message like "undefined reference to `printf`", you know it's a **linking error** (stage 4). When you see a **syntax error**, it's a **compilation error** (stage 2). Understanding the pipeline helps you debug!
 
----
 
 ## Make and Makefiles
 
@@ -233,7 +231,6 @@ make
 
 Make knows which files changed and only recompiles those + anything that depends on them. For a large project, this can mean the difference between a 2-minute wait and a 10-second rebuild.
 
----
 
 ## x86-64 Architecture Overview
 
@@ -259,14 +256,13 @@ Each register can be accessed at different sizes:
 
 **Golden rule:** When you write to a 32-bit register (`%eax`), it **zero-extends** the upper 32 bits automatically. When you write to 8-bit or 16-bit, the upper bits are NOT cleared.
 
----
 
 ## x86-64 Registers (CRITICAL)
 
 **You must memorize this table for the exam.**
 
 | 64-bit | 32-bit | 16-bit | 8-bit | Special Purpose |
-|--------|--------|--------|-------|-----------------|
+|:---|:---|:---|:---|:---|
 | %rax   | %eax   | %ax    | %al   | Return value, accumulator |
 | %rbx   | %ebx   | %bx    | %bl   | Callee-saved |
 | %rcx   | %ecx   | %cx    | %cl   | 4th argument, loop counter |
@@ -301,14 +297,13 @@ The pattern holds for the first 8 registers. For %r8–%r15, you add suffixes: `
 3. **Caller-saved vs. Callee-saved:** Some registers you must preserve if your function uses them (callee-saved: %rbx, %r12–%r15, %rsp, %rbp). Others the caller must save if it wants to keep their values (caller-saved: %rax, %rcx, %rdx, %rsi, %rdi, %r8–%r11).
 4. **Arguments go in registers:** The first 6 integer arguments to a function go in %rdi, %rsi, %rdx, %rcx, %r8, %r9 (in that order). The 7th argument and beyond go on the stack.
 
----
 
 ## Data Sizes and Instruction Suffixes
 
 In assembly, we use **suffixes** on instructions to specify data size. This is the x86-64 convention (AT&T syntax, what GCC uses).
 
 | Suffix | Data Size | C Type | Example |
-|--------|-----------|--------|---------|
+|:---|:---|:---|:---|
 | `b`    | 1 byte    | `char` | `movb $0x42, %al` |
 | `w`    | 2 bytes   | `short` | `movw $0x1234, %ax` |
 | `l`    | 4 bytes   | `int` | `movl $0xDEADBEEF, %eax` |
@@ -323,7 +318,6 @@ movl %eax, %ebx      # Move 4 bytes (32-bit, zero-extends)
 movq %rax, %rbx      # Move 8 bytes (full 64-bit)
 ```
 
----
 
 ## The mov Instruction
 
@@ -397,7 +391,6 @@ movl (%rax), %ecx    # Load from memory
 movl %ecx, (%rbx)    # Store to memory
 ```
 
----
 
 ## mov Operand Forms and Addressing Modes
 
@@ -406,7 +399,7 @@ movl %ecx, (%rbx)    # Store to memory
 The CPU provides flexible ways to calculate memory addresses. Each mode is useful for different situations (array access, struct fields, pointer dereference, etc.).
 
 | Mode | Syntax | Address | Meaning |
-|------|--------|---------|---------|
+|:---|:---|:---|:---|
 | Direct | `addr` | addr | Fixed address (rare) |
 | Register Indirect | `(%r)` | R[r] | Address is in register r |
 | Base + Displacement | `D(%r)` | R[r] + D | Register + constant offset |
@@ -418,7 +411,7 @@ The CPU provides flexible ways to calculate memory addresses. Each mode is usefu
 **General formula:**
 ```
 Effective Address = Displacement + BaseRegister + Scale × IndexRegister
-```
+```text
 
 Where:
 - **Displacement (D):** A constant (0–2 billion, typically small)
@@ -468,7 +461,6 @@ int x = *ptr;  // Dereference the pointer
 movl (%rdi), %eax   # Load from address stored in %rdi
 ```
 
----
 
 ## The lea Instruction
 
@@ -529,7 +521,6 @@ leaq 7(%rdi, %rdi, 1), %rax
 
 If you see `lea` in assembly, ask: "Is this computing an address for memory access, or doing arithmetic?" Usually it's arithmetic. The instruction computes the address but doesn't access memory, making it fast and efficient.
 
----
 
 ## Arithmetic and Logical Instructions
 
@@ -538,7 +529,7 @@ If you see `lea` in assembly, ask: "Is this computing an address for memory acce
 These instructions follow the pattern: `op src, dst` → `dst = dst OP src`
 
 | Instruction | Operation | Syntax | Example | C Equivalent |
-|-------------|-----------|--------|---------|--------------|
+|:---|:---|:---|:---|:---|
 | `add` | Addition | `add S, D` | `addl %ecx, %eax` | `eax += ecx` |
 | `sub` | Subtraction | `sub S, D` | `subl $8, %rsp` | `rsp -= 8` |
 | `imul` | Signed Multiply | `imul S, D` | `imulq %rbx, %rax` | `rax *= rbx` |
@@ -556,7 +547,7 @@ These instructions follow the pattern: `op src, dst` → `dst = dst OP src`
 ### One-Operand Instructions
 
 | Instruction | Operation | Syntax | Example |
-|-------------|-----------|--------|---------|
+|:---|:---|:---|:---|
 | `inc` | Increment | `inc D` | `incl %eax` |
 | `dec` | Decrement | `dec D` | `decl %eax` |
 | `neg` | Negate (two's complement) | `neg D` | `negl %eax` |
@@ -598,7 +589,6 @@ addw %cx, %ax      # Add 16-bit values
 addb %cl, %al      # Add 8-bit values
 ```
 
----
 
 ## Reverse Engineering Assembly
 
@@ -696,7 +686,6 @@ int conditional_op(int x, int y) {
 }
 ```
 
----
 
 ## Calling Conventions (Brief)
 
@@ -729,7 +718,6 @@ Arguments 7+ go on the stack.
 
 This means if your function uses %rbx, you must save it on entry and restore it on exit.
 
----
 
 ## Practice Problems
 
@@ -840,7 +828,6 @@ int mystery(int arr[], int n) {
 
 (This is a simple array sum!)
 
----
 
 ## Common Exam Traps
 
@@ -978,7 +965,6 @@ movl (%rax), %ecx
 movl %ecx, (%rbx)
 ```
 
----
 
 ## Summary: Key Takeaways
 
@@ -993,7 +979,6 @@ movl %ecx, (%rbx)
 9. **Reverse engineering:** Track arguments, return value, and operations carefully
 10. **Calling convention:** First 6 args in %rdi, %rsi, %rdx, %rcx, %r8, %r9; return in %rax
 
----
 
 ## Quick Reference: Common Instructions
 
@@ -1029,7 +1014,6 @@ jmp                             # Unconditional jump
 ret                             # Return from function
 ```
 
----
 
 ## Final Exam Advice
 

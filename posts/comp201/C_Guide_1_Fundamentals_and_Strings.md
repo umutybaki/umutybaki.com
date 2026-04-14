@@ -1,14 +1,12 @@
 ---
-title: "C Fundamentals, Chars & Strings — Study Guide"
+title: "1 - C Fundamentals, Chars & Strings — Study Guide"
 date: "2026-04-14"
 description: "Comprehensive guide to C basics, characters, and strings from first principles for the COMP 201 midterm."
 ---
 
-# COMP201 Midterm Study Guide 1: C Fundamentals, Chars & Strings
+# 1 - C Fundamentals, Chars & Strings — Study Guide
 
 A comprehensive guide to passing the COMP201 midterm. This guide covers everything you need to know about C basics, characters, and strings from first principles. Read it like a textbook and work through the examples.
-
----
 
 
 ## C Fundamentals & Program Structure
@@ -49,7 +47,6 @@ In C, you can write comments two ways:
    comment */
 ```
 
----
 
 ## Data Types & Variables
 
@@ -58,7 +55,7 @@ In C, you can write comments two ways:
 C has several built-in data types. Here are the main ones you'll use:
 
 | Type | Size | Range | Example |
-|------|------|-------|---------|
+|:---|:---|:---|:---|
 | `int` | 4 bytes | -2,147,483,648 to 2,147,483,647 | `int x = 42;` |
 | `char` | 1 byte | -128 to 127 (or 0-255 unsigned) | `char c = 'A';` |
 | `float` | 4 bytes | ~±3.4e38 (6-7 decimal places) | `float pi = 3.14f;` |
@@ -99,7 +96,6 @@ int x;              // Bad: x contains random value
 printf("%d", x);    // Unpredictable output
 ```
 
----
 
 ## Input/Output: printf & scanf
 
@@ -114,7 +110,7 @@ printf("format string with %specifiers", arg1, arg2, ...);
 ### Common Format Specifiers
 
 | Specifier | What It Prints | Example |
-|-----------|---|---------|
+|:---|:---|:---|
 | `%d` | integer | `printf("%d", 42);` → `42` |
 | `%c` | single character | `printf("%c", 'A');` → `A` |
 | `%s` | C string | `printf("%s", "hello");` → `hello` |
@@ -191,7 +187,6 @@ int x;
 scanf("%d", x);   // CRASH! Should be &x
 ```
 
----
 
 ## Preprocessor Macros
 
@@ -271,7 +266,6 @@ int result = DOUBLE(2) * 3;
 #define BAD_DOUBLE(x) x + x
 ```
 
----
 
 ## Control Flow
 
@@ -369,7 +363,6 @@ if (0) {                // False
 }
 ```
 
----
 
 ## Functions
 
@@ -445,7 +438,6 @@ char getFirstCharacter(char *str) {
 }
 ```
 
----
 
 ## Characters in C
 
@@ -548,7 +540,6 @@ int main() {
 }
 ```
 
----
 
 ## Strings: The Basics
 
@@ -658,7 +649,6 @@ char str[] = "world";
 printf("Hello, %s!\n", str);    // Hello, world!
 ```
 
----
 
 ## String Library Functions
 
@@ -896,7 +886,7 @@ while (token != NULL) {
 ```
 
 This prints:
-```
+```text
 apple
 banana
 cherry
@@ -955,7 +945,6 @@ double pi = atof(str2);             // 3.14
 int bad = atoi("hello");            // 0
 ```
 
----
 
 ## Memory Layout of Strings
 
@@ -1019,7 +1008,6 @@ printf("%s\n", str1);       // hello
 printf("%s\n", str2);       // hello (points to same location)
 ```
 
----
 
 ## Exam-Style Practice Problems
 
@@ -1046,7 +1034,7 @@ int main() {
 ```
 
 **Answer**:
-```
+```text
 ha
 2
 (empty line, since str[2] is '\0')
@@ -1167,7 +1155,6 @@ int main() {
 
 **Lesson**: Always use parentheses in macros!
 
----
 
 ## Common Exam Traps
 
@@ -1300,7 +1287,6 @@ strncpy(dest, "hello world", 5);
 dest[5] = '\0';
 ```
 
----
 
 ## Final Tips for the Midterm
 

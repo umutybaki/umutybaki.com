@@ -1,10 +1,10 @@
 ---
-title: "Advanced C — void*, Generics, Function Pointers, and Structs"
+title: "4 - Advanced C — void*, Generics, Function Pointers, and Structs"
 date: "2026-04-14"
 description: "Comprehensive guide to advanced C topics including void pointers, generics, function pointers, and structs for COMP 201."
 ---
 
-# Guide 4: Advanced C — void*, Generics, Function Pointers, const, and Structs
+# 4 - Advanced C — void*, Generics, Function Pointers, and Structs
 
 > **Course:** COMP201: Computer Systems & Programming — Koç University
 >
@@ -12,7 +12,6 @@ description: "Comprehensive guide to advanced C topics including void pointers, 
 > concept from scratch just by reading them. This guide covers the advanced C topics
 > you'll need for your midterm exam and beyond.
 
----
 
 
 ## 1. Introduction: Why Advanced C?
@@ -23,7 +22,6 @@ This is where advanced C comes in. The topics in this guide—void pointers, fun
 
 Here's the big picture: In C, there's no built-in concept of generics like in Java or C++. There's no `template<typename T>`. Instead, C gives you powerful, low-level tools to build that genericity yourself. This guide teaches you how to use those tools correctly and confidently.
 
----
 
 ## 2. void Pointers and Generic Programming
 
@@ -165,7 +163,6 @@ char c = *(char*)ptr;  // OK: cast to char*, then dereference
 
 The cast tells the compiler "treat the bytes at this address as an integer" or "as a character". Then it knows exactly how many bytes to read.
 
----
 
 ## 3. Generics: Writing Type-Agnostic Code
 
@@ -192,7 +189,7 @@ The comparison function is key. You call it to compare two elements; it returns:
 
 **Pseudocode:**
 
-```
+```text
 FUNCTION bubble_sort(arr, n, elem_size, compar)
     FOR i = 0 TO n-1
         FOR j = 0 TO n-i-2
@@ -401,7 +398,6 @@ int main() {
 
 This pattern—passing a predicate function—is foundational for generic data processing in C.
 
----
 
 ## 4. Function Pointers
 
@@ -664,7 +660,6 @@ int main() {
 
 The pattern: Create an array of function pointers, then index into it (`filters[i]`) to call different functions. This is dispatch—you select which function to run based on a condition.
 
----
 
 ## 5. const Qualifiers and Const-Correctness
 
@@ -813,7 +808,7 @@ int count_vowels(const char *str) {
 ### 5.6 Common const Patterns
 
 | Declaration | Meaning |
-|---|---|
+|:---|:---|
 | `const int x;` | x is a const integer |
 | `const int *p;` | p is a pointer to a const int |
 | `int * const p;` | p is a const pointer to an int |
@@ -835,7 +830,6 @@ int compare_int(const void *a, const void *b) {
 
 This tells qsort and bsearch: "I won't modify the data you pass me; I only read it." That's the contract.
 
----
 
 ## 6. Structures and Compound Types
 
@@ -1045,7 +1039,6 @@ printf("Offset of gpa: %lu\n", offsetof(struct Student, gpa));
 printf("Total size: %lu\n", sizeof(struct Student));
 ```
 
----
 
 ## 7. Practical Patterns: Combining Concepts
 
@@ -1174,7 +1167,6 @@ int main() {
 
 This is the foundation of object-oriented programming in C. You bundle data with behavior.
 
----
 
 ## 8. Exam-Style Practice Problems
 
@@ -1222,7 +1214,6 @@ int main() {
 
 **Your task:** Extend this to compute the sum of `double` array. Write a `sum_combiner_double` function and test it.
 
----
 
 ### Problem 2: Sorting and Searching Structs
 
@@ -1272,7 +1263,6 @@ int main() {
 }
 ```
 
----
 
 ### Problem 3: Function Pointer Dispatch
 
@@ -1303,7 +1293,6 @@ int main() {
 }
 ```
 
----
 
 ### Problem 4: Generic Stack with Structs
 
@@ -1337,7 +1326,6 @@ int main() {
 }
 ```
 
----
 
 ## 9. Common Exam Traps
 
@@ -1356,7 +1344,6 @@ int x = *(int *)ptr;  // Cast first, then dereference
 
 **Why:** The compiler doesn't know how many bytes to read from void*. You must tell it by casting to a specific type.
 
----
 
 ### Trap 2: Double-Dereference Confusion with Function Pointers
 
@@ -1376,7 +1363,6 @@ comp_array[0] = compare_int;  // Correct
 
 **Why:** `Comparator` is already defined as a pointer type. Creating an array of `Comparator*` gives you pointers to pointers, which is confusing and almost never what you want.
 
----
 
 ### Trap 3: Confusion Between const int* and int* const
 
@@ -1403,7 +1389,6 @@ void iterate(const int *ptr) {
 
 **Why:** `const int*` means you can't modify the data, but you can move the pointer. If you need both const data and const pointer, use `const int* const`.
 
----
 
 ### Trap 4: Forgetting Size Parameter in Generics
 
@@ -1425,7 +1410,6 @@ void bubble_sort(void *arr, int n, int elem_size_bytes,
 
 **Why:** Without knowing the element size, you can't use pointer arithmetic correctly. Always pass `sizeof(element_type)` or `elem_size_bytes`.
 
----
 
 ### Trap 5: String vs. String Pointer in qsort
 
@@ -1453,7 +1437,6 @@ qsort(words, 3, sizeof(char*), compare);
 
 **Why:** The array `words` contains pointers to strings. When qsort passes elements to the comparison function, it passes the address of each element (i.e., the address of a `char*`). So you dereference once to get the `char*`, then use it.
 
----
 
 ### Trap 6: Uninitialized Struct Members
 
@@ -1474,7 +1457,6 @@ struct Student s = {"Alice", 20, 3.9};
 
 **Why:** Automatic (stack) structs are not automatically initialized. Use `= {0}` for safety, or initialize explicitly.
 
----
 
 ### Trap 7: Array vs. Pointer to Array in Struct Size
 
@@ -1511,7 +1493,6 @@ strcpy(s.name, "Alice");  // No malloc needed
 
 **Why:** Structs can embed arrays or store pointers. The semantics are very different. Embedded arrays mean the memory is part of the struct; pointers mean you allocate separately.
 
----
 
 ### Trap 8: Comparison Function Return Value
 
@@ -1546,14 +1527,13 @@ return 0;
 
 **Why:** Comparators should return negative if first < second (ascending order). It's easy to flip the logic under exam pressure.
 
----
 
 ## Summary & Comparison Table
 
 Here's a quick reference for all the major concepts:
 
 | Concept | Purpose | Key Syntax | Complexity |
-|---------|---------|-----------|-----------|
+|:---|:---|:---|:---:|
 | **void*** | Generic pointer, works for any type | `void *ptr = &x;` then cast to use | Medium |
 | **Generic sorting** | Sort array of unknown type | Pass `elem_size`, comparator function | High |
 | **Generic stack** | Container for any data type | Use `memcpy` to store/retrieve | High |
@@ -1566,7 +1546,6 @@ Here's a quick reference for all the major concepts:
 | **Nested structs** | Struct containing another struct | `struct A { struct B nested; };` | Medium |
 | **Function pointers in structs** | Simulate methods/polymorphism | `int (*func)(void);` inside struct | High |
 
----
 
 ## Final Exam Tips
 

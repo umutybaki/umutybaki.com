@@ -1,10 +1,10 @@
 ---
-title: "Pointers & Arrays — Study Guide"
+title: "2 - Pointers & Arrays — Study Guide"
 date: "2026-04-14"
 description: "Comprehensive guide to memory, pointers, and arrays in C for the COMP 201 midterm."
 ---
 
-# COMP201 Study Guide 2: Pointers & Arrays
+# 2 - Pointers & Arrays — Study Guide
 
 **A comprehensive guide to understanding memory, pointers, and arrays in C — everything you need for the midterm.**
 
@@ -123,7 +123,7 @@ int *p = &x;
 
 Memory diagram:
 
-```
+```text
 Address:  0x1000    0x1008
 Content:  42        0x1000
 Variable: x         p
@@ -144,7 +144,7 @@ int *p = &x;
 
 After the assignment:
 
-```
+```text
 Address:  0x1000    0x1008
 Content:  100       0x1000
 Variable: x         p
@@ -163,7 +163,7 @@ int *q = &y;
 
 Memory diagram:
 
-```
+```text
 Address:  0x1000    0x1004    0x1008    0x1010
 Content:  42        17        0x1000    0x1004
 Variable: x         y         p         q
@@ -239,7 +239,7 @@ Why it doesn't work: When we call `swap(x, y)`, the function receives *copies* o
 
 Memory during `swap(5, 10)`:
 
-```
+```text
 main's stack:           swap's stack:
 Address: 0x100          Address: 0x200
 Value: 5 (x)           Value: 5 (a, copy of x)
@@ -287,7 +287,7 @@ int **pp = &p;      // pp points to p
 
 Memory diagram:
 
-```
+```text
 Address:  0x1000    0x1008    0x1010
 Content:  5         0x1000    0x1008
 Variable: x         p         pp
@@ -365,7 +365,7 @@ int arr[5];  // Allocates 5 * 4 = 20 bytes (assuming 4-byte ints)
 
 Memory diagram:
 
-```
+```text
 Address:  0x1000   0x1004   0x1008   0x100C   0x1010
 Index:    [0]      [1]      [2]      [3]      [4]
 Content:  ???      ???      ???      ???      ???
@@ -590,7 +590,7 @@ char *words[3] = {
 
 Memory diagram:
 
-```
+```text
 words array (on stack):
 words[0]: 0x2000 > 'a' 'p' 'p' 'l' 'e' '\0' (data segment)
 words[1]: 0x3000 > 'b' 'a' 'n' 'a' 'n' 'a' '\0' (data segment)
@@ -645,7 +645,7 @@ A string in C is just characters stored in memory, ending with a **null terminat
 
 Memory representation of "hello":
 
-```
+```text
 Address:  0x1000   0x1001   0x1002   0x1003   0x1004   0x1005
 Content:  'h'      'e'      'l'      'l'      'o'      '\0'
 ```
@@ -662,7 +662,7 @@ printf("%s\n", str);    // Hllo
 
 Memory diagram:
 
-```
+```text
 STACK:
 Address:  0x7ffd   0x7ffe   0x7fff   0x8000   0x8001   0x8002
 Content:  'H'      'e'      'l'      'l'      'o'      '\0'
@@ -680,7 +680,7 @@ str[0] = 'H';         // CRASH! Segmentation fault
 
 Memory diagram:
 
-```
+```text
 STACK:                        DATA SEGMENT:
 Address:  0x7ffd             Address:  0x2000
 Content:  0x2000             Content:  'h' 'e' 'l' 'l' 'o' '\0'
@@ -754,7 +754,7 @@ int *q = &y;     // q @ 0x110 = 0x104
 
 Memory state after declarations:
 
-```
+```text
 Address:  0x100   0x104   0x108   0x110
 Content:  10      20      0x100   0x104
 Variable: x       y       p       q
@@ -768,7 +768,7 @@ Continuing:
 
 Memory after `*p = 15`:
 
-```
+```text
 Address:  0x100   0x104   0x108   0x110
 Content:  15      20      0x100   0x104
 Variable: x       y       p       q
@@ -780,7 +780,7 @@ p = q;           // p is reassigned to point to y
 
 Memory after `p = q`:
 
-```
+```text
 Address:  0x100   0x104   0x108   0x110
 Content:  15      20      0x104   0x104
 Variable: x       y       p       q
@@ -792,7 +792,7 @@ Variable: x       y       p       q
 
 Memory after `*p = 25`:
 
-```
+```text
 Address:  0x100   0x104   0x108   0x110
 Content:  15      25      0x104   0x104
 Variable: x       y       p       q
@@ -828,7 +828,7 @@ int **c = &b;     // c points to b
 
 Memory state:
 
-```
+```text
 Address:  0x100   0x108   0x110
 Content:  5       0x100   0x108
 Variable: a       b       c
@@ -842,7 +842,7 @@ Continuing:
 
 Memory:
 
-```
+```text
 Address:  0x100   0x108   0x110
 Content:  10      0x100   0x108
 Variable: a       b       c
@@ -854,7 +854,7 @@ Variable: a       b       c
 
 Memory:
 
-```
+```text
 Address:  0x100   0x108   0x110
 Content:  20      0x100   0x108
 Variable: a       b       c
@@ -866,7 +866,7 @@ Variable: a       b       c
 
 Memory:
 
-```
+```text
 Address:  0x100   0x108   0x110
 Content:  21      0x100   0x108
 Variable: a       b       c
@@ -903,7 +903,7 @@ Evaluate:
 
 Memory diagram (assuming arr starts at 0x1000):
 
-```
+```text
 Address:  0x1000   0x1004   0x1008   0x100C   0x1010   0x1014
 Index:    [0]      [1]      [2]      [3]      [4]      [5]
 Content:  4        8        15       16       23       42

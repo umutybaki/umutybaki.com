@@ -4,13 +4,12 @@ date: "2026-04-14"
 description: "Self-contained notes on CSPs covering backtracking, arc consistency, and constraint propagation for COMP 341 AI."
 ---
 
-# Constraint Satisfaction Problems (CSPs) — Comprehensive Study Notes
+# Constraint Satisfaction Problems — Comprehensive Study Notes
 
 > **Course:** COMP 341 — Introduction to Artificial Intelligence, Asst. Prof. Barış Akgün, Koç University
 >
 > These notes are written to be **self-contained**: you should be able to learn every concept from scratch just by reading them.
 
----
 
 
 ## 1. Where CSPs Fit in AI Search
@@ -23,7 +22,6 @@ In **local search** (hill climbing, simulated annealing, genetic algorithms), th
 
 **CSPs** are something different from both. Like local search, the goal itself is what matters — not the path. But unlike both classical and local search, CSPs have a very *specific structure* to their states and goals. In standard search, a state is essentially a "black box" — it could be anything. The goal test could be any Boolean function you like. CSPs impose structure on these: a state is an *assignment of values to variables*, and the goal is defined by *constraints* between those variables. This structure is a gift. It means we can build **general-purpose algorithms** that work on *any* CSP, rather than needing a custom strategy for every new problem. The structure lets us use smart heuristics that apply broadly.
 
----
 
 ## 2. What Is a Constraint Satisfaction Problem?
 
@@ -45,7 +43,6 @@ An **assignment** is a mapping from variables to values. We say:
 
 Think of it this way: if you're filling out a crossword puzzle, the variables are the blank squares, the domains are the letters A–Z, and the constraints are that each row/column must spell a valid word.
 
----
 
 ## 3. CSP Formulation: Variables, Domains, Constraints
 
@@ -77,7 +74,6 @@ $$X_i \neq X_j \text{ for } i \neq j, \; i, j \in A \quad \text{(all-different c
 
 The `alldiff` constraint is especially common — it says "all these variables must take different values."
 
----
 
 ## 4. Classic Examples of CSPs
 
@@ -132,7 +128,7 @@ By choosing one variable per row, we've already eliminated the "same row" constr
 
 This is a puzzle where each letter stands for a digit, and the arithmetic must work out.
 
-```
+```text
     T W O
   + T W O
   -------
@@ -169,7 +165,6 @@ Alternatively, these can be decomposed into pairwise inequality constraints (whi
 
 CSPs show up everywhere: assignment problems (who teaches what class), timetabling (which class is offered when and where), hardware configuration, transportation scheduling, factory scheduling, floor planning, and many more. Many of these involve real-valued variables, which we'll discuss next.
 
----
 
 ## 5. Constraint Graphs
 
@@ -184,7 +179,6 @@ This graph structure is extremely useful. It tells us which variables interact a
 
 For constraints involving more than two variables (like cryptarithmetic), we can use a **constraint hypergraph** or introduce auxiliary nodes. In the cryptarithmetic example, the constraint graph uses small square nodes to represent the column constraints that connect multiple letter variables.
 
----
 
 ## 6. Varieties of CSPs and Constraints
 
@@ -206,7 +200,6 @@ For constraints involving more than two variables (like cryptarithmetic), we can
 
 **Preferences (soft constraints):** Sometimes you don't just want *any* solution — you want a *good* one. Soft constraints express preferences rather than hard requirements. For example, "red is better than green." These are often modeled as costs, turning the CSP into a **constrained optimization problem**. Methods for these are more involved and out of our scope, but local search can be used (how? — by using the number/severity of constraint violations as an evaluation function).
 
----
 
 ## 7. Solving CSPs as Search Problems
 
@@ -229,7 +222,6 @@ The path to a solution is irrelevant — we only care about the final assignment
 
 If we apply naive DFS without being smart about it, the branching factor at depth $l$ is $(n - l) \cdot d$ — we can choose any of the remaining $n - l$ variables and assign any of $d$ values. This gives $n! \cdot d^n$ leaves, which is astronomical.
 
----
 
 ## 8. Backtracking Search
 
@@ -245,7 +237,7 @@ Don't wait until you have a complete assignment to check if constraints are sati
 
 ### The Algorithm
 
-```
+```text
 function BACKTRACKING-SEARCH(csp) returns a solution, or failure
     return BACKTRACK({}, csp)
 
@@ -284,7 +276,6 @@ Imagine we color Australia starting with WA. We try WA = red. Then we move to NT
 
 Basic backtracking can solve the N-Queens problem for $n \approx 25$.
 
----
 
 ## 9. Improving Backtracking: Ordering Heuristics
 
@@ -333,7 +324,7 @@ This combination makes problems like the 1000-Queens feasible! However, it's imp
 Starting with all domains = $\{R, G, B\}$ and tie-breaking variable order: up-down, left-right from the map; tie-breaking value order: $R \to G \to B$.
 
 | Step | MRV | DH | LCV | Assignment |
-|------|-----|----|-----|------------|
+|:---|:---|:---|:---|:---|
 | 1 | All tied (3 values each) | SA (degree 5) | R (leaves most options) | SA = R |
 | 2 | WA, NT, Q, NSW, V (2 values each) | NT (degree 2 to unassigned) | G | WA = G |
 | 3 | NT, Q (still 2 each, but check) | NT | B | NT = B |
@@ -344,7 +335,6 @@ Starting with all domains = $\{R, G, B\}$ and tie-breaking variable order: up-do
 
 We didn't even need to backtrack in this example — the heuristics guided us straight to a solution! That's not always the case, but it illustrates how effective smart ordering can be.
 
----
 
 ## 10. Improving Backtracking: Filtering
 
@@ -376,7 +366,6 @@ Forward checking only propagates information from **assigned** variables to **un
 
 For example: after assigning WA = R and Q = G, forward checking tells us NT = $\{B\}$ and SA = $\{B\}$. But NT and SA are adjacent — they can't both be blue! Forward checking doesn't catch this because neither NT nor SA is assigned yet. We need something more powerful.
 
----
 
 ## 11. Arc Consistency and the AC-3 Algorithm
 
@@ -420,7 +409,7 @@ This arc is still consistent. Eventually, the process stabilizes and we've deriv
 
 AC-3 is the standard algorithm for enforcing arc consistency on a CSP.
 
-```
+```text
 function AC-3(csp) returns false if inconsistency found, true otherwise
     inputs: csp, a binary CSP with components (X, D, C)
     local variables: queue, a queue of arcs, initially all arcs in csp
@@ -467,7 +456,7 @@ A more efficient version called **AC-4** achieves $O(n^2 d^2)$, but in practice 
 ### 11.5 Arc Consistency vs. Forward Checking
 
 | Property | Forward Checking | Arc Consistency |
-|----------|-----------------|-----------------|
+|:---|:---|:---|
 | What it checks | Arcs from neighbors to the just-assigned variable | All arcs in the entire CSP |
 | When values are removed | Only from domains of neighbors of the assigned variable | From any variable's domain |
 | Failure detection | Can miss some failures (e.g., two unassigned neighbors both forced to same value) | Catches more failures, earlier |
@@ -477,7 +466,6 @@ A more efficient version called **AC-4** achieves $O(n^2 d^2)$, but in practice 
 
 If you run AC, you don't need to run FC separately — AC already does everything FC does, and more.
 
----
 
 ## 12. Problem Structure
 
@@ -493,7 +481,6 @@ However, it's rare to find completely disconnected subproblems in practice — m
 
 > **Note from the lecture:** This topic was **skipped for Spring 2025** and the related slides were removed. It's mentioned here for completeness, but you likely won't be tested on the details of tree decomposition or cutset conditioning.
 
----
 
 ## 13. Local Search for CSPs: Min-Conflicts
 
@@ -501,7 +488,7 @@ In addition to backtracking (which builds a solution from scratch), we can solve
 
 ### 13.1 The Min-Conflicts Algorithm
 
-```
+```text
 function MIN-CONFLICTS(csp, max_steps) returns a solution or failure
     inputs: csp, a constraint satisfaction problem
             max_steps, the number of steps allowed before giving up
@@ -624,7 +611,7 @@ if __name__ == "__main__":
             print(f"  {var} = row {solution[var]}")
     else:
         print("No solution found within max_steps.")
-```
+```text
 
 **Sample output:**
 ```
@@ -635,7 +622,6 @@ Solution found:
   Q3 = row 2
 ```
 
----
 
 ## 14. Summary & Comparison Table
 
@@ -646,7 +632,7 @@ CSPs are a special kind of search problem where states are partial assignments o
 ### Algorithm Comparison
 
 | Method | Type | Complete? | Handles Structure? | Key Idea |
-|--------|------|-----------|-------------------|----------|
+|:---|:---|:---|:---|:---|
 | **Naive DFS** | Systematic | Yes (finite domains) | No | Try all assignments; $n! \cdot d^n$ leaves |
 | **Backtracking** | Systematic | Yes (finite domains) | Partially | Fix variable ordering + check constraints incrementally; $d^n$ leaves |
 | **BT + MRV/DH/LCV** | Systematic | Yes | Yes (ordering) | Smart variable and value ordering; fail-fast + succeed-first |
@@ -657,7 +643,7 @@ CSPs are a special kind of search problem where states are partial assignments o
 ### Filtering Comparison
 
 | Property | Forward Checking | Arc Consistency (AC-3) |
-|----------|-----------------|----------------------|
+|:---|:---|:---|
 | Speed per assignment | Fast | $O(n^2 d^3)$ |
 | Failure detection | Misses some | Catches more failures, earlier |
 | Works with MRV? | Yes (required for MRV) | Yes |
@@ -667,7 +653,7 @@ CSPs are a special kind of search problem where states are partial assignments o
 ### Ordering Heuristic Summary
 
 | Heuristic | Decides | Strategy | Intuition |
-|-----------|---------|----------|-----------|
+|:---|:---|:---|:---|
 | **MRV** | Which *variable* to assign next | Pick variable with fewest remaining values | Fail-fast: detect dead ends early |
 | **Degree Heuristic** | Tiebreaker for variable selection | Pick variable with most constraints on unassigned vars | Most influential variable first |
 | **LCV** | Which *value* to try first | Pick value that rules out fewest options for neighbors | Succeed-first: maximize flexibility |
@@ -676,6 +662,5 @@ CSPs are a special kind of search problem where states are partial assignments o
 
 CSPs give us powerful general-purpose tools because of their structured formulation. Backtracking search is the baseline solver. Smart ordering (MRV + DH for variables, LCV for values) dramatically speeds up search. Filtering (forward checking and arc consistency) prunes the search space by detecting dead ends early. For very large CSPs, local search with Min-Conflicts can be surprisingly effective, solving millions-of-queens problems in near-constant time, though it struggles at the critical constraint ratio.
 
----
 
 *These notes cover all material from the COMP 341 Lecture 6 — Constraint Satisfaction Problems by Asst. Prof. Barış Akgün, Koç University. Good luck studying!*

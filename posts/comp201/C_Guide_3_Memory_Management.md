@@ -1,16 +1,15 @@
 ---
-title: "Memory Management — Stack, Heap, and Memory Bugs"
+title: "3 - Memory Management — Stack, Heap, and Memory Bugs"
 date: "2026-04-14"
 description: "Comprehensive guide to stack, heap, dynamic allocation, and memory bug categories for the COMP 201 midterm."
 ---
 
-# Memory Management — Stack, Heap, and Memory Bugs
+# 3 - Memory Management — Stack, Heap, and Memory Bugs
 
 ## Introduction
 
 Memory management is one of the most heavily tested topics on COMP201 midterms. This guide covers the stack, heap, dynamic allocation functions (malloc, calloc, realloc, strdup), freeing memory, and the 13 critical memory bug categories that appear repeatedly in exam problems. Understanding these concepts deeply—not just memorizing them—is essential for success.
 
----
 
 ## Part 1: The Stack
 
@@ -86,7 +85,6 @@ int main() {
 
 **The fix**: Allocate the string on the **heap** instead, which persists until explicitly freed.
 
----
 
 ## Part 2: The Heap
 
@@ -146,7 +144,6 @@ int main() {
 
 **Key insight**: With the heap, we explicitly allocate memory that outlives the function, return a pointer to it, and trust the caller to free it when done.
 
----
 
 ## Part 3: Dynamic Memory Allocation Functions
 
@@ -304,7 +301,6 @@ free(copy);
 - When you need to modify the string
 - When the original string might be deallocated before you're done using it
 
----
 
 ## Part 4: Freeing Memory
 
@@ -397,7 +393,6 @@ Valgrind is a tool that tracks every malloc and free call. It reports:
 
 For the exam, understand the **concept**: Valgrind is tracking whether every allocation has a matching free.
 
----
 
 ## Part 5: Stack vs Heap Comparison
 
@@ -429,7 +424,6 @@ For the exam, understand the **concept**: Valgrind is tracking whether every all
 
 **General Principle**: Unless a situation requires heap allocation, stack allocation is preferred. However, many programs mix both—using the stack for fixed-size structures and the heap for dynamically-sized data.
 
----
 
 ## Part 6: The 13 Memory Bug Types
 
@@ -996,7 +990,6 @@ nums[4] = 99;
 // *(nums + 12) = 42;  // Moves 12 elements, not 12 bytes!
 ```
 
----
 
 ## Part 7: Stack vs Heap: Common Exam Patterns
 
@@ -1082,7 +1075,6 @@ int main() {
 }
 ```
 
----
 
 ## Part 8: Common Exam Traps
 
@@ -1248,7 +1240,6 @@ free(node->data);  // Free the contained data first
 free(node);        // Then free the struct
 ```
 
----
 
 ## Part 9: Exam-Style Practice Problems
 
@@ -1295,7 +1286,6 @@ char *concat(const char *s1, const char *s2) {
 - What if malloc fails? (Return NULL and let caller check)
 - What if the strings are very large? (Still works; malloc handles it)
 
----
 
 ### Problem 2: Array of Strings
 
@@ -1345,7 +1335,6 @@ char **copy_strings(const char *const *strings, int count) {
 - What if one of the original strings is NULL? (Handle it or document assumptions)
 - What if strdup fails? (Cleanup partially allocated strings)
 
----
 
 ### Problem 3: Dynamic Array Growth with Realloc
 
@@ -1402,7 +1391,6 @@ void free_array(IntArray *arr) {
 - What if realloc fails? (Don't modify arr, return error)
 - What if we shrink? (Similar logic, but half capacity)
 
----
 
 ### Problem 4: Memory Bug Identification
 
@@ -1451,7 +1439,6 @@ int main() {
 }
 ```
 
----
 
 ## Conclusion
 

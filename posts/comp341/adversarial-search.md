@@ -10,7 +10,6 @@ description: "Self-contained notes on adversarial search covering minimax, alpha
 >
 > These notes are written to be **self-contained**: you should be able to learn every concept from scratch just by reading them.
 
----
 
 
 ## 1. Why Adversarial Search?
@@ -25,14 +24,13 @@ There's also a practical constraint: **time limits**. In most games, you can't a
 
 This section of the course focuses on two key ideas: pruning states to enable deeper search (alpha-beta pruning), and approximately evaluating how promising a game state is (evaluation functions). More advanced topics like using machine learning or sample-based search (e.g., Monte Carlo Tree Search) are mentioned in the lecture as being outside the scope of this course but are covered in the RL part.
 
----
 
 ## 2. Types of Games
 
 Games can be classified along two dimensions: whether they are **deterministic** or **stochastic**, and whether they have **perfect** or **imperfect** information.
 
 |                          | **Deterministic**                  | **Stochastic**                          |
-|--------------------------|------------------------------------|-----------------------------------------|
+|:---|:---|:---|
 | **Perfect information**  | chess, checkers, go, othello       | backgammon, monopoly                    |
 | **Imperfect information**| battleship, blind tictactoe, kriegspiel | bridge, poker, scrabble, nuclear war |
 
@@ -44,7 +42,6 @@ For most of this lecture, we focus on **turn-taking, 2-player, zero-sum games**.
 
 The ideas we develop here *can* be expanded to multiplayer competitive games and even general games where agents have independent utilities and cooperation, indifference, or competition are all possible. But the 2-player zero-sum case is the cleanest starting point.
 
----
 
 ## 3. Problem Formulation for Deterministic Games
 
@@ -64,7 +61,6 @@ To apply search techniques to games, we need a formal way to describe them. Here
 
 **Terminal Utilities** $(s \times p) \rightarrow c$: A scalar value for each terminal state and player. In tic-tac-toe: +1 if player X wins, −1 if player O wins, 0 for a draw.
 
----
 
 ## 4. From Single-Agent to Adversarial Trees
 
@@ -98,7 +94,6 @@ At **terminal states**, $V(s)$ is simply the known utility.
 
 Think of it this way: you're playing a game against someone who is trying to make your life as difficult as possible. You assume the worst case at every opponent's turn and the best case at every one of your turns.
 
----
 
 ## 5. The Minimax Algorithm
 
@@ -112,7 +107,7 @@ Why "minimax"? Because one player **max**imizes the game value and the other **m
 
 The algorithm uses three mutually recursive functions:
 
-```
+```text
 function VALUE(state):
     if state is a terminal state: return the state's utility
     if the next agent is MAX: return MAX-VALUE(state)
@@ -133,7 +128,7 @@ function MIN-VALUE(state):
 
 To actually pick the best move (not just its value), we use:
 
-```
+```text
 function GET-BEST-ACTION(state):
     return argmax over a ∈ Actions(state) of VALUE(S(state, a))
 ```
@@ -284,7 +279,6 @@ if __name__ == "__main__":
     #   Best action for MAX at A: go to B
 ```
 
----
 
 ## 6. Minimax Worked Example
 
@@ -326,7 +320,6 @@ The key insight: even though B has a terminal state with value 12, MIN won't let
 
 Note that MIN has not actually played yet — we've just *simulated* what a rational MIN would do, and chose $a_1$ based on that simulation. These computed values at intermediate nodes are called the **minimax values**.
 
----
 
 ## 7. Minimax Properties & Analysis
 
@@ -342,7 +335,6 @@ Consider this example from the slides: a MAX node with two MIN children, termina
 
 **The problem in practice:** For chess, $b \approx 35$ and $m \approx 100$. That means $35^{100}$ nodes — a number so large it's beyond astronomical. We clearly can't explore the entire tree. This motivates the next two ideas: alpha-beta pruning and depth-limited search.
 
----
 
 ## 8. Alpha-Beta Pruning
 
@@ -368,7 +360,7 @@ These values get updated as the search progresses and are passed down the tree. 
 
 ### Formal Pseudocode
 
-```
+```text
 function MAX-VALUE(state, α, β):
     initialize v = -∞
     for each successor of state:
@@ -503,7 +495,6 @@ if __name__ == "__main__":
     demo_alpha_beta()
 ```
 
----
 
 ## 9. Alpha-Beta Worked Example
 
@@ -540,7 +531,6 @@ Why does this work? MAX already knows it can get 3 (via B). C's first child give
 
 **Total savings:** We saved ourselves from looking at 2 nodes ($c_2, c_3$ were pruned at C; and the early return at D saved examining beyond $d_3$). In this small example the savings are modest, but in more complex games, pruning can be enormous.
 
----
 
 ## 10. Alpha-Beta Properties
 
@@ -559,7 +549,6 @@ Even with perfect ordering, full search of big games like chess remains hopeless
 
 **Metareasoning:** Alpha-beta is a simple example of *metareasoning* — computing about what to compute. Instead of blindly evaluating every node, we reason about which nodes are worth evaluating.
 
----
 
 ## 11. Resource Limits & Depth-Limited Search
 
@@ -587,7 +576,6 @@ A clever technique is to use **iterative deepening**: first search to depth 1, t
 
 A crucial insight: **searching deeper is always better**, even with an imperfect evaluation function. The deeper you search, the less the quality of the evaluation function matters, because you're relying more on actual game tree structure and less on approximation. There's a fundamental tradeoff between the complexity of the evaluation function (how accurate it is) and the complexity of the computation (how deep you can search). Often, a simpler but faster evaluation function that lets you search deeper outperforms a more accurate but slower one.
 
----
 
 ## 12. Evaluation Functions
 
@@ -620,7 +608,6 @@ An important observation from the lecture: the **actual numerical values** of th
 
 This means our evaluation function doesn't need to predict exact minimax values; it just needs to correctly rank positions from best to worst.
 
----
 
 ## 13. Stochastic Games & Expectiminimax
 
@@ -651,7 +638,7 @@ MAX and MIN nodes keep their normal behavior. This gives us the **Expectiminimax
 
 ### Expectiminimax Pseudocode
 
-```
+```text
 function VALUE(state):
     if terminal: return utility
     if next agent is MAX: return MAX-VALUE(state)
@@ -790,7 +777,6 @@ if __name__ == "__main__":
     demo_expectiminimax()
 ```
 
----
 
 ## 14. Expectiminimax Worked Example
 
@@ -819,12 +805,11 @@ Let's trace through the lecture's expectiminimax example step by step.
 
 The chance nodes represent the uncertainty — you don't know which random outcome will occur, but on average, the left branch gives you an expected value of 3, while the right gives −1. A rational player picks left.
 
----
 
 ## 15. Summary & Comparison Table
 
 | Property | Minimax | Alpha-Beta Pruning | Depth-Limited + Eval | Expectiminimax |
-|---|---|---|---|---|
+|:---|:---|:---|:---|:---|
 | **Game type** | Deterministic, zero-sum | Deterministic, zero-sum | Deterministic, zero-sum | Stochastic, zero-sum |
 | **Complete?** | Yes (finite tree) | Yes (finite tree) | No (cuts off early) | Yes (finite tree) |
 | **Optimal?** | Yes (vs optimal opponent) | Yes (same as minimax) | No (eval is approximate) | Yes (vs optimal opponent + known probabilities) |
@@ -839,6 +824,5 @@ The lecture builds a progression of ideas, each solving a limitation of the prev
 
 Together, these techniques form the backbone of classical game-playing AI. More modern approaches (like Monte Carlo Tree Search used in AlphaGo, or deep reinforcement learning) build on these foundations — but understanding minimax, alpha-beta, and evaluation functions is essential groundwork.
 
----
 
 *These notes cover all material from the COMP 341 Adversarial Search lecture (75 slides). Good luck studying!*

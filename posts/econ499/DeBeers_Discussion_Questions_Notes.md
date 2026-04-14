@@ -12,7 +12,6 @@ description: "In-depth analytical responses to discussion questions on the De Be
 >
 > These notes provide **in-depth analytical responses** to each discussion question, grounded in the case material and antitrust economics theory. The De Beers case exemplifies fundamental tensions in antitrust law between protecting competition (as a process) and protecting consumers (as an outcome), between prosecuting conduct and dismantling structures, and between domestic market power and international commerce.
 
----
 
 
 ## 1. Antitrust Fundamentals and Jurisdiction
@@ -62,7 +61,6 @@ This explains the DOJ's repeated failures despite De Beers's candid admissions. 
 
 The DOJ's failures weren't due to weakness in antitrust theory or reluctance to prosecute monopoly. Rather, they reflected three barriers: (1) **jurisdictional gaps** created by De Beers's foreign structure and minimal U.S. presence; (2) **evidentiary challenges** in proving conspiracy without direct communications; and (3) **timing advantages** available to defendants who could act preemptively to eliminate jurisdictional hooks (like the Christensen divestiture). These failures ultimately motivated the shift toward the effects doctrine and the 2004 settlement, discussed below.
 
----
 
 ### (b) Legal Mapping
 
@@ -120,7 +118,6 @@ What emerges from this mapping is a picture of extraordinary legal violation. De
 
 The legal case against De Beers, from a statutory perspective, is perhaps one of the strongest imaginable. The challenge was never the law's clarity but rather jurisdictional and evidentiary barriers—the subject of question (a).
 
----
 
 ### (c) The Effects Doctrine
 
@@ -178,7 +175,6 @@ It's important to note that the effects doctrine has limits. Courts reserve the 
 
 The effects doctrine represents a conceptual revolution: it reframes antitrust jurisdiction from a territorial/nationality basis to a *substantive effects* basis. If your conduct affects U.S. markets, U.S. courts have jurisdiction, period. For De Beers, the doctrine eliminated the geographic shield that had protected it for decades. Once *Hartford Fire* and the DOJ guidelines clarified that the effects doctrine applied, De Beers's exposure became acute—ultimately motivating the 2004 settlement that ended decades of evasion.
 
----
 
 ## 2. Competition Theory and Consumer Welfare
 
@@ -238,7 +234,6 @@ For policy, the power concentration view should take priority. Here's why:
 
 While modern antitrust rhetoric emphasizes consumer welfare, the De Beers case suggests that preventing concentration of power should remain a co-equal goal. De Beers's market power was so extraordinary that letting it stand would corrupt the competitive process regardless of current consumer sentiment. The answer: both goals matter, but when they conflict, the structural concern—preventing extreme concentration of power—should prevail. De Beers's monopoly power itself, not just its effects, justified antitrust action.
 
----
 
 ### (b) The Chicago School Paradox
 
@@ -339,7 +334,6 @@ If anything, allowing De Beers's justification would corrupt antitrust law. Ever
 
 De Beers's Chicago School argument reveals a paradox: economic theory (consumer welfare maximization) seems to permit the argument, but antitrust doctrine correctly rejects it. The resolution is that per se rules are themselves economically efficient—they presume that certain conduct (horizontal cartels) harms consumer welfare based on economic theory and experience, without requiring case-by-case proof. De Beers's price fixing and market allocation are per se illegal, and stability claims don't justify them. The rule of reason applies to unilateral or vertical conduct; it doesn't apply to De Beers's horizontal coordination.
 
----
 
 ### (c) Conceptual Welfare Calculation: Deadweight Loss and Producer Surplus
 
@@ -553,7 +547,6 @@ Moreover, this analysis assumes De Beers's prices were set with optimal monopoly
 
 The fundamental principle: **competition is presumed superior to monopoly not because its outcomes are always optimal in every dimension, but because monopoly's concentrated power and deadweight loss exceed the gains from any claimed benefits.** De Beers's case, even under the most favorable assumptions about stability, doesn't overcome this presumption.
 
----
 
 ## 3. Market Definition and Monopoly Power
 
@@ -660,7 +653,6 @@ The correct relevant market is **gem diamonds** (or "gem-quality rough diamonds 
 
 With the gem diamonds market definition, De Beers's 60-80% market share is presumptively monopolistic, and the antitrust case succeeds at the market power stage. This is precisely why De Beers argued for broader market definitions in litigation—it understood that narrow definitions spelled trouble.
 
----
 
 ### (b) Barriers to Entry: Natural vs. Artificial
 
@@ -759,7 +751,7 @@ When Zaire threatened independent sales in the 1980s, De Beers retaliated throug
 **Summary: Natural vs. Artificial Barriers**
 
 | Barrier | Type | Source | Exploitative? |
-|---------|------|--------|---|
+|:---------|:------|:--------|:---|
 | Kimberlite deposits | Natural | Geology | No—De Beers can't create deposits |
 | Economies of scale | Natural | Technology | No—legitimate efficiency advantage |
 | Brand capital | Natural | Past investment | No—competitors can build competing brands |
@@ -783,7 +775,6 @@ This justified the DOJ's enforcement efforts and, ultimately, the 2004 settlemen
 
 While De Beers benefited from some legitimate natural barriers (geological deposits, scale economies), it erected and maintained substantial artificial barriers to foreclose competition. These artificial barriers—exclusive agreements, the sightholder system, stockpiling, purging, retaliation—are classic antitrust violations. Their removal would allow meaningful competition, benefiting consumers while preserving De Beers's natural advantages (access to deposits, efficient operations).
 
----
 
 ### (c) Essential Facilities Doctrine
 
@@ -903,7 +894,6 @@ The CSO/sightholder system arguably meets most elements of the essential facilit
 
 Instead, the essential facilities doctrine's practical impact is that courts could order divestiture or separation of the CSO from De Beers's mining operations—a remedy that aligns with essential facilities thinking even if the doctrine isn't explicitly invoked.
 
----
 
 ## 4. Remedies and Modern Implications
 
@@ -1073,7 +1063,6 @@ The remedy would be: **Divest CSO; separate mining from distribution; transform 
 
 This remedy is ambitious but justified by the severity and persistence of De Beers's conduct.
 
----
 
 ### (b) Supplier of Choice Strategy: From Horizontal Collusion to Vertical Contracts
 
@@ -1202,7 +1191,6 @@ A dominant firm cannot escape antitrust liability by structuring monopolistic co
 
 De Beers's shift from horizontal CSO collusion to vertical SoC contracts does not reduce antitrust vulnerability. While the shift nominally moves from per se to rule of reason analysis, the conduct remains fundamentally anticompetitive in its effects: coordinating prices, allocating markets, and foreclosing competitors. The 2004 settlement confirmed that the SoC model, like the CSO model before it, violates antitrust law. De Beers's vulnerability is **equal or greater** under SoC because the conduct is more disguised and therefore harder to defend on legitimate business grounds.
 
----
 
 ### (c) Modern Platform Monopolies: Lessons from De Beers for Google, Amazon, Facebook
 
@@ -1346,7 +1334,6 @@ De Beers offers a profound template for analyzing modern platform monopolies. Th
 
 The De Beers settlement (and the failed prosecutions preceding it) teaches that antitrust enforcement takes decades and requires updated legal theories (effects doctrine, essential facilities analysis) to overcome jurisdictional and evidentiary barriers. Modern antitrust against platforms should move more quickly, learning from De Beers's persistence and evolving legal doctrines rather than waiting for dramatic prosecutions.
 
----
 
 ### (d) The Settlement Dilemma: Why De Beers Settled in 2004
 
@@ -1508,7 +1495,6 @@ The settlement can be understood as De Beers's acknowledgment that its 60-year m
 
 This lesson applies to modern platform monopolies: dominant firms that anticipate antitrust pressure may prefer proactive settlement and business model transformation to drawn-out litigation and risky adverse precedent. The settlement doesn't defeat antitrust law; rather, it channels antitrust pressure into business innovation.
 
----
 
 ## 5. Technological Disruption: The Synthetic Diamond Threat
 
@@ -1606,7 +1592,6 @@ The lab-grown question exemplifies a deeper principle: **technological disruptio
 
 Lab-grown diamonds should **not** be included in the relevant natural diamond market for antitrust purposes (yet), because demand-side differentiation and switching costs remain significant. However, they should be included when assessing De Beers's **long-term competitive constraints** and business risk. The paradox—that broad market definition helps antitrust but hurts business—reveals that antitrust law and technology both limit monopoly power. De Beers's exposure is ultimately not from one or the other, but from both: DOJ enforcement (narrowly defined market, monopoly power) and technological disruption (lab-grown competition). De Beers's settlement and Lightbox launch represent attempts to address both threats simultaneously.
 
----
 
 ### (b) Lightbox Strategy: Predatory Pricing or Strategic Signaling?
 
@@ -1750,7 +1735,6 @@ From an antitrust perspective, this strategy is **risky but likely defensible**.
 
 The deeper insight: **Lightbox exemplifies how dominant firms can adapt to technological disruption in ways that don't obviously violate antitrust law while still leveraging market dominance.** Rather than monopolistically priced natural diamonds (vulnerable to antitrust), De Beers now offers dual products—premium natural, commodity lab-grown—maintaining market power while accommodating competition. This is legal, if controversial.
 
----
 
 ### (c) Information Asymmetry and Lemons Problem: Labeling Laws as Pro- or Exclusionary?
 
@@ -1880,7 +1864,6 @@ De Beers's lobbying for mandatory labeling laws is **exclusionary, not pro-compe
 
 From an antitrust perspective, this conduct is troubling but legally defensible (lobbying is protected). From an economic policy perspective, it's a textbook example of regulatory capture—using government to entrench market power. The remedy is transparency about De Beers's financial interest in labeling (require disclosure that natural diamond producers funded labeling advocacy) and resistance to mandatory disclosure rules without genuine consumer protection rationale.
 
----
 
 ## 6. Comparative and Policy Debate
 
@@ -2019,7 +2002,6 @@ Neither approach is clearly superior. The U.S. approach respects business freedo
 
 De Beers's settlement in 2004 represents a convergence: behavioral remedies (EU-style requirement to cease exclusionary conduct) applied to a firm subject to effects doctrine jurisdiction (U.S.-style). The case shows that despite different paths, both systems ultimately protected consumers and limited De Beers's monopoly power, albeit after lengthy delays.
 
----
 
 ## Conclusion: Synthesizing the De Beers Case
 
@@ -2039,7 +2021,6 @@ The De Beers case traverses six dimensions of antitrust economics and law:
 
 These lessons extend far beyond diamonds. Modern platform monopolies (Google, Amazon, Facebook) face similar challenges: network effects and switching costs that create dominance; exclusive dealing and vertical integration that raise foreclosure concerns; technological disruption (AI, new platforms) that threatens current monopolies. De Beers's case provides both a roadmap (effects doctrine, dominance analysis, remedy design) and a warning (how long antitrust enforcement can take if jurisdictional and evidentiary barriers exist).
 
----
 
 **End of Notes**
 
