@@ -42,7 +42,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
   transition: background-color var(--transition-med), color var(--transition-med);
 }
@@ -335,12 +335,27 @@ html[lang="tr"] .lang-label.tr {
 }
 
 /* Blog post page */
-.blog-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+.blog-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 0 1rem;
   position: relative;
   z-index: 1;
+}
+
+.blog-container {
+  max-width: 800px;
+  width: 100%;
+  padding: 2rem 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.blog-toc-sidebar {
+  flex: 0 0 220px;
+  padding-top: 2rem;
 }
 
 .back-link {
@@ -363,6 +378,74 @@ html[lang="tr"] .lang-label.tr {
   background-color: transparent !important;
   margin-top: 2rem;
   transition: color 0.3s ease;
+}
+
+/* Table of contents */
+.toc {
+  position: sticky;
+  top: 5rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.toc::-webkit-scrollbar {
+  display: none;
+}
+
+.toc-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.toc-list {
+  list-style: none;
+  border-left: 1px solid var(--border-color);
+}
+
+.toc-item {
+  line-height: 1.4;
+}
+
+.toc-depth-2 {
+  padding-left: 0.75rem;
+}
+
+.toc-depth-3 {
+  padding-left: 1.5rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  line-height: 1.4;
+}
+
+.toc-link:hover {
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+.toc-link-active {
+  color: var(--accent-color);
+  border-left-color: var(--accent-color);
+}
+
+@media (max-width: 1100px) {
+  .blog-toc-sidebar {
+    display: none;
+  }
 }
 
 /* Home page */

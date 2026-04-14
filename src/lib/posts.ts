@@ -6,9 +6,16 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import remarkRehype from 'remark-rehype'
 import rehypeKatex from 'rehype-katex'
+import rehypeSlug from 'rehype-slug'
 import rehypeStringify from 'rehype-stringify'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
+
+export interface TocItem {
+  id: string
+  text: string
+  depth: number
+}
 
 export interface PostMeta {
   slug: string
@@ -20,6 +27,30 @@ export interface PostMeta {
 
 export interface Post extends PostMeta {
   contentHtml: string
+  headings: TocItem[]
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function extractHeadings(content: string): TocItem[] {
+  const headings: TocItem[] = []
+  const lines = content.split('\n')
+  for (const line of lines) {
+    const match = line.match(/^(#{2,3})\s+(.+)$/)
+    if (match) {
+      const depth = match[1].length
+      const text = match[2].trim()
+      const id = slugify(text)
+      headings.push({ id, text, depth })
+    }
+  }
+  return headings
 }
 
 export function getAllPosts(): PostMeta[] {
@@ -72,9 +103,11 @@ export async function getPost(category: string, slug: string): Promise<Post> {
     .use(remarkMath)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeKatex)
+    .use(rehypeSlug)
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content)
   const contentHtml = processed.toString()
+  const headings = extractHeadings(content)
 
   return {
     slug,
@@ -83,6 +116,7 @@ export async function getPost(category: string, slug: string): Promise<Post> {
     date: data.date ?? '',
     description: data.description ?? '',
     contentHtml,
+    headings,
   }
 }
 
