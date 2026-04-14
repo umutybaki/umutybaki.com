@@ -74,7 +74,7 @@ export default function Home() {
               <line x1="16" y1="17" x2="8" y2="17" />
               <polyline points="10 9 9 9 8 9" />
             </svg>
-            Blog
+            Lecture Notes
           </a>
         </div>
       </section>

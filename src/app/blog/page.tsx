@@ -3,7 +3,7 @@ import { getPostsByCategory } from '@/lib/posts'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog — Umut Yalçın Baki',
+  title: 'Lecture Notes — Umut Yalçın Baki',
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -17,7 +17,7 @@ export default function BlogPage() {
 
   return (
     <main className="container">
-      <h1 className="section-title reveal active">Blog</h1>
+      <h1 className="section-title reveal active">Lecture Notes</h1>
 
       {Object.entries(postsByCategory).map(([category, posts]) => (
         <div key={category} className="blog-category reveal active">

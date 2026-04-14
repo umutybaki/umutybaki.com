@@ -46,7 +46,7 @@ export default async function PostPage({ params }: Props) {
           >
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          Back to Blog
+          Back to Lecture Notes
         </Link>
 
         <article
