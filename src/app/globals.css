@@ -40,6 +40,10 @@
   padding: 0;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   background-color: var(--bg-color);
@@ -358,6 +362,21 @@ html[lang="tr"] .lang-label.tr {
 
 [lang="en"] .lang-tr {
   display: none !important;
+}
+
+/* Accordion */
+.accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease;
+}
+
+.accordion-body.open {
+  grid-template-rows: 1fr;
+}
+
+.accordion-body-inner {
+  overflow: hidden;
 }
 
 /* Blog listing */

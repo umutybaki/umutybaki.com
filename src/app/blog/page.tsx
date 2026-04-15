@@ -1,6 +1,9 @@
-import Link from 'next/link'
 import { getPostsByCategory } from '@/lib/posts'
 import type { Metadata } from 'next'
+import PageTitle from '@/components/PageTitle'
+import PostList from '@/components/PostList'
+import PostListItem from '@/components/PostListItem'
+import Accordion from '@/components/Accordion'
 
 export const metadata: Metadata = {
   title: 'Lecture Notes — Umut Yalçın Baki',
@@ -17,22 +20,26 @@ export default function BlogPage() {
 
   return (
     <main className="container">
-      <h1 className="section-title reveal active">Lecture Notes</h1>
+      <PageTitle>Lecture Notes</PageTitle>
 
-      <ul className="blog-post-list">
-        {Object.keys(postsByCategory).map((category) => (
-          <li key={category} className="blog-post-item">
-            <Link href={`/blog/${category}`} className="blog-post-link">
-              <span className="blog-post-title">
-                {CATEGORY_LABELS[category] ?? category}
-              </span>
-              <span className="blog-post-date">
-                {postsByCategory[category].length} notes
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {Object.keys(postsByCategory).map((category) => (
+        <Accordion
+          key={category}
+          title={CATEGORY_LABELS[category] ?? category}
+          defaultOpen
+        >
+          <PostList>
+            {postsByCategory[category].map((post) => (
+              <PostListItem
+                key={post.slug}
+                href={`/blog/${category}/${post.slug}`}
+                title={post.title}
+                meta={post.date}
+              />
+            ))}
+          </PostList>
+        </Accordion>
+      ))}
     </main>
   )
 }

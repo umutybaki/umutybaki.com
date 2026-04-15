@@ -1,6 +1,9 @@
-import Link from 'next/link'
 import { getPostsByCategory } from '@/lib/posts'
 import type { Metadata } from 'next'
+import BackLink from '@/components/BackLink'
+import PageTitle from '@/components/PageTitle'
+import PostList from '@/components/PostList'
+import PostListItem from '@/components/PostListItem'
 
 const CATEGORY_LABELS: Record<string, string> = {
   comp201: 'COMP 201 — Computer Systems & Programming',
@@ -33,39 +36,20 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <main className="container">
-      <Link href="/blog" className="back-link">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-        All Categories
-      </Link>
+      <BackLink href="/blog" label="All Categories" />
 
-      <h1 className="section-title reveal active">{label}</h1>
+      <PageTitle>{label}</PageTitle>
 
-      <ul className="blog-post-list">
+      <PostList>
         {posts.map((post) => (
-          <li key={post.slug} className="blog-post-item">
-            <Link
-              href={`/blog/${category}/${post.slug}`}
-              className="blog-post-link"
-            >
-              <span className="blog-post-title">{post.title}</span>
-              {post.date && (
-                <span className="blog-post-date">{post.date}</span>
-              )}
-            </Link>
-          </li>
+          <PostListItem
+            key={post.slug}
+            href={`/blog/${category}/${post.slug}`}
+            title={post.title}
+            meta={post.date}
+          />
         ))}
-      </ul>
+      </PostList>
     </main>
   )
 }

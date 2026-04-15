@@ -1,8 +1,8 @@
 import { getAllPostParams, getPost } from '@/lib/posts'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import MarkdownTheme from '@/components/MarkdownTheme'
 import TableOfContents from '@/components/TableOfContents'
+import BackLink from '@/components/BackLink'
 
 interface Props {
   params: Promise<{ category: string; slug: string }>
@@ -33,21 +33,7 @@ export default async function PostPage({ params }: Props) {
       </aside>
 
       <main className="blog-container">
-        <Link href={`/blog/${category}`} className="back-link">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          Back to Category
-        </Link>
+        <BackLink href={`/blog/${category}`} label="Back to Category" />
 
         <article
           className="markdown-body"
