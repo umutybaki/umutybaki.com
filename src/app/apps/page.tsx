@@ -21,7 +21,7 @@ export default function AppsPage() {
           <ul className="blog-post-list">
             <li className="blog-post-item">
               <a
-                href="https://github.com/umutybaki/portwatcher"
+                href="https://portwatcher.umutybaki.com"
                 className="blog-post-link app-item-link"
                 target="_blank"
                 rel="noopener noreferrer"
