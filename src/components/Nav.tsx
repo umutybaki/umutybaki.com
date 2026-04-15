@@ -45,9 +45,9 @@ export default function Nav() {
         </Link>
         
         <div className="nav-centered-links">
-          <Link href="/apps" className="nav-link">
-            <span className="lang-en">Apps</span>
-            <span className="lang-tr">Uygulamalar</span>
+          <Link href="/projects" className="nav-link">
+            <span className="lang-en">Projects</span>
+            <span className="lang-tr">Projeler</span>
           </Link>
           <Link href="/blog" className="nav-link">
             <span className="lang-en">Blog</span>
@@ -131,9 +131,9 @@ export default function Nav() {
             <span className="lang-en">Home</span>
             <span className="lang-tr">Ana Sayfa</span>
           </Link>
-          <Link href="/apps" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="lang-en">Apps</span>
-            <span className="lang-tr">Uygulamalar</span>
+          <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)}>
+            <span className="lang-en">Projects</span>
+            <span className="lang-tr">Projeler</span>
           </Link>
           <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>
             <span className="lang-en">Blog</span>

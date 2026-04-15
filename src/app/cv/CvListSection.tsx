@@ -32,10 +32,10 @@ export default function CvListSection({ items }: CvListSectionProps) {
           </div>
           {item.description && (
             <>
-              <p className="lang-en text-sm leading-relaxed mt-1" style={{ color: 'var(--text-secondary)' }}>
+              <p className="lang-en text-sm leading-relaxed mt-1 mb-0" style={{ color: 'var(--text-secondary)' }}>
                 {item.description.en}
               </p>
-              <p className="lang-tr text-sm leading-relaxed mt-1" style={{ color: 'var(--text-secondary)' }}>
+              <p className="lang-tr text-sm leading-relaxed mt-1 mb-0" style={{ color: 'var(--text-secondary)' }}>
                 {item.description.tr}
               </p>
             </>

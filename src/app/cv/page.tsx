@@ -28,7 +28,7 @@ const tagStyle: Record<string, React.CSSProperties> = {
 
 export default function CvPage() {
   return (
-    <main className="max-w-[var(--max-width)] mx-auto px-8 py-16 relative z-[1]">
+    <main className="max-w-(--max-width) mx-auto px-8 py-16 relative z-[1]">
       {/* ── Hero ────────────────────────────────────────────── */}
       <section id="hero" className="mb-24 reveal active">
         <h1
@@ -154,19 +154,41 @@ export default function CvPage() {
 
       {/* ── Volunteering ────────────────────────────────────── */}
       <Accordion
-        title={{ en: 'Volunteering & Extracurriculars', tr: 'Gönüllülük & Ders Dışı Etkinlikler' }}
+        titleClassName="text-3xl font-bold tracking-tight"
+        title={
+          <>
+            <span className="lang-en">Volunteering & Extracurriculars</span>
+            <span className="lang-tr">Gönüllülük & Ders Dışı Etkinlikler</span>
+          </>
+        }
         defaultOpen
       >
         <CvListSection items={volunteeringItems} />
       </Accordion>
 
       {/* ── Certificates ────────────────────────────────────── */}
-      <Accordion title={{ en: 'Certificates & Training', tr: 'Sertifikalar & Eğitimler' }}>
+      <Accordion
+        titleClassName="text-3xl font-bold tracking-tight"
+        title={
+          <>
+            <span className="lang-en">Certificates & Training</span>
+            <span className="lang-tr">Sertifikalar & Eğitimler</span>
+          </>
+        }
+      >
         <CvListSection items={certificateItems} />
       </Accordion>
 
       {/* ── Competitions ────────────────────────────────────── */}
-      <Accordion title={{ en: 'Competitions & Achievements', tr: 'Yarışmalar & Başarılar' }}>
+      <Accordion
+        titleClassName="text-3xl font-bold tracking-tight"
+        title={
+          <>
+            <span className="lang-en">Competitions & Achievements</span>
+            <span className="lang-tr">Yarışmalar & Başarılar</span>
+          </>
+        }
+      >
         <CvListSection items={competitionItems} />
       </Accordion>
     </main>

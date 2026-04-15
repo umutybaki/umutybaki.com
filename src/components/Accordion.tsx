@@ -4,11 +4,17 @@ import { useState, type ReactNode } from 'react'
 
 interface AccordionProps {
   title: ReactNode
+  titleClassName?: string
   defaultOpen?: boolean
   children: ReactNode
 }
 
-export default function Accordion({ title, defaultOpen = false, children }: AccordionProps) {
+export default function Accordion({
+  title,
+  titleClassName = 'blog-category-title',
+  defaultOpen = false,
+  children,
+}: AccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
@@ -30,7 +36,7 @@ export default function Accordion({ title, defaultOpen = false, children }: Acco
           marginBottom: '0.75rem',
         }}
       >
-        <h2 className="blog-category-title" style={{ marginBottom: 0 }}>
+        <h2 className={titleClassName} style={{ marginBottom: 0 }}>
           {title}
         </h2>
         <svg

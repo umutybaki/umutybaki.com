@@ -60,7 +60,7 @@ export default function Timeline({ items }: TimelineProps) {
           >
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-3">
-              <h3 className="text-base font-semibold leading-snug" style={{ color: 'var(--text-primary)' }}>
+              <h3 className="text-base font-semibold leading-snug mb-0" style={{ color: 'var(--text-primary)' }}>
                 <span className="lang-en">{item.title.en}</span>
                 <span className="lang-tr">{item.title.tr}</span>
               </h3>
@@ -76,10 +76,10 @@ export default function Timeline({ items }: TimelineProps) {
             {/* Description */}
             {item.description && (
               <>
-                <div className="lang-en text-sm leading-relaxed space-y-2" style={{ color: 'var(--text-secondary)' }}>
+                <div className="lang-en text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0" style={{ color: 'var(--text-secondary)' }}>
                   {item.description.en}
                 </div>
-                <div className="lang-tr text-sm leading-relaxed space-y-2" style={{ color: 'var(--text-secondary)' }}>
+                <div className="lang-tr text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0" style={{ color: 'var(--text-secondary)' }}>
                   {item.description.tr}
                 </div>
               </>
