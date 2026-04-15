@@ -19,7 +19,7 @@ export default function ProjectsPage() {
           <PostList>
             <AppListItem
               href="https://portwatcher.umutybaki.com"
-              logo="/projects/portwatcher.svg"
+              logo="/media/portwatcher.svg"
               logoAlt="PortWatcher Logo"
               name="PortWatcher"
               subtitle={
