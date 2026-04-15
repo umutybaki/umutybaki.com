@@ -13,8 +13,7 @@ export default $config({
   },
   async run() {
     const site = new sst.aws.Nextjs("Web", {
-      // Uncomment and set your domain once it's pointed to Route 53:
-      // domain: "umutybaki.com",
+      domain: "umutybaki.com",
     })
 
     return {
