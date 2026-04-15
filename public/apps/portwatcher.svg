@@ -1,0 +1,24 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded Rect Background (macOS Style) -->
+  <rect width="512" height="512" rx="114" fill="url(#mainGradient)"/>
+  
+  <!-- Stylized Radar Rings (Thicker for readability) -->
+  <circle cx="256" cy="256" r="160" stroke="white" stroke-width="4" stroke-opacity="0.3"/>
+  <circle cx="256" cy="256" r="110" stroke="white" stroke-width="4" stroke-opacity="0.2"/>
+  
+  <!-- Main Port Symbol / Lens Border -->
+  <circle cx="256" cy="256" r="70" stroke="white" stroke-width="32" stroke-linecap="round"/>
+  
+  <!-- Bold Radar Sweep -->
+  <path d="M256 90C315 90 380 140 405 200" stroke="white" stroke-width="16" stroke-linecap="round" stroke-opacity="0.6"/>
+  
+  <!-- Central Focus Point / Cross -->
+  <path d="M256 180V225M256 332V287M287 256H332M180 256H225" stroke="white" stroke-width="28" stroke-linecap="round"/>
+  
+  <defs>
+    <linearGradient id="mainGradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A84FF"/>
+      <stop offset="1" stop-color="#5E5CE6"/>
+    </linearGradient>
+  </defs>
+</svg>

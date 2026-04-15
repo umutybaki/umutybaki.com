@@ -5,11 +5,21 @@ import Link from 'next/link'
 
 export default function Nav() {
   const [lang, setLang] = useState<'en' | 'tr'>('en')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   // Sync lang attribute with state on mount
   useEffect(() => {
     document.documentElement.setAttribute('lang', lang)
   }, [lang])
+
+  // Prevent scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
 
   function toggleTheme() {
     const current = document.documentElement.getAttribute('data-theme')
@@ -30,10 +40,22 @@ export default function Nav() {
   return (
     <nav className="main-nav">
       <div className="nav-content">
-        <Link href="/" className="nav-name">
+        <Link href="/" className="nav-name" style={{ position: 'relative', zIndex: 10 }}>
           Umut Yalçın Baki
         </Link>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        
+        <div className="nav-centered-links">
+          <Link href="/apps" className="nav-link">
+            <span className="lang-en">Apps</span>
+            <span className="lang-tr">Uygulamalar</span>
+          </Link>
+          <Link href="/blog" className="nav-link">
+            <span className="lang-en">Blog</span>
+            <span className="lang-tr">Blog</span>
+          </Link>
+        </div>
+
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', position: 'relative', zIndex: 10 }}>
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle Dark Mode">
             <svg
               className="sun-icon"
@@ -77,6 +99,50 @@ export default function Nav() {
             <span className="lang-label en">EN</span>
             <span className="lang-label tr">TR</span>
           </button>
+          
+          <button 
+            className="mobile-menu-btn" 
+            onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Toggle Menu"
+          >
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div className={`mobile-menu-sheet ${isMobileMenuOpen ? 'open' : ''}`}>
+        <div className="mobile-menu-header">
+           <Link href="/" className="nav-name" onClick={() => setIsMobileMenuOpen(false)}>
+             Umut Yalçın Baki
+           </Link>
+           <button className="mobile-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
+             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+               <line x1="18" y1="6" x2="6" y2="18"></line>
+               <line x1="6" y1="6" x2="18" y2="18"></line>
+             </svg>
+           </button>
+        </div>
+        <div className="mobile-menu-links">
+          <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+            <span className="lang-en">Home</span>
+            <span className="lang-tr">Ana Sayfa</span>
+          </Link>
+          <Link href="/apps" onClick={() => setIsMobileMenuOpen(false)}>
+            <span className="lang-en">Apps</span>
+            <span className="lang-tr">Uygulamalar</span>
+          </Link>
+          <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>
+            <span className="lang-en">Blog</span>
+            <span className="lang-tr">Blog</span>
+          </Link>
+        </div>
+        <div style={{ marginTop: 'auto', padding: '2rem', display: 'flex', gap: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
+          <a href="https://github.com/umutybaki" target="_blank" rel="noopener noreferrer" className="nav-link">GitHub</a>
+          <a href="https://linkedin.com/in/umutybaki" target="_blank" rel="noopener noreferrer" className="nav-link">LinkedIn</a>
         </div>
       </div>
     </nav>
