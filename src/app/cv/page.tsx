@@ -28,7 +28,7 @@ const tagStyle: Record<string, React.CSSProperties> = {
 
 export default function CvPage() {
   return (
-    <main className="max-w-(--max-width) mx-auto px-8 py-16 relative z-[1]">
+    <main className="max-w-(--max-width) mx-auto px-8 py-16 relative z-1">
       {/* ── Hero ────────────────────────────────────────────── */}
       <section id="hero" className="mb-24 reveal active">
         <h1

@@ -13,7 +13,10 @@ export default $config({
   },
   async run() {
     const site = new sst.aws.Nextjs("Web", {
-      domain: "umutybaki.com",
+      domain: {
+        name: "umutybaki.com",
+        dns: false,
+      },
     })
 
     return {
