@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 export default function AppsPage() {
   return (
     <main className="container">
