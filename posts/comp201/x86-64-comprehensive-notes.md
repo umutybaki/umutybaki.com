@@ -1,31 +1,31 @@
 ---
-title: "x86-64 Assembly — Comprehensive Study Notes"
+title: "x86-64 Assembly - Comprehensive Study Notes"
 date: "2026-04-16"
 description: "Comprehensive study notes covering x86-64 assembly fundamentals, arithmetic, logic, registers, and control flow for COMP201."
 ---
 
-# x86-64 Assembly — Comprehensive Study Notes
+# x86-64 Assembly - Comprehensive Study Notes
 
-> **Course:** COMP201 — Computer Systems & Programming (Koç University, Spring 2026, Prof. Aykut Erdem)
+> **Course:** COMP201 - Computer Systems & Programming (Koç University, Spring 2026, Prof. Aykut Erdem)
 >
 > **Covers:** Lecture 14 (Intro to x86-64), Lecture 15 (Arithmetic & Logic), Lecture 16 (Control Flow & Condition Codes), Lecture 17 (More Control Flow).
 >
 > These notes are written to be **self-contained**. If you read them from top to bottom, you should be able to learn x86-64 assembly from scratch without needing the original slides. Each concept comes with intuition, the formal rule, worked examples, and small exercises.
 
 
-## 1. Why Assembly Matters — The Big Picture
+## 1. Why Assembly Matters - The Big Picture
 
-Everything you have learned in this course so far — integers in two's complement, ASCII characters, pointers, `struct`s, the stack and heap, `malloc`/`free` — has been about how a computer **represents data**. But your programs themselves are *also* data: the `.c` files you write eventually become sequences of bytes that the CPU reads, interprets, and executes.
+Everything you have learned in this course so far - integers in two's complement, ASCII characters, pointers, `struct`s, the stack and heap, `malloc`/`free` - has been about how a computer **represents data**. But your programs themselves are *also* data: the `.c` files you write eventually become sequences of bytes that the CPU reads, interprets, and executes.
 
 **The fundamental question this lecture block answers is:**
 
 > *How does a computer actually execute a C program?*
 
-The short answer is that your C code is translated by a compiler into **machine code** — long sequences of raw bytes the CPU understands directly. Pure machine code is unreadable to humans (it is literally 1s and 0s), so engineers created a one-to-one human-readable mirror of it called **assembly language**. Each line of assembly corresponds (almost) directly to one machine instruction.
+The short answer is that your C code is translated by a compiler into **machine code** - long sequences of raw bytes the CPU understands directly. Pure machine code is unreadable to humans (it is literally 1s and 0s), so engineers created a one-to-one human-readable mirror of it called **assembly language**. Each line of assembly corresponds (almost) directly to one machine instruction.
 
 Why should you, a programmer using a high-level language, ever look at assembly?
 
-- **To debug at the deepest level.** When a bug is a nightmare — a pointer is mysteriously wrong, a stack is corrupted, or optimization has rewritten your loop — the only way to know what is *really* happening is to read the assembly.
+- **To debug at the deepest level.** When a bug is a nightmare - a pointer is mysteriously wrong, a stack is corrupted, or optimization has rewritten your loop - the only way to know what is *really* happening is to read the assembly.
 - **To understand performance.** Why is one loop 10× faster than another? The difference usually shows up in the assembly: fewer instructions, better register use, no unnecessary memory accesses.
 - **To reverse engineer.** Security researchers, malware analysts, and anyone inspecting a binary without source code all read assembly.
 - **To appreciate what your compiler is doing for you.** Once you see how much work GCC does to turn `sum += arr[i];` into half a dozen machine instructions, you understand why C is called a "high-level" language.
@@ -39,17 +39,17 @@ Before we plunge in, a note on vocabulary. The word **assembly** refers to the h
 
 When you compile a C program with GCC, you are invoking a pipeline that turns text into an executable:
 
-1. **Preprocessing** — `#include`s and macros are expanded.
-2. **Compilation proper** — C source becomes assembly text (`.s`).
-3. **Assembly** — the assembly text becomes an **object file** (`.o`) containing machine code.
-4. **Linking** — object files and libraries are combined into an executable.
+1. **Preprocessing** - `#include`s and macros are expanded.
+2. **Compilation proper** - C source becomes assembly text (`.s`).
+3. **Assembly** - the assembly text becomes an **object file** (`.o`) containing machine code.
+4. **Linking** - object files and libraries are combined into an executable.
 
 Two important things to internalize:
 
 - **Assembly is processor-specific.** The instructions we are learning (`mov`, `add`, `jmp`, `lea`, `cmp`, etc.) are part of the **x86-64** instruction set, used by Intel and AMD CPUs in most desktops, laptops, and servers. Phones and tablets often use ARM instead, and chips for tiny embedded devices use things like MIPS or RISC-V. The *ideas* transfer, but the exact instruction names and encodings do not.
 - **A single line of C may become many lines of assembly.** There is not a 1-to-1 correspondence. For example, `sum += arr[i];` may need several assembly instructions: one to compute the address of `arr[i]`, one to fetch the value, one to do the addition, and possibly one to store it back.
 
-To look at the assembly of a compiled program, you run `objdump -d my_program`. This disassembles the executable. For quick experiments, the **Compiler Explorer** website (<https://godbolt.org>) shows you the assembly of any C snippet in real time — a fantastic tool for learning.
+To look at the assembly of a compiled program, you run `objdump -d my_program`. This disassembles the executable. For quick experiments, the **Compiler Explorer** website (<https://godbolt.org>) shows you the assembly of any C snippet in real time - a fantastic tool for learning.
 
 
 ## 3. Reading an Assembly Listing (objdump output)
@@ -83,28 +83,28 @@ When compiled and disassembled, it becomes this:
 
 Don't panic. Every column of this listing means something specific. Let's peel them apart.
 
-**`00000000004005b6 <sum_array>:`** — This is the **symbol header**. `<sum_array>` is the name of the C function, preserved so humans can find it. `4005b6` is the **memory address** where the first instruction of the function lives. When the program runs, this is where the CPU will jump to in order to "call" this function.
+**`00000000004005b6 <sum_array>:`** - This is the **symbol header**. `<sum_array>` is the name of the C function, preserved so humans can find it. `4005b6` is the **memory address** where the first instruction of the function lives. When the program runs, this is where the CPU will jump to in order to "call" this function.
 
-**`4005b6:`, `4005bb:`, `4005c0:`, …** — These are the addresses of each individual instruction. Notice they are **not evenly spaced**: `4005bb – 4005b6 = 5` means the first instruction is 5 bytes long. Instructions in x86 have *variable length* (anywhere from 1 to about 15 bytes). Sequential instructions are placed sequentially in memory, so the next instruction after one at address `A` of length `n` starts at address `A + n`.
+**`4005b6:`, `4005bb:`, `4005c0:`, …** - These are the addresses of each individual instruction. Notice they are **not evenly spaced**: `4005bb – 4005b6 = 5` means the first instruction is 5 bytes long. Instructions in x86 have *variable length* (anywhere from 1 to about 15 bytes). Sequential instructions are placed sequentially in memory, so the next instruction after one at address `A` of length `n` starts at address `A + n`.
 
-**`ba 00 00 00 00`, `48 63 ca`, …** — This is the **machine code**: the raw hexadecimal bytes stored in memory. This is what the CPU literally reads and executes. The assembly column next to it is just a human-readable rendering of these bytes.
+**`ba 00 00 00 00`, `48 63 ca`, …** - This is the **machine code**: the raw hexadecimal bytes stored in memory. This is what the CPU literally reads and executes. The assembly column next to it is just a human-readable rendering of these bytes.
 
-**`mov $0x0,%edx`** — The **assembly instruction**. Every instruction has two parts:
+**`mov $0x0,%edx`** - The **assembly instruction**. Every instruction has two parts:
 
 - an **opcode** (the operation name, e.g. `mov`, `add`, `jmp`, `cmp`),
 - zero or more **operands** (the arguments).
 
-In AT&T syntax (what GCC uses by default on Linux, and what your course uses), operands come in the order **source, destination**: `mov src, dst` means "copy `src` into `dst`". This is the *opposite* of Intel syntax, which writes `mov dst, src`. Be careful when reading documentation from different sources — almost every source of confusion about assembly traces back to syntax differences.
+In AT&T syntax (what GCC uses by default on Linux, and what your course uses), operands come in the order **source, destination**: `mov src, dst` means "copy `src` into `dst`". This is the *opposite* of Intel syntax, which writes `mov dst, src`. Be careful when reading documentation from different sources - almost every source of confusion about assembly traces back to syntax differences.
 
 Two conventions you will see in every operand:
 
-- A `$` prefix marks an **immediate value** — a literal constant hard-coded into the instruction. `$0x0` means "the number zero".
-- A `%` prefix marks a **register** — one of the CPU's on-chip storage slots. `%edx` is one of them (the 32-bit lower half of `%rdx`, as we'll see).
+- A `$` prefix marks an **immediate value** - a literal constant hard-coded into the instruction. `$0x0` means "the number zero".
+- A `%` prefix marks a **register** - one of the CPU's on-chip storage slots. `%edx` is one of them (the 32-bit lower half of `%rdx`, as we'll see).
 
 So `mov $0x0,%edx` reads as: *put the constant 0 into register `%edx`*. The equivalent C statement is roughly `edx = 0;`.
 
 
-## 4. Registers — The CPU's Scratch Paper
+## 4. Registers - The CPU's Scratch Paper
 
 Before we can manipulate data, we need to know where data lives. In C you think of variables as having names and sitting "in memory". Assembly is more primitive: there is **memory** (the big pool of RAM where the stack, heap, globals, and code all live), and there is a separate, much smaller, much faster pool of storage called **registers** that sits directly inside the CPU.
 
@@ -143,15 +143,15 @@ The **ALU** (Arithmetic Logic Unit) is the chunk of hardware that actually does 
 
 Some registers have conventional jobs:
 
-- `%rax` — stores the function's **return value**.
-- `%rdi`, `%rsi`, `%rdx`, `%rcx`, `%r8`, `%r9` — hold the **first six arguments** to a function (in that order).
-- `%rsp` — the **stack pointer**, pointing at the top of the stack.
-- `%rbp` — sometimes the **base pointer** (frame pointer).
-- `%rip` — the **instruction pointer**: the address of the *next* instruction to execute. (We'll unpack this in §15.)
+- `%rax` - stores the function's **return value**.
+- `%rdi`, `%rsi`, `%rdx`, `%rcx`, `%r8`, `%r9` - hold the **first six arguments** to a function (in that order).
+- `%rsp` - the **stack pointer**, pointing at the top of the stack.
+- `%rbp` - sometimes the **base pointer** (frame pointer).
+- `%rip` - the **instruction pointer**: the address of the *next* instruction to execute. (We'll unpack this in §15.)
 
 You don't have to memorize all the conventions right now. The important one for reading code is: **when you see `%rdi` used early in a function, that's the first argument to the function. `%rax` at the end is the return value.**
 
-## 5. The `mov` Instruction — Moving Data Around
+## 5. The `mov` Instruction - Moving Data Around
 
 The single most common instruction in any x86 program is `mov`. It copies bytes from a source to a destination. Think of it as the assignment operator `=` from C. (A better name would have been `copy`, because the source is unchanged.)
 
@@ -163,7 +163,7 @@ Source and destination can each be one of three things:
 
 - an **immediate** (a literal constant, only allowed as the source),
 - a **register**,
-- a **memory location** (but *at most one* of `src`/`dst` may be memory — you cannot copy directly from one memory location to another in a single instruction).
+- a **memory location** (but *at most one* of `src`/`dst` may be memory - you cannot copy directly from one memory location to another in a single instruction).
 
 The rule "at most one memory operand" is a restriction of the x86 instruction encoding: memory-to-memory copies must be done in two steps, going through a register.
 
@@ -183,7 +183,7 @@ Two syntax things are worth burning into your brain immediately:
 
 Mixing those two up is the single most common bug people make when reading assembly for the first time. A `$` is the assembly equivalent of *"the integer itself"*, and its absence is the equivalent of *"go read RAM at this spot"*.
 
-### Practice — Basic `mov`
+### Practice - Basic `mov`
 
 > Assume the value `5` is stored at address `0x42`, and the value `8` is stored in `%rbx`. What happens?
 
@@ -193,9 +193,9 @@ Mixing those two up is the single most common bug people make when reading assem
 
 The first two look almost identical but behave completely differently. Go slowly.
 
-## 6. Operand Forms — All 11 Ways to Name a Location
+## 6. Operand Forms - All 11 Ways to Name a Location
 
-`mov` — and many other instructions — need to specify memory locations, and x86 is astonishingly flexible about how you may *compute* an address. The reason is pragmatic: C programs access memory in very predictable patterns (array indexing, struct fields, pointer chasing), and x86 has a single general-purpose addressing mode that matches all those patterns so the compiler can use it directly, without extra instructions.
+`mov` - and many other instructions - need to specify memory locations, and x86 is astonishingly flexible about how you may *compute* an address. The reason is pragmatic: C programs access memory in very predictable patterns (array indexing, struct fields, pointer chasing), and x86 has a single general-purpose addressing mode that matches all those patterns so the compiler can use it directly, without extra instructions.
 
 The **most general memory operand** looks like this:
 
@@ -238,7 +238,7 @@ A few handy mental pictures:
 - **`Imm(rᵦ)` is a struct field access.** If `rᵦ` points to a struct and `Imm` is the byte offset of the field, `Imm(rᵦ)` is that field. For instance, `12(%rax)` is "the field 12 bytes into the struct pointed to by `%rax`".
 - **`(rᵦ, rᵢ, s)` is `arr[i]` when each element is `s` bytes.** `rᵦ` holds the array's base address, `rᵢ` holds the index, and `s` is the element size. So for an `int` array (`s=4`), `(%rdi, %rcx, 4)` is `arr[i]` where `arr` is in `%rdi` and `i` is in `%rcx`.
 
-### Practice — Operand Forms
+### Practice - Operand Forms
 
 > Assume: `0x11` is stored at `0x10C`, `0xAB` is at `0x104`, `%rax = 0x100`, `%rdx = 0x3`.
 
@@ -293,24 +293,24 @@ Up to now we have blurred over the question of *how many bytes* a `mov` actually
 | 4 | double word | `l` | `int`, `float` |
 | 8 | quad word | `q` | `long`, `double`, pointer |
 
-The name "word" is historical — on older Intel processors from the 1970s a word really was 16 bits. When Intel moved to 32-bit, they preserved the meaning of "word" for backward compatibility, so a 32-bit quantity became a "double word" and a 64-bit quantity became a "quad word". The suffix `l` (not `d`) comes from "long", which at the time meant 32-bit.
+The name "word" is historical - on older Intel processors from the 1970s a word really was 16 bits. When Intel moved to 32-bit, they preserved the meaning of "word" for backward compatibility, so a 32-bit quantity became a "double word" and a 64-bit quantity became a "quad word". The suffix `l` (not `d`) comes from "long", which at the time meant 32-bit.
 
 You write the suffix right after the opcode: `movb`, `movw`, `movl`, `movq`. Same pattern for other instructions: `addq`, `subl`, `xorw`, etc.
 
 **Usually the assembler can infer the suffix from the operands** (for example, `%al` is a 1-byte register, so any instruction writing to `%al` must be byte-sized), but making it explicit is best practice.
 
-### Practice — picking the right suffix
+### Practice - picking the right suffix
 
 Given the registers (from the next section), what's the right suffix for each?
 
-1. `mov__ %eax, (%rsp)` — `%eax` is 4 bytes → `movl`.
-2. `mov__ (%rax), %dx` — `%dx` is 2 bytes → `movw`.
-3. `mov__ $0xff, %bl` — `%bl` is 1 byte → `movb`.
-4. `mov__ (%rsp, %rdx, 4), %dl` — `%dl` is 1 byte → `movb`.
-5. `mov__ (%rdx), %rax` — `%rax` is 8 bytes → `movq`.
-6. `mov__ %dx, (%rax)` — `%dx` is 2 bytes → `movw`.
+1. `mov__ %eax, (%rsp)` - `%eax` is 4 bytes → `movl`.
+2. `mov__ (%rax), %dx` - `%dx` is 2 bytes → `movw`.
+3. `mov__ $0xff, %bl` - `%bl` is 1 byte → `movb`.
+4. `mov__ (%rsp, %rdx, 4), %dl` - `%dl` is 1 byte → `movb`.
+5. `mov__ (%rdx), %rax` - `%rax` is 8 bytes → `movq`.
+6. `mov__ %dx, (%rax)` - `%dx` is 2 bytes → `movw`.
 
-## 8. Register Sizes — Looking at Sub-Parts of a Register
+## 8. Register Sizes - Looking at Sub-Parts of a Register
 
 Each 64-bit register can also be *partially* accessed at smaller sizes. This is a legacy feature: when Intel moved from 16-bit → 32-bit → 64-bit CPUs, they preserved access to the older, smaller "versions" of each register so that old code would keep working.
 
@@ -327,7 +327,7 @@ For the first eight registers the naming system is irregular (because they date 
 | `%rbp` | `%ebp` | `%bp` | `%bpl` |
 | `%rsp` | `%esp` | `%sp` | `%spl` |
 
-For the newer eight registers (`%r8`–`%r15`), the naming is regular — you just add a size letter:
+For the newer eight registers (`%r8`–`%r15`), the naming is regular - you just add a size letter:
 
 | 64-bit | 32-bit | 16-bit | 8-bit |
 |:---|:---|:---|:---|
@@ -353,9 +353,9 @@ Visually, the 8 bytes of `%rax` look like this:
 
 Writing to `%al` only changes the bottom byte and leaves the rest alone. Writing to `%ax` only changes the bottom two bytes.
 
-**Important rule — the one exception to "only change what you wrote":** writing to a 32-bit register (`%eax`, `%ebx`, `%r8d`, …) *also zeros the upper 32 bits of the full 64-bit register*. This is a deliberate design choice in x86-64: it lets the CPU decode and execute `movl`-style instructions slightly faster, and it guarantees predictable behaviour. So `movl $1, %eax` sets `%rax` to `0x00000000_00000001`, not to some arbitrary top half.
+**Important rule - the one exception to "only change what you wrote":** writing to a 32-bit register (`%eax`, `%ebx`, `%r8d`, …) *also zeros the upper 32 bits of the full 64-bit register*. This is a deliberate design choice in x86-64: it lets the CPU decode and execute `movl`-style instructions slightly faster, and it guarantees predictable behaviour. So `movl $1, %eax` sets `%rax` to `0x00000000_00000001`, not to some arbitrary top half.
 
-### Practice — upper bytes after `mov`
+### Practice - upper bytes after `mov`
 
 Start with `%rax = 0xAAAAAAAAAAAAAAAA` (imagine) and execute:
 
@@ -365,11 +365,11 @@ Start with `%rax = 0xAAAAAAAAAAAAAAAA` (imagine) and execute:
 4. `movl $-1, %eax` → writing `%eax` zeros top 4 bytes: `%rax = 00000000FFFFFFFF`.
 5. `movq $-1, %rax` → full 64-bit write: `%rax = FFFFFFFFFFFFFFFF`.
 
-Line 4 is the "trap". If you expected `0011223344555555555555FFFFFFFF`, you'd be wrong — the upper bytes are *cleared*, not preserved.
+Line 4 is the "trap". If you expected `0011223344555555555555FFFFFFFF`, you'd be wrong - the upper bytes are *cleared*, not preserved.
 
 ## 9. `mov` Variants: `movabsq`, `movz`, `movs`, `cltq`
 
-### `movabsq` — for big constants
+### `movabsq` - for big constants
 
 Regular `movq` instructions can only carry a 32-bit immediate, which the CPU then sign-extends to 64 bits. That's fine for small constants, but if you want to load a full 64-bit literal, you need `movabsq`:
 
@@ -379,7 +379,7 @@ movabsq $0x0011223344556677, %rax
 
 `movabsq` accepts a 64-bit immediate, but only into a register (not memory).
 
-### `movz` and `movs` — copy small into big
+### `movz` and `movs` - copy small into big
 
 When you copy an 8-bit value into a 64-bit register, you need to decide how to fill the upper 56 bits. Two natural answers:
 
@@ -404,15 +404,15 @@ The source can be in memory or a register; the destination must be a register.
 
 Think of the first letter after `mov` as "zero or sign", the next as "from size", the last as "to size".
 
-*(There is no `movzlq` — because any `movl` automatically zero-extends into the 64-bit register, you don't need a separate instruction.)*
+*(There is no `movzlq` - because any `movl` automatically zero-extends into the 64-bit register, you don't need a separate instruction.)*
 
-### `cltq` — a short way to sign-extend `%eax`
+### `cltq` - a short way to sign-extend `%eax`
 
 `cltq` (Convert Long to Quad) is a zero-operand shortcut that sign-extends `%eax` into `%rax`. It's equivalent to `movslq %eax, %rax` but shorter in binary encoding, so the compiler emits it a lot.
 
-## 10. The `lea` Instruction — Load Effective Address
+## 10. The `lea` Instruction - Load Effective Address
 
-`lea src, dst` looks visually identical to `mov`, but it behaves completely differently — and the difference is precisely what makes it useful.
+`lea src, dst` looks visually identical to `mov`, but it behaves completely differently - and the difference is precisely what makes it useful.
 
 - `mov (%rax), %rdx` means: **go to memory** at the address in `%rax`, **fetch** the value there, put it into `%rdx`.
 - `lea (%rax), %rdx` means: **compute the address** (here, just `%rax`), **do not dereference**, put that *computed address* into `%rdx`. Effectively `%rdx = %rax`.
@@ -480,11 +480,11 @@ A common idiom: `xor %rax, %rax` (XORing anything with itself is zero) is a very
 
 64-bit arithmetic has a subtlety: multiplying two 64-bit numbers can produce a 128-bit result, and dividing a 128-bit number by a 64-bit number can leave you with a 64-bit quotient and 64-bit remainder. x86-64 has special "two-register" instructions to handle these.
 
-### `imul` with two operands — the normal case
+### `imul` with two operands - the normal case
 
 `imul S, D` computes `D ← D * S`, truncating the product to fit in the destination register. You will use this 99% of the time.
 
-### `imul` / `mul` with one operand — the full-width case
+### `imul` / `mul` with one operand - the full-width case
 
 If you give `imulq` a single operand, the CPU multiplies it by `%rax` and puts the full 128-bit result into the register pair `%rdx:%rax` (high 64 bits in `%rdx`, low 64 bits in `%rax`).
 
@@ -505,7 +505,7 @@ If you give `imulq` a single operand, the CPU multiplies it by `%rax` and puts t
 
 The twist: most divisions in C involve only 64-bit numbers, so you wouldn't want to set `%rdx` to zero explicitly every time. The **`cqto`** instruction takes the 64-bit value in `%rax` and **sign-extends** it into `%rdx`, preparing the `%rdx:%rax` pair for division. (For unsigned division you'd zero `%rdx` with `xor %rdx, %rdx` instead.)
 
-### Example — full division with remainder
+### Example - full division with remainder
 
 ```c
 // Returns x/y, stores remainder in *remainder_ptr
@@ -533,7 +533,7 @@ Notice the third argument (`remainder_ptr`) arrives in `%rdx` but has to be move
 
 ## 13. Shift Instructions
 
-Shifts take an amount `k` and a destination `D`. `k` can be an immediate or the specific 8-bit register `%cl` (and *only* `%cl` — no other register allowed).
+Shifts take an amount `k` and a destination `D`. `k` can be an immediate or the specific 8-bit register `%cl` (and *only* `%cl` - no other register allowed).
 
 | Instruction | Effect | Description |
 |:---|:---|:---|
@@ -552,9 +552,9 @@ sarl $4, 8(%rax)               # *(int*)(%rax+8) >>= 4 (signed, arithmetic)
 
 ### Why "arithmetic" vs "logical"?
 
-For unsigned numbers there's only one right-shift: fill with zeros. For signed numbers in two's complement, shifting right to divide by a power of two should preserve the sign — so you fill with *copies of the sign bit*. That's arithmetic right shift (`sar`). In C, `>>` on a signed int is arithmetic, and `>>` on an unsigned int is logical; the compiler picks `sar` or `shr` accordingly.
+For unsigned numbers there's only one right-shift: fill with zeros. For signed numbers in two's complement, shifting right to divide by a power of two should preserve the sign - so you fill with *copies of the sign bit*. That's arithmetic right shift (`sar`). In C, `>>` on a signed int is arithmetic, and `>>` on an unsigned int is logical; the compiler picks `sar` or `shr` accordingly.
 
-### Quirk — shift counts and `%cl`
+### Quirk - shift counts and `%cl`
 
 If you shift by `%cl` rather than an immediate, the CPU uses only the **low-order log₂(w) bits** of `%cl`, where `w` is the width in bits of the destination. So for `shlb` (byte destination, 8 bits), `log₂(8) = 3`, meaning only the low 3 bits of `%cl` are consulted. If `%cl = 0xFF`, then:
 
@@ -690,7 +690,7 @@ Tracing the value of `%rip` over time:
 | 5 | `4004fc` | `jmp 4004f8` (2 bytes) → rewrites `%rip` back to `4004f8` |
 | 6 | `4004f8` | …and we're back to step 4, forever. |
 
-So this assembly implements an **infinite loop**: `while (true) { i++; }`. The ability to write to `%rip` — to "interfere with" what the program counter thinks comes next — is what lets us build every form of control flow.
+So this assembly implements an **infinite loop**: `while (true) { i++; }`. The ability to write to `%rip` - to "interfere with" what the program counter thinks comes next - is what lets us build every form of control flow.
 
 ## 16. Unconditional Jumps (`jmp`)
 
@@ -715,25 +715,25 @@ There are two kinds of jumps:
 
 A `jmp` by itself always jumps. To do *conditional* control flow (if, while, for), we need to first run a comparison, then jump only if a certain condition holds. That's the subject of §17–§19.
 
-## 17. Condition Codes — The CPU's Secret Status Bits
+## 17. Condition Codes - The CPU's Secret Status Bits
 
 Alongside the 16 general-purpose registers, the x86-64 CPU maintains a separate tiny register made of single-bit flags called **condition codes** (or sometimes "flags"). They are set automatically as a *side effect* of most arithmetic and logic instructions.
 
 The four condition codes we care about:
 
-- **`CF` — Carry Flag.** Set when the most recent *unsigned* operation generated a carry out of the top bit. It detects unsigned overflow.
-- **`ZF` — Zero Flag.** Set when the most recent result was exactly 0.
-- **`SF` — Sign Flag.** Set when the most recent result was negative (top bit = 1 for signed interpretation).
-- **`OF` — Overflow Flag.** Set when the most recent operation caused signed two's-complement overflow.
+- **`CF` - Carry Flag.** Set when the most recent *unsigned* operation generated a carry out of the top bit. It detects unsigned overflow.
+- **`ZF` - Zero Flag.** Set when the most recent result was exactly 0.
+- **`SF` - Sign Flag.** Set when the most recent result was negative (top bit = 1 for signed interpretation).
+- **`OF` - Overflow Flag.** Set when the most recent operation caused signed two's-complement overflow.
 
 For example, after computing `t = a + b`:
 
 | Flag | When set (informally) |
 |:---|:---|
-| CF | `(unsigned) t < (unsigned) a` — unsigned overflow |
+| CF | `(unsigned) t < (unsigned) a` - unsigned overflow |
 | ZF | `t == 0` |
 | SF | `t < 0` |
-| OF | `(a<0 == b<0) && (t<0 != a<0)` — signed overflow |
+| OF | `(a<0 == b<0) && (t<0 != a<0)` - signed overflow |
 
 You don't read or write these flags directly. Instead:
 
@@ -742,16 +742,16 @@ You don't read or write these flags directly. Instead:
 
 Important exceptions to the "set them as a side effect" rule:
 
-- **`lea` never sets condition codes** — it was designed purely for address computation.
+- **`lea` never sets condition codes** - it was designed purely for address computation.
 - **Logical operations (`xor`, `and`, `or`) always clear `CF` and `OF`** to zero and set `ZF`/`SF` based on the result.
 - **Shifts set `CF` to the last bit shifted out** and `OF` to zero.
 - **`inc` and `dec` set `OF` and `ZF` but leave `CF` alone** (historical quirk, useful in certain loops).
 
-## 18. `cmp` and `test` — Setting Condition Codes
+## 18. `cmp` and `test` - Setting Condition Codes
 
-Most of the time, when you want to branch, you don't actually want to *compute* anything — you just want to see *what would have happened*. `cmp` and `test` let you do exactly that: perform an operation purely for its side effect on the condition codes, discarding the result.
+Most of the time, when you want to branch, you don't actually want to *compute* anything - you just want to see *what would have happened*. `cmp` and `test` let you do exactly that: perform an operation purely for its side effect on the condition codes, discarding the result.
 
-### `cmp` — subtract without storing
+### `cmp` - subtract without storing
 
 ```asm
 cmp  S1, S2       # computes S2 - S1, sets flags, throws away the difference
@@ -770,24 +770,24 @@ Has suffixes for data sizes:
 | `cmpl` | dword (32) |
 | `cmpq` | qword (64) |
 
-### `test` — AND without storing
+### `test` - AND without storing
 
 ```asm
 test  S1, S2      # computes S2 & S1, sets flags, throws away the result
 ```
 
-Most often used as `testq %rax, %rax`, which ANDs a value with itself. The result equals the value, so the flags directly reflect the sign and zeroness of the value — a compact idiom for "is this register zero, negative, or positive?". When you see `test %reg, %reg` followed by a conditional jump, read it as *"branch on the sign of %reg"*.
+Most often used as `testq %rax, %rax`, which ANDs a value with itself. The result equals the value, so the flags directly reflect the sign and zeroness of the value - a compact idiom for "is this register zero, negative, or positive?". When you see `test %reg, %reg` followed by a conditional jump, read it as *"branch on the sign of %reg"*.
 
-**Worked example — interpreting `cmp` and `test`**
+**Worked example - interpreting `cmp` and `test`**
 
 Suppose `%edi = 0x10` (that's 16 in decimal).
 
-- `cmp $0x10, %edi` — computes `%edi - 0x10 = 16 - 16 = 0`. `ZF` is set. A subsequent `je` would jump.
-- `test $0x10, %edi` — computes `%edi & 0x10 = 0x10 & 0x10 = 0x10 ≠ 0`. `ZF` is *not* set. A subsequent `je` would **not** jump.
+- `cmp $0x10, %edi` - computes `%edi - 0x10 = 16 - 16 = 0`. `ZF` is set. A subsequent `je` would jump.
+- `test $0x10, %edi` - computes `%edi & 0x10 = 0x10 & 0x10 = 0x10 ≠ 0`. `ZF` is *not* set. A subsequent `je` would **not** jump.
 
 These look deceptively similar but do very different things. `cmp` is about *equality/ordering*; `test` is about *bitmask checks* and *sign checks*.
 
-## 19. Conditional Jumps — `je`, `jne`, `jg`, `jl`, …
+## 19. Conditional Jumps - `je`, `jne`, `jg`, `jl`, …
 
 Conditional jumps inspect the condition codes and jump to the target **only if** the condition holds. Otherwise execution continues to the next instruction. The target is hard-coded in the instruction (direct jump only).
 
@@ -795,8 +795,8 @@ Conditional jumps inspect the condition codes and jump to the target **only if**
 
 x86 provides two families of comparison jumps because signed and unsigned numbers don't order the same way. `0xFFFFFFFF` is `-1` as a signed `int`, but `4294967295` as an unsigned `int`.
 
-- **Signed:** `jg`, `jge`, `jl`, `jle` — these mean "greater", "greater or equal", "less", "less or equal".
-- **Unsigned:** `ja`, `jae`, `jb`, `jbe` — these mean "above", "above or equal", "below", "below or equal".
+- **Signed:** `jg`, `jge`, `jl`, `jle` - these mean "greater", "greater or equal", "less", "less or equal".
+- **Unsigned:** `ja`, `jae`, `jb`, `jbe` - these mean "above", "above or equal", "below", "below or equal".
 - **Equality:** `je` / `jne` work for both (equality doesn't care about signedness).
 
 ### Full table
@@ -842,7 +842,7 @@ jle target        # jump if %edi <= 1
 
 Grammar check: `cmp S1, S2` + `jOP` asks "is `S2 OP S1`?". So `cmp $2, %edi; jg target` asks "is `%edi > 2`?".
 
-### Exercise — conditional jump
+### Exercise - conditional jump
 
 ```asm
 00000000004004d6 <if_then>:
@@ -885,7 +885,7 @@ past:
 
 The trick is that you **jump when the condition is FALSE**, to *skip* the body. That's why the jump in an if-statement is always the *negation* of the source-level condition.
 
-**Worked example — `if_then`**
+**Worked example - `if_then`**
 
 ```c
 int if_then(int param1) {
@@ -954,9 +954,9 @@ Note the **unconditional `jmp`** at the end of the if-body: without it, executio
 Reading through:
 
 - `cmp $3, %edi` sets flags for `arg - 3`.
-- `jle else` — if `arg <= 3`, go to else-body. So the *source condition* was `arg > 3` (its inverse).
+- `jle else` - if `arg <= 3`, go to else-body. So the *source condition* was `arg > 3` (its inverse).
 - If-body: `ret = 10;`
-- `jmp past_else` — skip the else.
+- `jmp past_else` - skip the else.
 - Else-body: `ret = 0;`
 - After: `ret++`.
 
@@ -994,7 +994,7 @@ test:
 
 This arrangement evaluates the test *once per iteration*, and the unconditional `jmp` at the top is only executed *once* (on entry), never again inside the loop. Compilers like this because it's one branch per iteration instead of two.
 
-**Worked example — `while (i < 100) { i++; }`**
+**Worked example - `while (i < 100) { i++; }`**
 
 ```c
 void loop() {
@@ -1055,7 +1055,7 @@ while (test) {
 
 so `for` loops compile to the *same* "while" pattern. The difference from a hand-rolled while is only that the `update` step is always at the end of the body.
 
-### Back to our very first example — `sum_array`
+### Back to our very first example - `sum_array`
 
 Now, *finally*, we can read the whole `sum_array` disassembly end-to-end:
 
@@ -1089,7 +1089,7 @@ Mapping to the C source:
 - `%rdi` is `arr` (first argument).
 - `%esi` is `nelems` (second argument).
 - `(%rdi, %rcx, 4)` is `arr[i]` (int = 4 bytes, base + index*size).
-- `movslq %edx, %rcx` widens the 32-bit signed `i` to a 64-bit `%rcx` because address arithmetic uses 64-bit registers — you can't directly index with a 32-bit register.
+- `movslq %edx, %rcx` widens the 32-bit signed `i` to a 64-bit `%rcx` because address arithmetic uses 64-bit registers - you can't directly index with a 32-bit register.
 - `cmp %esi, %edx; jl …` reads as *"if `i < nelems`, jump"*. Remember: `cmp S1, S2` computes `S2 - S1`, so this compares `%edx` (i) against `%esi` (nelems).
 
 ### Python cross-check
@@ -1122,9 +1122,9 @@ print(sum_array([1, 2, 3, 4, 5], 5))      # 15
 print(sum_array_asm([1, 2, 3, 4, 5], 5))  # 15
 ```
 
-## 24. `set` Instructions — Materializing a Condition as 0 or 1
+## 24. `set` Instructions - Materializing a Condition as 0 or 1
 
-Sometimes you don't want to *branch* on a condition — you want to turn the condition itself into a value (`1` if true, `0` if false). That's what `set` instructions do.
+Sometimes you don't want to *branch* on a condition - you want to turn the condition itself into a value (`1` if true, `0` if false). That's what `set` instructions do.
 
 ```asm
 setCC  D     # D ← 1 if condition CC holds, else 0
@@ -1132,7 +1132,7 @@ setCC  D     # D ← 1 if condition CC holds, else 0
 
 The destination `D` is a **single byte** (typically an 8-bit register like `%al`, or a 1-byte memory location). `set` doesn't touch the other bytes of the register, so you usually follow it with `movzbl %al, %eax` to zero-extend it into the full 32-bit return register.
 
-### Example — `x < 16`?
+### Example - `x < 16`?
 
 ```c
 int small(int x) {
@@ -1149,7 +1149,7 @@ compiles to
     ret
 ```
 
-Wait — the C compares against 16, but the assembly compares against 15! That's because `x < 16` is the same as `x <= 15` for ints. The compiler uses whichever form generates shorter machine code.
+Wait - the C compares against 16, but the assembly compares against 15! That's because `x < 16` is the same as `x <= 15` for ints. The compiler uses whichever form generates shorter machine code.
 
 ### Full table
 
@@ -1170,7 +1170,7 @@ Same condition suffixes as conditional jumps, just attached to `set`:
 | `setb  D` | `setnae` | unsigned below |
 | `setbe D` | `setna` | unsigned below or equal |
 
-## 25. `cmov` Instructions — Conditional Move
+## 25. `cmov` Instructions - Conditional Move
 
 `cmov` is a compromise between a `mov` and a conditional jump: it unconditionally *computes* the source address, but only *writes* to the destination if the condition holds.
 
@@ -1182,7 +1182,7 @@ cmovCC  src, dst      # if condition CC, dst ← src;   else dst unchanged
 
 ### Why?
 
-Branches hurt modern CPUs: they stall the pipeline and hurt branch prediction. For a *simple* either-or choice, `cmov` lets the compiler emit straight-line code with no branches — often faster for short, balanced conditions.
+Branches hurt modern CPUs: they stall the pipeline and hurt branch prediction. For a *simple* either-or choice, `cmov` lets the compiler emit straight-line code with no branches - often faster for short, balanced conditions.
 
 The C construct that maps most naturally to `cmov` is the **ternary operator**:
 
@@ -1190,7 +1190,7 @@ The C construct that maps most naturally to `cmov` is the **ternary operator**:
 result = test ? then_value : else_value;
 ```
 
-### Example — max
+### Example - max
 
 ```c
 int max(int x, int y) {
@@ -1201,7 +1201,7 @@ int max(int x, int y) {
 compiles to
 
 ```asm
-    cmp    %edi, %esi      # flags from (y - x) — i.e. "is x > y?"
+    cmp    %edi, %esi      # flags from (y - x) - i.e. "is x > y?"
     mov    %edi, %eax      # eax = x (default)
     cmovge %esi, %eax      # if y >= x, eax = y
     ret
@@ -1209,9 +1209,9 @@ compiles to
 
 Put in prose: "start by assuming the answer is `x`; then, if `y >= x`, overwrite with `y`". No branching.
 
-### Example — `x / 4` with correct rounding for negatives
+### Example - `x / 4` with correct rounding for negatives
 
-In C, dividing a negative number by a power of two with `>>` rounds *toward negative infinity*, not toward zero. For example `-14 >> 2 = -4`, but `-14 / 4 = -3` in C. So the compiler has to adjust by adding a bias before shifting — and it can use `cmov` to add the bias only when `x` is negative.
+In C, dividing a negative number by a power of two with `>>` rounds *toward negative infinity*, not toward zero. For example `-14 >> 2 = -4`, but `-14 / 4 = -3` in C. So the compiler has to adjust by adding a bias before shifting - and it can use `cmov` to add the bias only when `x` is negative.
 
 ```c
 int signed_division(int x) {
@@ -1247,7 +1247,7 @@ The idea: shifting negative numbers rounds down, but `/` rounds toward zero. For
 | `cmovb  S,R` | `cmovnae` | unsigned below |
 | `cmovbe S,R` | `cmovna` | unsigned below or equal |
 
-### Ternary operator — C refresher
+### Ternary operator - C refresher
 
 For completeness, since this is the C construct `cmov` maps to:
 
@@ -1270,7 +1270,7 @@ int x = argc > 1 ? 50 : 0;
 
 ## 26. Full Walk-through: `sum_array`
 
-Tying it all together — this is the exact example from Lecture 14 on slide 1 and Lecture 17 near the end. Knowing everything in §1–§25, you should now be able to read it with complete understanding. Below is the fully annotated version.
+Tying it all together - this is the exact example from Lecture 14 on slide 1 and Lecture 17 near the end. Knowing everything in §1–§25, you should now be able to read it with complete understanding. Below is the fully annotated version.
 
 ```c
 int sum_array(int arr[], int nelems) {
@@ -1299,7 +1299,7 @@ int sum_array(int arr[], int nelems) {
   4005c2: 48 63 ca         movslq %edx, %rcx
            ;; Sign-extend i (32-bit) into the 64-bit %rcx, because addressing
            ;; uses 64-bit registers. (If nelems is always non-negative we could
-           ;; have used movzlq or movslq — compiler chose sign-extend.)
+           ;; have used movzlq or movslq - compiler chose sign-extend.)
 
   4005c5: 03 04 8f         add    (%rdi, %rcx, 4), %eax
            ;; Fetch arr[i]: address = %rdi + 4*%rcx; add 4 bytes at that addr
@@ -1398,7 +1398,7 @@ Set by: arithmetic, logical, `cmp`, `test`, shifts.
 
 ## 28. Extra Practice
 
-### Practice A — "fill in the blank" while loop
+### Practice A - "fill in the blank" while loop
 
 ```asm
 // a in %rdi, b in %rsi
@@ -1428,7 +1428,7 @@ long loop(long a, long b) {
 }
 ```
 
-### Practice B — "escape room"
+### Practice B - "escape room"
 
 ```asm
 escapeRoom:
@@ -1454,7 +1454,7 @@ For what values of the first parameter does this return `1`?
 
 **Answer:** returns 1 when `arg > 2` (i.e. `arg >= 3`) **or** `arg == 1`. It returns 0 when `arg == 0` or `arg == 2` (or negative values `<= 2`).
 
-### Practice C — reading `sum_example1`
+### Practice C - reading `sum_example1`
 
 ```asm
 00000000004005ac <sum_example1>:
@@ -1482,9 +1482,9 @@ void sum_example1(int x, int y) {
 }
 ```
 
-The assembly (i) uses two parameters (%edi, %esi — yes), (ii) leaves the sum in %eax (the return-value register). Only (B) matches, because only (B) actually returns something. (C) would compute the sum but discard it; a good optimizing compiler would elide the whole function body for (A) and (C).
+The assembly (i) uses two parameters (%edi, %esi - yes), (ii) leaves the sum in %eax (the return-value register). Only (B) matches, because only (B) actually returns something. (C) would compute the sum but discard it; a good optimizing compiler would elide the whole function body for (A) and (C).
 
-### Practice D — `sum_example2` variable mapping
+### Practice D - `sum_example2` variable mapping
 
 ```asm
 0000000000400578 <sum_example2>:
@@ -1512,6 +1512,6 @@ Questions:
 
 ### Closing
 
-These notes cover every concept introduced in Lectures 14–17 of COMP201 — from the very first `mov $0x0, %edx` to the fully-annotated `sum_array`, with every instruction family, operand form, condition code, control-flow construct, and their conditional-move / conditional-set variants along the way. Next up in Lecture 18 is **function calls**: how the stack is set up on entry, how arguments past the first six are passed, how `call` and `ret` cooperate with `%rip`, and how local variables actually live on the stack. Everything you just learned about `mov`, `%rsp`, `jmp`, and the operand forms will reappear — this is the foundation.
+These notes cover every concept introduced in Lectures 14–17 of COMP201 - from the very first `mov $0x0, %edx` to the fully-annotated `sum_array`, with every instruction family, operand form, condition code, control-flow construct, and their conditional-move / conditional-set variants along the way. Next up in Lecture 18 is **function calls**: how the stack is set up on entry, how arguments past the first six are passed, how `call` and `ret` cooperate with `%rip`, and how local variables actually live on the stack. Everything you just learned about `mov`, `%rsp`, `jmp`, and the operand forms will reappear - this is the foundation.
 
 *Good luck studying, and happy disassembling!*
