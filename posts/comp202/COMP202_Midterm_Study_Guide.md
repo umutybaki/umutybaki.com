@@ -1,10 +1,10 @@
 ---
-title: "COMP 202 — Midterm Study Guide"
+title: "COMP 202 - Midterm Study Guide"
 date: "2026-04-19"
 description: "Compiled from four past midterms with new practice problems and full step-by-step solutions."
 ---
 
-# COMP 202 — Midterm Study Guide
+# COMP 202 - Midterm Study Guide
 
 > Compiled from four past midterms: Sample Midterm, Fall 2019 MT1, Fall 2019 MT2, and Fall 2022.
 > Contains **original past questions** (with solutions) plus **new practice problems** with full
@@ -14,7 +14,7 @@ description: "Compiled from four past midterms with new practice problems and fu
 > no new sorting/graph practice problems are generated.
 
 
-## 1. Complexity & Big-O Notation
+## 1. Complexity and Big-O Notation
 
 ### Past Questions
 
@@ -127,11 +127,11 @@ Total work: `log n · log n = (log n)²`.
 </details>
 
 
-## 2. Recursion & Recurrence Relations
+## 2. Recursion and Recurrence Relations
 
-### Recursion & Recurrence Relations Past Questions
+### Recursion and Recurrence Relations Past Questions
 
-**[Sample Q1] Tree Height — recursive.** Fill in `nodeHeight` for a BST and give Big-O.
+**[Sample Q1] Tree Height - recursive.** Fill in `nodeHeight` for a BST and give Big-O.
 
 <details>
 <summary><b>Solution</b></summary>
@@ -169,7 +169,7 @@ Expand: `T(n) = n + (n-1) + (n-2) + ... + 1 = n(n+1)/2`.
 </details>
 
 
-### Recursion & Recurrence Relations New Practice Questions
+### Recursion and Recurrence Relations New Practice Questions
 
 **Q2.1** Write a recursive method `sumPositive(int[] a, int i)` that returns the sum of all positive numbers in array `a` starting at index `i`. Give its time complexity.
 
@@ -269,11 +269,11 @@ Output:  {6,2,12,-2,4,48,48,-10}
 void combineDuplicates(Node head) {
   if (head == null) return;
   Node current = head;
-  while (current != null && current.next != null) {
+  while (current != null &and current.next != null) {
     if (current.value == current.next.value) {
       current.value = current.value + current.next.value;
       current.next = current.next.next;     // skip the duplicate
-      // stay on current — we may need to merge another duplicate
+      // stay on current - we may need to merge another duplicate
     } else {
       current = current.next;               // advance
     }
@@ -306,8 +306,8 @@ Node reverse(Node head) {
 }
 ```
 
-**Time: O(n)** — one pass.
-**Space: O(1)** — constant extra pointers, in-place.
+**Time: O(n)** - one pass.
+**Space: O(1)** - constant extra pointers, in-place.
 </details>
 
 
@@ -319,7 +319,7 @@ Node reverse(Node head) {
 ```java
 boolean hasCycle(Node head) {
   Node slow = head, fast = head;
-  while (fast != null && fast.next != null) {
+  while (fast != null &and fast.next != null) {
     slow = slow.next;
     fast = fast.next.next;
     if (slow == fast) return true;
@@ -328,7 +328,7 @@ boolean hasCycle(Node head) {
 }
 ```
 
-**Time: O(n)**  — if a cycle exists, fast catches up to slow within one cycle length after slow enters the cycle.
+**Time: O(n)**  - if a cycle exists, fast catches up to slow within one cycle length after slow enters the cycle.
 **Space: O(1)**.
 </details>
 
@@ -341,9 +341,9 @@ boolean hasCycle(Node head) {
 ```java
 boolean isPalindrome(Node head, Node tail) {
   Node left = head, right = tail;
-  while (left != null && right != null && left != right) {
+  while (left != null &and right != null &and left != right) {
     if (left.value != right.value) return false;
-    if (left.next == right) return true;     // adjacent — even length done
+    if (left.next == right) return true;     // adjacent - even length done
     left = left.next;
     right = right.prev;
   }
@@ -351,7 +351,7 @@ boolean isPalindrome(Node head, Node tail) {
 }
 ```
 
-**Time: O(n)** — pointers meet in the middle after n/2 steps.
+**Time: O(n)** - pointers meet in the middle after n/2 steps.
 **Space: O(1)**.
 </details>
 
@@ -384,9 +384,9 @@ Two passes → **O(n)** expected time (hashing), **O(n)** extra space for the ma
 </details>
 
 
-## 4. Stacks & Queues
+## 4. Stacks and Queues
 
-### Stacks & Queues Past Questions
+### Stacks and Queues Past Questions
 
 **[Sample Q4a] Problem with the following stack copy:**
 
@@ -401,7 +401,7 @@ Stack copyStack(Stack stack) {
 <details>
 <summary><b>Solution</b></summary>
 
-Two problems: (1) it **destroys** the original stack (the original is left empty because `pop` is destructive); (2) the returned copy is **reversed** relative to the original — pushing pops in order gives the reverse order.
+Two problems: (1) it **destroys** the original stack (the original is left empty because `pop` is destructive); (2) the returned copy is **reversed** relative to the original - pushing pops in order gives the reverse order.
 </details>
 
 
@@ -435,7 +435,7 @@ Alternatively, pop+push twice gives the correct order. **Time: O(n)**.
 </details>
 
 
-**[Fall 2019 MT1 Q4] `expunge(Stack S)`** — remove any element that has a larger element above it, so the final stack is non-decreasing top-to-bottom, using only one auxiliary stack or queue.
+**[Fall 2019 MT1 Q4] `expunge(Stack S)`** - remove any element that has a larger element above it, so the final stack is non-decreasing top-to-bottom, using only one auxiliary stack or queue.
 
 <details>
 <summary><b>Solution (one auxiliary stack)</b></summary>
@@ -453,11 +453,11 @@ expunge(Stack S):
     S.push(S2.pop())
 ```
 
-**Time: O(n)** amortized — each element pushed and popped O(1) times across both stacks.
+**Time: O(n)** amortized - each element pushed and popped O(1) times across both stacks.
 </details>
 
 
-### Stacks & Queues New Practice Questions
+### Stacks and Queues New Practice Questions
 
 **Q4.1** Implement a **Queue using two stacks**. Provide `enqueue(x)` and `dequeue()` and analyze their amortized complexity.
 
@@ -481,7 +481,7 @@ class MyQueue {
 ```
 
 - `enqueue`: **O(1)**.
-- `dequeue`: **O(n) worst case** for a single call (when `out` is empty and we move everything), but **amortized O(1)** — each element is moved from `in` to `out` exactly once in its lifetime.
+- `dequeue`: **O(n) worst case** for a single call (when `out` is empty and we move everything), but **amortized O(1)** - each element is moved from `in` to `out` exactly once in its lifetime.
 </details>
 
 
@@ -502,7 +502,7 @@ sortStack(S):
     S.push(temp.pop())
 ```
 
-**Time: O(n²)** worst case — each element can cause linear back-and-forth moves (similar to insertion sort).
+**Time: O(n²)** worst case - each element can cause linear back-and-forth moves (similar to insertion sort).
 </details>
 
 
@@ -552,15 +552,15 @@ reverseK(Queue q, int k):
     q.enqueue(q.dequeue())
 ```
 
-**Time: O(n)**, **Space: O(k)** for recursion — so "O(1) extra space" is impossible in a strict sense because any such solution must store k items somewhere (stack or recursion).
+**Time: O(n)**, **Space: O(k)** for recursion - so "O(1) extra space" is impossible in a strict sense because any such solution must store k items somewhere (stack or recursion).
 </details>
 
 
-## 5. Binary Trees & Binary Search Trees
+## 5. Binary Trees and Binary Search Trees
 
-### Binary Trees & Binary Search Trees Past Questions
+### Binary Trees and Binary Search Trees Past Questions
 
-**[Fall 2019 MT1 Q5] Mirror of a binary tree** — swap left and right of every internal node.
+**[Fall 2019 MT1 Q5] Mirror of a binary tree** - swap left and right of every internal node.
 
 <details>
 <summary><b>Solution</b></summary>
@@ -596,11 +596,11 @@ Every node is visited once → **O(n)** time, **O(h)** space for recursion where
                                  78(h=1)
 ```
 
-Does **not** satisfy AVL property (root's left subtree height 3 vs right 4 is fine, but 80's children have heights 3 and 0 — difference > 1).
+Does **not** satisfy AVL property (root's left subtree height 3 vs right 4 is fine, but 80's children have heights 3 and 0 - difference > 1).
 </details>
 
 
-### Binary Trees & Binary Search Trees New Practice Questions
+### Binary Trees and Binary Search Trees New Practice Questions
 
 **Q5.1** Write a recursive method `isBST(Node root)` that returns true iff the tree is a valid BST. Analyze complexity.
 
@@ -614,7 +614,7 @@ boolean isBST(Node root) {
 boolean check(Node n, long lo, long hi) {
   if (n == null) return true;
   if (n.key <= lo || n.key >= hi) return false;
-  return check(n.left, lo, n.key) && check(n.right, n.key, hi);
+  return check(n.left, lo, n.key) &and check(n.right, n.key, hi);
 }
 ```
 
@@ -640,7 +640,7 @@ void kthSmallest(Node root, int k) {
 }
 ```
 
-**Time: O(h + k)** — we walk down to the smallest, then visit k nodes in order.
+**Time: O(h + k)** - we walk down to the smallest, then visit k nodes in order.
 For a balanced BST this is **O(log n + k)**; for a skewed BST worst case is O(n).
 </details>
 
@@ -660,7 +660,7 @@ For a balanced BST this is **O(log n + k)**; for a skewed BST worst case is O(n)
      /      (h=1)(h=1)(h=1)
     5       
    (h=1)
-     …and 25 hangs off 30? No — 25 < 30 so 25 is left child of 30.
+     …and 25 hangs off 30? No - 25 < 30 so 25 is left child of 30.
 ```
 
 Cleaner ASCII:
@@ -693,7 +693,7 @@ Heights unchanged at 40, 60; 25 has height 3 (max child height 2 + 1).
 </details>
 
 
-**Q5.4** Write a method `diameter(Node root)` that returns the diameter of a binary tree — the length (edge count) of the longest path between any two nodes.
+**Q5.4** Write a method `diameter(Node root)` that returns the diameter of a binary tree - the length (edge count) of the longest path between any two nodes.
 
 <details>
 <summary><b>Solution</b></summary>
@@ -849,13 +849,13 @@ Contrast: inserting each element of heap B into heap A one-at-a-time costs `O(|B
 
 (If root at index 1 instead: parent `⌊i/2⌋`, left `2i`, right `2i+1`.)
 
-**Why `removeMin` is O(log n):** we (1) save `A[0]` as the return value, (2) move the last leaf to the root, and (3) down-heap — which at each step compares with the two children and swaps with the smaller, moving down one level. A complete binary tree has height `⌊log₂ n⌋`, so down-heap does O(log n) swaps/comparisons.
+**Why `removeMin` is O(log n):** we (1) save `A[0]` as the return value, (2) move the last leaf to the root, and (3) down-heap - which at each step compares with the two children and swaps with the smaller, moving down one level. A complete binary tree has height `⌊log₂ n⌋`, so down-heap does O(log n) swaps/comparisons.
 </details>
 
 
-## 7. Balanced BSTs (AVL & Red-Black)
+## 7. Balanced BSTs (AVL and Red-Black)
 
-### Balanced BSTs (AVL & Red-Black) Past Questions
+### Balanced BSTs (AVL and Red-Black) Past Questions
 
 **[Fall 2019 MT2 Q2c] Re-balancing after AVL violation.** After deleting 32 from the BST (see section 5), the tree is not AVL-balanced. Insert two nodes to violate it further (if needed) and perform rotations to restore AVL. Per the solution, a trinode restructuring with (27, 69, 75) gives a balanced tree.
 
@@ -864,11 +864,11 @@ Contrast: inserting each element of heap B into heap A one-at-a-time costs `O(|B
 <details>
 <summary><b>Solution</b></summary>
 
-The tree **cannot** be converted without rotations: Red-Black property bounds the ratio of any two sibling heights by 2 (i.e., `h_longer ≤ 2 · h_shorter`). In the tree from Q2a, node 80's subtree has height 3 while its sibling (32's subtree) has height 3 — ratio OK at root, but at node 80 itself, the left child (69) has height 3 while right child is empty/height 0, violating the rule.
+The tree **cannot** be converted without rotations: Red-Black property bounds the ratio of any two sibling heights by 2 (i.e., `h_longer ≤ 2 · h_shorter`). In the tree from Q2a, node 80's subtree has height 3 while its sibling (32's subtree) has height 3 - ratio OK at root, but at node 80 itself, the left child (69) has height 3 while right child is empty/height 0, violating the rule.
 </details>
 
 
-### Balanced BSTs (AVL & Red-Black) New Practice Questions
+### Balanced BSTs (AVL and Red-Black) New Practice Questions
 
 **Q7.1** Insert the following keys into an initially empty **AVL tree** in the given order. Show the tree after each rotation and indicate whether the rotation is LL, RR, LR, or RL.
 
@@ -1026,7 +1026,7 @@ Inserting in sorted order would make a right-skewed BST; AVL rotations fix this.
           \
            6
 ```
-Imbalance at node 5 (height 2 right, 0 left)? Actually no — the imbalance propagates to the root. At node 2: left height 1, right height 3. Shape right-right → **RR rotation** around root (lift 4 up):
+Imbalance at node 5 (height 2 right, 0 left)? Actually no - the imbalance propagates to the root. At node 2: left height 1, right height 3. Shape right-right → **RR rotation** around root (lift 4 up):
 ```text
      4
     / \
@@ -1082,7 +1082,7 @@ Load factor = 8/13. Same load factor would hold with separate chaining.
 
 - (a) Primary collisions (two records mapping to same home slot) depend only on the hash function and table size, **not** the collision-resolution strategy. So both have the same number of primary collisions.
 - (b) Linear probing is never faster to search than chaining: probing can create secondary collisions (records whose home is elsewhere may still collide), meaning more comparisons.
-- (c) Quadratic probing reduces but doesn't eliminate secondary collisions — same conclusion: chaining is at least as fast for search.
+- (c) Quadratic probing reduces but doesn't eliminate secondary collisions - same conclusion: chaining is at least as fast for search.
 
 
 ### Hash Tables New Practice Questions
@@ -1094,7 +1094,7 @@ Load factor = 8/13. Same load factor would hold with separate chaining.
 
 | x  | h(x)=x%11 | probes | final idx |
 | :--- | :--- | :--- | :--- |
-| 4  | 4         | —      | 4         |
+| 4  | 4         | -      | 4         |
 | 15 | 4         | collision at 4 → try 5 | 5 |
 | 26 | 4         | 4 taken, 5 taken → 6 | 6 |
 | 17 | 6         | collision at 6 → try 7 | 7 |
@@ -1133,7 +1133,7 @@ With open addressing, a search for key `x` probes slots starting at `h(x)`. It s
 
 A **DEFUNCT/tombstone** marker lets search continue probing but tells insert that the slot is reusable.
 
-With **separate chaining**, deletion simply unlinks a node from the bucket's list — the bucket is still "occupied" conceptually; there's no probe chain that can be broken.
+With **separate chaining**, deletion simply unlinks a node from the bucket's list - the bucket is still "occupied" conceptually; there's no probe chain that can be broken.
 
 > ⚠ When resizing an open-addressing table, DEFUNCT entries are **not** copied over (they're artifacts of prior collisions, not real data).
 </details>
@@ -1163,9 +1163,9 @@ Collisions: 1 (for 26) + 1 (for 12) = **2 collisions** total.
 </details>
 
 
-## 9. Dynamic Arrays & Amortized Analysis
+## 9. Dynamic Arrays and Amortized Analysis
 
-### Dynamic Arrays & Amortized Analysis Past Questions
+### Dynamic Arrays and Amortized Analysis Past Questions
 
 **[Fall 2022 Q5a]** Two same-size arrays A (n unsorted items) and B (empty). Insert from A into B one-at-a-time keeping B sorted. Complexity?
 
@@ -1186,11 +1186,11 @@ Inserting the i-th item: finding position by binary search is `O(log i)`, but **
 
 Since this dominates linear work, total = **O(n²/c)**.
 
-**Contrast with doubling:** if B doubles on resize, amortized insert is O(1) — total O(n).
+**Contrast with doubling:** if B doubles on resize, amortized insert is O(1) - total O(n).
 </details>
 
 
-### Dynamic Arrays & Amortized Analysis New Practice Questions
+### Dynamic Arrays and Amortized Analysis New Practice Questions
 
 **Q9.1** A dynamic array doubles its capacity on overflow. Prove that `n` appends cost amortized O(1) each (i.e., total O(n)).
 
@@ -1227,7 +1227,7 @@ Naive "halve when ½ full" thrashes: alternating append/remove at the boundary t
 </details>
 
 
-**Q9.4** Arguments for ArrayList vs. DoublyLinkedList for the following access patterns — briefly justify:
+**Q9.4** Arguments for ArrayList vs. DoublyLinkedList for the following access patterns - briefly justify:
 
 (a) Many random-index reads.
 (b) Frequent inserts/removes at both ends.
@@ -1237,10 +1237,10 @@ Naive "halve when ½ full" thrashes: alternating append/remove at the boundary t
 <details>
 <summary><b>Solution</b></summary>
 
-- (a) **ArrayList** — `get(i)` is O(1) vs O(n) for a linked list.
-- (b) **DoublyLinkedList** — O(1) at both head and tail; ArrayList is O(n) for head operations.
-- (c) **ArrayList** — contiguous memory, better cache locality; linked lists scatter nodes in heap.
-- (d) **DoublyLinkedList** — O(1) if you already have the node pointer; ArrayList would need O(n) shifts.
+- (a) **ArrayList** - `get(i)` is O(1) vs O(n) for a linked list.
+- (b) **DoublyLinkedList** - O(1) at both head and tail; ArrayList is O(n) for head operations.
+- (c) **ArrayList** - contiguous memory, better cache locality; linked lists scatter nodes in heap.
+- (d) **DoublyLinkedList** - O(1) if you already have the node pointer; ArrayList would need O(n) shifts.
 </details>
 
 
@@ -1257,11 +1257,11 @@ Newton's method iteratively approximates a root of a differentiable function `f(
 
 `x_{n+1} = x_n − f(x_n) / f'(x_n)`
 
-Starting from an initial guess `x₀`, each iteration uses the tangent line at `x_n` to estimate where the function crosses zero. Convergence is **quadratic** near a simple root (number of correct digits roughly doubles each iteration) — much faster than bisection's linear convergence.
+Starting from an initial guess `x₀`, each iteration uses the tangent line at `x_n` to estimate where the function crosses zero. Convergence is **quadratic** near a simple root (number of correct digits roughly doubles each iteration) - much faster than bisection's linear convergence.
 </details>
 
 
-**[Fall 2022 Q4b] Approximate √x.** Using Newton's method on `f(y) = y² − x` (whose root is √x), iteration becomes `y_{n+1} = 0.5 (y_n + x/y_n)` — the classic Babylonian method. For n-digit precision, **O(log n)** iterations.
+**[Fall 2022 Q4b] Approximate √x.** Using Newton's method on `f(y) = y² − x` (whose root is √x), iteration becomes `y_{n+1} = 0.5 (y_n + x/y_n)` - the classic Babylonian method. For n-digit precision, **O(log n)** iterations.
 
 **[Fall 2022 Q4c] Does Newton converge for `f(x) = √x for x≥0, −√(−x) for x<0`?**
 
@@ -1309,8 +1309,8 @@ The true value is `∛20 ≈ 2.71442`. After 3 iterations we're within 10⁻⁴.
 <details>
 <summary><b>Solution</b></summary>
 
-1. **Zero or near-zero derivative:** if `f'(x_n) = 0`, the update formula divides by zero. E.g., applying to `f(x) = x²` at `x₀ = 0` — derivative is zero at the root, causing slow/failed convergence (only linear convergence at a double root).
-2. **Oscillation / no root nearby:** Fall 2022 Q4c's example — the iteration oscillates between `h` and `−h`.
+1. **Zero or near-zero derivative:** if `f'(x_n) = 0`, the update formula divides by zero. E.g., applying to `f(x) = x²` at `x₀ = 0` - derivative is zero at the root, causing slow/failed convergence (only linear convergence at a double root).
+2. **Oscillation / no root nearby:** Fall 2022 Q4c's example - the iteration oscillates between `h` and `−h`.
 3. **Divergence due to bad initial guess:** For `f(x) = arctan(x)`, choosing `|x₀|` too large causes the iterates to grow without bound.
 
 Also worth noting: Newton's method assumes `f` is differentiable and `f'` is continuous near the root. For `f(x) = |x|^(1/3)`, derivatives explode and the method diverges.
@@ -1326,7 +1326,7 @@ We want a root of `f(x) = 1/x − a` (root at x = 1/a). Compute `f'(x) = −1/x�
 
 `x_{n+1} = x_n − (1/x_n − a) / (−1/x_n²) = x_n + x_n² (1/x_n − a) = x_n (2 − a · x_n)`.
 
-**Update: `x_{n+1} = x_n (2 − a · x_n)`** — only multiplications and one subtraction, no division. Converges quadratically given a good initial guess (typically from a lookup table). Used in floating-point hardware and in GPU reciprocal approximations.
+**Update: `x_{n+1} = x_n (2 − a · x_n)`** - only multiplications and one subtraction, no division. Converges quadratically given a good initial guess (typically from a lookup table). Used in floating-point hardware and in GPU reciprocal approximations.
 </details>
 
 
@@ -1339,7 +1339,7 @@ At the current guess `x_n`, draw the **tangent line** to the graph of f at the p
 
 **Quadratic convergence:** Taylor-expand f around the true root r: `f(x) = f'(r)(x − r) + ½ f''(ξ)(x − r)²`. Plugging into the update:
 `x_{n+1} − r ≈ f''(r)/(2 f'(r)) · (x_n − r)²`.
-The new error is proportional to the **square** of the old error — each iteration roughly doubles the number of correct digits (provided f'(r) ≠ 0).
+The new error is proportional to the **square** of the old error - each iteration roughly doubles the number of correct digits (provided f'(r) ≠ 0).
 </details>
 
 
@@ -1347,18 +1347,18 @@ The new error is proportional to the **square** of the old error — each iterat
 
 Rapid-fire conceptual review drawn from all four midterms.
 
-### Access control & Java fundamentals
+### Access control and Java fundamentals
 - **Default (package-private) access:** variables with no modifier are visible to classes in the same package.
 - **Primitive types have no constructors.** `int x = 5;` creates a value, not a heap object.
 
 ### Complexity nuances
-- `O(n^1.01) > O(n log n)` — any polynomial (with power > 1) dominates `n log n`.
+- `O(n^1.01) > O(n log n)` - any polynomial (with power > 1) dominates `n log n`.
 - The constant multipliers of a specific algorithm **do depend** on implementation details.
 - `log(n!) = Θ(n log n)` (Stirling's approximation).
 
 ### Recursion
-- **All recursive functions need a base case** — otherwise they don't terminate.
-- **Binary search is not binary recursion** — it makes only one recursive call per non-base case (it's linear recursion).
+- **All recursive functions need a base case** - otherwise they don't terminate.
+- **Binary search is not binary recursion** - it makes only one recursive call per non-base case (it's linear recursion).
 
 ### Lists (for positional access around known elements)
 - **ArrayList** exploits **cache locality** → prefer for random-access-heavy workloads.
@@ -1366,7 +1366,7 @@ Rapid-fire conceptual review drawn from all four midterms.
 
 ### Heaps (array-indexed, root at 1)
 - Parent of i = `⌊i/2⌋`; left = `2i`; right = `2i+1`.
-- An in-place array **can** serve as a heap — no auxiliary array needed for O(n) `heapify`.
+- An in-place array **can** serve as a heap - no auxiliary array needed for O(n) `heapify`.
 - **Heap-sort** is asymptotically fast and in-place, but its dominant cost is the **repeated down-heap**, not the initial heapify.
 
 ### Memory management choice
@@ -1376,7 +1376,7 @@ Rapid-fire conceptual review drawn from all four midterms.
 - Work on most recent → **stack** (LIFO).
 
 ### BSTs, AVL, Red-Black
-- Traversing any balanced BST is `O(n)` (not `O(log n)`) — you must visit every node.
+- Traversing any balanced BST is `O(n)` (not `O(log n)`) - you must visit every node.
 - AVL with dummy/null leaves has ≈ 2× the node count vs. AVL without.
 - Red-Black deletion rebalancing uses **constant** rotations (at most 3) but possibly O(log n) recolors.
 - **Prefer AVL** when reads dominate; **prefer Red-Black** when updates dominate.
@@ -1387,7 +1387,7 @@ Rapid-fire conceptual review drawn from all four midterms.
 - Hashmaps with separate chaining **do not** copy DEFUNCT slots on resize (open-addressing only concern).
 - Insert into an n-element separate-chaining hashmap of size n with unsorted lists: **O(n)** worst case (walk the chain to check for duplicates).
 
-### Sorting quick facts (for concept questions only — no new practice)
+### Sorting quick facts (for concept questions only - no new practice)
 - Quick-sort's theoretical complexity **depends on pivot** (O(n²) worst, O(n log n) average with good pivots).
 - Merge-sort is always `Θ(n log n)` but needs O(n) auxiliary space → problematic for huge datasets.
 - **Insertion sort is adaptive** → optimal for nearly-sorted input (O(n)).
@@ -1395,8 +1395,8 @@ Rapid-fire conceptual review drawn from all four midterms.
 - Any comparison-based sort can be **made stable** by augmenting keys with their original index and breaking ties via index.
 
 ### True/False warnings
-- "We need to heapify at every iteration" — **False.** Heap-sort heapifies once; each subsequent swap+down-heap is O(log n), not full heapify.
-- "We need a comparator/total order to build a BST" — **True.** Keys must be comparable.
+- "We need to heapify at every iteration" - **False.** Heap-sort heapifies once; each subsequent swap+down-heap is O(log n), not full heapify.
+- "We need a comparator/total order to build a BST" - **True.** Keys must be comparable.
 
 
 ## 12. Past Sorting Questions (reference only)
@@ -1406,7 +1406,7 @@ Rapid-fire conceptual review drawn from all four midterms.
 ### [Fall 2019 MT2 Q3] Sorting (concept questions)
 
 - **(a) Which values could have been the pivot?** Array `[3, 0, 2, 4, 5, 8, 7, 6, 9]`. After partitioning, all elements left of the pivot are ≤ pivot and all right are > pivot. Candidates where this holds: **4, 5, 9**.
-- **(b) Library catalog, almost sorted:** use **insertion sort** — it's adaptive (O(n) on nearly-sorted input).
+- **(b) Library catalog, almost sorted:** use **insertion sort** - it's adaptive (O(n) on nearly-sorted input).
 - **(c) Embedded system, 1M integers, tight memory:** use **quick-sort** or **heap-sort** (in-place, fast).
 - **(d) Make any comparison sort stable:** pair each element with its original index; tie-break on index.
 - **(e) Merge-sort tree:** for `27, 29, 49, 18, 55, 15, 66, 49`, recursive split/merge gives final sorted `[15, 18, 27, 29, 49, 49, 55, 66]`.
@@ -1426,14 +1426,14 @@ Merge-sort is insensitive to input order (always Θ(n log n)); insertion-sort's 
 Given unique integers, find longest run of consecutive values (in any order).
 
 ### Three approaches
-1. Sort then scan — **O(n log n)**.
-2. Counting sort (if range is bounded) — O(n + range).
-3. **HashSet trick** — **O(n) expected**: add all to a set; for each element that starts a run (i.e., `x-1` not in set), count forward until the run ends. Each element touched O(1) times.
+1. Sort then scan - **O(n log n)**.
+2. Counting sort (if range is bounded) - O(n + range).
+3. **HashSet trick** - **O(n) expected**: add all to a set; for each element that starts a run (i.e., `x-1` not in set), count forward until the run ends. Each element touched O(1) times.
 
 
 ## How to Use This Guide
 
-1. **First pass:** skim Section 11 (short-answer concepts) — these are the highest-density facts.
+1. **First pass:** skim Section 11 (short-answer concepts) - these are the highest-density facts.
 2. **Topic-by-topic:** work each past question *without looking at the solution first*, then compare.
 3. **New practice:** use the new questions (Q*.n* in each section) as simulated exam problems. Try the "hide the solution" approach and only uncover after attempting.
 4. **Weak areas:** the topics with most practice questions that trip you up should get a second-round review.

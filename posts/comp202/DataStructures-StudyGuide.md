@@ -24,7 +24,7 @@ Because the size of an array is fixed at creation time, it cannot grow or shrink
 - **insert(i, x)** - place `x` at index `i`, shifting elements at indices `i` through `n-1` one position to the right.
 - **remove(i)** - delete `A[i]`, shifting elements at indices `i+1` through `n-1` one position to the left.
 
-### Time & Space Complexity
+### Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -108,7 +108,7 @@ public void addLast(E e) {
 }
 ```
 
-### Singly Linked Lists Time & Space Complexity
+### Singly Linked Lists Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -184,7 +184,7 @@ private E remove(Node<E> node) {
 }
 ```
 
-### Doubly Linked Lists Time & Space Complexity
+### Doubly Linked Lists Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -256,7 +256,7 @@ private void resize(int cap) {
 }
 ```
 
-### ArrayList (Dynamic Array) Time & Space Complexity
+### ArrayList (Dynamic Array) Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -316,7 +316,7 @@ private Node<E> validate(Position<E> p) {
 }
 ```
 
-### Positional List Time & Space Complexity
+### Positional List Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -394,7 +394,7 @@ public class LinkedStack<E> {
 
 Use a singly linked list; `push` = `addFirst`, `pop` = `removeFirst` - both O(1). Grows dynamically without any capacity limit (other than available heap memory).
 
-### Stack Time & Space Complexity
+### Stack Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -478,7 +478,7 @@ public class LinkedQueue<E> {
 
 Singly linked list with both `head` and `tail` pointers: `enqueue` = append at tail (O(1) with tail pointer), `dequeue` = remove from head (O(1)). Note: `removeFirst` is used for dequeue (not `removeLast`), which is why a singly linked list suffices - no backward pointer needed.
 
-### Queue Time & Space Complexity
+### Queue Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -545,7 +545,7 @@ public void insert(K k, V v) {
     Entry<K,V> newest = new MapEntry<>(k, v);
     Position<Entry<K,V>> walk = data.last();
     // Traverse backward across larger keys
-    while (walk != null && comp.compare(newest.getKey(), walk.getElement().getKey()) < 0) {
+    while (walk != null &and comp.compare(newest.getKey(), walk.getElement().getKey()) < 0) {
         walk = data.before(walk);
     }
     if (walk == null) data.addFirst(newest);
@@ -636,7 +636,7 @@ Node<K,V> treeSearch(K k, Node<K,V> v) {
 ```
 **BST insert:** run `treeSearch`; if not found, attach new leaf where the search fell off (at the null position where the search terminated).
 
-### Tree Time & Space Complexity
+### Tree Time and Space Complexity
 
 | Operation | Complexity | Why |
 | :--- | :--- | :--- |
@@ -777,7 +777,7 @@ private void downheap(int j) {
     int n = heap.size();
     while (2*j + 1 < n) {
         int left = 2*j + 1, right = 2*j + 2, small = left;
-        if (right < n && comp.compare(heap.get(right).getKey(), heap.get(left).getKey()) < 0)
+        if (right < n &and comp.compare(heap.get(right).getKey(), heap.get(left).getKey()) < 0)
             small = right;
         if (comp.compare(heap.get(j).getKey(), heap.get(small).getKey()) <= 0) break;
         swap(j, small);
@@ -791,7 +791,7 @@ private void heapify() {
 }
 ```
 
-### Heap Time & Space Complexity
+### Heap Time and Space Complexity
 
 | Operation | Complexity | Why |
 | :--- | :--- | :--- |
@@ -890,7 +890,7 @@ public V get(K key) {
 
 Other implementations: **sorted search table** (binary search on a sorted array), **hashtable**, **balanced BST**, **skip list**.
 
-### Map Time & Space Complexity
+### Map Time and Space Complexity
 
 | Implementation | get / put / remove | Why |
 | :--- | :--- | :--- |
@@ -1002,7 +1002,7 @@ Probe `A[(h(k) + j²) mod N]` for `j = 0, 1, 2, ...`. Reduces primary clustering
 Use a **secondary hash function** `d(k)` as the step size: probe `A[(h(k) + j · d(k)) mod N]`. A common choice: `d(k) = q − (k mod q)` with `q` prime, `q < N`. Because different keys get different step sizes, their probe sequences diverge - this avoids both primary and secondary clustering.
 `d(k)` must be nonzero and ideally coprime to `N` (guaranteed if `N` is prime) so the full table is probed.
 
-### Load Factor & Rehashing
+### Load Factor and Rehashing
 
 **Load factor** `λ = n/N` (number of entries / table capacity).
 
@@ -1014,7 +1014,7 @@ Use a **secondary hash function** `d(k)` as the step size: probe `A[(h(k) + j ·
 
 When exceeded, **rehash**: allocate a new (typically doubled and kept prime) table and reinsert every entry. This is O(n) per rehash, but amortized O(1) per insertion if you double the table size each time (same argument as ArrayList doubling).
 
-### Hashtable Time & Space Complexity
+### Hashtable Time and Space Complexity
 
 | | Average | Worst | Why |
 | :--- | :--- | :--- | :--- |
@@ -1091,7 +1091,7 @@ public class ListSet<E> {
 
 The List-backed Set checks every element on `add` to ensure uniqueness, resulting in O(n) additions.
 
-### Set Time & Space Complexity
+### Set Time and Space Complexity
 
 | Implementation | add / remove / contains | Why |
 | :--- | :--- | :--- |
@@ -1158,7 +1158,7 @@ public boolean remove(K key, V value) {
 }
 ```
 
-### Multimap Time & Space Complexity
+### Multimap Time and Space Complexity
 
 | Operation | Time | Why |
 | :--- | :--- | :--- |
@@ -1223,7 +1223,7 @@ public void insert(K key, V value) {
 - **Unordered (hashtable-backed):** O(1) average find/insert/remove. Effectively a multimap built on a hashtable where each bucket can hold multiple entries with the same key.
 - **Ordered (sorted search table):** entries kept sorted by key; `find` is O(log n) via binary search, `findAll(k)` is O(log n + s) where `s` is the number of matches (binary search to find one, then scan adjacent entries). Insert/remove cost O(n) from shifting.
 
-### Dictionary Time & Space Complexity
+### Dictionary Time and Space Complexity
 
 | Implementation | find | findAll | insert | remove | Why |
 | :--- | :--- | :--- | :--- | :--- | :--- |
