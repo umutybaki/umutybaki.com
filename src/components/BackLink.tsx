@@ -7,7 +7,7 @@ interface Props {
 
 export default function BackLink({ href, label }: Props) {
   return (
-    <Link href={href} className="back-link">
+    <Link href={href} className="inline-flex items-center gap-[0.4rem] text-text-secondary text-[0.875rem] transition-opacity duration-150 mb-8 hover:opacity-60">
       <svg
         width="16"
         height="16"

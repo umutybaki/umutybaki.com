@@ -3,5 +3,5 @@ interface Props {
 }
 
 export default function PostList({ children }: Props) {
-  return <ul className="blog-post-list">{children}</ul>
+  return <ul className="list-none flex flex-col gap-[0.4rem]">{children}</ul>
 }

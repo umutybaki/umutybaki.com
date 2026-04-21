@@ -1,25 +1,26 @@
-export default function Home() {
-  return (
-    <main className="container">
-      <section className="home-hero">
-        <h1 className="hero-name">Umut Yalçın Baki</h1>
-        <p className="home-tagline">
-          <span className="lang-en">Koç University — Computer Engineering &amp; Economics DM</span>
-          <span className="lang-tr">Koç Üniversitesi — Bilgisayar Mühendisliği &amp; Ekonomi ÇAP</span>
-        </p>
-        <p className="home-bio">
-          <span className="lang-en">
-            Computer Engineering &amp; Economics double major. I like building things that make sense.
-          </span>
-          <span className="lang-tr">Bilgisayar Mühendisliği &amp; Ekonomi ÇAP öğrencisi.</span>
-        </p>
+import { getDictionary } from '@/dictionaries'
 
-        <div className="home-links">
+interface Props {
+  params: Promise<{ locale: string }>
+}
+
+export default async function Home({ params }: Props) {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+
+  return (
+    <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
+      <section className="flex flex-col justify-center h-[calc(100vh-70px)]">
+        <h1 className="text-[2.75rem] md:text-[3.5rem] font-bold tracking-[-0.03em] text-text-primary">Umut Yalçın Baki</h1>
+        <p className="text-[0.9rem] text-accent-color font-medium mb-4 font-roboto-mono tracking-[0.02em]">{dict.home.subtitle}</p>
+        <p className="text-[1.1rem] text-text-secondary max-w-[560px] mb-0 leading-[1.7]">{dict.home.description}</p>
+
+        <div className="flex gap-[0.6rem] flex-wrap mt-8">
           <a
             href="https://github.com/umutybaki"
             target="_blank"
             rel="noopener noreferrer"
-            className="home-link"
+            className="flex items-center gap-[0.45rem] px-4 py-[0.6rem] border border-border-color rounded-sm text-text-primary font-[450] text-[0.9rem] transition-colors duration-150 no-underline hover:bg-surface-hover hover:border-[rgba(255,100,0,0.3)] hover:opacity-100 [&_svg]:text-accent-color"
           >
             <svg
               width="20"
@@ -39,7 +40,7 @@ export default function Home() {
             href="https://www.linkedin.com/in/umutybaki"
             target="_blank"
             rel="noopener noreferrer"
-            className="home-link"
+            className="flex items-center gap-[0.45rem] px-4 py-[0.6rem] border border-border-color rounded-sm text-text-primary font-[450] text-[0.9rem] transition-colors duration-150 no-underline hover:bg-surface-hover hover:border-[rgba(255,100,0,0.3)] hover:opacity-100 [&_svg]:text-accent-color"
           >
             <svg
               width="20"

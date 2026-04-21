@@ -8,10 +8,10 @@ interface Props {
 
 export default function AppListItem({ href, logo, logoAlt, name, subtitle }: Props) {
   return (
-    <li className="blog-post-item">
+    <li className="border border-border-color rounded-md transition-all duration-150 hover:bg-surface-hover hover:border-[rgba(255,100,0,0.25)]">
       <a
         href={href}
-        className="blog-post-link app-item-link"
+        className="flex items-center justify-start p-4 md:p-5 gap-4 md:gap-5 text-text-primary no-underline hover:opacity-100"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -20,17 +20,13 @@ export default function AppListItem({ href, logo, logoAlt, name, subtitle }: Pro
           alt={logoAlt}
           width="48"
           height="48"
-          className="app-item-logo"
-          style={{ borderRadius: '10px' }}
+          className="w-10 h-10 md:w-12 md:h-12 rounded-[10px]"
         />
-        <div style={{ flex: 1 }}>
-          <div className="blog-post-title" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
+        <div className="flex-1">
+          <div className="text-[1.1rem] font-semibold">
             {name}
           </div>
-          <div
-            className="blog-post-date"
-            style={{ marginLeft: 0, marginTop: '0.2rem', fontSize: '0.85rem' }}
-          >
+          <div className="text-[0.85rem] mt-[0.2rem] text-text-secondary font-roboto-mono">
             {subtitle}
           </div>
         </div>
