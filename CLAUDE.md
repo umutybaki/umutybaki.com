@@ -18,11 +18,13 @@ No test suite or linter is configured.
 
 ### Pages
 
-- `/` — landing page
-- `/blog` — lecture notes index, grouped by category
-- `/blog/[category]/[slug]` — individual post
-- `/projects` — projects showcase
-- `/cv` — CV/portfolio
+All pages are under the `[locale]` dynamic segment. `/` redirects to `/en` via middleware.
+
+- `/[locale]` — landing page
+- `/[locale]/blog` — lecture notes index, grouped by category
+- `/[locale]/blog/[category]/[slug]` — individual post
+- `/[locale]/projects` — projects showcase
+- `/[locale]/cv` — CV/portfolio
 
 ### Blog content pipeline
 
@@ -35,9 +37,22 @@ Posts live in `/posts/[category]/[slug].md` as Markdown files with YAML frontmat
 
 To add a new blog category, create a new directory under `/posts/`. No other registration is needed.
 
-### Bilingual UI
+### i18n / Dictionary system
 
-Language switching is CSS-based: the Nav component toggles `document.documentElement.lang` between `en` and `tr`. Content uses `<span class="lang-en">` / `<span class="lang-tr">` sibling elements, with CSS showing/hiding the appropriate one.
+Language is determined by the `[locale]` URL segment. `src/middleware.ts` redirects `/` → `/en`.
+
+Dictionaries live in `src/dictionaries/`:
+- `types.ts` — the `Dictionary` type covering every UI string and all CV content
+- `en.ts` — English strings (the only locale currently)
+- `index.ts` — `getDictionary(locale): Dictionary` (sync, falls back to `en`)
+
+`src/app/[locale]/layout.tsx` validates the locale, calls `getDictionary`, and passes `dict.nav` + `locale` to the `Nav` client component. All page server components call `getDictionary(locale)` directly from their `params`.
+
+To add a new locale: create `src/dictionaries/tr.ts` satisfying the `Dictionary` type and add it to the map in `index.ts`. The routes are already pre-generated for `tr`.
+
+The language toggle in Nav navigates to `/${otherLocale}${restOfPath}` via `router.push`.
+
+CV content strings (job titles, descriptions, dates) all live in the dictionary. `src/app/[locale]/cv/cvData.tsx` is a factory `getCvData(dict.cv)` that composes the JSX (with links and HTML descriptions) from those strings. The SVG icons and skill tags stay in that file.
 
 ### Theme system
 

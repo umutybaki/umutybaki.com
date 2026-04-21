@@ -1,18 +1,27 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import type { Dictionary } from '@/dictionaries/types'
 
-export default function Nav() {
-  const [lang, setLang] = useState<'en' | 'tr'>('en')
+interface NavProps {
+  locale: string
+  dict: Dictionary['nav']
+  availableLocales: string[]
+}
+
+export default function Nav({ locale, dict, availableLocales }: NavProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+  const otherLocale = locale === 'en' ? 'tr' : 'en'
+  const canSwitch = availableLocales.includes(otherLocale)
 
-  // Sync lang attribute with state on mount
   useEffect(() => {
-    document.documentElement.setAttribute('lang', lang)
-  }, [lang])
+    document.documentElement.setAttribute('lang', locale)
+  }, [locale])
 
-  // Prevent scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden'
@@ -30,28 +39,24 @@ export default function Nav() {
   }
 
   function toggleLang() {
-    setLang((prev) => {
-      const next = prev === 'en' ? 'tr' : 'en'
-      document.documentElement.setAttribute('lang', next)
-      return next
-    })
+    if (!canSwitch) return
+    const newPath = pathname.replace(new RegExp(`^/${locale}(?=/|$)`), `/${otherLocale}`)
+    router.push(newPath)
   }
 
   return (
     <nav className="main-nav">
       <div className="nav-content">
-        <Link href="/" className="nav-name" style={{ position: 'relative', zIndex: 10 }}>
+        <Link href={`/${locale}`} className="nav-name" style={{ position: 'relative', zIndex: 10 }}>
           Umut Yalçın Baki
         </Link>
-        
+
         <div className="nav-centered-links">
-          <Link href="/projects" className="nav-link">
-            <span className="lang-en">Projects</span>
-            <span className="lang-tr">Projeler</span>
+          <Link href={`/${locale}/projects`} className="nav-link">
+            {dict.projects}
           </Link>
-          <Link href="/blog" className="nav-link">
-            <span className="lang-en">Blog</span>
-            <span className="lang-tr">Blog</span>
+          <Link href={`/${locale}/blog`} className="nav-link">
+            {dict.blog}
           </Link>
         </div>
 
@@ -94,14 +99,14 @@ export default function Nav() {
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
           </button>
-          <button className="lang-toggle" onClick={toggleLang} aria-label="Toggle Language">
+          <button className="lang-toggle" onClick={toggleLang} disabled={!canSwitch} aria-label="Toggle Language">
             <div className="lang-slider" />
             <span className="lang-label en">EN</span>
             <span className="lang-label tr">TR</span>
           </button>
-          
-          <button 
-            className="mobile-menu-btn" 
+
+          <button
+            className="mobile-menu-btn"
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="Toggle Menu"
           >
@@ -116,28 +121,25 @@ export default function Nav() {
 
       <div className={`mobile-menu-sheet ${isMobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-menu-header">
-           <Link href="/" className="nav-name" onClick={() => setIsMobileMenuOpen(false)}>
-             Umut Yalçın Baki
-           </Link>
-           <button className="mobile-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
-             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-               <line x1="18" y1="6" x2="6" y2="18"></line>
-               <line x1="6" y1="6" x2="18" y2="18"></line>
-             </svg>
-           </button>
+          <Link href={`/${locale}`} className="nav-name" onClick={() => setIsMobileMenuOpen(false)}>
+            Umut Yalçın Baki
+          </Link>
+          <button className="mobile-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
         <div className="mobile-menu-links">
-          <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="lang-en">Home</span>
-            <span className="lang-tr">Ana Sayfa</span>
+          <Link href={`/${locale}`} onClick={() => setIsMobileMenuOpen(false)}>
+            {dict.home}
           </Link>
-          <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="lang-en">Projects</span>
-            <span className="lang-tr">Projeler</span>
+          <Link href={`/${locale}/projects`} onClick={() => setIsMobileMenuOpen(false)}>
+            {dict.projects}
           </Link>
-          <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="lang-en">Blog</span>
-            <span className="lang-tr">Blog</span>
+          <Link href={`/${locale}/blog`} onClick={() => setIsMobileMenuOpen(false)}>
+            {dict.blog}
           </Link>
         </div>
         <div style={{ marginTop: 'auto', padding: '2rem', display: 'flex', gap: '1.5rem', borderTop: '1px solid var(--border-color)' }}>

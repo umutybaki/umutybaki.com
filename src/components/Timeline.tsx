@@ -3,17 +3,11 @@
 import { type ReactNode } from 'react'
 
 export interface TimelineItemData {
-  /** SVG or image element for the icon bubble */
   icon: ReactNode
-  /** CSS box-shadow color for the icon glow, e.g. "rgba(209,0,177,0.4)" */
   iconGlow?: string
-  /** Bilingual title — rendered as h3 */
-  title: { en: ReactNode; tr: ReactNode }
-  /** Bilingual date string */
-  date: { en: string; tr: string }
-  /** Bilingual description paragraphs */
-  description?: { en: ReactNode; tr: ReactNode }
-  /** Skill / tech tags */
+  title: ReactNode
+  date: string
+  description?: ReactNode
   tags?: string[]
 }
 
@@ -40,7 +34,6 @@ export default function Timeline({ items }: TimelineProps) {
             >
               {item.icon}
             </div>
-            {/* Connecting line */}
             {i < items.length - 1 && (
               <div
                 className="w-px flex-1 min-h-6 mt-2"
@@ -58,34 +51,24 @@ export default function Timeline({ items }: TimelineProps) {
               boxShadow: 'var(--card-shadow)',
             }}
           >
-            {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-3">
               <h3 className="text-base font-semibold leading-snug mb-0" style={{ color: 'var(--text-primary)' }}>
-                <span className="lang-en">{item.title.en}</span>
-                <span className="lang-tr">{item.title.tr}</span>
+                {item.title}
               </h3>
               <span
                 className="text-xs whitespace-nowrap mt-0.5 sm:mt-1 shrink-0"
                 style={{ fontFamily: 'var(--font-roboto-mono), monospace', color: 'var(--text-secondary)' }}
               >
-                <span className="lang-en">{item.date.en}</span>
-                <span className="lang-tr">{item.date.tr}</span>
+                {item.date}
               </span>
             </div>
 
-            {/* Description */}
             {item.description && (
-              <>
-                <div className="lang-en text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0" style={{ color: 'var(--text-secondary)' }}>
-                  {item.description.en}
-                </div>
-                <div className="lang-tr text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0" style={{ color: 'var(--text-secondary)' }}>
-                  {item.description.tr}
-                </div>
-              </>
+              <div className="text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0" style={{ color: 'var(--text-secondary)' }}>
+                {item.description}
+              </div>
             )}
 
-            {/* Tags */}
             {item.tags && item.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-4">
                 {item.tags.map((tag) => (

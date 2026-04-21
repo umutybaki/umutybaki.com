@@ -316,8 +316,13 @@
   transition: border-color var(--transition-fast);
 }
 
-.lang-toggle:hover {
+.lang-toggle:hover:not(:disabled) {
   border-color: var(--accent-color);
+}
+
+.lang-toggle:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .lang-label {
@@ -356,14 +361,6 @@ html[lang="tr"] .lang-slider {
 
 html[lang="tr"] .lang-label.tr {
   color: #ffffff;
-}
-
-[lang="tr"] .lang-en {
-  display: none !important;
-}
-
-[lang="en"] .lang-tr {
-  display: none !important;
 }
 
 /* Accordion */

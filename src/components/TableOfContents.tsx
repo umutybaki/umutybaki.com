@@ -5,9 +5,10 @@ import type { TocItem } from '@/lib/posts'
 
 interface Props {
   headings: TocItem[]
+  title: string
 }
 
-export default function TableOfContents({ headings }: Props) {
+export default function TableOfContents({ headings, title }: Props) {
   const [activeId, setActiveId] = useState<string>('')
   const observerRef = useRef<IntersectionObserver | null>(null)
 
@@ -40,7 +41,7 @@ export default function TableOfContents({ headings }: Props) {
 
   return (
     <nav className="toc" aria-label="Table of contents">
-      <p className="toc-title">On this page</p>
+      <p className="toc-title">{title}</p>
       <ul className="toc-list">
         {headings.map((heading) => (
           <li

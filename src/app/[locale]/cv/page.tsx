@@ -1,16 +1,9 @@
 import type { Metadata } from 'next'
+import { getDictionary } from '@/dictionaries'
 import Timeline from '@/components/Timeline'
 import Accordion from '@/components/Accordion'
 import CvListSection from './CvListSection'
-import {
-  careerItems,
-  educationItems,
-  volunteeringItems,
-  certificateItems,
-  competitionItems,
-  technicalSkills,
-  spokenLanguages,
-} from './cvData'
+import { getCvData, technicalSkills } from './cvData'
 
 export const metadata: Metadata = {
   title: 'CV – Umut Yalçın Baki',
@@ -18,7 +11,6 @@ export const metadata: Metadata = {
     'Portfolio of Umut Yalçın Baki, Software Engineer & Computer Engineering/Economics double major at Koç University.',
 }
 
-/* ─── Skill‑tag colors ─────────────────────────────────────── */
 const tagStyle: Record<string, React.CSSProperties> = {
   lang: { backgroundColor: 'var(--accent-muted)', color: 'var(--accent-color)' },
   infra: { backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' },
@@ -26,7 +18,15 @@ const tagStyle: Record<string, React.CSSProperties> = {
   spoken: { backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' },
 }
 
-export default function CvPage() {
+interface Props {
+  params: Promise<{ locale: string }>
+}
+
+export default async function CvPage({ params }: Props) {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  const { careerItems, educationItems, volunteeringItems, certificateItems, competitionItems } = getCvData(dict.cv)
+
   return (
     <main className="max-w-(--max-width) mx-auto px-8 py-16 relative z-1">
       {/* ── Hero ────────────────────────────────────────────── */}
@@ -35,28 +35,18 @@ export default function CvPage() {
           className="text-5xl font-bold tracking-tight mb-2 max-sm:text-4xl"
           style={{ color: 'var(--text-primary)' }}
         >
-          Umut Yalçın Baki
+          {dict.cv.name}
         </h1>
 
         <h2
           className="text-lg font-medium tracking-wide mb-6 max-sm:text-base"
           style={{ color: 'var(--accent-color)', fontFamily: 'var(--font-roboto-mono), monospace' }}
         >
-          <span className="lang-en">Koç University - Computer Engineering &amp; Economics DM</span>
-          <span className="lang-tr">Koç Üniversitesi - Bilgisayar Mühendisliği &amp; Ekonomi ÇAP</span>
+          {dict.cv.subtitle}
         </h2>
 
         <div className="max-w-xl leading-relaxed space-y-1" style={{ color: 'var(--text-secondary)' }}>
-          <p className="lang-en">
-            I like building things that make sense. I want to be a software engineer who develops
-            impactful and scalable solutions. I like tinkering on the low-level, but I have the sense
-            required to actually build things ground up.
-          </p>
-          <p className="lang-tr">
-            Mantıklı ve işe yarar şeyler inşa etmeyi seviyorum. Etkili ve ölçeklenebilir çözümler
-            geliştiren bir yazılım mühendisi olmak istiyorum. Düşük levelde uğraşmayı seviyorum, ve
-            bir şeyleri sıfırdan inşa etmek için gereken mantığa ve kararlılığa sahibim.
-          </p>
+          <p>{dict.cv.bio}</p>
         </div>
 
         {/* Contact links */}
@@ -115,14 +105,13 @@ export default function CvPage() {
 
         {/* Spoken languages */}
         <div className="flex flex-wrap gap-2 mt-4">
-          {spokenLanguages.map((lang) => (
+          {dict.cv.spokenLanguages.map((lang) => (
             <span
-              key={lang.en}
+              key={lang}
               className="text-xs font-medium px-3 py-1.5 rounded-full tracking-wide"
               style={tagStyle.spoken}
             >
-              <span className="lang-en">{lang.en}</span>
-              <span className="lang-tr">{lang.tr}</span>
+              {lang}
             </span>
           ))}
         </div>
@@ -134,8 +123,7 @@ export default function CvPage() {
           className="text-3xl font-bold tracking-tight mb-8"
           style={{ color: 'var(--text-primary)' }}
         >
-          <span className="lang-en">Career</span>
-          <span className="lang-tr">Kariyer</span>
+          {dict.cv.sections.career}
         </h2>
         <Timeline items={careerItems} />
       </section>
@@ -146,8 +134,7 @@ export default function CvPage() {
           className="text-3xl font-bold tracking-tight mb-8"
           style={{ color: 'var(--text-primary)' }}
         >
-          <span className="lang-en">Education</span>
-          <span className="lang-tr">Eğitim</span>
+          {dict.cv.sections.education}
         </h2>
         <Timeline items={educationItems} />
       </section>
@@ -155,12 +142,7 @@ export default function CvPage() {
       {/* ── Volunteering ────────────────────────────────────── */}
       <Accordion
         titleClassName="text-3xl font-bold tracking-tight"
-        title={
-          <>
-            <span className="lang-en">Volunteering & Extracurriculars</span>
-            <span className="lang-tr">Gönüllülük & Ders Dışı Etkinlikler</span>
-          </>
-        }
+        title={dict.cv.sections.volunteering}
         defaultOpen
       >
         <CvListSection items={volunteeringItems} />
@@ -169,12 +151,7 @@ export default function CvPage() {
       {/* ── Certificates ────────────────────────────────────── */}
       <Accordion
         titleClassName="text-3xl font-bold tracking-tight"
-        title={
-          <>
-            <span className="lang-en">Certificates & Training</span>
-            <span className="lang-tr">Sertifikalar & Eğitimler</span>
-          </>
-        }
+        title={dict.cv.sections.certificates}
       >
         <CvListSection items={certificateItems} />
       </Accordion>
@@ -182,12 +159,7 @@ export default function CvPage() {
       {/* ── Competitions ────────────────────────────────────── */}
       <Accordion
         titleClassName="text-3xl font-bold tracking-tight"
-        title={
-          <>
-            <span className="lang-en">Competitions & Achievements</span>
-            <span className="lang-tr">Yarışmalar & Başarılar</span>
-          </>
-        }
+        title={dict.cv.sections.competitions}
       >
         <CvListSection items={competitionItems} />
       </Accordion>

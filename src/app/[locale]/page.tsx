@@ -1,18 +1,19 @@
-export default function Home() {
+import { getDictionary } from '@/dictionaries'
+
+interface Props {
+  params: Promise<{ locale: string }>
+}
+
+export default async function Home({ params }: Props) {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+
   return (
     <main className="container">
       <section className="home-hero">
         <h1 className="hero-name">Umut Yalçın Baki</h1>
-        <p className="home-tagline">
-          <span className="lang-en">Koç University — Computer Engineering &amp; Economics DM</span>
-          <span className="lang-tr">Koç Üniversitesi — Bilgisayar Mühendisliği &amp; Ekonomi ÇAP</span>
-        </p>
-        <p className="home-bio">
-          <span className="lang-en">
-            Computer Engineering &amp; Economics double major. I like building things that make sense.
-          </span>
-          <span className="lang-tr">Bilgisayar Mühendisliği &amp; Ekonomi ÇAP öğrencisi.</span>
-        </p>
+        <p className="home-tagline">{dict.home.subtitle}</p>
+        <p className="home-bio">{dict.home.description}</p>
 
         <div className="home-links">
           <a

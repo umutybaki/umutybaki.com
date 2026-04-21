@@ -3,7 +3,6 @@ import { Inter, Roboto_Mono } from 'next/font/google'
 import { cookies } from 'next/headers'
 import './globals.css'
 import 'katex/dist/katex.min.css'
-import Nav from '@/components/Nav'
 import NextTopLoader from 'nextjs-toploader'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -46,7 +45,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           speed={200}
           shadow="0 0 10px #ff6400,0 0 5px #ff6400"
         />
-        <Nav />
         {children}
       </body>
     </html>
