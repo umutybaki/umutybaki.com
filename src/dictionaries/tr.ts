@@ -23,6 +23,28 @@ const tr: Dictionary = {
     subtitle: 'Geliştirdiğim projelerden küçük bir koleksiyon.',
     portWatcherSubtitle: 'macOS Menü Çubuğu Uygulaması',
   },
+  guide: {
+    title: 'De Beers & ABD Rekabet Hukuku',
+    subtitle: 'ECON 499 · Modül 2 · Rekabet Ekonomisi · Koç Üniversitesi',
+    tagline: '"Elmas Sonsuzdur" — ve kartel de öyleydi, ta ki çöküşüne dek.',
+    backToHome: 'Ana Sayfaya Dön',
+    legend: {
+      origins: 'Kökenler & Yükseliş',
+      monopoly: 'Tekel Mekanizmaları',
+      legal: 'Hukuki Mücadeleler',
+      crises: 'Krizler & Ayrılmalar',
+      strategy: 'Stratejik Dönüşüm',
+      law: 'Hukuk & Politika',
+    },
+    eras: {
+      era1: 'Keşif Dönemi · 1866–1890',
+      era2: "Oppenheimer'ın İmparatorluğu · 1902–1940'lar",
+      era3: 'CSO Sistemi & Hukuki Mücadeleler · 1945–1980',
+      era4: 'Çatlaklar · 1981–1995',
+      era5: 'Stratejik Hesaplaşma · 1997–1999',
+      era6: 'Çözüm & Miras · 2000–2004+',
+    },
+  },
   cv: {
     name: 'Umut Yalçın Baki',
     subtitle: 'Koç Üniversitesi - Bilgisayar Mühendisliği & Ekonomi ÇAP',

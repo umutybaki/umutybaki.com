@@ -23,6 +23,28 @@ const en: Dictionary = {
     subtitle: 'A small collection of projects I have created.',
     portWatcherSubtitle: 'macOS Menubar App',
   },
+  guide: {
+    title: 'De Beers & U.S. Antitrust Law',
+    subtitle: 'ECON 499 · Module 2 · Antitrust Economics · Koç University',
+    tagline: '"A Diamond is Forever" — and so was the cartel, until it wasn\'t.',
+    backToHome: 'Back to Home',
+    legend: {
+      origins: 'Origins & Rise',
+      monopoly: 'Monopoly Mechanics',
+      legal: 'Legal Battles',
+      crises: 'Crises & Defections',
+      strategy: 'Strategic Pivot',
+      law: 'Law & Policy',
+    },
+    eras: {
+      era1: 'The Discovery Era · 1866–1890',
+      era2: "Oppenheimer's Empire · 1902–1940s",
+      era3: 'The CSO System & Legal Battles · 1945–1980',
+      era4: 'Cracks in the Foundation · 1981–1995',
+      era5: 'Strategic Reckoning · 1997–1999',
+      era6: 'Resolution & Legacy · 2000–2004+',
+    },
+  },
   cv: {
     name: 'Umut Yalçın Baki',
     subtitle: 'Koç University - Computer Engineering & Economics DM',

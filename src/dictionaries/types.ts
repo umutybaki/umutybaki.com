@@ -43,6 +43,28 @@ export type Dictionary = {
     subtitle: string
     portWatcherSubtitle: string
   }
+  guide: {
+    title: string
+    subtitle: string
+    tagline: string
+    backToHome: string
+    legend: {
+      origins: string
+      monopoly: string
+      legal: string
+      crises: string
+      strategy: string
+      law: string
+    }
+    eras: {
+      era1: string
+      era2: string
+      era3: string
+      era4: string
+      era5: string
+      era6: string
+    }
+  }
   cv: {
     name: string
     subtitle: string
