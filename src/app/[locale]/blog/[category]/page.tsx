@@ -35,7 +35,7 @@ export default async function CategoryPage({ params }: Props) {
   const label = CATEGORY_LABELS[category] ?? category
 
   return (
-    <main className="container">
+    <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
       <BackLink href={`/${locale}/blog`} label={dict.blog.allCategories} />
       <PageTitle>{label}</PageTitle>
       <PostList>

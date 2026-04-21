@@ -11,32 +11,20 @@ interface AccordionProps {
 
 export default function Accordion({
   title,
-  titleClassName = 'blog-category-title',
+  titleClassName = 'text-[0.7rem] font-roboto-mono text-accent-color font-semibold uppercase tracking-[0.12em]',
   defaultOpen = false,
   children,
 }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
-    <div style={{ marginBottom: '2rem' }}>
+    <div className="mb-8">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem',
-          cursor: 'pointer',
-          background: 'transparent',
-          border: 'none',
-          padding: '0.5rem 0',
-          textAlign: 'left',
-          marginBottom: '0.75rem',
-        }}
+        className="w-full flex items-center justify-between gap-4 cursor-pointer bg-transparent border-none py-2 text-left mb-3"
       >
-        <h2 className={titleClassName} style={{ marginBottom: 0 }}>
+        <h2 className={`${titleClassName} mb-0`}>
           {title}
         </h2>
         <svg
@@ -48,19 +36,14 @@ export default function Accordion({
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{
-            color: 'var(--accent-color)',
-            flexShrink: 0,
-            transition: 'transform var(--transition-fast)',
-            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-          }}
+          className={`text-accent-color shrink-0 transition-transform duration-150 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </button>
 
-      <div className={`accordion-body${isOpen ? ' open' : ''}`}>
-        <div className="accordion-body-inner">
+      <div className={`grid transition-[grid-template-rows] duration-200 ease-in ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">
           {children}
         </div>
       </div>

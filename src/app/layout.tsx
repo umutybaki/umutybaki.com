@@ -15,11 +15,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies()
-  const theme = cookieStore.get('theme')?.value === 'dark' ? 'dark' : 'light'
+  const theme = cookieStore.get('theme')?.value === 'light' ? 'light' : 'dark'
 
   return (
     <html lang="en" data-theme={theme}>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);document.cookie='theme='+t+'; path=/; max-age=31536000; SameSite=Lax';}else if(window.matchMedia('(prefers-color-scheme: light)').matches){document.documentElement.setAttribute('data-theme','light');document.cookie='theme=light; path=/; max-age=31536000; SameSite=Lax';}}catch(e){}})();` }} />
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ4R2RV2NP" />
         <script

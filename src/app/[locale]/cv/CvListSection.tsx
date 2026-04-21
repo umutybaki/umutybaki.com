@@ -14,26 +14,18 @@ export default function CvListSection({ items }: CvListSectionProps) {
       {items.map((item) => (
         <li
           key={item.title}
-          className="rounded-xl p-5 transition-all duration-200 hover:translate-x-0.5"
-          style={{
-            backgroundColor: 'var(--surface-color)',
-            border: '1px solid var(--card-border)',
-            boxShadow: 'var(--card-shadow)',
-          }}
+          className="rounded-xl p-5 transition-all duration-200 hover:translate-x-0.5 bg-surface-color border border-card-border shadow-[var(--card-shadow)]"
         >
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-2">
-            <strong className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+            <strong className="text-sm font-semibold text-text-primary">
               {item.title}
             </strong>
-            <span
-              className="text-xs whitespace-nowrap shrink-0"
-              style={{ fontFamily: 'var(--font-roboto-mono), monospace', color: 'var(--text-secondary)' }}
-            >
+            <span className="text-xs whitespace-nowrap shrink-0 font-roboto-mono text-text-secondary">
               {item.meta}
             </span>
           </div>
           {item.description && (
-            <p className="text-sm leading-relaxed mt-1 mb-0" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-sm leading-relaxed mt-1 mb-0 text-text-secondary">
               {item.description}
             </p>
           )}

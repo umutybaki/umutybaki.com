@@ -3,6 +3,15 @@ import type { NextRequest } from 'next/server'
 
 const locales = ['en', 'tr']
 
+function getPreferredLocale(request: NextRequest): string {
+  const acceptLanguage = request.headers.get('accept-language') ?? ''
+  const preferred = acceptLanguage
+    .split(',')
+    .map(part => part.split(';')[0].trim().toLowerCase().slice(0, 2))
+    .find(lang => locales.includes(lang))
+  return preferred ?? 'en'
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
@@ -11,7 +20,8 @@ export function middleware(request: NextRequest) {
   )
 
   if (!hasLocale) {
-    const redirectPath = pathname === '/' ? '/en' : `/en${pathname}`
+    const locale = getPreferredLocale(request)
+    const redirectPath = pathname === '/' ? `/${locale}` : `/${locale}${pathname}`
     return NextResponse.redirect(new URL(redirectPath, request.url))
   }
 }

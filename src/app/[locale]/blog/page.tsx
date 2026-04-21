@@ -27,7 +27,7 @@ export default async function BlogPage({ params }: Props) {
   const postsByCategory = getPostsByCategory()
 
   return (
-    <main className="container">
+    <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
       <PageTitle>{dict.blog.pageTitle}</PageTitle>
 
       {Object.keys(postsByCategory).map((category) => (
