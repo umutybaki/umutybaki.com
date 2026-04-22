@@ -125,7 +125,7 @@ export function getCvData(d: Dictionary['cv']) {
         </>
       ),
       date: d.career.odarama.date,
-      description: <>{d.career.odarama.description.map((p, i) => <p key={i} dangerouslySetInnerHTML={{ __html: p }} />)}</>,
+      description: <>{d.career.odarama.description.map((p, i) => <p key={i}>{p}</p>)}</>,
       tags: ['JavaScript', 'PHP', 'WordPress', 'Frontend'],
     },
     {
@@ -140,7 +140,7 @@ export function getCvData(d: Dictionary['cv']) {
         </>
       ),
       date: d.career.gordion.date,
-      description: <>{d.career.gordion.description.map((p, i) => <p key={i} dangerouslySetInnerHTML={{ __html: p }} />)}</>,
+      description: <>{d.career.gordion.description.map((p, i) => <p key={i}>{p}</p>)}</>,
       tags: ['Python', 'AWS Deployment'],
     },
     {
@@ -155,7 +155,7 @@ export function getCvData(d: Dictionary['cv']) {
         </>
       ),
       date: d.career.kocTutor.date,
-      description: <>{d.career.kocTutor.description.map((p, i) => <p key={i} dangerouslySetInnerHTML={{ __html: p }} />)}</>,
+      description: <>{d.career.kocTutor.description.map((p, i) => <p key={i}>{p}</p>)}</>,
       tags: ['Python', 'Teaching'],
     },
     {
@@ -170,7 +170,7 @@ export function getCvData(d: Dictionary['cv']) {
         </>
       ),
       date: d.career.kocRA.date,
-      description: <>{d.career.kocRA.description.map((p, i) => <p key={i} dangerouslySetInnerHTML={{ __html: p }} />)}</>,
+      description: <>{d.career.kocRA.description.map((p, i) => <p key={i}>{p}</p>)}</>,
       tags: ['Research'],
     },
   ]
@@ -188,7 +188,7 @@ export function getCvData(d: Dictionary['cv']) {
         </>
       ),
       date: d.education.kocUni.date,
-      description: <>{d.education.kocUni.description.map((p, i) => <p key={i} dangerouslySetInnerHTML={{ __html: p }} />)}</>,
+      description: <>{d.education.kocUni.description.map((p, i) => <p key={i}>{p}</p>)}</>,
     },
     {
       icon: MaastrichtIcon,
@@ -202,7 +202,7 @@ export function getCvData(d: Dictionary['cv']) {
         </>
       ),
       date: d.education.maastricht.date,
-      description: <>{d.education.maastricht.description.map((p, i) => <p key={i} dangerouslySetInnerHTML={{ __html: p }} />)}</>,
+      description: <>{d.education.maastricht.description.map((p, i) => <p key={i}>{p}</p>)}</>,
     },
     {
       icon: TevIcon,
@@ -216,7 +216,7 @@ export function getCvData(d: Dictionary['cv']) {
         </>
       ),
       date: d.education.tev.date,
-      description: <>{d.education.tev.description.map((p, i) => <p key={i} dangerouslySetInnerHTML={{ __html: p }} />)}</>,
+      description: <>{d.education.tev.description.map((p, i) => <p key={i}>{p}</p>)}</>,
     },
   ]
 

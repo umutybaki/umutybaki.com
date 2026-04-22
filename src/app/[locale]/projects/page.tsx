@@ -1,10 +1,22 @@
 import { getDictionary } from '@/dictionaries'
+import { getAlternates, pageTitle } from '@/lib/metadata'
 import PageTitle from '@/components/PageTitle'
 import PostList from '@/components/PostList'
 import AppListItem from '@/components/AppListItem'
+import type { Metadata } from 'next'
 
 interface Props {
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return {
+    title: pageTitle(dict.projects.pageTitle),
+    description: dict.projects.subtitle,
+    alternates: getAlternates(locale, '/projects'),
+  }
 }
 
 export default async function ProjectsPage({ params }: Props) {

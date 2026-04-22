@@ -19,10 +19,6 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
   const canSwitch = availableLocales.includes(otherLocale)
 
   useEffect(() => {
-    document.documentElement.setAttribute('lang', locale)
-  }, [locale])
-
-  useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden'
     } else {
@@ -41,12 +37,14 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
   function toggleLang() {
     if (!canSwitch) return
     const newPath = pathname.replace(new RegExp(`^/${locale}(?=/|$)`), `/${otherLocale}`)
+    // Persist preference so middleware doesn't redirect back
+    document.cookie = `NEXT_LOCALE=${otherLocale}; path=/; max-age=31536000; SameSite=Lax`
     router.push(newPath)
   }
 
   return (
-    <nav className="sticky top-0 z-[100] bg-[rgba(249,249,247,0.85)] dark:bg-[rgba(24,24,24,0.85)] backdrop-blur-[10px] border-b border-border-color transition-colors duration-300">
-      <div className="max-w-[900px] mx-auto px-6 py-4 md:px-8 relative flex justify-between items-center">
+    <nav className="sticky top-0 z-100 bg-[rgba(249,249,247,0.85)] dark:bg-[rgba(24,24,24,0.85)] backdrop-blur-[10px] border-b border-border-color transition-colors duration-300">
+      <div className="max-w-225 mx-auto px-6 py-4 md:px-8 relative flex justify-between items-center">
         <Link href={`/${locale}`} className="font-semibold text-[0.95rem] text-text-primary tracking-[-0.02em] hover:opacity-65 transition-opacity" style={{ position: 'relative', zIndex: 10 }}>
           Umut Yalçın Baki
         </Link>
@@ -140,6 +138,9 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
           </Link>
           <Link href={`/${locale}/blog`} onClick={() => setIsMobileMenuOpen(false)} className="text-[1.5rem] font-semibold text-text-primary transition-opacity duration-150 hover:opacity-65">
             {dict.blog}
+          </Link>
+          <Link href={`/${locale}/cv`} onClick={() => setIsMobileMenuOpen(false)} className="text-[1.5rem] font-semibold text-text-primary transition-opacity duration-150 hover:opacity-65">
+            {dict.cv}
           </Link>
         </div>
         <div style={{ marginTop: 'auto', padding: '2rem', display: 'flex', gap: '1.5rem', borderTop: '1px solid var(--border-color)' }}>

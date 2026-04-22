@@ -1,24 +1,24 @@
 import { getPostsByCategory } from '@/lib/posts'
 import { getDictionary } from '@/dictionaries'
-import type { Metadata } from 'next'
+import { getAlternates, pageTitle } from '@/lib/metadata'
 import PageTitle from '@/components/PageTitle'
 import PostList from '@/components/PostList'
 import PostListItem from '@/components/PostListItem'
 import Accordion from '@/components/Accordion'
-
-export const metadata: Metadata = {
-  title: 'Lecture Notes — Umut Yalçın Baki',
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  comp201: 'COMP 201 — Computer Systems and Programming',
-  comp341: 'COMP 341 — Artificial Intelligence',
-  econ499: 'ECON 499 — Economics Capstone',
-  comp202: 'COMP 202 — Data Structures and Algorithms',
-}
+import type { Metadata } from 'next'
 
 interface Props {
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return {
+    title: pageTitle(dict.blog.pageTitle),
+    description: dict.blog.pageTitle,
+    alternates: getAlternates(locale, '/blog'),
+  }
 }
 
 export default async function BlogPage({ params }: Props) {
@@ -33,7 +33,7 @@ export default async function BlogPage({ params }: Props) {
       {Object.keys(postsByCategory).map((category) => (
         <Accordion
           key={category}
-          title={CATEGORY_LABELS[category] ?? category}
+          title={dict.blog.categories[category] ?? category}
           defaultOpen
         >
           <PostList>

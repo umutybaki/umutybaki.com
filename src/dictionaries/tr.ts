@@ -5,6 +5,7 @@ const tr: Dictionary = {
     home: 'Ana Sayfa',
     projects: 'Projeler',
     blog: 'Blog',
+    cv: 'Özgeçmiş',
   },
   home: {
     subtitle: 'Koç Üniversitesi — Bilgisayar Mühendisliği & Ekonomi ÇAP',
@@ -13,6 +14,12 @@ const tr: Dictionary = {
   blog: {
     pageTitle: 'Ders Notları',
     allCategories: 'Tüm Kategoriler',
+    categories: {
+      comp201: 'COMP 201 — Bilgisayar Sistemleri ve Programlama',
+      comp341: 'COMP 341 — Yapay Zeka',
+      econ499: 'ECON 499 — Ekonomi Bitirme Projesi',
+      comp202: 'COMP 202 — Veri Yapıları ve Algoritmalar',
+    },
   },
   post: {
     backToCategory: 'Kategoriye Dön',
@@ -46,6 +53,8 @@ const tr: Dictionary = {
     },
   },
   cv: {
+    pageTitle: 'Özgeçmiş',
+    pageDescription: 'Umut Yalçın Baki — Yazılım Mühendisi & Koç Üniversitesi Bilgisayar Mühendisliği/Ekonomi çift anadal öğrencisi.',
     name: 'Umut Yalçın Baki',
     subtitle: 'Koç Üniversitesi - Bilgisayar Mühendisliği & Ekonomi ÇAP',
     bio: 'Mantıklı ve işe yarar şeyler inşa etmeyi seviyorum. Etkili ve ölçeklenebilir çözümler geliştiren bir yazılım mühendisi olmak istiyorum. Düşük levelde uğraşmayı seviyorum ve bir şeyleri sıfırdan inşa etmek için gereken mantığa ve kararlılığa sahibim.',
@@ -106,8 +115,8 @@ const tr: Dictionary = {
         subtitle: 'Mühendislik Fakültesi / İktisadi ve İdari Bilimler Fakültesi',
         date: 'Eylül 2022 - Haziran 2027 (Beklenen)',
         description: [
-          '<strong>Not Ortalaması:</strong> 3.69 / 4.00',
-          "Üstün Başarı Yüzde 100 Burslusu (YKS Türkiye 144.'sü)<br />Vehbi Koç Onur Ödülü ve Dekanlık Onur Ödülü sahibi.",
+          'Not Ortalaması: 3.69 / 4.00',
+          "Üstün Başarı Yüzde 100 Burslusu (YKS Türkiye 144.'sü) — Vehbi Koç Onur Ödülü ve Dekanlık Onur Ödülü sahibi.",
         ],
       },
       maastricht: {
@@ -122,7 +131,7 @@ const tr: Dictionary = {
         nameUrl: 'https://tevinanc.k12.tr',
         subtitle: 'Kocaeli',
         date: 'Eylül 2017 - Haziran 2022',
-        description: ['<strong>Not Ortalaması:</strong> 96.72 / 100'],
+        description: ['Not Ortalaması: 96.72 / 100'],
       },
     },
     volunteering: [

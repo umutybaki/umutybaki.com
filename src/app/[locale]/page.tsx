@@ -1,7 +1,19 @@
 import { getDictionary } from '@/dictionaries'
+import { getAlternates } from '@/lib/metadata'
+import type { Metadata } from 'next'
 
 interface Props {
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return {
+    title: 'Umut Yalçın Baki',
+    description: dict.home.description,
+    alternates: getAlternates(locale, ''),
+  }
 }
 
 export default async function Home({ params }: Props) {

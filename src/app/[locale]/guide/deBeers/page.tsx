@@ -1,17 +1,23 @@
 import React from 'react'
-import { Metadata } from 'next'
 import Timeline from '@/components/Timeline'
 import BackLink from '@/components/BackLink'
 import { getDictionary } from '@/dictionaries'
+import { getAlternates, pageTitle } from '@/lib/metadata'
+import type { Metadata } from 'next'
 import { era1, era2, era3, era4, era5, era6 } from './deBeersData'
-
-export const metadata: Metadata = {
-  title: 'De Beers: A Century of Diamonds & Antitrust',
-  description: 'Interactive Timeline - ECON 499 Module 2, Antitrust Economics',
-}
 
 interface Props {
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return {
+    title: pageTitle(dict.guide.title),
+    description: dict.guide.subtitle,
+    alternates: getAlternates(locale, '/guide/deBeers'),
+  }
 }
 
 export default async function GuidePage({ params }: Props) {

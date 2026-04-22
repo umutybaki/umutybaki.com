@@ -1,12 +1,13 @@
 import type { Dictionary } from './types'
+import type { Locale } from '@/i18n-config'
 import en from './en'
 import tr from './tr'
 
-const dictionaries: Record<string, Dictionary> = { en, tr }
+const dictionaries: Record<Locale, Dictionary> = { en, tr }
 
-// Locales with actual translations — expand when a new dictionary file is added
-export const AVAILABLE_LOCALES = Object.keys(dictionaries)
+/** Locales that have a full translation file */
+export const AVAILABLE_LOCALES = Object.keys(dictionaries) as Locale[]
 
 export function getDictionary(locale: string): Dictionary {
-  return dictionaries[locale] ?? dictionaries.en
+  return (dictionaries as Record<string, Dictionary>)[locale] ?? dictionaries.en
 }

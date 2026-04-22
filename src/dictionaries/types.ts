@@ -25,6 +25,7 @@ export type Dictionary = {
     home: string
     projects: string
     blog: string
+    cv: string
   }
   home: {
     subtitle: string
@@ -33,6 +34,7 @@ export type Dictionary = {
   blog: {
     pageTitle: string
     allCategories: string
+    categories: Record<string, string>
   }
   post: {
     backToCategory: string
@@ -66,6 +68,8 @@ export type Dictionary = {
     }
   }
   cv: {
+    pageTitle: string
+    pageDescription: string
     name: string
     subtitle: string
     bio: string

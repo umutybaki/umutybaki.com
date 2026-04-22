@@ -1,17 +1,11 @@
 import { getPostsByCategory } from '@/lib/posts'
 import { getDictionary } from '@/dictionaries'
-import type { Metadata } from 'next'
+import { getAlternates, pageTitle } from '@/lib/metadata'
 import BackLink from '@/components/BackLink'
 import PageTitle from '@/components/PageTitle'
 import PostList from '@/components/PostList'
 import PostListItem from '@/components/PostListItem'
-
-const CATEGORY_LABELS: Record<string, string> = {
-  comp201: 'COMP 201 — Computer Systems & Programming',
-  comp341: 'COMP 341 — Artificial Intelligence',
-  econ499: 'ECON 499 — Economics Capstone',
-  comp202: 'COMP 202 — Data Structures and Algorithms',
-}
+import type { Metadata } from 'next'
 
 interface Props {
   params: Promise<{ locale: string; category: string }>
@@ -22,9 +16,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { category } = await params
-  const label = CATEGORY_LABELS[category] ?? category
-  return { title: `${label} — Umut Yalçın Baki` }
+  const { locale, category } = await params
+  const dict = getDictionary(locale)
+  const label = dict.blog.categories[category] ?? category
+  return {
+    title: pageTitle(label),
+    alternates: getAlternates(locale, `/blog/${category}`),
+  }
 }
 
 export default async function CategoryPage({ params }: Props) {
@@ -32,7 +30,7 @@ export default async function CategoryPage({ params }: Props) {
   const dict = getDictionary(locale)
   const postsByCategory = getPostsByCategory()
   const posts = postsByCategory[category] ?? []
-  const label = CATEGORY_LABELS[category] ?? category
+  const label = dict.blog.categories[category] ?? category
 
   return (
     <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">

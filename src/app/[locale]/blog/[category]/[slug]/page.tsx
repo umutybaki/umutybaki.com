@@ -1,8 +1,9 @@
 import { getAllPostParams, getPost } from '@/lib/posts'
 import { getDictionary } from '@/dictionaries'
-import type { Metadata } from 'next'
+import { getAlternates, pageTitle } from '@/lib/metadata'
 import TableOfContents from '@/components/TableOfContents'
 import BackLink from '@/components/BackLink'
+import type { Metadata } from 'next'
 
 interface Props {
   params: Promise<{ locale: string; category: string; slug: string }>
@@ -13,11 +14,12 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { category, slug } = await params
+  const { locale, category, slug } = await params
   const post = await getPost(category, slug)
   return {
-    title: `${post.title} — Umut Yalçın Baki`,
+    title: pageTitle(post.title),
     description: post.description,
+    alternates: getAlternates(locale, `/blog/${category}/${slug}`),
   }
 }
 

@@ -5,6 +5,7 @@ const en: Dictionary = {
     home: 'Home',
     projects: 'Projects',
     blog: 'Blog',
+    cv: 'CV',
   },
   home: {
     subtitle: 'Koç University — Computer Engineering & Economics DM',
@@ -13,6 +14,12 @@ const en: Dictionary = {
   blog: {
     pageTitle: 'Lecture Notes',
     allCategories: 'All Categories',
+    categories: {
+      comp201: 'COMP 201 — Computer Systems & Programming',
+      comp341: 'COMP 341 — Artificial Intelligence',
+      econ499: 'ECON 499 — Economics Capstone',
+      comp202: 'COMP 202 — Data Structures & Algorithms',
+    },
   },
   post: {
     backToCategory: 'Back to Category',
@@ -46,6 +53,8 @@ const en: Dictionary = {
     },
   },
   cv: {
+    pageTitle: 'CV',
+    pageDescription: 'Portfolio of Umut Yalçın Baki, Software Engineer & Computer Engineering/Economics double major at Koç University.',
     name: 'Umut Yalçın Baki',
     subtitle: 'Koç University - Computer Engineering & Economics DM',
     bio: 'I like building things that make sense. I want to be a software engineer who develops impactful and scalable solutions. I like tinkering on the low-level, but I have the sense required to actually build things ground up.',
@@ -106,8 +115,8 @@ const en: Dictionary = {
         subtitle: 'College of Engineering / College of Administrative Sciences and Economics',
         date: 'Sep 2022 - June 2027 (Expected)',
         description: [
-          '<strong>GPA:</strong> 3.69 / 4.00',
-          'Merit-based 100% Scholarship (ranked 144th nationally at YKS)<br />Vehbi Koç Honor Award &amp; Dean\'s Honor Award recipient.',
+          'GPA: 3.69 / 4.00',
+          "Merit-based 100% Scholarship (ranked 144th nationally at YKS) — Vehbi Koç Honor Award & Dean's Honor Award recipient.",
         ],
       },
       maastricht: {
@@ -122,7 +131,7 @@ const en: Dictionary = {
         nameUrl: 'https://tevinanc.k12.tr',
         subtitle: 'Kocaeli',
         date: 'Sep 2017 - June 2022',
-        description: ['<strong>GPA:</strong> 96.72 / 100'],
+        description: ['GPA: 96.72 / 100'],
       },
     },
     volunteering: [

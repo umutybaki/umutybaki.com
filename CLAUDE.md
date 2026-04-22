@@ -25,6 +25,7 @@ All pages are under the `[locale]` dynamic segment. `/` redirects to `/en` via m
 - `/[locale]/blog/[category]/[slug]` — individual post
 - `/[locale]/projects` — projects showcase
 - `/[locale]/cv` — CV/portfolio
+- `/[locale]/guide/deBeers` — De Beers antitrust timeline
 
 ### Blog content pipeline
 
@@ -39,20 +40,34 @@ To add a new blog category, create a new directory under `/posts/`. No other reg
 
 ### i18n / Dictionary system
 
-Language is determined by the `[locale]` URL segment. `src/middleware.ts` redirects `/` → `/en`.
+Language is determined by the `[locale]` URL segment. The `<html lang={locale}>` attribute is set in `src/app/[locale]/layout.tsx` (not the root layout) so SSR always emits the correct language.
 
-Dictionaries live in `src/dictionaries/`:
+**Centralized config:** `src/i18n-config.ts` exports `locales` (`['en', 'tr']`), `defaultLocale` (`'en'`), and the `Locale` type. All other files import from here — never duplicate locale lists.
+
+**Middleware** (`src/middleware.ts`) redirects bare paths to `/${locale}...`. Locale detection priority:
+1. `NEXT_LOCALE` cookie (set when user explicitly switches language)
+2. `Accept-Language` header (parsed with quality values)
+3. Fallback to `defaultLocale` (`en`)
+
+**Dictionaries** live in `src/dictionaries/`:
 - `types.ts` — the `Dictionary` type covering every UI string and all CV content
-- `en.ts` — English strings (the only locale currently)
+- `en.ts` — English strings
+- `tr.ts` — Turkish strings
 - `index.ts` — `getDictionary(locale): Dictionary` (sync, falls back to `en`)
 
 `src/app/[locale]/layout.tsx` validates the locale, calls `getDictionary`, and passes `dict.nav` + `locale` to the `Nav` client component. All page server components call `getDictionary(locale)` directly from their `params`.
 
-To add a new locale: create `src/dictionaries/tr.ts` satisfying the `Dictionary` type and add it to the map in `index.ts`. The routes are already pre-generated for `tr`.
+To add a new locale: create `src/dictionaries/<locale>.ts` satisfying the `Dictionary` type, add it to the map in `index.ts`, and add the locale code to `locales` in `src/i18n-config.ts`. Routes are pre-generated automatically via `generateStaticParams`.
 
-The language toggle in Nav navigates to `/${otherLocale}${restOfPath}` via `router.push`.
+The language toggle in `Nav` navigates to `/${otherLocale}${restOfPath}` via `router.push` and persists the choice in the `NEXT_LOCALE` cookie.
 
-CV content strings (job titles, descriptions, dates) all live in the dictionary. `src/app/[locale]/cv/cvData.tsx` is a factory `getCvData(dict.cv)` that composes the JSX (with links and HTML descriptions) from those strings. The SVG icons and skill tags stay in that file.
+**Localized metadata:** Every page under `[locale]/` uses `generateMetadata()` (not static `metadata` exports) to produce locale-aware `<title>`, `<meta description>`, and `<link rel=alternate hreflang>` tags. The helper `getAlternates(locale, path)` in `src/lib/metadata.ts` generates canonical + hreflang links for all locales.
+
+**Blog category labels** live in `dict.blog.categories` (not hardcoded). The old `CATEGORY_LABELS` objects have been removed.
+
+CV content strings (job titles, descriptions, dates) all live in the dictionary. `src/app/[locale]/cv/cvData.tsx` is a factory `getCvData(dict.cv)` that composes the JSX (with links) from those strings. The SVG icons and skill tags stay in that file. Description strings are plain text — no `dangerouslySetInnerHTML` is used.
+
+**Layout structure:** The root `src/app/layout.tsx` is a passthrough (returns `children` only). The real `<html>`/`<body>` shell lives in `src/app/[locale]/layout.tsx` so that `lang={locale}` is set correctly on every request. Font loading, theme script, GA, and `NextTopLoader` are all in the locale layout.
 
 ### Theme system
 

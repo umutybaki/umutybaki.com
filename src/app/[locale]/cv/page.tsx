@@ -1,14 +1,23 @@
-import type { Metadata } from 'next'
 import { getDictionary } from '@/dictionaries'
+import { getAlternates, pageTitle } from '@/lib/metadata'
 import Timeline from '@/components/Timeline'
 import Accordion from '@/components/Accordion'
 import CvListSection from './CvListSection'
 import { getCvData, technicalSkills } from './cvData'
+import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'CV – Umut Yalçın Baki',
-  description:
-    'Portfolio of Umut Yalçın Baki, Software Engineer & Computer Engineering/Economics double major at Koç University.',
+interface Props {
+  params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return {
+    title: pageTitle(dict.cv.pageTitle),
+    description: dict.cv.pageDescription,
+    alternates: getAlternates(locale, '/cv'),
+  }
 }
 
 const tagStyle: Record<string, React.CSSProperties> = {
@@ -16,10 +25,6 @@ const tagStyle: Record<string, React.CSSProperties> = {
   infra: { backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' },
   tool: { backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10b981' },
   spoken: { backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' },
-}
-
-interface Props {
-  params: Promise<{ locale: string }>
 }
 
 export default async function CvPage({ params }: Props) {
