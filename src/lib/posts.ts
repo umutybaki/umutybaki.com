@@ -31,6 +31,12 @@ export interface Post extends PostMeta {
   headings: TocItem[]
 }
 
+function sanitizeTitle(title: string): string {
+  return title
+    .replace(/[—–]/g, '-')
+    .replace(/&/g, 'and')
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -74,7 +80,7 @@ export function getAllPosts(): PostMeta[] {
       posts.push({
         slug,
         category,
-        title: data.title ?? slug,
+        title: sanitizeTitle(data.title ?? slug),
         date: data.date ?? '',
         description: data.description ?? '',
       })
@@ -114,7 +120,7 @@ export async function getPost(category: string, slug: string): Promise<Post> {
   return {
     slug,
     category,
-    title: data.title ?? slug,
+    title: sanitizeTitle(data.title ?? slug),
     date: data.date ?? '',
     description: data.description ?? '',
     contentHtml,

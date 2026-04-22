@@ -61,7 +61,7 @@ export default function Timeline({ items }: TimelineProps) {
 
             {/* Right column: content card */}
             <div
-              className={`flex-1 mb-8 rounded-xl p-5 sm:p-6 bg-surface-color border border-card-border shadow-[var(--card-shadow)] ${isClickable ? 'cursor-pointer hover:-translate-y-0.5 hover:border-accent-color/40 hover:shadow-lg transition-all duration-200 group relative' : ''}`}
+              className={`flex-1 mb-8 rounded-xl p-5 sm:p-6 bg-surface-color border border-card-border shadow-(--card-shadow) ${isClickable ? 'cursor-pointer hover:-translate-y-0.5 hover:border-accent-color/40 hover:shadow-lg transition-all duration-200 group relative' : ''}`}
               onClick={isClickable ? () => setSelectedItem(item) : undefined}
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-3">
@@ -107,13 +107,13 @@ export default function Timeline({ items }: TimelineProps) {
   {
     selectedItem && (
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-[4px] z-[1000] flex items-center justify-center p-4 transition-opacity"
+        className="fixed inset-0 bg-black/50 backdrop-blur-s z-1000 flex items-center justify-center p-4 transition-opacity"
         onClick={(e) => {
           if (e.target === e.currentTarget) setSelectedItem(null)
         }}
       >
         <div
-          className="bg-surface-color border border-card-border rounded-2xl w-full max-w-[680px] max-h-[88vh] overflow-y-auto relative shadow-2xl animate-in zoom-in-95 duration-200 custom-scrollbar"
+          className="bg-surface-color border border-card-border rounded-2xl w-full max-w-170 max-h-[88vh] overflow-y-auto relative shadow-2xl animate-in zoom-in-95 duration-200 custom-scrollbar"
           style={{ animation: 'pop-in 0.25s ease' }}
         >
           <div className="sticky top-0 bg-surface-color/95 backdrop-blur-sm z-10 px-7 py-6 border-b border-card-border flex justify-between items-start gap-4">

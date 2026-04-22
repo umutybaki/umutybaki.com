@@ -40,7 +40,7 @@ export default function TableOfContents({ headings, title }: Props) {
   if (headings.length === 0) return null
 
   return (
-    <nav className="sticky top-[4.5rem] max-h-[calc(100vh-4.5rem)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pt-6" aria-label="Table of contents">
+    <nav className="sticky top-18 max-h-[calc(100vh-4.5rem)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pt-6" aria-label="Table of contents">
       <p className="font-roboto-mono text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-text-secondary mb-3">{title}</p>
       <ul className="list-none border-l border-border-color">
         {headings.map((heading) => (
