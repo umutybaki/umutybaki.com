@@ -52,7 +52,7 @@ function extractHeadings(content: string): TocItem[] {
     const match = line.match(/^(#{2,3})\s+(.+)$/)
     if (match) {
       const depth = match[1].length
-      const text = match[2].trim()
+      const text = sanitizeTitle(match[2].trim())
       const id = slugify(text)
       headings.push({ id, text, depth })
     }

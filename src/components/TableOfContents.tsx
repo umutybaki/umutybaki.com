@@ -50,7 +50,7 @@ export default function TableOfContents({ headings, title }: Props) {
           >
             <a
               href={`#${heading.id}`}
-              className={`block px-2 py-[0.28rem] text-[0.78rem] text-text-secondary border-l-2 border-transparent -ml-[1px] transition-colors duration-150 leading-[1.4] hover:text-text-primary hover:opacity-100${activeId === heading.id ? ' !text-accent-color !border-l-accent-color' : ''}`}
+              className={`block px-2 py-[0.28rem] text-[0.78rem] text-text-secondary border-l-2 border-transparent -ml-px transition-colors duration-150 leading-[1.4] hover:text-text-primary hover:opacity-100${activeId === heading.id ? ' text-accent-color! border-l-accent-color!' : ''}`}
               onClick={(e) => {
                 e.preventDefault()
                 document.getElementById(heading.id)?.scrollIntoView({ behavior: 'smooth' })
