@@ -1,14 +1,14 @@
 ---
-title: "3 - Memory Management — Stack, Heap, and Memory Bugs"
+title: "3 - Memory Management - Stack, Heap, and Memory Bugs"
 date: "2026-04-14"
 description: "Comprehensive guide to stack, heap, dynamic allocation, and memory bug categories for the COMP 201 midterm."
 ---
 
-# 3 - Memory Management — Stack, Heap, and Memory Bugs
+# 3 - Memory Management - Stack, Heap, and Memory Bugs
 
 ## Introduction
 
-Memory management is one of the most heavily tested topics on COMP201 midterms. This guide covers the stack, heap, dynamic allocation functions (malloc, calloc, realloc, strdup), freeing memory, and the 13 critical memory bug categories that appear repeatedly in exam problems. Understanding these concepts deeply—not just memorizing them—is essential for success.
+Memory management is one of the most heavily tested topics on COMP201 midterms. This guide covers the stack, heap, dynamic allocation functions (malloc, calloc, realloc, strdup), freeing memory, and the 13 critical memory bug categories that appear repeatedly in exam problems. Understanding these concepts deeply-not just memorizing them-is essential for success.
 
 
 ## Part 1: The Stack
@@ -31,7 +31,7 @@ void example() {
 
 **Fixed Size**: The total stack size is fixed, typically 8MB on modern systems. Large allocations can cause a **stack overflow**.
 
-**Speed**: Stack allocation/deallocation is extremely fast—just a pointer adjustment.
+**Speed**: Stack allocation/deallocation is extremely fast-just a pointer adjustment.
 
 **Type Safety**: The compiler checks variable types on the stack.
 
@@ -79,7 +79,7 @@ int main() {
 }
 ```
 
-**What goes wrong**: When `create_string()` returns, its stack frame is destroyed. The local variable `new_str` no longer exists. The pointer `str` in main now points to freed (recycled) memory. Accessing it is undefined behavior—it might print garbage, crash, or appear to work by coincidence.
+**What goes wrong**: When `create_string()` returns, its stack frame is destroyed. The local variable `new_str` no longer exists. The pointer `str` in main now points to freed (recycled) memory. Accessing it is undefined behavior-it might print garbage, crash, or appear to work by coincidence.
 
 **Why it happens**: `new_str` is an array on the stack, not a pointer. It's not allocated with `malloc()`, so we can't return it.
 
@@ -147,7 +147,7 @@ int main() {
 
 ## Part 3: Dynamic Memory Allocation Functions
 
-### malloc() — Memory Allocate
+### malloc() - Memory Allocate
 
 **Signature**:
 ```c
@@ -178,7 +178,7 @@ int *arr = malloc(100);        // WRONG! Only 100 bytes, not 100 ints
 int *arr = malloc(100 * sizeof(int));  // Correct on most systems
 ```
 
-### calloc() — Cleared Allocate
+### calloc() - Cleared Allocate
 
 **Signature**:
 ```c
@@ -210,7 +210,7 @@ int *scores = calloc(100, sizeof(int));
 free(scores);
 ```
 
-### realloc() — Resize Allocation
+### realloc() - Resize Allocation
 
 **Signature**:
 ```c
@@ -264,7 +264,7 @@ printf("%s\n", str);  // prints "Hello world!"
 free(str);
 ```
 
-### strdup() — String Duplicate
+### strdup() - String Duplicate
 
 **Signature**:
 ```c
@@ -304,7 +304,7 @@ free(copy);
 
 ## Part 4: Freeing Memory
 
-### free() — Deallocate
+### free() - Deallocate
 
 **Signature**:
 ```c
@@ -316,7 +316,7 @@ void free(void *ptr);
 **Critical Rules**:
 1. **Exactly Once**: Each allocated block must be freed exactly once
 2. **Starting Address**: You must free the pointer you received from allocation (for malloc'd memory)
-3. **NULL Safe**: Calling `free(NULL)` is safe—it does nothing
+3. **NULL Safe**: Calling `free(NULL)` is safe-it does nothing
 
 **Example**:
 ```c
@@ -422,7 +422,7 @@ For the exam, understand the **concept**: Valgrind is tracking whether every all
 - You need a very large allocation (would overflow stack)
 - You need to resize memory
 
-**General Principle**: Unless a situation requires heap allocation, stack allocation is preferred. However, many programs mix both—using the stack for fixed-size structures and the heap for dynamically-sized data.
+**General Principle**: Unless a situation requires heap allocation, stack allocation is preferred. However, many programs mix both-using the stack for fixed-size structures and the heap for dynamically-sized data.
 
 
 ## Part 6: The 13 Memory Bug Types
@@ -582,7 +582,7 @@ char *msg = "hello";  // don't free this
 
 ### Bug 5: Freeing Stack Space
 
-**Intuition**: A specific case of freeing unallocated storage—trying to free a stack variable.
+**Intuition**: A specific case of freeing unallocated storage-trying to free a stack variable.
 
 **Definition**: Calling `free()` on a pointer to a stack-allocated variable.
 
@@ -598,7 +598,7 @@ void process_data() {
 }
 ```
 
-**What goes wrong**: Same as "Freeing Unallocated Storage"—heap corruption, crash.
+**What goes wrong**: Same as "Freeing Unallocated Storage"-heap corruption, crash.
 
 **Fix**: Don't free stack memory:
 ```c
@@ -616,7 +616,7 @@ void process_data() {
 
 **Intuition**: You have a pointer to memory that's been freed (or gone out of scope).
 
-**Definition**: A pointer that refers to memory that's no longer valid—either freed or stack-allocated that's gone out of scope.
+**Definition**: A pointer that refers to memory that's no longer valid-either freed or stack-allocated that's gone out of scope.
 
 **Example**:
 ```c
@@ -643,7 +643,7 @@ char *ptr;
 printf("%s\n", ptr);  // UNDEFINED: dangling pointer
 ```
 
-**What goes wrong**: Accessing the pointer reads undefined memory—garbage, crashed program, or security vulnerability.
+**What goes wrong**: Accessing the pointer reads undefined memory-garbage, crashed program, or security vulnerability.
 
 **Fix**: Either return new heap memory, or adjust lifetime:
 ```c
@@ -668,7 +668,7 @@ int main() {
 
 ### Bug 7: Returning Pointer to Local Variable
 
-**Intuition**: A specific dangling pointer case—returning stack variable's address.
+**Intuition**: A specific dangling pointer case-returning stack variable's address.
 
 **Definition**: A function returns a pointer to a local variable (stack-allocated). When the function returns, the local variable's memory is freed, and the returned pointer becomes invalid.
 
@@ -1451,4 +1451,4 @@ Master these concepts:
 
 The key to exam success is not memorizing, but deeply understanding when to use each approach and why certain patterns lead to bugs. Trace through code carefully: What is allocated? Where? When is it freed? Do all allocations have matching frees?
 
-Memory management is difficult because errors are often silent—they corrupt memory elsewhere. The fix is always vigilance: check malloc returns, free exactly once, use tools like Valgrind, and practice.
+Memory management is difficult because errors are often silent-they corrupt memory elsewhere. The fix is always vigilance: check malloc returns, free exactly once, use tools like Valgrind, and practice.

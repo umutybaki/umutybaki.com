@@ -1,12 +1,12 @@
 ---
-title: "Adversarial Search — Comprehensive Study Notes"
+title: "Adversarial Search - Comprehensive Study Notes"
 date: "2026-04-14"
 description: "Self-contained notes on adversarial search covering minimax, alpha-beta pruning, and game-tree search for COMP 341 AI."
 ---
 
-# Adversarial Search — Comprehensive Study Notes
+# Adversarial Search - Comprehensive Study Notes
 
-> **Course:** COMP 341 — Introduction to Artificial Intelligence (Asst. Prof. Barış Akgün, Koç University)
+> **Course:** COMP 341 - Introduction to Artificial Intelligence (Asst. Prof. Barış Akgün, Koç University)
 >
 > These notes are written to be **self-contained**: you should be able to learn every concept from scratch just by reading them.
 
@@ -14,13 +14,13 @@ description: "Self-contained notes on adversarial search covering minimax, alpha
 
 ## 1. Why Adversarial Search?
 
-Up to this point in the course, you've studied search algorithms where a single agent tries to find a path from a start state to a goal state. Think of a robot navigating a maze — nobody is actively trying to stop it. The maze is just sitting there, and the robot explores it.
+Up to this point in the course, you've studied search algorithms where a single agent tries to find a path from a start state to a goal state. Think of a robot navigating a maze - nobody is actively trying to stop it. The maze is just sitting there, and the robot explores it.
 
-But what happens when there's an **opponent**? Imagine you're playing chess. You can't just plan a sequence of moves and execute them, because after every move you make, your opponent gets to respond — and they're trying to make you *lose*. This fundamentally changes the nature of the problem.
+But what happens when there's an **opponent**? Imagine you're playing chess. You can't just plan a sequence of moves and execute them, because after every move you make, your opponent gets to respond - and they're trying to make you *lose*. This fundamentally changes the nature of the problem.
 
-In regular search, a solution is a **path** — a sequence of actions from start to goal. In adversarial search, a solution is a **strategy** — a plan that specifies what move you should make for *every possible* move your opponent might make. You need to think ahead not just about your own moves, but about how your opponent will react to them.
+In regular search, a solution is a **path** - a sequence of actions from start to goal. In adversarial search, a solution is a **strategy** - a plan that specifies what move you should make for *every possible* move your opponent might make. You need to think ahead not just about your own moves, but about how your opponent will react to them.
 
-There's also a practical constraint: **time limits**. In most games, you can't afford to search the entire game tree (it's astronomically large for games like chess). So you need to be smart about it — pruning branches that don't matter and approximating the value of positions you can't fully explore.
+There's also a practical constraint: **time limits**. In most games, you can't afford to search the entire game tree (it's astronomically large for games like chess). So you need to be smart about it - pruning branches that don't matter and approximating the value of positions you can't fully explore.
 
 This section of the course focuses on two key ideas: pruning states to enable deeper search (alpha-beta pruning), and approximately evaluating how promising a game state is (evaluation functions). More advanced topics like using machine learning or sample-based search (e.g., Monte Carlo Tree Search) are mentioned in the lecture as being outside the scope of this course but are covered in the RL part.
 
@@ -34,11 +34,11 @@ Games can be classified along two dimensions: whether they are **deterministic**
 | **Perfect information**  | chess, checkers, go, othello       | backgammon, monopoly                    |
 | **Imperfect information**| battleship, blind tictactoe, kriegspiel | bridge, poker, scrabble, nuclear war |
 
-**Perfect information** means both players can see the entire state of the game at all times. In chess, you can see every piece on the board. In poker, you can't see your opponent's hand — that's imperfect information.
+**Perfect information** means both players can see the entire state of the game at all times. In chess, you can see every piece on the board. In poker, you can't see your opponent's hand - that's imperfect information.
 
-**Deterministic** means the outcome of an action is entirely determined by the current state and the action taken. In chess, when you move a piece, you know exactly what the board will look like. In backgammon, you roll dice — the outcome involves randomness, making it stochastic.
+**Deterministic** means the outcome of an action is entirely determined by the current state and the action taken. In chess, when you move a piece, you know exactly what the board will look like. In backgammon, you roll dice - the outcome involves randomness, making it stochastic.
 
-For most of this lecture, we focus on **turn-taking, 2-player, zero-sum games**. The "zero-sum" part is crucial: it means that one player's gain is exactly the other player's loss. If I win (+1), you lose (−1). If we draw, we both get 0. This is a simplification that lets us represent both players' interests with a single number — one player tries to maximize it, the other tries to minimize it.
+For most of this lecture, we focus on **turn-taking, 2-player, zero-sum games**. The "zero-sum" part is crucial: it means that one player's gain is exactly the other player's loss. If I win (+1), you lose (−1). If we draw, we both get 0. This is a simplification that lets us represent both players' interests with a single number - one player tries to maximize it, the other tries to minimize it.
 
 The ideas we develop here *can* be expanded to multiplayer competitive games and even general games where agents have independent utilities and cooperation, indifference, or competition are all possible. But the 2-player zero-sum case is the cleanest starting point.
 
@@ -49,7 +49,7 @@ To apply search techniques to games, we need a formal way to describe them. Here
 
 **State space** $S$: The set of all possible configurations of the game. In tic-tac-toe, a state is a particular arrangement of X's and O's on the board.
 
-**Initial state** $s_0$: Where the game starts — an empty board in tic-tac-toe, the standard piece arrangement in chess.
+**Initial state** $s_0$: Where the game starts - an empty board in tic-tac-toe, the standard piece arrangement in chess.
 
 **Players** $P = \{1, \ldots, N\}$: The agents that take turns. We'll focus on $N = 2$.
 
@@ -76,9 +76,9 @@ The agent always picks the child with the highest value. Simple.
 
 ### Adversarial Game Trees
 
-Now introduce an opponent — say, a ghost in Pac-Man. The tree now has two kinds of levels: levels where *you* choose (you want to maximize your score) and levels where *your opponent* chooses (they want to minimize your score).
+Now introduce an opponent - say, a ghost in Pac-Man. The tree now has two kinds of levels: levels where *you* choose (you want to maximize your score) and levels where *your opponent* chooses (they want to minimize your score).
 
-The key insight is that at the opponent's levels, you can't assume they'll make the move that's best for *you*. A rational opponent will make the move that's best for *them* — which, in a zero-sum game, is the move that's worst for you.
+The key insight is that at the opponent's levels, you can't assume they'll make the move that's best for *you*. A rational opponent will make the move that's best for *them* - which, in a zero-sum game, is the move that's worst for you.
 
 This leads us to the concept of **minimax values**:
 
@@ -137,11 +137,11 @@ where $S(\text{state}, a)$ is the transition function that returns the next stat
 
 Let's break this down line by line:
 
-`VALUE(state)` is the dispatcher — it checks whether we've reached a terminal state (return the utility), or whether it's MAX's turn or MIN's turn, and calls the appropriate function.
+`VALUE(state)` is the dispatcher - it checks whether we've reached a terminal state (return the utility), or whether it's MAX's turn or MIN's turn, and calls the appropriate function.
 
 `MAX-VALUE(state)` starts with the worst possible value ($-\infty$) and iterates through all successors. For each successor, it recursively computes its value and keeps track of the maximum. This models the maximizing player choosing the best available move.
 
-`MIN-VALUE(state)` is the mirror image — it starts at $+\infty$ and keeps track of the minimum, modeling the minimizing player choosing the worst outcome for MAX.
+`MIN-VALUE(state)` is the mirror image - it starts at $+\infty$ and keeps track of the minimum, modeling the minimizing player choosing the worst outcome for MAX.
 
 ### Python Implementation
 
@@ -199,7 +199,7 @@ def minimax_value(state, actions_fn, result_fn,
 
 def max_value(state, actions_fn, result_fn,
               terminal_test, utility_fn, is_max_turn) -> float:
-    """Compute value for MAX player — wants to maximize."""
+    """Compute value for MAX player - wants to maximize."""
     v = -math.inf
     for action in actions_fn(state):
         successor = result_fn(state, action)
@@ -210,7 +210,7 @@ def max_value(state, actions_fn, result_fn,
 
 def min_value(state, actions_fn, result_fn,
               terminal_test, utility_fn, is_max_turn) -> float:
-    """Compute value for MIN player — wants to minimize."""
+    """Compute value for MIN player - wants to minimize."""
     v = math.inf
     for action in actions_fn(state):
         successor = result_fn(state, action)
@@ -318,22 +318,22 @@ Let's trace through the lecture's example step-by-step. The game tree has:
 
 The key insight: even though B has a terminal state with value 12, MIN won't let MAX reach it. MIN will choose the action leading to value 3. But that's still better than what MAX can guarantee through C (value 2) or D (value 2).
 
-Note that MIN has not actually played yet — we've just *simulated* what a rational MIN would do, and chose $a_1$ based on that simulation. These computed values at intermediate nodes are called the **minimax values**.
+Note that MIN has not actually played yet - we've just *simulated* what a rational MIN would do, and chose $a_1$ based on that simulation. These computed values at intermediate nodes are called the **minimax values**.
 
 
 ## 7. Minimax Properties & Analysis
 
 **Completeness:** Yes, minimax is complete *if the game tree is finite*. It will always find a decision. If the game tree is infinite (which can happen with games that allow repeated states), the algorithm won't terminate.
 
-**Optimality:** Yes — *if the opponent plays optimally*. But what if the opponent is not optimal? The lecture asks this interesting question. The answer: minimax is still a good strategy! If the opponent makes mistakes (plays suboptimally), the minimax player will do *even better* than the minimax value predicts. In other words, the minimax value is a **lower bound** on what you'll actually get — you'll always get at least as much as if the opponent were perfect.
+**Optimality:** Yes - *if the opponent plays optimally*. But what if the opponent is not optimal? The lecture asks this interesting question. The answer: minimax is still a good strategy! If the opponent makes mistakes (plays suboptimally), the minimax player will do *even better* than the minimax value predicts. In other words, the minimax value is a **lower bound** on what you'll actually get - you'll always get at least as much as if the opponent were perfect.
 
-Consider this example from the slides: a MAX node with two MIN children, terminal values [10, 10] and [9, 100]. The minimax value of the root is $\max(\min(10,10), \min(9,100)) = \max(10, 9) = 10$. MAX picks the left branch. If the opponent were suboptimal and somehow picked 100 instead of 9 on the right side, MAX would have been better off going right — but minimax didn't account for that because it conservatively assumes the worst.
+Consider this example from the slides: a MAX node with two MIN children, terminal values [10, 10] and [9, 100]. The minimax value of the root is $\max(\min(10,10), \min(9,100)) = \max(10, 9) = 10$. MAX picks the left branch. If the opponent were suboptimal and somehow picked 100 instead of 9 on the right side, MAX would have been better off going right - but minimax didn't account for that because it conservatively assumes the worst.
 
-**Time Complexity:** $O(b^m)$ where $b$ is the branching factor (number of legal moves per state) and $m$ is the maximum depth of the tree. This is the same as DFS, which makes sense — minimax *is* essentially a DFS of the game tree.
+**Time Complexity:** $O(b^m)$ where $b$ is the branching factor (number of legal moves per state) and $m$ is the maximum depth of the tree. This is the same as DFS, which makes sense - minimax *is* essentially a DFS of the game tree.
 
-**Space Complexity:** $O(bm)$ — again same as DFS, because we only need to keep one path from root to the current node in memory, plus the siblings at each level.
+**Space Complexity:** $O(bm)$ - again same as DFS, because we only need to keep one path from root to the current node in memory, plus the siblings at each level.
 
-**The problem in practice:** For chess, $b \approx 35$ and $m \approx 100$. That means $35^{100}$ nodes — a number so large it's beyond astronomical. We clearly can't explore the entire tree. This motivates the next two ideas: alpha-beta pruning and depth-limited search.
+**The problem in practice:** For chess, $b \approx 35$ and $m \approx 100$. That means $35^{100}$ nodes - a number so large it's beyond astronomical. We clearly can't explore the entire tree. This motivates the next two ideas: alpha-beta pruning and depth-limited search.
 
 
 ## 8. Alpha-Beta Pruning
@@ -344,7 +344,7 @@ Most games are far too large to explore every possible continuation. Alpha-beta 
 
 The core insight is: if you've already found a move that guarantees you a certain value, you don't need to keep looking at alternatives that your opponent can force to be worse.
 
-Think of it like house shopping. You find a house for $300K. The next house's first floor is terrible (worth only $200K), and you haven't even seen the second floor yet. It doesn't matter how nice the second floor is — the house is already worse than the first one. You can skip it.
+Think of it like house shopping. You find a house for $300K. The next house's first floor is terrible (worth only $200K), and you haven't even seen the second floor yet. It doesn't matter how nice the second floor is - the house is already worse than the first one. You can skip it.
 
 ### The Alpha and Beta Values
 
@@ -435,7 +435,7 @@ def ab_max_value(state, alpha, beta, actions_fn, result_fn,
         v = max(v, ab_value(successor, alpha, beta, actions_fn, result_fn,
                             terminal_test, utility_fn, is_max_turn))
         if v >= beta:
-            return v  # Beta cutoff — MIN won't allow this
+            return v  # Beta cutoff - MIN won't allow this
         alpha = max(alpha, v)
     return v
 
@@ -449,7 +449,7 @@ def ab_min_value(state, alpha, beta, actions_fn, result_fn,
         v = min(v, ab_value(successor, alpha, beta, actions_fn, result_fn,
                             terminal_test, utility_fn, is_max_turn))
         if v <= alpha:
-            return v  # Alpha cutoff — MAX won't choose this path
+            return v  # Alpha cutoff - MAX won't choose this path
         beta = min(beta, v)
     return v
 
@@ -509,7 +509,7 @@ We annotate each node with an $[\alpha, \beta]$ window.
 - $b_1 = 3$: $v = \min(+\infty, 3) = 3$. Check: $v \leq \alpha$? $3 \leq -\infty$? No. Update $\beta = \min(+\infty, 3) = 3$. Window is now $[-\infty, 3]$.
 - $b_2 = 12$: $v = \min(3, 12) = 3$. No pruning. $\beta$ stays 3.
 - $b_3 = 8$: $v = \min(3, 8) = 3$. No pruning.
-- **B returns 3.** Note: MIN would not choose $b_2=12$ or $b_3=8$ — they're circled in the slides as "min would not choose these."
+- **B returns 3.** Note: MIN would not choose $b_2=12$ or $b_3=8$ - they're circled in the slides as "min would not choose these."
 
 **Back at A:** $v = \max(-\infty, 3) = 3$. Update $\alpha = \max(-\infty, 3) = 3$. Window is now $[3, +\infty]$.
 
@@ -536,33 +536,33 @@ Why does this work? MAX already knows it can get 3 (via B). C's first child give
 
 **Correctness:** Alpha-beta pruning has **no effect** on the minimax value computed for the root. It produces the exact same answer as full minimax. It just does it faster by skipping provably irrelevant subtrees.
 
-**Caveat — Wrong intermediate values:** While the root value is always correct, the values of intermediate nodes might be wrong. This is because some children of internal nodes might get pruned before their true minimax value is computed. The lecture shows an example: with terminal values [3, 8, 2, 1], full minimax gives MIN node 1 a value of 3 and MIN node 2 a value of 1. With alpha-beta, the right MIN node might get value 2 (because node with value 1 gets pruned) — but the root still correctly returns 3.
+**Caveat - Wrong intermediate values:** While the root value is always correct, the values of intermediate nodes might be wrong. This is because some children of internal nodes might get pruned before their true minimax value is computed. The lecture shows an example: with terminal values [3, 8, 2, 1], full minimax gives MIN node 1 a value of 3 and MIN node 2 a value of 1. With alpha-beta, the right MIN node might get value 2 (because node with value 1 gets pruned) - but the root still correctly returns 3.
 
 **Move ordering matters:** The effectiveness of pruning depends heavily on the order in which children are explored. If you happen to explore the *best* moves first, alpha-beta can prune much more aggressively.
 
 **With perfect ordering** (always exploring the best move first):
 - Time complexity drops from $O(b^m)$ to $O(b^{m/2})$
-- This effectively **doubles the solvable depth** — you can search twice as deep in the same amount of time!
+- This effectively **doubles the solvable depth** - you can search twice as deep in the same amount of time!
 - Intuitively: instead of exploring all $b$ children at each of $m$ levels, you only need to fully explore $\sqrt{b}$ at each level
 
 Even with perfect ordering, full search of big games like chess remains hopeless, but the improvement is still dramatic.
 
-**Metareasoning:** Alpha-beta is a simple example of *metareasoning* — computing about what to compute. Instead of blindly evaluating every node, we reason about which nodes are worth evaluating.
+**Metareasoning:** Alpha-beta is a simple example of *metareasoning* - computing about what to compute. Instead of blindly evaluating every node, we reason about which nodes are worth evaluating.
 
 
 ## 11. Resource Limits & Depth-Limited Search
 
 ### The Problem
 
-Even with alpha-beta pruning, we can't search all the way to terminal states in realistic games. Chess with $b \approx 35$ and $m \approx 100$ means $O(b^{m/2}) = O(35^{50})$ — still impossibly large.
+Even with alpha-beta pruning, we can't search all the way to terminal states in realistic games. Chess with $b \approx 35$ and $m \approx 100$ means $O(b^{m/2}) = O(35^{50})$ - still impossibly large.
 
 ### The Solution: Depth-Limited Search
 
 The idea is simple: instead of searching all the way to the bottom of the tree, we **stop at a certain depth** and use an **evaluation function** to estimate the value of the non-terminal states we've reached.
 
-So instead of using actual terminal utilities at the leaves, we replace them with $\text{Eval}(s)$ — a heuristic estimate of how good the position is.
+So instead of using actual terminal utilities at the leaves, we replace them with $\text{Eval}(s)$ - a heuristic estimate of how good the position is.
 
-This means we lose **optimality** — our evaluation function is just an approximation, so we might not find the truly best move. But we can actually play games in real time, which is the whole point.
+This means we lose **optimality** - our evaluation function is just an approximation, so we might not find the truly best move. But we can actually play games in real time, which is the whole point.
 
 ### Practical Numbers
 
@@ -570,7 +570,7 @@ Say we have 100 seconds per move and can explore 10,000 nodes per second. That's
 
 ### Iterative Deepening
 
-A clever technique is to use **iterative deepening**: first search to depth 1, then depth 2, then depth 3, and so on. If you run out of time, you return the best move found at the deepest completed level. This gives you an **anytime algorithm** — it always has an answer ready, and the answer gets better the more time you give it.
+A clever technique is to use **iterative deepening**: first search to depth 1, then depth 2, then depth 3, and so on. If you run out of time, you return the best move found at the deepest completed level. This gives you an **anytime algorithm** - it always has an answer ready, and the answer gets better the more time you give it.
 
 ### Depth Matters
 
@@ -581,7 +581,7 @@ A crucial insight: **searching deeper is always better**, even with an imperfect
 
 ### What Are They?
 
-An evaluation function $\text{Eval}(s)$ assigns a numerical score to a non-terminal game state, estimating how favorable it is for the MAX player. Ideally, this would be the actual minimax value of the position — but computing that requires searching all the way to terminal states, which is exactly what we're trying to avoid.
+An evaluation function $\text{Eval}(s)$ assigns a numerical score to a non-terminal game state, estimating how favorable it is for the MAX player. Ideally, this would be the actual minimax value of the position - but computing that requires searching all the way to terminal states, which is exactly what we're trying to avoid.
 
 ### Design Principles
 
@@ -604,7 +604,7 @@ A position where black has much more material might get $\text{Eval}(s) = -5.6$ 
 
 ### Do Exact Values Matter?
 
-An important observation from the lecture: the **actual numerical values** of the evaluation function don't matter — only the **relative ordering** does. Consider two trees where the terminal values are [1, 2, 2, 4] vs [1, 20, 20, 400]. In both cases, MAX picks the same action (go right, getting min = 2 or min = 20 respectively). The decision is the same because the ranking of options is preserved.
+An important observation from the lecture: the **actual numerical values** of the evaluation function don't matter - only the **relative ordering** does. Consider two trees where the terminal values are [1, 2, 2, 4] vs [1, 20, 20, 400]. In both cases, MAX picks the same action (go right, getting min = 2 or min = 20 respectively). The decision is the same because the ranking of options is preserved.
 
 This means our evaluation function doesn't need to predict exact minimax values; it just needs to correctly rank positions from best to worst.
 
@@ -620,9 +620,9 @@ Not all games are deterministic. In games like backgammon, dice rolls introduce 
 In a stochastic game, the game tree has a new type of node: **chance nodes**. The structure alternates like this:
 
 1. **MAX** takes an action
-2. **CHANCE** — a random event occurs (e.g., dice roll) with known probabilities
+2. **CHANCE** - a random event occurs (e.g., dice roll) with known probabilities
 3. **MIN** takes an action
-4. **CHANCE** — another random event
+4. **CHANCE** - another random event
 5. **MAX** takes an action
 6. ... and so on until a terminal state
 
@@ -630,7 +630,7 @@ For backgammon, after MAX chooses a move, MIN rolls the dice (21 possible outcom
 
 ### Computing Values
 
-The key question: what should the value of a chance node be? Not the best case (that's MAX's job), not the worst case (that's MIN's job), but the **average case** — the expected value, weighted by the probabilities of each outcome.
+The key question: what should the value of a chance node be? Not the best case (that's MAX's job), not the worst case (that's MIN's job), but the **average case** - the expected value, weighted by the probabilities of each outcome.
 
 $$V(\text{chance node}) = \sum_{i} P(\text{outcome}_i) \times V(\text{child}_i)$$
 
@@ -803,7 +803,7 @@ Let's trace through the lecture's expectiminimax example step by step.
 
 **Result:** MAX picks the left action with expected value 3.
 
-The chance nodes represent the uncertainty — you don't know which random outcome will occur, but on average, the left branch gives you an expected value of 3, while the right gives −1. A rational player picks left.
+The chance nodes represent the uncertainty - you don't know which random outcome will occur, but on average, the left branch gives you an expected value of 3, while the right gives −1. A rational player picks left.
 
 
 ## 15. Summary & Comparison Table
@@ -816,13 +816,13 @@ The chance nodes represent the uncertainty — you don't know which random outco
 | **Time** | $O(b^m)$ | $O(b^{m/2})$ best case | Depends on depth limit $d$: $O(b^d)$ | $O(b^m \cdot n^m)$ where $n$ = chance outcomes |
 | **Space** | $O(bm)$ | $O(bm)$ | $O(bd)$ | $O(bm)$ |
 | **Key idea** | Assume optimal opponent, alternate max/min | Skip provably irrelevant branches | Trade optimality for tractability with heuristic eval | Average over random outcomes at chance nodes |
-| **Pruning possible?** | No built-in pruning | Yes — that's the whole point | Yes (combine with alpha-beta) | More difficult (values matter, not just ordering) |
+| **Pruning possible?** | No built-in pruning | Yes - that's the whole point | Yes (combine with alpha-beta) | More difficult (values matter, not just ordering) |
 
 ### Key Takeaways
 
 The lecture builds a progression of ideas, each solving a limitation of the previous one. We start with minimax, which gives us the theoretically optimal strategy but is too slow for real games. Alpha-beta pruning dramatically reduces the search space without sacrificing correctness at the root. Depth-limited search with evaluation functions makes the algorithm practical by trading optimality for speed. And expectiminimax extends the framework to handle stochastic games with chance elements.
 
-Together, these techniques form the backbone of classical game-playing AI. More modern approaches (like Monte Carlo Tree Search used in AlphaGo, or deep reinforcement learning) build on these foundations — but understanding minimax, alpha-beta, and evaluation functions is essential groundwork.
+Together, these techniques form the backbone of classical game-playing AI. More modern approaches (like Monte Carlo Tree Search used in AlphaGo, or deep reinforcement learning) build on these foundations - but understanding minimax, alpha-beta, and evaluation functions is essential groundwork.
 
 
 *These notes cover all material from the COMP 341 Adversarial Search lecture (75 slides). Good luck studying!*

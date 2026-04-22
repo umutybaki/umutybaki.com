@@ -1,12 +1,12 @@
 ---
-title: "4 - Advanced C — void*, Generics, Function Pointers, and Structs"
+title: "4 - Advanced C - void*, Generics, Function Pointers, and Structs"
 date: "2026-04-14"
 description: "Comprehensive guide to advanced C topics including void pointers, generics, function pointers, and structs for COMP 201."
 ---
 
-# 4 - Advanced C — void*, Generics, Function Pointers, and Structs
+# 4 - Advanced C - void*, Generics, Function Pointers, and Structs
 
-> **Course:** COMP201: Computer Systems & Programming — Koç University
+> **Course:** COMP201: Computer Systems & Programming - Koç University
 >
 > These notes are written to be **self-contained**: you should be able to master every
 > concept from scratch just by reading them. This guide covers the advanced C topics
@@ -18,7 +18,7 @@ description: "Comprehensive guide to advanced C topics including void pointers, 
 
 When you first learned C, you worked with familiar types: `int`, `double`, `char`. Each type had its own functions and operations. But what happens when you want to write a sorting function that works for *any* type? Or a data structure that can hold *any* kind of object?
 
-This is where advanced C comes in. The topics in this guide—void pointers, function pointers, const qualifiers, and structures—are the tools that let you write **generic, flexible code** that works across different types and use cases. They're also the concepts that trip up students on exams, so we'll be thorough.
+This is where advanced C comes in. The topics in this guide-void pointers, function pointers, const qualifiers, and structures-are the tools that let you write **generic, flexible code** that works across different types and use cases. They're also the concepts that trip up students on exams, so we'll be thorough.
 
 Here's the big picture: In C, there's no built-in concept of generics like in Java or C++. There's no `template<typename T>`. Instead, C gives you powerful, low-level tools to build that genericity yourself. This guide teaches you how to use those tools correctly and confidently.
 
@@ -27,9 +27,9 @@ Here's the big picture: In C, there's no built-in concept of generics like in Ja
 
 ### 2.1 What is a void Pointer?
 
-Imagine you're writing a library that needs to work with data of *any* type. You have integers, characters, structs—you name it. How do you write a function that accepts all of them?
+Imagine you're writing a library that needs to work with data of *any* type. You have integers, characters, structs-you name it. How do you write a function that accepts all of them?
 
-A **void pointer** (`void*`) is C's answer. It's a pointer that doesn't know—or doesn't care—what type of data it points to. When you declare `void *ptr;`, you're saying: "This pointer can point to any type of data. I'll figure out what it actually points to at runtime."
+A **void pointer** (`void*`) is C's answer. It's a pointer that doesn't know-or doesn't care-what type of data it points to. When you declare `void *ptr;`, you're saying: "This pointer can point to any type of data. I'll figure out what it actually points to at runtime."
 
 Here's the formal definition:
 
@@ -37,7 +37,7 @@ Here's the formal definition:
 - Conversely, any pointer type can be converted to `void*` without an explicit cast.
 - However, before you *use* a `void*` pointer (read from it, write to it), you must **cast it to a specific pointer type**.
 
-Why? Because the compiler needs to know how many bytes to read. If `ptr` is `void*` and points to an integer, the compiler can't read from it directly—it doesn't know if the integer is 2 bytes, 4 bytes, or 8 bytes. You must cast it first: `int value = *(int*)ptr;`
+Why? Because the compiler needs to know how many bytes to read. If `ptr` is `void*` and points to an integer, the compiler can't read from it directly-it doesn't know if the integer is 2 bytes, 4 bytes, or 8 bytes. You must cast it first: `int value = *(int*)ptr;`
 
 ### 2.2 Syntax: Declaring and Using void Pointers
 
@@ -58,9 +58,9 @@ The key insight: **assignment to void* is easy, but usage requires explicit cast
 
 ### 2.3 Why void Pointers? Intuition
 
-Think of a void pointer as a **labeled storage box**. The box doesn't care what's inside—a book, a toy, a coin. The box just stores the address. But when you want to actually *use* what's inside, you need to look at the label (the cast) to know how to treat it.
+Think of a void pointer as a **labeled storage box**. The box doesn't care what's inside-a book, a toy, a coin. The box just stores the address. But when you want to actually *use* what's inside, you need to look at the label (the cast) to know how to treat it.
 
-Real-world example: Imagine a generic mailbox system that delivers mail to addresses worldwide. The mailbox doesn't care what's inside each envelope—it just needs the address. But when you retrieve your mail, you need to know whether you're getting a letter (read it as text), a photo (look at it as an image), or a package (handle it carefully). The void pointer is like the address; the cast is like understanding what kind of mail you have.
+Real-world example: Imagine a generic mailbox system that delivers mail to addresses worldwide. The mailbox doesn't care what's inside each envelope-it just needs the address. But when you retrieve your mail, you need to know whether you're getting a letter (read it as text), a photo (look at it as an image), or a package (handle it carefully). The void pointer is like the address; the cast is like understanding what kind of mail you have.
 
 ### 2.4 Example: Swapping Any Two Values
 
@@ -98,7 +98,7 @@ void swap(void *a, void *b, size_t size) {
 
 **Why does this work?**
 
-- `memcpy(dest, src, size)` copies `size` bytes from `src` to `dest`. It doesn't care what type the data is—it just moves raw bytes.
+- `memcpy(dest, src, size)` copies `size` bytes from `src` to `dest`. It doesn't care what type the data is-it just moves raw bytes.
 - We treat `a` and `b` as `void*` pointers (they can point to anything).
 - We copy 3 times: `a` → `temp`, `b` → `a`, `temp` → `b`. The result is a swap.
 - `size` tells us how many bytes to copy. For `int`, it's `sizeof(int)` (usually 4). For `double`, it's `sizeof(double)` (usually 8).
@@ -115,7 +115,7 @@ swap(&a, &b, sizeof(double));
 // a is now 2.71, b is now 3.14
 ```
 
-**Key point:** The function never cares what types x, y, a, b actually are. It just moves bytes around. This is the power of void pointers—you write the function once, and it works for any type.
+**Key point:** The function never cares what types x, y, a, b actually are. It just moves bytes around. This is the power of void pointers-you write the function once, and it works for any type.
 
 ### 2.5 memcpy vs. memmove
 
@@ -354,7 +354,7 @@ int main() {
 }
 ```
 
-The beauty here is the same stack works for doubles, structs, or anything else—just call `stack_create` with the appropriate `elem_size`.
+The beauty here is the same stack works for doubles, structs, or anything else-just call `stack_create` with the appropriate `elem_size`.
 
 ### 3.4 Writing Predicates: Generic Filtering
 
@@ -396,7 +396,7 @@ int main() {
 }
 ```
 
-This pattern—passing a predicate function—is foundational for generic data processing in C.
+This pattern-passing a predicate function-is foundational for generic data processing in C.
 
 
 ## 4. Function Pointers
@@ -428,7 +428,7 @@ int (*func_ptr)(int, int);
 Let's parse this:
 - `func_ptr` is a pointer (the `*` tells you that)
 - It points to a function that takes two `int` arguments and returns an `int`
-- The parentheses around `*func_ptr` are crucial—they group the pointer declaration
+- The parentheses around `*func_ptr` are crucial-they group the pointer declaration
 
 **Assigning a function to the pointer:**
 
@@ -658,7 +658,7 @@ int main() {
 }
 ```
 
-The pattern: Create an array of function pointers, then index into it (`filters[i]`) to call different functions. This is dispatch—you select which function to run based on a condition.
+The pattern: Create an array of function pointers, then index into it (`filters[i]`) to call different functions. This is dispatch-you select which function to run based on a condition.
 
 
 ## 5. const Qualifiers and Const-Correctness
@@ -962,7 +962,7 @@ printf("Born: %d-%d-%d\n", alice.birth_date.year,
 
 ### 6.6 Structs with Function Pointers
 
-A struct can contain function pointers—this is how you build objects in C:
+A struct can contain function pointers-this is how you build objects in C:
 
 ```c
 typedef int (*Operation)(int, int);
@@ -1018,7 +1018,7 @@ int main() {
 
 ### 6.8 Memory Layout
 
-Structs in memory are stored sequentially—members lay out in order:
+Structs in memory are stored sequentially-members lay out in order:
 
 ```c
 struct Student {
@@ -1565,4 +1565,4 @@ Here's a quick reference for all the major concepts:
 
 These notes cover all material from COMP201 lectures 10, 11, and 12. You now have the foundation to handle advanced C confidently. Practice these concepts with the exam problems above, and you'll be well-prepared. Good luck studying!
 
-*These notes are designed to teach you from scratch. If you find sections unclear, re-read them carefully—the repetition helps concepts stick. Remember: C gives you power, but with that power comes responsibility to manage memory and types correctly.*
+*These notes are designed to teach you from scratch. If you find sections unclear, re-read them carefully-the repetition helps concepts stick. Remember: C gives you power, but with that power comes responsibility to manage memory and types correctly.*

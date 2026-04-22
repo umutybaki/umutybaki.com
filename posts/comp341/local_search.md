@@ -1,12 +1,12 @@
 ---
-title: "Local Search — Comprehensive Study Notes"
+title: "Local Search - Comprehensive Study Notes"
 date: "2026-04-14"
 description: "Self-contained notes on local search algorithms including hill climbing, simulated annealing, and genetic algorithms for COMP 341 AI."
 ---
 
-# Local Search — Comprehensive Study Notes
+# Local Search - Comprehensive Study Notes
 
-> **Course:** COMP 341 — Introduction to AI (Koç University, Asst. Prof. Barış Akgün)
+> **Course:** COMP 341 - Introduction to AI (Koç University, Asst. Prof. Barış Akgün)
 > 
 > These notes are written to be **self-contained**: you should be able to learn every concept from scratch just by reading them. Every algorithm includes intuition, formal pseudocode, annotated Python code, and a discussion of where it is used in the real world.
 
@@ -15,7 +15,7 @@ description: "Self-contained notes on local search algorithms including hill cli
 
 ### The Core Idea
 
-Imagine you are blindfolded on a hilly terrain and your goal is to reach the highest peak. You can’t see the entire landscape — you can only feel the ground immediately around you. You take a step in whatever direction feels like it goes uphill. That’s local search.
+Imagine you are blindfolded on a hilly terrain and your goal is to reach the highest peak. You can’t see the entire landscape - you can only feel the ground immediately around you. You take a step in whatever direction feels like it goes uphill. That’s local search.
 
 More formally: **local search** algorithms operate by starting at some state and iteratively moving to a **neighboring** state, trying to improve some **evaluation function** (also called an **objective function**). The key insight is:
 
@@ -27,13 +27,13 @@ This is fundamentally different from algorithms like BFS, DFS, or A*, where the 
 
 Local search is everywhere in real-world AI and engineering:
 
-- **Integrated circuit design** — placing millions of transistors on a chip to minimize wire length
-- **Factory floor layout** — arranging machines to minimize transport time between stations
-- **Scheduling** — assigning tasks to time slots (e.g., class timetables, airline crew schedules)
-- **Routing** — finding efficient paths for delivery trucks (think Google Maps fleet routing)
-- **Portfolio management** — selecting investments to maximize return while minimizing risk
-- **Network optimization** — configuring network topologies for maximum throughput
-- **Machine learning** — training neural networks (gradient descent is a form of local search!)
+- **Integrated circuit design** - placing millions of transistors on a chip to minimize wire length
+- **Factory floor layout** - arranging machines to minimize transport time between stations
+- **Scheduling** - assigning tasks to time slots (e.g., class timetables, airline crew schedules)
+- **Routing** - finding efficient paths for delivery trucks (think Google Maps fleet routing)
+- **Portfolio management** - selecting investments to maximize return while minimizing risk
+- **Network optimization** - configuring network topologies for maximum throughput
+- **Machine learning** - training neural networks (gradient descent is a form of local search!)
 
 In all these cases, you have some configuration (state) and you want to find the **best** configuration, or at least a **good enough** one.
 
@@ -48,7 +48,7 @@ In all these cases, you have some configuration (state) and you want to find the
 |**Guarantees**           |Often complete and/or optimal            |Usually neither (with some exceptions)    |
 |**Good for**             |Finding how to reach a goal              |Finding the best configuration            |
 
-**Think of it this way:** classical search is like getting turn-by-turn driving directions. Local search is like trying to find the best seat in a crowded stadium — you don’t care how you walked there, you just want the best spot.
+**Think of it this way:** classical search is like getting turn-by-turn driving directions. Local search is like trying to find the best seat in a crowded stadium - you don’t care how you walked there, you just want the best spot.
 
 
 ## 3. Formulating a Local Search Problem
@@ -61,11 +61,11 @@ This is whatever configuration you’re currently looking at. For example, in th
 
 ### 3.2 Successor (Transition) Function
 
-This defines **which states you can reach in one step** from the current state — i.e., the “neighbors” of the current state. For N-Queens, a successor might be the board configuration you get by moving one queen within its column to a different row.
+This defines **which states you can reach in one step** from the current state - i.e., the “neighbors” of the current state. For N-Queens, a successor might be the board configuration you get by moving one queen within its column to a different row.
 
 ### 3.3 Evaluation (Objective) Function
 
-This is a function that tells you **how good** a state is — it assigns a numerical score to each state. We either want to **maximize** it (hill climbing *up*) or **minimize** it (hill climbing *down*, or descent). For N-Queens, the evaluation function might count the number of pairs of queens attacking each other (and we’d want to **minimize** that to zero).
+This is a function that tells you **how good** a state is - it assigns a numerical score to each state. We either want to **maximize** it (hill climbing *up*) or **minimize** it (hill climbing *down*, or descent). For N-Queens, the evaluation function might count the number of pairs of queens attacking each other (and we’d want to **minimize** that to zero).
 
 ### Key Properties We Care About
 
@@ -75,13 +75,13 @@ This is a function that tells you **how good** a state is — it assigns a numer
 
 ## 4. The State-Space Landscape
 
-Imagine plotting every possible state on the x-axis and the value of the evaluation function on the y-axis. You get a “landscape” — a terrain of hills and valleys.
+Imagine plotting every possible state on the x-axis and the value of the evaluation function on the y-axis. You get a “landscape” - a terrain of hills and valleys.
 
 ### Key Features of the Landscape
 
 - **Global maximum:** The highest point in the entire landscape. This is the state with the best evaluation. It’s what we ideally want to find.
-- **Local maximum:** A point that is higher than all its immediate neighbors, but NOT the highest point overall. This is a trap — a local search algorithm might think it’s found the best state, but there’s something better elsewhere.
-- **Plateau (flat local maximum):** A flat area where all neighboring states have the same value. The algorithm has no idea which way to go — there’s no uphill direction.
+- **Local maximum:** A point that is higher than all its immediate neighbors, but NOT the highest point overall. This is a trap - a local search algorithm might think it’s found the best state, but there’s something better elsewhere.
+- **Plateau (flat local maximum):** A flat area where all neighboring states have the same value. The algorithm has no idea which way to go - there’s no uphill direction.
 - **Shoulder:** A plateau that has an uphill edge. It looks like a plateau locally, but if you keep walking along it, you’ll eventually find an uphill direction. These are tricky because you might give up too early.
 - **Current state:** Where you are right now in the search.
 
@@ -96,8 +96,8 @@ Hill climbing is the simplest local search algorithm. The analogy from the lectu
 
 > **“Climbing a hill in heavy fog with amnesia.”**
 
-- **Heavy fog:** You can only see your immediate neighbors — you have no idea what the global landscape looks like.
-- **Amnesia:** You have no memory of where you’ve been — you only know your current state.
+- **Heavy fog:** You can only see your immediate neighbors - you have no idea what the global landscape looks like.
+- **Amnesia:** You have no memory of where you’ve been - you only know your current state.
 
 At each step, you look at all your neighbors, pick the one with the highest value, and move there. If no neighbor is better than you, you stop.
 
@@ -117,7 +117,7 @@ function HILL-CLIMBING(problem) returns a state that is a local maximum
 1. Start at the initial state.
 2. Enter an infinite loop.
 3. Look at ALL successors (neighbors) of the current state, and pick the one with the highest evaluation value.
-4. If that best neighbor is **not better** than where you are now (≤), you’re at a local maximum — stop and return the current state.
+4. If that best neighbor is **not better** than where you are now (≤), you’re at a local maximum - stop and return the current state.
 5. Otherwise, move to that neighbor and repeat.
 
 ### 5.3 Hill-Climbing Python Implementation
@@ -145,7 +145,7 @@ def hill_climbing(problem):
         neighbors = problem.get_successors(current)
 
         if not neighbors:
-            # No neighbors at all — we're stuck
+            # No neighbors at all - we're stuck
             return current
 
         # Find the neighbor with the highest evaluation
@@ -242,8 +242,8 @@ The slide showed the 8-queens board with an evaluation of 17 (counting all attac
 |:-------------------|:---------------------------------------------------------------------------------------------|
 |**Complete?**       |**No.** It can get stuck at local maxima, plateaus.                                           |
 |**Optimal?**        |**No.** It finds a local maximum, not necessarily the global one.                             |
-|**Time Complexity** |O(d) where d is the longest path to a “solution” — could be infinite if it cycles on plateaus.|
-|**Space Complexity**|**O(1)** — constant! It only stores the current state.                                        |
+|**Time Complexity** |O(d) where d is the longest path to a “solution” - could be infinite if it cycles on plateaus.|
+|**Space Complexity**|**O(1)** - constant! It only stores the current state.                                        |
 
 ### 5.6 The Three Drawbacks
 
@@ -264,7 +264,7 @@ The slide showed the 8-queens board with an evaluation of 17 (counting all attac
 
 **Adding Memory:**
 
-- **Parallel hill climbing:** Run hill climbing from multiple starting points simultaneously. States that lead to good evaluations “recruit” others — this is the idea behind Local Beam Search (covered next).
+- **Parallel hill climbing:** Run hill climbing from multiple starting points simultaneously. States that lead to good evaluations “recruit” others - this is the idea behind Local Beam Search (covered next).
 
 ### 5.8 Randomized Variants
 
@@ -294,8 +294,8 @@ The key idea:
 Specifically:
 
 - Combine **random walk** (exploring) with **hill climbing** (exploiting).
-- Early on, allow lots of random moves (high “temperature”) — explore broadly.
-- Over time, gradually **decrease** the randomness (cool down) — focus more on exploitation.
+- Early on, allow lots of random moves (high “temperature”) - explore broadly.
+- Over time, gradually **decrease** the randomness (cool down) - focus more on exploitation.
 - Eventually, when the temperature reaches 0, behave exactly like hill climbing.
 
 ### 6.2 The Temperature Parameter (T)
@@ -337,7 +337,7 @@ function SIMULATED-ANNEALING(problem, schedule) returns a solution state
 1. Start at the initial state.
 2. At each time step `t`, compute the current temperature from the schedule.
 3. If the temperature has reached 0, stop and return whatever state you’re at.
-4. Pick a **random** successor (NOT the best one — this is key!).
+4. Pick a **random** successor (NOT the best one - this is key!).
 5. Calculate the change in value: $\Delta E$ = new − current.
 6. If $\Delta E > 0$ (the neighbor is better), always move there.
 7. If $\Delta E \leq 0$ (the neighbor is worse), move there with probability $e^{\Delta E / T}$.
@@ -396,11 +396,11 @@ def simulated_annealing(problem, schedule, max_iterations=100000):
         delta_e = next_value - current_value
 
         if delta_e > 0:
-            # The neighbor is better — always accept
+            # The neighbor is better - always accept
             current = next_state
             current_value = next_value
         else:
-            # The neighbor is worse — accept with probability e^(delta_e / T)
+            # The neighbor is worse - accept with probability e^(delta_e / T)
             acceptance_probability = math.exp(delta_e / T)
             if random.random() < acceptance_probability:
                 current = next_state
@@ -422,7 +422,7 @@ def linear_schedule(t, initial_temp=100, k=0.01):
 
 ### 6.6 Why Does Simulated Annealing Work?
 
-Early in the search (high T), the algorithm behaves almost like a random walk — it can jump around the state space freely and escape any local maximum. As the temperature drops, it becomes pickier, settling into whatever good region it has found. If the temperature is decreased **slowly enough**, SA is:
+Early in the search (high T), the algorithm behaves almost like a random walk - it can jump around the state space freely and escape any local maximum. As the temperature drops, it becomes pickier, settling into whatever good region it has found. If the temperature is decreased **slowly enough**, SA is:
 
 > **Probabilistically complete AND globally optimal.**
 
@@ -515,7 +515,7 @@ def local_beam_search(problem, k=10, max_iterations=1000):
 
 > **All k states often end up on the same local hill.**
 
-Because we always pick the top k, the “good” states quickly dominate. If there’s one local maximum that looks better than anything else, all k states will converge there — and we lose the diversity that made beam search useful in the first place.
+Because we always pick the top k, the “good” states quickly dominate. If there’s one local maximum that looks better than anything else, all k states will converge there - and we lose the diversity that made beam search useful in the first place.
 
 ### 7.6 Stochastic Beam Search
 
@@ -523,7 +523,7 @@ To fix this, instead of always picking the top k successors deterministically, w
 
 This preserves diversity: bad successors still have some chance of surviving, which keeps the search spread across the landscape.
 
-> “Natural selection, anyone?” — this directly leads to the idea of Genetic Algorithms.
+> “Natural selection, anyone?” - this directly leads to the idea of Genetic Algorithms.
 
 
 ## 8. Genetic Algorithms
@@ -575,7 +575,7 @@ Compute the fitness of each state. Higher fitness = better solution.
 
 #### Step 3: Selection
 
-Select pairs of parents for reproduction. Parents are chosen **proportionally to their fitness** — fitter individuals are more likely to be selected, but even unfit ones have some chance.
+Select pairs of parents for reproduction. Parents are chosen **proportionally to their fitness** - fitter individuals are more likely to be selected, but even unfit ones have some chance.
 
 **Example from the lecture:** The fitness values 24, 23, 20, 11 sum to 78. The selection probabilities become:
 
@@ -781,7 +781,7 @@ From the lecture’s visual: two parent boards are combined at a crossover point
 
 ### 9.1 The Idea
 
-All the methods above are **derivative-free** — they don’t use calculus. They work on discrete state spaces (or treat continuous spaces as if they were discrete).
+All the methods above are **derivative-free** - they don’t use calculus. They work on discrete state spaces (or treat continuous spaces as if they were discrete).
 
 **Gradient descent/ascent** is for when:
 
@@ -792,7 +792,7 @@ The idea is beautifully simple:
 
 > **Move in the direction where the function increases (ascent) or decreases (descent) the fastest.**
 
-That direction is given by the **gradient** — the vector of partial derivatives.
+That direction is given by the **gradient** - the vector of partial derivatives.
 
 ### 9.2 The Gradient
 
@@ -810,7 +810,7 @@ $$x(t+1) = x(t) + \alpha \nabla f(x)$$
 **Gradient descent** (minimizing):
 $$x(t+1) = x(t) - \alpha \nabla f(x)$$
 
-Where $\alpha$ is the **learning rate** (step size) — a small positive number that controls how big each step is.
+Where $\alpha$ is the **learning rate** (step size) - a small positive number that controls how big each step is.
 
 ### 9.4 Stopping Conditions
 
@@ -898,7 +898,7 @@ print(f"f(x_min) = {f2(x_min2)}")
 **Advantages:**
 
 - Very simple to implement.
-- Works in **any number of dimensions** — even infinite dimensions (e.g., function spaces in calculus of variations).
+- Works in **any number of dimensions** - even infinite dimensions (e.g., function spaces in calculus of variations).
 - Extremely widely used: it’s the backbone of **deep learning** (training neural networks), logistics optimization, physics simulations, economics, and more.
 
 **Disadvantages:**
@@ -925,7 +925,7 @@ This is **the** optimization algorithm of modern machine learning. Every time yo
 ### 10.1 Offline vs. Online Search
 
 - **Offline search** (everything we’ve covered so far): You have a complete model of the world. You simulate and reason about it in your head (or computer), then produce a plan, and then execute it.
-- **Online search:** You don’t have a model. You **learn about the world by acting in it**. You interleave search and execution — take an action, observe what happens, then decide the next action.
+- **Online search:** You don’t have a model. You **learn about the world by acting in it**. You interleave search and execution - take an action, observe what happens, then decide the next action.
 
 ### 10.2 When Do You Need Online Search?
 
@@ -936,8 +936,8 @@ This is **the** optimization algorithm of modern machine learning. Every time yo
 ### 10.3 What Works for Online Search?
 
 - **Hill climbing:** Yes! It only needs the current state and its neighbors. Most local search methods work online.
-- **Random restart:** No — you can’t teleport back to a random state in a real environment.
-- **A*:** No — A* needs to jump around the state space, which you can’t do in the real world.
+- **Random restart:** No - you can’t teleport back to a random state in a real environment.
+- **A*:** No - A* needs to jump around the state space, which you can’t do in the real world.
 
 ### 10.4 Learning Real-Time A* (LRTA*)
 
@@ -948,8 +948,8 @@ A variant of A* designed for online search. It follows f(n) locally and **update
 
 The lectures briefly mention that the real world is messier than what classical search assumes:
 
-- **Nondeterministic actions:** An action might lead to different outcomes. Solution: **contingency plans** — plans that branch based on what actually happens.
-- **Partial observability:** You can’t see the entire state. Solution: reason about **belief states** — sets of states you might be in.
+- **Nondeterministic actions:** An action might lead to different outcomes. Solution: **contingency plans** - plans that branch based on what actually happens.
+- **Partial observability:** You can’t see the entire state. Solution: reason about **belief states** - sets of states you might be in.
 
 These topics are beyond the scope of this course but are central to planning under uncertainty (covered in more advanced AI courses).
 
@@ -969,13 +969,13 @@ These topics are beyond the scope of this course but are central to planning und
 
 ### The Big Takeaways
 
-1. **Local search is for optimization** — when the path doesn’t matter, just the final answer.
+1. **Local search is for optimization** - when the path doesn’t matter, just the final answer.
 2. **The fundamental tension** is between **exploration** (trying new areas) and **exploitation** (improving what you have).
-3. **Hill climbing is simple but fragile** — it gets stuck easily.
-4. **Simulated annealing adds controlled randomness** — it can escape local optima.
-5. **Beam search adds memory** — keeping multiple states provides more coverage.
-6. **Genetic algorithms add recombination** — combining good partial solutions from different states.
-7. **Gradient descent leverages calculus** — when you can compute derivatives, it’s the tool of choice.
+3. **Hill climbing is simple but fragile** - it gets stuck easily.
+4. **Simulated annealing adds controlled randomness** - it can escape local optima.
+5. **Beam search adds memory** - keeping multiple states provides more coverage.
+6. **Genetic algorithms add recombination** - combining good partial solutions from different states.
+7. **Gradient descent leverages calculus** - when you can compute derivatives, it’s the tool of choice.
 8. **All of these (except SA with perfect schedule) lack completeness and optimality guarantees** in practice. But they work remarkably well on real problems!
 
 

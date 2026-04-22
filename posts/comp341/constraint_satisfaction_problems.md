@@ -1,12 +1,12 @@
 ---
-title: "Constraint Satisfaction Problems — Comprehensive Study Notes"
+title: "Constraint Satisfaction Problems - Comprehensive Study Notes"
 date: "2026-04-14"
 description: "Self-contained notes on CSPs covering backtracking, arc consistency, and constraint propagation for COMP 341 AI."
 ---
 
-# Constraint Satisfaction Problems — Comprehensive Study Notes
+# Constraint Satisfaction Problems - Comprehensive Study Notes
 
-> **Course:** COMP 341 — Introduction to Artificial Intelligence, Asst. Prof. Barış Akgün, Koç University
+> **Course:** COMP 341 - Introduction to Artificial Intelligence, Asst. Prof. Barış Akgün, Koç University
 >
 > These notes are written to be **self-contained**: you should be able to learn every concept from scratch just by reading them.
 
@@ -16,22 +16,22 @@ description: "Self-contained notes on CSPs covering backtracking, arc consistenc
 
 Before we dive into CSPs, let's recall the search paradigms you've already encountered in this course, because understanding where CSPs sit among them will help everything else click.
 
-In **classical search** (uninformed and informed search, like BFS, DFS, A*), the solution to a problem is a *path* from the initial state to a goal state. You care about the sequence of actions that gets you there. Think of navigating from city A to city B — you want the route.
+In **classical search** (uninformed and informed search, like BFS, DFS, A*), the solution to a problem is a *path* from the initial state to a goal state. You care about the sequence of actions that gets you there. Think of navigating from city A to city B - you want the route.
 
-In **local search** (hill climbing, simulated annealing, genetic algorithms), the path doesn't matter at all. You only care about the *final state*. You start with some state and keep improving it by making local modifications. Think of placing queens on a chessboard — you just want a valid configuration, not the story of how you got there.
+In **local search** (hill climbing, simulated annealing, genetic algorithms), the path doesn't matter at all. You only care about the *final state*. You start with some state and keep improving it by making local modifications. Think of placing queens on a chessboard - you just want a valid configuration, not the story of how you got there.
 
-**CSPs** are something different from both. Like local search, the goal itself is what matters — not the path. But unlike both classical and local search, CSPs have a very *specific structure* to their states and goals. In standard search, a state is essentially a "black box" — it could be anything. The goal test could be any Boolean function you like. CSPs impose structure on these: a state is an *assignment of values to variables*, and the goal is defined by *constraints* between those variables. This structure is a gift. It means we can build **general-purpose algorithms** that work on *any* CSP, rather than needing a custom strategy for every new problem. The structure lets us use smart heuristics that apply broadly.
+**CSPs** are something different from both. Like local search, the goal itself is what matters - not the path. But unlike both classical and local search, CSPs have a very *specific structure* to their states and goals. In standard search, a state is essentially a "black box" - it could be anything. The goal test could be any Boolean function you like. CSPs impose structure on these: a state is an *assignment of values to variables*, and the goal is defined by *constraints* between those variables. This structure is a gift. It means we can build **general-purpose algorithms** that work on *any* CSP, rather than needing a custom strategy for every new problem. The structure lets us use smart heuristics that apply broadly.
 
 
 ## 2. What Is a Constraint Satisfaction Problem?
 
-Here's the core idea: imagine you have a bunch of decisions to make. Each decision is choosing a value for some variable. But not all combinations of choices are allowed — there are rules (constraints) that restrict which combinations are valid. A CSP asks: *can you find a set of choices that satisfies all the rules simultaneously?*
+Here's the core idea: imagine you have a bunch of decisions to make. Each decision is choosing a value for some variable. But not all combinations of choices are allowed - there are rules (constraints) that restrict which combinations are valid. A CSP asks: *can you find a set of choices that satisfies all the rules simultaneously?*
 
 Formally, a **Constraint Satisfaction Problem** is defined by three things:
 
 **Variables:** A set of variables $X_1, X_2, \ldots, X_n$. Each variable represents a decision you need to make.
 
-**Domains:** Each variable $X_i$ has a domain $D_i$ — the set of possible values it can take. Domains can differ across variables, though they're often the same.
+**Domains:** Each variable $X_i$ has a domain $D_i$ - the set of possible values it can take. Domains can differ across variables, though they're often the same.
 
 **Constraints:** A set of constraints, each specifying the allowable combinations of values for some subset of variables. The goal test is simply: *do all constraints hold simultaneously?*
 
@@ -39,7 +39,7 @@ An **assignment** is a mapping from variables to values. We say:
 
 - A **complete assignment** is one where every variable has been given a value.
 - A **legal (consistent) assignment** is one where no constraint is violated.
-- A **solution** to a CSP is an assignment that is both complete and legal — every variable is assigned, and every constraint is satisfied.
+- A **solution** to a CSP is an assignment that is both complete and legal - every variable is assigned, and every constraint is satisfied.
 
 Think of it this way: if you're filling out a crossword puzzle, the variables are the blank squares, the domains are the letters A–Z, and the constraints are that each row/column must spell a valid word.
 
@@ -72,7 +72,7 @@ $$\sum_{i \in A} X_i = k \quad \text{(a sum constraint)}$$
 
 $$X_i \neq X_j \text{ for } i \neq j, \; i, j \in A \quad \text{(all-different constraint)}$$
 
-The `alldiff` constraint is especially common — it says "all these variables must take different values."
+The `alldiff` constraint is especially common - it says "all these variables must take different values."
 
 
 ## 4. Classic Examples of CSPs
@@ -83,13 +83,13 @@ Understanding CSPs becomes much easier when you see them in action. Let's walk t
 
 This is the quintessential CSP example. The task is to color a map of Australia so that no two neighboring regions share the same color.
 
-**Variables:** One variable per region — WA (Western Australia), NT (Northern Territory), Q (Queensland), NSW (New South Wales), V (Victoria), SA (South Australia), T (Tasmania). So seven variables total.
+**Variables:** One variable per region - WA (Western Australia), NT (Northern Territory), Q (Queensland), NSW (New South Wales), V (Victoria), SA (South Australia), T (Tasmania). So seven variables total.
 
 **Domains:** Each variable can be assigned one of three colors: $D_i = \{\text{red, green, blue}\}$.
 
 **Constraints:** Adjacent regions must have different colors. The adjacencies in Australia give us these constraints: $WA \neq NT$, $WA \neq SA$, $NT \neq SA$, $NT \neq Q$, $SA \neq Q$, $SA \neq NSW$, $SA \neq V$, $Q \neq NSW$, $NSW \neq V$.
 
-Notice how South Australia (SA) borders nearly every other mainland region — it appears in 5 of the 9 constraints. This will become important when we discuss heuristics later.
+Notice how South Australia (SA) borders nearly every other mainland region - it appears in 5 of the 9 constraints. This will become important when we discuss heuristics later.
 
 One valid solution is: $\{WA = \text{red}, NT = \text{green}, Q = \text{red}, NSW = \text{green}, V = \text{red}, SA = \text{blue}, T = \text{green}\}$. You can verify that no two adjacent regions share a color.
 
@@ -106,13 +106,13 @@ This is a fun example from the lecture. Ahmet, Elif, Mehmet, and Zeynep want to 
 - Ahmet and Elif don't like each other: $A \neq E$
 - Mehmet has a crush on Zeynep: $M = Z$
 
-A solution: $A = C_1, E = C_2, M = C_2, Z = C_2$. The lecture makes a humorous side note: they should just put Elif in front and Ahmet in back and take one car — but the CSP doesn't model that! This is an important insight: the quality of your CSP solution depends on how well you model the real problem.
+A solution: $A = C_1, E = C_2, M = C_2, Z = C_2$. The lecture makes a humorous side note: they should just put Elif in front and Ahmet in back and take one car - but the CSP doesn't model that! This is an important insight: the quality of your CSP solution depends on how well you model the real problem.
 
 ### 4.3 N-Queens
 
 Place $N$ queens on an $N \times N$ chessboard so that no two queens threaten each other (no two in the same row, column, or diagonal).
 
-**Variables:** $Q_1, Q_2, \ldots, Q_N$ — one per row. $Q_k$ represents the column position of the queen in row $k$.
+**Variables:** $Q_1, Q_2, \ldots, Q_N$ - one per row. $Q_k$ represents the column position of the queen in row $k$.
 
 **Domains:** $D_k = \{1, 2, \ldots, N\}$.
 
@@ -122,7 +122,7 @@ Place $N$ queens on an $N \times N$ chessboard so that no two queens threaten ea
 
 **Constraints (explicit):** For instance, $(Q_1, Q_2) \in \{(1,3), (1,4), (2,4), (3,1), (4,1), (4,2), \ldots\}$.
 
-By choosing one variable per row, we've already eliminated the "same row" constraint — each queen is in a different row by construction. This is a clever modeling trick.
+By choosing one variable per row, we've already eliminated the "same row" constraint - each queen is in a different row by construction. This is a clever modeling trick.
 
 ### 4.4 Cryptarithmetic (TWO + TWO = FOUR)
 
@@ -140,11 +140,11 @@ This is a puzzle where each letter stands for a digit, and the arithmetic must w
 **Domains:** $\{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$ for each letter.
 
 **Constraints:**
-- $\text{alldiff}(F, T, U, W, R, O)$ — each letter maps to a different digit
+- $\text{alldiff}(F, T, U, W, R, O)$ - each letter maps to a different digit
 - Column arithmetic: $O + O = R + 10 \cdot X_1$ (the ones column, with carry $X_1$)
 - And similar for each column...
 
-This example is notable because it involves **higher-order constraints** — the column constraints involve three or more variables (the two addend digits plus the carry).
+This example is notable because it involves **higher-order constraints** - the column constraints involve three or more variables (the two addend digits plus the carry).
 
 ### 4.5 Sudoku
 
@@ -173,7 +173,7 @@ A **constraint graph** is a visual representation of the structure of a CSP. For
 - **Nodes** represent variables.
 - **Arcs (edges)** connect pairs of variables that share a constraint.
 
-For the Australia map coloring problem, the constraint graph has nodes WA, NT, SA, Q, NSW, V, and T, with edges corresponding to shared borders. SA is the most connected node (it borders nearly every other mainland region), while T (Tasmania) is disconnected from the rest — it has no constraints with any mainland variable.
+For the Australia map coloring problem, the constraint graph has nodes WA, NT, SA, Q, NSW, V, and T, with edges corresponding to shared borders. SA is the most connected node (it borders nearly every other mainland region), while T (Tasmania) is disconnected from the rest - it has no constraints with any mainland variable.
 
 This graph structure is extremely useful. It tells us which variables interact and which are independent. It also underlies the arc consistency algorithms we'll study later.
 
@@ -186,7 +186,7 @@ For constraints involving more than two variables (like cryptarithmetic), we can
 
 **Discrete variables with finite domains:** This is the most common case. If the domain has size $d$ and there are $n$ variables, there are $O(d^n)$ complete assignments. Even with domains of size 2 (Boolean CSPs), the problem is in general NP-complete (this is the Boolean satisfiability problem, or SAT).
 
-**Discrete variables with infinite domains:** For example, job scheduling where variables are start/end times as integers. You can't enumerate the domain, so you need a **constraint language** — something like "Job1 + 5 < Job2" meaning Job 2 starts at least 5 time units after Job 1. With linear constraints, these are solvable; with nonlinear constraints, they become undecidable.
+**Discrete variables with infinite domains:** For example, job scheduling where variables are start/end times as integers. You can't enumerate the domain, so you need a **constraint language** - something like "Job1 + 5 < Job2" meaning Job 2 starts at least 5 time units after Job 1. With linear constraints, these are solvable; with nonlinear constraints, they become undecidable.
 
 **Continuous variables:** For example, start/end times for Hubble Telescope observations as real numbers. Linear constraints over continuous variables can be solved in polynomial time using **Linear Programming** methods (like the Simplex method).
 
@@ -198,7 +198,7 @@ For constraints involving more than two variables (like cryptarithmetic), we can
 
 **Higher-order constraints** involve 3 or more variables. The column constraints in cryptarithmetic are a good example. These can sometimes be decomposed into binary constraints by introducing auxiliary variables.
 
-**Preferences (soft constraints):** Sometimes you don't just want *any* solution — you want a *good* one. Soft constraints express preferences rather than hard requirements. For example, "red is better than green." These are often modeled as costs, turning the CSP into a **constrained optimization problem**. Methods for these are more involved and out of our scope, but local search can be used (how? — by using the number/severity of constraint violations as an evaluation function).
+**Preferences (soft constraints):** Sometimes you don't just want *any* solution - you want a *good* one. Soft constraints express preferences rather than hard requirements. For example, "red is better than green." These are often modeled as costs, turning the CSP into a **constrained optimization problem**. Methods for these are more involved and out of our scope, but local search can be used (how? - by using the number/severity of constraint violations as an evaluation function).
 
 
 ## 7. Solving CSPs as Search Problems
@@ -207,7 +207,7 @@ For constraints involving more than two variables (like cryptarithmetic), we can
 
 We can formulate any CSP as a standard search problem:
 
-- **Initial state:** $\{\}$ (the empty assignment — no variable has been assigned yet)
+- **Initial state:** $\{\}$ (the empty assignment - no variable has been assigned yet)
 - **Successor function:** Assign a value (consistent with constraints) to an unassigned variable
 - **Goal test:** All variables are assigned and all constraints are satisfied
 - **Failure:** No legal assignment possible
@@ -216,11 +216,11 @@ Here's the beautiful thing: **this formulation is the same for every CSP.** You 
 
 ### 7.2 Key Observations
 
-The path to a solution is irrelevant — we only care about the final assignment. Also, every solution appears at depth $n$ (with $n$ variables), because we need to assign all $n$ variables. This suggests **depth-first search (DFS)** is a natural fit — we don't need BFS's breadth or iterative deepening because we know exactly how deep solutions live.
+The path to a solution is irrelevant - we only care about the final assignment. Also, every solution appears at depth $n$ (with $n$ variables), because we need to assign all $n$ variables. This suggests **depth-first search (DFS)** is a natural fit - we don't need BFS's breadth or iterative deepening because we know exactly how deep solutions live.
 
 ### 7.3 Complexity of Naive Search
 
-If we apply naive DFS without being smart about it, the branching factor at depth $l$ is $(n - l) \cdot d$ — we can choose any of the remaining $n - l$ variables and assign any of $d$ values. This gives $n! \cdot d^n$ leaves, which is astronomical.
+If we apply naive DFS without being smart about it, the branching factor at depth $l$ is $(n - l) \cdot d$ - we can choose any of the remaining $n - l$ variables and assign any of $d$ values. This gives $n! \cdot d^n$ leaves, which is astronomical.
 
 
 ## 8. Backtracking Search
@@ -229,11 +229,11 @@ If we apply naive DFS without being smart about it, the branching factor at dept
 
 ### Idea 1: One Variable at a Time
 
-Variable assignments are **commutative** — the order doesn't matter. Assigning $WA = \text{red}$ then $NT = \text{green}$ gives the same result as $NT = \text{green}$ then $WA = \text{red}$. So instead of considering all possible orderings (which is what causes the $n!$ factor), we fix an ordering and assign one variable at a time. This eliminates the $n!$ factor from our complexity.
+Variable assignments are **commutative** - the order doesn't matter. Assigning $WA = \text{red}$ then $NT = \text{green}$ gives the same result as $NT = \text{green}$ then $WA = \text{red}$. So instead of considering all possible orderings (which is what causes the $n!$ factor), we fix an ordering and assign one variable at a time. This eliminates the $n!$ factor from our complexity.
 
 ### Idea 2: Check Constraints As You Go
 
-Don't wait until you have a complete assignment to check if constraints are satisfied. Instead, at each step, only consider values that **don't conflict** with the assignments made so far. This is called the **incremental goal test**. If a variable has no legal values left, backtrack immediately — no point continuing down a dead end.
+Don't wait until you have a complete assignment to check if constraints are satisfied. Instead, at each step, only consider values that **don't conflict** with the assignments made so far. This is called the **incremental goal test**. If a variable has no legal values left, backtrack immediately - no point continuing down a dead end.
 
 ### The Algorithm
 
@@ -259,33 +259,33 @@ function BACKTRACK(assignment, csp) returns a solution, or failure
 
 Let's break this down line by line:
 
-1. If the assignment is complete (all variables assigned), we're done — return it.
+1. If the assignment is complete (all variables assigned), we're done - return it.
 2. **SELECT-UNASSIGNED-VARIABLE** picks the next variable to assign. The simplest approach is a fixed order, but smarter strategies exist (we'll cover them next).
 3. **ORDER-DOMAIN-VALUES** determines the order to try values for the chosen variable. Again, the simplest approach is some fixed order, but smarter strategies exist.
 4. For each value, check if it's **consistent** with the current assignment (doesn't violate any constraint).
-5. If consistent, add the assignment and run **INFERENCE** (optional — this is where filtering happens, like forward checking or arc consistency).
+5. If consistent, add the assignment and run **INFERENCE** (optional - this is where filtering happens, like forward checking or arc consistency).
 6. If inference doesn't detect a failure, recursively try to complete the assignment.
 7. If the recursive call fails, **undo** the assignment and inferences (backtrack) and try the next value.
-8. If no value works, return failure — this propagates the backtrack up to the previous variable.
+8. If no value works, return failure - this propagates the backtrack up to the previous variable.
 
 An important detail: the algorithm only keeps **a single representation** of the current state. It doesn't copy the entire assignment for each recursive call. It adds and removes assignments in place. This keeps space usage linear in the number of variables.
 
 ### Worked Example: Map Coloring
 
-Imagine we color Australia starting with WA. We try WA = red. Then we move to NT. Since NT is adjacent to WA, red is eliminated; we try NT = green (legal). Then we move to Q. Since Q is adjacent to NT, green is eliminated; we try Q = red (legal — Q is not adjacent to WA in our constraint set... wait, actually it is not adjacent to WA). We continue assigning variables one by one. If we hit a dead end where some variable has no legal values, we backtrack to the previous variable and try a different value.
+Imagine we color Australia starting with WA. We try WA = red. Then we move to NT. Since NT is adjacent to WA, red is eliminated; we try NT = green (legal). Then we move to Q. Since Q is adjacent to NT, green is eliminated; we try Q = red (legal - Q is not adjacent to WA in our constraint set... wait, actually it is not adjacent to WA). We continue assigning variables one by one. If we hit a dead end where some variable has no legal values, we backtrack to the previous variable and try a different value.
 
 Basic backtracking can solve the N-Queens problem for $n \approx 25$.
 
 
 ## 9. Improving Backtracking: Ordering Heuristics
 
-The backtracking algorithm has two key functions we can make smarter: **SELECT-UNASSIGNED-VARIABLE** (which variable to assign next) and **ORDER-DOMAIN-VALUES** (which value to try first). The CSP's structure — variables, domains, and constraints — enables **general-purpose heuristics** that work across all CSPs.
+The backtracking algorithm has two key functions we can make smarter: **SELECT-UNASSIGNED-VARIABLE** (which variable to assign next) and **ORDER-DOMAIN-VALUES** (which value to try first). The CSP's structure - variables, domains, and constraints - enables **general-purpose heuristics** that work across all CSPs.
 
 ### 9.1 Variable Ordering: Minimum Remaining Values (MRV)
 
 **Idea:** Choose the variable with the **fewest legal values left** in its domain.
 
-Why minimum rather than maximum? The reasoning is "**fail-fast**." If a variable has very few remaining options, it's the most constrained — and if it's going to cause a failure, we want to discover that as soon as possible, before wasting time assigning other variables. If a variable has only 1 value left, we *must* assign that value, so let's do it now. If it has 0 values left, we need to backtrack immediately.
+Why minimum rather than maximum? The reasoning is "**fail-fast**." If a variable has very few remaining options, it's the most constrained - and if it's going to cause a failure, we want to discover that as soon as possible, before wasting time assigning other variables. If a variable has only 1 value left, we *must* assign that value, so let's do it now. If it has 0 values left, we need to backtrack immediately.
 
 Also known as the **"most constrained variable"** heuristic.
 
@@ -305,7 +305,7 @@ Once we've chosen *which* variable to assign, we need to decide *which value* to
 
 **Idea:** Choose the value that **rules out the fewest values** in the remaining unassigned variables.
 
-Wait — for variable ordering we wanted to fail *fast*, but for value ordering we want to succeed *first*? Yes! The logic is different. When choosing which variable to assign, we want to identify failures early. But once we've committed to a variable, we want to pick the value most likely to lead to a solution. A value that rules out fewer options for other variables leaves the remaining problem more flexible, increasing the chance we can find a complete solution.
+Wait - for variable ordering we wanted to fail *fast*, but for value ordering we want to succeed *first*? Yes! The logic is different. When choosing which variable to assign, we want to identify failures early. But once we've committed to a variable, we want to pick the value most likely to lead to a solution. A value that rules out fewer options for other variables leaves the remaining problem more flexible, increasing the chance we can find a complete solution.
 
 For example, suppose we're assigning Q in the Australia problem, and WA = red, NT = green are already assigned. If we try Q = blue, it only eliminates blue from NSW's domain. But if we try Q = red, it eliminates red from NSW. We'd pick whichever value leaves more options for NSW (and SA, etc.).
 
@@ -317,7 +317,7 @@ Combining these ordering ideas:
 - **Variable selection:** MRV (with Degree Heuristic as tiebreaker)
 - **Value selection:** LCV
 
-This combination makes problems like the 1000-Queens feasible! However, it's important to note that **these heuristics don't change the theoretical worst-case bounds** — the problem is still NP-hard. They improve average-case performance dramatically, though.
+This combination makes problems like the 1000-Queens feasible! However, it's important to note that **these heuristics don't change the theoretical worst-case bounds** - the problem is still NP-hard. They improve average-case performance dramatically, though.
 
 ### 9.5 Worked Example: Backtracking + Heuristics on Australia
 
@@ -333,14 +333,14 @@ Starting with all domains = $\{R, G, B\}$ and tie-breaking variable order: up-do
 | 6 | V has {G} (1 value) | V | G | V = G |
 | 7 | T has {R, G, B} | T | R | T = R |
 
-We didn't even need to backtrack in this example — the heuristics guided us straight to a solution! That's not always the case, but it illustrates how effective smart ordering can be.
+We didn't even need to backtrack in this example - the heuristics guided us straight to a solution! That's not always the case, but it illustrates how effective smart ordering can be.
 
 
 ## 10. Improving Backtracking: Filtering
 
 Ordering heuristics are about being smart when making choices. **Filtering** is about being proactive in **eliminating impossible values** before you even consider them.
 
-The idea: keep track of the domains of all unassigned variables. Whenever you make an assignment, **cross off values** from the domains of neighboring variables that are now impossible. If any variable's domain becomes empty, you know this path is doomed — backtrack immediately, without continuing further.
+The idea: keep track of the domains of all unassigned variables. Whenever you make an assignment, **cross off values** from the domains of neighboring variables that are now impossible. If any variable's domain becomes empty, you know this path is doomed - backtrack immediately, without continuing further.
 
 ### 10.1 Forward Checking (FC)
 
@@ -348,7 +348,7 @@ The idea: keep track of the domains of all unassigned variables. Whenever you ma
 
 Whenever you assign a value to a variable, look at all the **neighbors** (variables sharing a constraint with the assigned variable). For each neighbor, remove any values from its domain that would violate the constraint with the new assignment.
 
-If any neighbor's domain becomes **empty**, the current assignment can't lead to a solution — backtrack.
+If any neighbor's domain becomes **empty**, the current assignment can't lead to a solution - backtrack.
 
 **Worked Example:** In the Australia map, we start with all domains = $\{R, G, B\}$.
 
@@ -358,13 +358,13 @@ If any neighbor's domain becomes **empty**, the current assignment can't lead to
 
 SA's domain is empty! Backtrack. We know Q = G won't work without trying further.
 
-Notice that **forward checking is needed to compute MRV** — you need to know how many values are left in each variable's domain, and forward checking is exactly what tells you. So if you're using MRV, you're already doing forward checking implicitly.
+Notice that **forward checking is needed to compute MRV** - you need to know how many values are left in each variable's domain, and forward checking is exactly what tells you. So if you're using MRV, you're already doing forward checking implicitly.
 
 ### 10.2 Limitations of Forward Checking
 
 Forward checking only propagates information from **assigned** variables to **unassigned** ones. It doesn't detect inconsistencies *between* unassigned variables.
 
-For example: after assigning WA = R and Q = G, forward checking tells us NT = $\{B\}$ and SA = $\{B\}$. But NT and SA are adjacent — they can't both be blue! Forward checking doesn't catch this because neither NT nor SA is assigned yet. We need something more powerful.
+For example: after assigning WA = R and Q = G, forward checking tells us NT = $\{B\}$ and SA = $\{B\}$. But NT and SA are adjacent - they can't both be blue! Forward checking doesn't catch this because neither NT nor SA is assigned yet. We need something more powerful.
 
 
 ## 11. Arc Consistency and the AC-3 Algorithm
@@ -385,7 +385,7 @@ Let's trace through arc consistency after assigning WA = R and Q = G.
 
 After forward checking: WA = $\{R\}$, NT = $\{B\}$, Q = $\{G\}$, NSW = $\{R, B\}$, V = $\{R, G, B\}$, SA = $\{B\}$.
 
-Now consider arc $\text{SA} \to \text{NSW}$: SA only has $\{B\}$. For SA = B, is there some value in NSW that satisfies $SA \neq NSW$? NSW has $\{R, B\}$. Yes — NSW = R works. So this arc is consistent.
+Now consider arc $\text{SA} \to \text{NSW}$: SA only has $\{B\}$. For SA = B, is there some value in NSW that satisfies $SA \neq NSW$? NSW has $\{R, B\}$. Yes - NSW = R works. So this arc is consistent.
 
 Now consider arc $\text{NSW} \to \text{SA}$: NSW has $\{R, B\}$.
 - For NSW = R: is there a value in SA such that $NSW \neq SA$? SA = $\{B\}$, and $R \neq B$, so yes.
@@ -403,7 +403,7 @@ Now V = $\{G, B\}$. Since V lost a value, re-check arcs into V.
 Consider arc $\text{SA} \to \text{V}$: SA = $\{B\}$.
 - For SA = B: V = $\{G, B\}$, and $B = B$, so blue doesn't work. But $B \neq G$, so V = G works.
 
-This arc is still consistent. Eventually, the process stabilizes and we've derived much tighter domains — catching failures that forward checking missed.
+This arc is still consistent. Eventually, the process stabilizes and we've derived much tighter domains - catching failures that forward checking missed.
 
 ### 11.3 The AC-3 Algorithm
 
@@ -437,9 +437,9 @@ function REVISE(csp, Xi, Xj) returns true iff we revise the domain of Xi
 2. Pull an arc $(X_i, X_j)$ off the queue.
 3. Call **REVISE**: for each value $x$ in $X_i$'s domain, check if *any* value $y$ in $X_j$'s domain satisfies the constraint. If no such $y$ exists, remove $x$ from $D_i$.
 4. If REVISE actually removed something (returned true):
-   - If $D_i$ is now empty, the CSP has no solution from the current state — return **false**.
+   - If $D_i$ is now empty, the CSP has no solution from the current state - return **false**.
    - Otherwise, add all arcs $(X_k, X_i)$ to the queue for every neighbor $X_k$ of $X_i$ (except $X_j$ itself, since we just processed that pair). We need to re-check these because $X_i$'s domain shrank, which might invalidate values in $X_k$'s domain.
-5. If the queue empties without any domain becoming empty, return **true** — the CSP is arc-consistent.
+5. If the queue empties without any domain becoming empty, return **true** - the CSP is arc-consistent.
 
 ### 11.4 Runtime of AC-3
 
@@ -464,7 +464,7 @@ A more efficient version called **AC-4** achieves $O(n^2 d^2)$, but in practice 
 | Relationship | FC ⊂ AC (AC entails FC) | Strictly more powerful |
 | Practical value | Pairs well with MRV; very fast | Usually worth the cost; AC-3 is standard |
 
-If you run AC, you don't need to run FC separately — AC already does everything FC does, and more.
+If you run AC, you don't need to run FC separately - AC already does everything FC does, and more.
 
 
 ## 12. Problem Structure
@@ -477,7 +477,7 @@ How dramatic is this? Suppose $n = 80, d = 2, c = 20$:
 - Without decomposition: $2^{80} \approx 4$ billion years at 10 million nodes/sec
 - With decomposition: $(4)(2^{20}) \approx 0.4$ seconds at 10 million nodes/sec
 
-However, it's rare to find completely disconnected subproblems in practice — most real-world CSPs have well-connected constraint graphs.
+However, it's rare to find completely disconnected subproblems in practice - most real-world CSPs have well-connected constraint graphs.
 
 > **Note from the lecture:** This topic was **skipped for Spring 2025** and the related slides were removed. It's mentioned here for completeness, but you likely won't be tested on the details of tree decomposition or cutset conditioning.
 
@@ -503,9 +503,9 @@ function MIN-CONFLICTS(csp, max_steps) returns a solution or failure
 
 **How it works:**
 
-1. Start with a **complete assignment** — every variable has a value, but constraints may be violated.
+1. Start with a **complete assignment** - every variable has a value, but constraints may be violated.
 2. At each step, pick a **randomly chosen conflicted variable** (one involved in at least one violated constraint).
-3. Reassign that variable to the value that **minimizes the number of conflicts** — that is, the value that violates the fewest constraints with the current assignments of other variables.
+3. Reassign that variable to the value that **minimizes the number of conflicts** - that is, the value that violates the fewest constraints with the current assignments of other variables.
 4. Repeat until either a solution is found (zero conflicts) or we run out of steps.
 
 ### 13.2 Example: 4-Queens with Min-Conflicts
@@ -516,7 +516,7 @@ For a 4×4 board with one queen per column:
 - **Goal test:** No attacks ($h = 0$)
 - **Evaluation:** $c(n) = $ number of attacking pairs
 
-Starting from a random configuration with $h = 5$ (five attacking pairs), Min-Conflicts picks a conflicted queen and moves it to the row that creates the fewest new conflicts. In just a few steps, it might reach $h = 2$, then $h = 0$ — done!
+Starting from a random configuration with $h = 5$ (five attacking pairs), Min-Conflicts picks a conflicted queen and moves it to the row that creates the fewest new conflicts. In just a few steps, it might reach $h = 2$, then $h = 0$ - done!
 
 ### 13.3 Performance
 
@@ -526,7 +526,7 @@ Min-Conflicts is remarkably effective in practice:
 
 $$R = \frac{\text{number of constraints}}{\text{number of variables}}$$
 
-Near a "**critical ratio**," problems become dramatically harder — this is related to the **phase transition phenomenon** in computational complexity. When $R$ is low, there are many solutions (easy). When $R$ is very high, there are no solutions (easy to detect). But right at the critical ratio, solutions exist but are hard to find.
+Near a "**critical ratio**," problems become dramatically harder - this is related to the **phase transition phenomenon** in computational complexity. When $R$ is low, there are many solutions (easy). When $R$ is very high, there are no solutions (easy to detect). But right at the critical ratio, solutions exist but are hard to find.
 
 ### 13.4 Python Implementation
 
@@ -663,4 +663,4 @@ CSPs are a special kind of search problem where states are partial assignments o
 CSPs give us powerful general-purpose tools because of their structured formulation. Backtracking search is the baseline solver. Smart ordering (MRV + DH for variables, LCV for values) dramatically speeds up search. Filtering (forward checking and arc consistency) prunes the search space by detecting dead ends early. For very large CSPs, local search with Min-Conflicts can be surprisingly effective, solving millions-of-queens problems in near-constant time, though it struggles at the critical constraint ratio.
 
 
-*These notes cover all material from the COMP 341 Lecture 6 — Constraint Satisfaction Problems by Asst. Prof. Barış Akgün, Koç University. Good luck studying!*
+*These notes cover all material from the COMP 341 Lecture 6 - Constraint Satisfaction Problems by Asst. Prof. Barış Akgün, Koç University. Good luck studying!*

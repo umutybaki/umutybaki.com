@@ -1,10 +1,10 @@
 ---
-title: "Economics of Horizontal Mergers — ECON 499 Study Guide"
+title: "Economics of Horizontal Mergers - ECON 499 Study Guide"
 date: "2026-04-22"
 description: "Study guide covering unilateral effects, the Cournot merger model, the merger paradox, the Williamson trade-off, coordinated effects, and the DOJ/FTC 5-step merger review framework for ECON 499."
 ---
 
-# Economics of Horizontal Mergers — ECON 499 Study Guide
+# Economics of Horizontal Mergers - ECON 499 Study Guide
 *Lecture 2 | Self-contained exam reference*
 
 ## What Is a Horizontal Merger?
@@ -15,7 +15,7 @@ This is distinct from:
 - **Vertical merger**: firms at different stages of the supply chain (e.g., a manufacturer acquiring a distributor).
 - **Conglomerate merger**: firms in unrelated markets (e.g., GE + Honeywell).
 
-The legal standard comes from **Clayton Act §7**: a merger is prohibited where its effect "may be substantially to lessen competition, or to tend to create a monopoly." The operative word is *may* — regulators act before harm is certain.
+The legal standard comes from **Clayton Act §7**: a merger is prohibited where its effect "may be substantially to lessen competition, or to tend to create a monopoly." The operative word is *may* - regulators act before harm is certain.
 
 ## The Core Trade-Off
 
@@ -28,20 +28,20 @@ Almost every merger analysis reduces to weighing two opposing forces:
 
 The job of the regulator (and of you in an exam question) is to determine which force dominates.
 
-## Part 1 — Unilateral Effects
+## Part 1 - Unilateral Effects
 
 ### The Core Idea
 
-**Unilateral effects** are price increases the merged firm can impose profitably on its own — without needing to coordinate with any rival. This is the most direct form of merger harm.
+**Unilateral effects** are price increases the merged firm can impose profitably on its own - without needing to coordinate with any rival. This is the most direct form of merger harm.
 
 **The logic step by step:**
 
-1. Before the merger, Firm A competes with Firm B. If A raises its price, it loses customers — some go to B, some leave the market entirely.
+1. Before the merger, Firm A competes with Firm B. If A raises its price, it loses customers - some go to B, some leave the market entirely.
 2. The customers who switch to B represent a *lost sale* from A's perspective. This is what disciplines A's pricing.
 3. After the merger, Firm AB owns both products. If customers switch from product A to product B, Firm AB still captures that revenue.
-4. The merger **internalizes the competitive externality** — the merged firm no longer "loses" when customers divert from one of its products to another. So it has a unilateral incentive to raise prices on both.
+4. The merger **internalizes the competitive externality** - the merged firm no longer "loses" when customers divert from one of its products to another. So it has a unilateral incentive to raise prices on both.
 
-This logic applies most powerfully when the merging firms are **close substitutes** — i.e., when a large fraction of customers who leave product A go to product B (high diversion ratio).
+This logic applies most powerfully when the merging firms are **close substitutes** - i.e., when a large fraction of customers who leave product A go to product B (high diversion ratio).
 
 ### The Cournot Model: Pre-Merger (Triopoly)
 
@@ -52,7 +52,7 @@ The lecture formalizes this with a **Cournot (quantity-setting) model**. You sho
 - Inverse demand: P(Q) = a − bQ, where Q = q₁ + q₂ + q₃
 - Marginal cost = c for all firms (c < a)
 
-**Symmetric equilibrium** — each firm solves max πᵢ = (P − c)qᵢ:
+**Symmetric equilibrium** - each firm solves max πᵢ = (P − c)qᵢ:
 
 $$q^* = \frac{a-c}{4b} \quad \text{(each firm)}$$
 $$Q_{pre} = \frac{3(a-c)}{4b} \quad \text{(total output)}$$
@@ -69,7 +69,7 @@ a − 2bq* − 2bq* − c = 0 → q* = (a−c)/4b ✓
 
 ### The Cournot Model: Post-Merger (Duopoly, No Efficiencies)
 
-Now Firms 1 and 2 merge into Firm M. The market is now a duopoly (Firm M and outsider Firm 3). Crucially, assume **no cost savings** — marginal cost stays at c for both.
+Now Firms 1 and 2 merge into Firm M. The market is now a duopoly (Firm M and outsider Firm 3). Crucially, assume **no cost savings** - marginal cost stays at c for both.
 
 **New equilibrium:**
 
@@ -83,11 +83,11 @@ $$\pi_{post}^M = \frac{(a-c)^2}{9b} \quad \text{(Firm M's profit)}$$
 - Q_post = 2(a−c)/3b **<** Q_pre = 3(a−c)/4b → output *falls*
 - P_post = (a+2c)/3 **>** P_pre = (a+3c)/4 → price *rises*
 
-**Conclusion**: Even without any coordination, the merger is anticompetitive — it raises prices and harms consumers. This is the unilateral effect in action.
+**Conclusion**: Even without any coordination, the merger is anticompetitive - it raises prices and harms consumers. This is the unilateral effect in action.
 
 *Intuition*: Firm M now controls two plants worth of capacity but behaves like a single Cournot player. It restricts output to maximize joint profit on its two products, which raises the market price.
 
-## Part 2 — The Merger Paradox
+## Part 2 - The Merger Paradox
 
 Here's the result that seems counterintuitive at first.
 
@@ -104,13 +104,13 @@ Since 1/9 < 1/8, the **merged firm earns less than the two firms earned separate
 
 If simple mergers are unprofitable, why do they happen? Two answers:
 
-**Reason 1 — Efficiencies.** The model assumed MC was unchanged post-merger. If the merger reduces marginal cost to cM < c (economies of scale, plant closures, better procurement), the merged firm is more competitive. With a low enough cM, the merger becomes highly profitable — and may even *lower* consumer prices.
+**Reason 1 - Efficiencies.** The model assumed MC was unchanged post-merger. If the merger reduces marginal cost to cM < c (economies of scale, plant closures, better procurement), the merged firm is more competitive. With a low enough cM, the merger becomes highly profitable - and may even *lower* consumer prices.
 
-**Reason 2 — The model is wrong.** Cournot with identical homogeneous goods is stylized. In markets with **differentiated products** or a **dominant firm**, mergers are far more likely to be profitable and anticompetitive. The diversion ratio between the merging firms' products becomes crucial.
+**Reason 2 - The model is wrong.** Cournot with identical homogeneous goods is stylized. In markets with **differentiated products** or a **dominant firm**, mergers are far more likely to be profitable and anticompetitive. The diversion ratio between the merging firms' products becomes crucial.
 
-**Exam takeaway**: The merger paradox tells you that in simple models, the *outsider* benefits most. If you're asked who wins and loses from a merger — the answer often is: consumers lose, the outsider gains, and the merging firms may not benefit as much as expected (unless there are efficiencies).
+**Exam takeaway**: The merger paradox tells you that in simple models, the *outsider* benefits most. If you're asked who wins and loses from a merger - the answer often is: consumers lose, the outsider gains, and the merging firms may not benefit as much as expected (unless there are efficiencies).
 
-## Part 3 — Efficiencies and the Williamson Trade-Off
+## Part 3 - Efficiencies and the Williamson Trade-Off
 
 When a merger both raises prices *and* reduces costs, regulators must trade off welfare losses against welfare gains. This is formalized in the **Williamson trade-off**.
 
@@ -121,13 +121,13 @@ When a merger both raises prices *and* reduces costs, regulators must trade off 
 
 ### Two Areas to Compare
 
-**Allocative loss (A1) — the deadweight loss triangle:**
+**Allocative loss (A1) - the deadweight loss triangle:**
 
 $$A_1 \approx \frac{1}{2}(P_2 - P_1)(Q_1 - Q_2)$$
 
 This is the welfare lost because output contracts from Q₁ to Q₂. Consumers who would have bought at the old price but won't at the new, higher price are priced out. This is a *second-order* effect (it scales with the *square* of the price change).
 
-**Productive gain (A2) — the cost savings rectangle:**
+**Productive gain (A2) - the cost savings rectangle:**
 
 $$A_2 \approx (AC_1 - AC_2) \times Q_2$$
 
@@ -148,16 +148,16 @@ This is the resource saving from producing Q₂ units at lower average cost. Thi
 | **Total welfare** | CS + PS (A2 > A1 is enough) | Efficiencies easier to justify |
 | **Consumer welfare** | CS only | Efficiencies must be *passed through* as lower prices |
 
-US antitrust law nominally uses a consumer welfare standard, so efficiency claims must show that consumers themselves benefit — not just that costs fall for shareholders.
+US antitrust law nominally uses a consumer welfare standard, so efficiency claims must show that consumers themselves benefit - not just that costs fall for shareholders.
 
 ### Requirements for an Efficiency Defense
 
 For efficiencies to count as a defense in US merger review, they must be:
 1. **Merger-specific**: the savings couldn't be achieved without the merger (e.g., not achievable via a licensing agreement or organic growth).
-2. **Verifiable**: concrete and supported by evidence — not speculative projections.
+2. **Verifiable**: concrete and supported by evidence - not speculative projections.
 3. **Cognizable**: don't come at the expense of competition (e.g., cost savings from eliminating a rival's R&D don't count).
 
-## Part 4 — Coordinated Effects
+## Part 4 - Coordinated Effects
 
 **Coordinated effects** are a second, distinct channel of harm. The concern is not that the merged firm will raise prices unilaterally, but that the merger restructures the market in a way that makes **tacit or explicit collusion among all remaining firms easier and more stable**.
 
@@ -166,7 +166,7 @@ For efficiencies to count as a defense in US merger review, they must be:
 A cartel or tacit collusive arrangement is easier to sustain when:
 
 - **Fewer firms**: easier to detect deviations and punish cheaters.
-- **More symmetry**: firms with similar cost structures and market shares have aligned interests — less temptation to undercut.
+- **More symmetry**: firms with similar cost structures and market shares have aligned interests - less temptation to undercut.
 - **Stable demand and costs**: collusion is harder when conditions shift unpredictably (makes deviations hard to distinguish from market noise).
 - **High entry barriers**: if new entry is difficult, firms can sustain high prices without attracting competitors.
 
@@ -174,17 +174,17 @@ A cartel or tacit collusive arrangement is easier to sustain when:
 
 **Exam tip**: If a question involves a market that was *already* oligopolistic or has a history of coordination, flag coordinated effects explicitly. They're often more relevant than unilateral effects in such settings.
 
-## Part 5 — The DOJ/FTC 5-Step Horizontal Merger Guidelines Framework
+## Part 5 - The DOJ/FTC 5-Step Horizontal Merger Guidelines Framework
 
 This is the **exact analytical sequence** you should follow when analyzing any merger question on the exam. The 2010 Horizontal Merger Guidelines are the operational document regulators use.
 
-### Step 1 — Market Definition
+### Step 1 - Market Definition
 
 Define the relevant **product market** and **geographic market** using the SSNIP test (see Core Antitrust Concepts guide for full detail). The market definition determines who competes with whom and sets the denominator for market share calculations.
 
 **Practical exam move**: State your market definition first, justify it briefly with SSNIP logic, then proceed. A different market definition often leads to a completely different conclusion.
 
-### Step 2 — Market Concentration (HHI Screen)
+### Step 2 - Market Concentration (HHI Screen)
 
 Calculate the **post-merger HHI** and **ΔHHI**.
 
@@ -212,21 +212,21 @@ Post-merger HHI = 2,650 + 1,750 = **4,400**
 
 → Highly concentrated market, ΔHHI >> 200 → **presumptively anticompetitive**.
 
-### Step 3 — Competitive Effects
+### Step 3 - Competitive Effects
 
 Assess both channels:
 
-**Unilateral effects** — ask:
+**Unilateral effects** - ask:
 - Are the merging firms close substitutes? (High diversion ratio?)
 - Does the merged firm control a large enough combined share to profitably raise price alone?
 - Are remaining competitors close enough to discipline the price increase?
 
-**Coordinated effects** — ask:
+**Coordinated effects** - ask:
 - Does the merger increase market symmetry?
 - Are there historical signs of coordination in this industry?
 - Do entry barriers prevent new firms from breaking up a cartel?
 
-### Step 4 — Efficiencies
+### Step 4 - Efficiencies
 
 If the parties claim the merger generates cost savings, regulators evaluate whether these are:
 - **Merger-specific** (couldn't happen otherwise)
@@ -235,33 +235,33 @@ If the parties claim the merger generates cost savings, regulators evaluate whet
 
 In practice, efficiency defenses are hard to win. Regulators are skeptical of projected savings, especially those claimed at the time of merger review when firms have incentive to overstate benefits.
 
-### Step 5 — Entry
+### Step 5 - Entry
 
 Would potential entry by new firms prevent a post-merger price increase? Entry must be:
 - **Timely**: within approximately 2 years.
 - **Likely**: would be profitable at the elevated post-merger price.
 - **Sufficient**: enough scale to actually constrain price, not just token competition.
 
-If entry is easy and rapid, it can defeat both unilateral and coordinated effects concerns — the merged firm can't sustain high prices because new entrants will undercut it. If entry requires large sunk costs, regulatory approvals, or years of development, it is not a credible constraint.
+If entry is easy and rapid, it can defeat both unilateral and coordinated effects concerns - the merged firm can't sustain high prices because new entrants will undercut it. If entry requires large sunk costs, regulatory approvals, or years of development, it is not a credible constraint.
 
-## Part 6 — Real-World Application: Whole Foods / Wild Oats (2007)
+## Part 6 - Real-World Application: Whole Foods / Wild Oats (2007)
 
 This case from lecture illustrates how market definition can make or break a merger challenge.
 
 **The merger**: Whole Foods (the dominant premium natural/organic grocer) sought to acquire Wild Oats (its main direct competitor).
 
-**The FTC's narrow market**: "Premium natural and organic supermarkets." The FTC argued that core Whole Foods customers — health-conscious shoppers buying organic produce and specialty items — would not switch to Safeway or Kroger even if Whole Foods raised prices 5%. These customers valued the curated organic selection, the store atmosphere, and the brand identity enough to pay more. Under this definition, the merger was a near-monopoly.
+**The FTC's narrow market**: "Premium natural and organic supermarkets." The FTC argued that core Whole Foods customers - health-conscious shoppers buying organic produce and specialty items - would not switch to Safeway or Kroger even if Whole Foods raised prices 5%. These customers valued the curated organic selection, the store atmosphere, and the brand identity enough to pay more. Under this definition, the merger was a near-monopoly.
 
-**Whole Foods' broad market**: "All supermarkets." Conventional grocers had rapidly expanded their organic sections. In a broad market, Whole Foods and Wild Oats had small combined shares — no antitrust concern.
+**Whole Foods' broad market**: "All supermarkets." Conventional grocers had rapidly expanded their organic sections. In a broad market, Whole Foods and Wild Oats had small combined shares - no antitrust concern.
 
 **What happened:**
-1. *Initial ruling (2007)*: District Court sided with Whole Foods. The FTC hadn't met its burden of proof on the narrow market definition — the merger closed.
+1. *Initial ruling (2007)*: District Court sided with Whole Foods. The FTC hadn't met its burden of proof on the narrow market definition - the merger closed.
 2. *Appeal (2008)*: The D.C. Circuit reversed, ruling the FTC's narrow definition was plausible. The case was reinstated.
 3. *Remedy (2009)*: With the appellate ruling in hand, the FTC had leverage. Whole Foods agreed to divest 32 former Wild Oats stores to restore competition.
 
-**Key lesson**: Market definition is not just technical — it is often the entire dispute. Here, the same merger was simultaneously a near-monopoly (narrow market) and a minor consolidation (broad market). Getting the market definition right is the most important analytical step.
+**Key lesson**: Market definition is not just technical - it is often the entire dispute. Here, the same merger was simultaneously a near-monopoly (narrow market) and a minor consolidation (broad market). Getting the market definition right is the most important analytical step.
 
-## Part 7 — Remedies
+## Part 7 - Remedies
 
 When a merger is found anticompetitive, regulators don't always block it outright. They may require remedies:
 
@@ -272,22 +272,22 @@ When a merger is found anticompetitive, regulators don't always block it outrigh
 
 **Behavioral remedies (more common in the EU):**
 - Impose conduct obligations on the merged firm: price caps, access requirements, non-discrimination rules.
-- Don't require selling assets — instead regulate behavior going forward.
+- Don't require selling assets - instead regulate behavior going forward.
 - Criticism: harder to monitor and enforce; may not fully restore competition.
 
-## Part 8 — Full Exam Framework for Any Merger Question
+## Part 8 - Full Exam Framework for Any Merger Question
 
 When given a "small case" involving a merger, work through this in order:
 
-1. **Define the market** — product + geography, justify with SSNIP logic.
-2. **Calculate HHI and ΔHHI** — show the arithmetic, apply the thresholds.
-3. **Unilateral effects** — are the firms close substitutes? Can the merged entity profitably raise price alone?
-4. **Coordinated effects** — does the merger make tacit collusion more likely? Check: fewer firms, more symmetry, entry barriers.
-5. **Efficiencies** — are claimed cost savings merger-specific and verifiable? Run the Williamson comparison if numbers are given.
-6. **Entry** — is entry timely, likely, and sufficient to constrain the merged firm?
-7. **Conclusion and remedy** — overall welfare assessment; structural vs. behavioral remedy if needed.
+1. **Define the market** - product + geography, justify with SSNIP logic.
+2. **Calculate HHI and ΔHHI** - show the arithmetic, apply the thresholds.
+3. **Unilateral effects** - are the firms close substitutes? Can the merged entity profitably raise price alone?
+4. **Coordinated effects** - does the merger make tacit collusion more likely? Check: fewer firms, more symmetry, entry barriers.
+5. **Efficiencies** - are claimed cost savings merger-specific and verifiable? Run the Williamson comparison if numbers are given.
+6. **Entry** - is entry timely, likely, and sufficient to constrain the merged firm?
+7. **Conclusion and remedy** - overall welfare assessment; structural vs. behavioral remedy if needed.
 
-## Part 9 — Quick Reference
+## Part 9 - Quick Reference
 
 | Concept | Formula / Threshold | Note |
 |:---|:---|:---|

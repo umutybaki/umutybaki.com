@@ -1,10 +1,10 @@
 ---
-title: "5 - Tools & x86-64 Assembly — Study Guide"
+title: "5 - Tools & x86-64 Assembly - Study Guide"
 date: "2026-04-14"
 description: "Comprehensive guide to GDB, Valgrind, Make, and x86-64 assembly for the COMP 201 midterm."
 ---
 
-# 5 - Tools & x86-64 Assembly — Study Guide
+# 5 - Tools & x86-64 Assembly - Study Guide
 
 **For COMP201: Computer Systems & Programming at Koç University**
 
@@ -28,7 +28,7 @@ gcc -E hello.c -o hello.i
 
 If you open `hello.i`, you'll see your original source code, but every `#include <stdio.h>` has been replaced with the entire contents of that header file, and every macro has been expanded.
 
-**Key insight:** The preprocessor is very dumb — it's just text manipulation. It doesn't understand C at all.
+**Key insight:** The preprocessor is very dumb - it's just text manipulation. It doesn't understand C at all.
 
 ### Stage 2: Compilation
 
@@ -52,7 +52,7 @@ Now you have assembly code! This is where the **compiler** (the real translator)
 
 **Flag:** `gcc -c`
 
-**Output:** `.o` file (object file — binary, not human-readable)
+**Output:** `.o` file (object file - binary, not human-readable)
 
 ```bash
 gcc -c hello.c -o hello.o
@@ -60,7 +60,7 @@ gcc -c hello.c -o hello.o
 gcc -c hello.s -o hello.o
 ```
 
-The **assembler** reads the human-readable assembly and outputs raw binary. But notice: you don't have an executable yet! Object files are "incomplete" — they contain references to external functions that need to be resolved.
+The **assembler** reads the human-readable assembly and outputs raw binary. But notice: you don't have an executable yet! Object files are "incomplete" - they contain references to external functions that need to be resolved.
 
 **Key insight:** A `.o` file is object code, not executable. It's the "middle ground" between assembly and executables.
 
@@ -120,7 +120,7 @@ gcc -Wall -g -O2 hello.c      # All of the above
 
 ### What is Make?
 
-**Make** is a **build automation tool**. Instead of typing the same `gcc` commands over and over, you write them once in a **Makefile**, and `make` executes them for you. Better yet, `make` only recompiles files that have changed — a huge time-saver for large projects.
+**Make** is a **build automation tool**. Instead of typing the same `gcc` commands over and over, you write them once in a **Makefile**, and `make` executes them for you. Better yet, `make` only recompiles files that have changed - a huge time-saver for large projects.
 
 ### Makefile Structure
 
@@ -246,7 +246,7 @@ x86-64 is the **64-bit version** of the x86 instruction set, the dominant archit
 
 ### Registers: Your Fastest Storage
 
-A **register** is a tiny, super-fast piece of memory built into the CPU. x86-64 has **16 general-purpose 64-bit registers**. Think of them as your CPU's "scratchpad" — variables you're actively using live here.
+A **register** is a tiny, super-fast piece of memory built into the CPU. x86-64 has **16 general-purpose 64-bit registers**. Think of them as your CPU's "scratchpad" - variables you're actively using live here.
 
 Each register can be accessed at different sizes:
 - **64-bit:** `%rax`, `%rbx`, etc.
@@ -284,9 +284,9 @@ Each register can be accessed at different sizes:
 
 Look at %rax:
 - `%rax` = 64-bit (quadword)
-- `%eax` = 32-bit (doubleword) — the 'e' is for "extended"
+- `%eax` = 32-bit (doubleword) - the 'e' is for "extended"
 - `%ax` = 16-bit (word)
-- `%al` = 8-bit (byte) — the 'l' is for "low byte"
+- `%al` = 8-bit (byte) - the 'l' is for "low byte"
 
 The pattern holds for the first 8 registers. For %r8–%r15, you add suffixes: `b`, `w`, `d`, or no suffix for 64-bit.
 
@@ -335,7 +335,7 @@ This is **AT&T syntax** (what GCC outputs). Note: **source comes first, destinat
 
 ```asm
 movl $42, %eax       # %eax now contains 42
-movl $42, %eax       # Again — copies 42 to %eax
+movl $42, %eax       # Again - copies 42 to %eax
 movl %eax, %ebx      # %eax → %ebx, %eax unchanged
 movl (%rax), %ebx    # Read from memory at address %rax, store in %ebx
 ```
@@ -872,7 +872,7 @@ movl $0xFFFFFFFF, %eax
 # %rax is now 0x00000000FFFFFFFF, not 0xFFFFFFFFFFFFFFFF
 ```
 
-**Why?** This is a hardware feature for efficiency — the 32-bit operation automatically clears the upper bits.
+**Why?** This is a hardware feature for efficiency - the 32-bit operation automatically clears the upper bits.
 
 But writing to 8-bit or 16-bit does NOT zero-extend:
 
