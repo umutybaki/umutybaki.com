@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { Dictionary } from '@/dictionaries/types'
@@ -18,13 +18,6 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
   const otherLocale = locale === 'en' ? 'tr' : 'en'
   const canSwitch = availableLocales.includes(otherLocale)
 
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-  }, [isMobileMenuOpen])
 
   function toggleTheme() {
     const current = document.documentElement.getAttribute('data-theme')
@@ -97,10 +90,10 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
           </button>
-          <button className="relative bg-transparent border border-border-color rounded-[20px] flex items-center p-1 w-[84px] h-[34px] cursor-pointer outline-none font-roboto-mono font-semibold text-[0.8rem] transition-colors duration-150 hover:border-accent-color disabled:opacity-[0.35] disabled:cursor-not-allowed disabled:hover:border-border-color" onClick={toggleLang} disabled={!canSwitch} aria-label="Toggle Language">
-            <div className="absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-accent-color rounded-[14px] z-10 transition-transform duration-[400ms] ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] pointer-events-none [[lang=tr]_&]:translate-x-[100%]" />
-            <span className="flex-1 text-center z-20 text-text-secondary select-none transition-colors duration-250 [[lang=en]_&]:text-white">EN</span>
-            <span className="flex-1 text-center z-20 text-text-secondary select-none transition-colors duration-250 [[lang=tr]_&]:text-white">TR</span>
+          <button className="relative bg-transparent border border-border-color rounded-[20px] flex items-center p-1 w-21 h-8.5 cursor-pointer outline-none font-roboto-mono font-semibold text-[0.8rem] transition-colors duration-150 hover:border-accent-color disabled:opacity-[0.35] disabled:cursor-not-allowed disabled:hover:border-border-color" onClick={toggleLang} disabled={!canSwitch} aria-label="Toggle Language">
+            <div className="absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-accent-color rounded-[14px] z-10 transition-transform duration-400 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] pointer-events-none in-[[lang=tr]]:translate-x-full" />
+            <span className="flex-1 text-center z-20 text-text-secondary select-none transition-colors duration-250 in-[[lang=en]]:text-white">EN</span>
+            <span className="flex-1 text-center z-20 text-text-secondary select-none transition-colors duration-250 in-[[lang=tr]]:text-white">TR</span>
           </button>
 
           <button
@@ -117,7 +110,7 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
         </div>
       </div>
 
-      <div className={`fixed inset-0 w-full h-screen bg-bg-color z-[200] flex flex-col transition-transform duration-[400ms] ease-[cubic-bezier(0.77,0,0.175,1)] ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed inset-0 w-full h-screen bg-bg-color z-200 flex flex-col transition-transform duration-400 ease-[cubic-bezier(0.77,0,0.175,1)] ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between items-center p-4 px-6 border-b border-border-color">
           <Link href={`/${locale}`} className="font-semibold text-[0.95rem] text-text-primary tracking-[-0.02em] hover:opacity-65 transition-opacity" onClick={() => setIsMobileMenuOpen(false)}>
             Umut Yalçın Baki
@@ -138,9 +131,6 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
           </Link>
           <Link href={`/${locale}/blog`} onClick={() => setIsMobileMenuOpen(false)} className="text-[1.5rem] font-semibold text-text-primary transition-opacity duration-150 hover:opacity-65">
             {dict.blog}
-          </Link>
-          <Link href={`/${locale}/cv`} onClick={() => setIsMobileMenuOpen(false)} className="text-[1.5rem] font-semibold text-text-primary transition-opacity duration-150 hover:opacity-65">
-            {dict.cv}
           </Link>
         </div>
         <div style={{ marginTop: 'auto', padding: '2rem', display: 'flex', gap: '1.5rem', borderTop: '1px solid var(--border-color)' }}>

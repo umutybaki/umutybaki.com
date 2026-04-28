@@ -30,6 +30,7 @@ export interface PostMeta {
 export interface Post extends PostMeta {
   contentHtml: string
   headings: TocItem[]
+  sidebarRoot: CategoryNode | null
 }
 
 export interface CategoryNode {
@@ -56,13 +57,17 @@ function slugify(text: string): string {
 
 function extractHeadings(content: string): TocItem[] {
   const headings: TocItem[] = []
+  const seen = new Map<string, number>()
   const lines = content.split('\n')
   for (const line of lines) {
     const match = line.match(/^(#{2,3})\s+(.+)$/)
     if (match) {
       const depth = match[1].length
       const text = sanitizeTitle(match[2].trim())
-      const id = slugify(text)
+      const base = slugify(text)
+      const count = seen.get(base) ?? 0
+      const id = count === 0 ? base : `${base}-${count}`
+      seen.set(base, count + 1)
       headings.push({ id, text, depth })
     }
   }
@@ -155,6 +160,22 @@ export function getPostsByCategory(): Record<string, PostMeta[]> {
   return Object.fromEntries(Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)))
 }
 
+function getSidebarRoot(categoryPath: string[]): CategoryNode | null {
+  for (let i = 1; i <= categoryPath.length; i++) {
+    const segment = categoryPath.slice(0, i)
+    const metaPath = path.join(postsDirectory, ...segment, '_meta.json')
+    if (fs.existsSync(metaPath)) {
+      try {
+        const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'))
+        if (meta.sidebarRoot === true) {
+          return buildNode(path.join(postsDirectory, ...segment), segment)
+        }
+      } catch { /* ignore */ }
+    }
+  }
+  return null
+}
+
 export function getCategoryLabels(category: string): Record<string, string> {
   const metaPath = path.join(postsDirectory, ...category.split('/'), '_meta.json')
   if (!fs.existsSync(metaPath)) return {}
@@ -197,6 +218,7 @@ export async function getPost(category: string, slug: string): Promise<Post> {
   const contentHtml = processed.toString()
   const headings = extractHeadings(content)
   const categoryPath = category.split('/')
+  const sidebarRoot = getSidebarRoot(categoryPath)
 
   return {
     slug,
@@ -207,6 +229,7 @@ export async function getPost(category: string, slug: string): Promise<Post> {
     description: data.description ?? '',
     contentHtml,
     headings,
+    sidebarRoot,
   }
 }
 

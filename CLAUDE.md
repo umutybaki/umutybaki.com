@@ -33,10 +33,19 @@ Posts live in `/posts/[category]/[slug].md` as Markdown files with YAML frontmat
 
 - `gray-matter` extracts frontmatter
 - `remark → remark-gfm → remark-math → remark-rehype → rehype-highlight → rehype-katex → rehype-slug → rehype-stringify` compiles to HTML
-- Headings (h2/h3) are extracted from raw Markdown for the table of contents — they are **not** derived from the compiled HTML
+- Headings (h2/h3) are extracted from raw Markdown for the sidebar — they are **not** derived from the compiled HTML. Duplicate heading slugs are deduplicated with a counter suffix (`-1`, `-2`, …) to match `rehype-slug`'s `github-slugger` behaviour.
 - `generateStaticParams()` pre-renders all posts at build time
 
 To add a new blog category, create a new directory under `/posts/`. No other registration is needed.
+
+### Blog post page layout
+
+`src/app/[locale]/blog/[...path]/page.tsx` renders two sidebar components:
+
+- **`Sidebar`** (`src/components/Sidebar.tsx`) — desktop-only sticky panel (`hidden min-[1100px]:block`). Highlights the active heading via `IntersectionObserver`.
+- **`SidebarDrawer`** (`src/components/SidebarDrawer.tsx`) — client component that owns the sticky top bar (back button + sidebar toggle) and the slide-in drawer for mobile/tablet (`min-[1100px]:hidden`). The drawer opens below the navbar (`top-18`) and uses the same blurred background as the navbar. The sticky bar uses `sticky top-18` with the same blur. Do **not** set `document.body.overflow = hidden` when the drawer is open — it breaks the sticky navbar.
+
+`dict.post.onThisPage` is the sidebar heading label; `dict.post.backToCategory` is the back button label.
 
 ### i18n / Dictionary system
 

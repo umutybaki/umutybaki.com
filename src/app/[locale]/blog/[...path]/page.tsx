@@ -1,8 +1,8 @@
 import { getAllPostParams, getPost } from '@/lib/posts'
 import { getDictionary } from '@/dictionaries'
 import { getAlternates, pageTitle } from '@/lib/metadata'
-import TableOfContents from '@/components/TableOfContents'
-import BackLink from '@/components/BackLink'
+import Sidebar from '@/components/Sidebar'
+import SidebarDrawer from '@/components/SidebarDrawer'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -39,14 +39,30 @@ export default async function PostPage({ params }: Props) {
   return (
     <div className="flex justify-center gap-8 px-4 relative z-10">
       <aside className="hidden min-[1100px]:block flex-none w-55 self-stretch">
-        <TableOfContents headings={post.headings} title={dict.post.onThisPage} />
+        <Sidebar
+          headings={post.headings}
+          title={dict.post.sidebar}
+          sidebarRoot={post.sidebarRoot}
+          locale={locale}
+          currentCategory={post.category}
+          currentSlug={post.slug}
+        />
       </aside>
 
       <main className="max-w-200 w-full py-8 flex-auto min-w-0 self-start">
-        <BackLink href={backHref} label={dict.post.backToCategory} />
+        <SidebarDrawer
+          headings={post.headings}
+          title={dict.post.sidebar}
+          backHref={backHref}
+          backLabel={dict.post.backToCategory}
+          sidebarRoot={post.sidebarRoot}
+          locale={locale}
+          currentCategory={post.category}
+          currentSlug={post.slug}
+        />
 
         <article
-          className="mt-8 markdown-body"
+          className="markdown-body"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
       </main>

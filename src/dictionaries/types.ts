@@ -37,7 +37,7 @@ export type Dictionary = {
   }
   post: {
     backToCategory: string
-    onThisPage: string
+    sidebar: string
   }
   projects: {
     pageTitle: string
