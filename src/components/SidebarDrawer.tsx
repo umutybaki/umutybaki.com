@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Sidebar from './Sidebar'
 import type { TocItem, CategoryNode } from '@/lib/posts'
 
@@ -14,9 +13,10 @@ interface Props {
   locale?: string
   currentCategory?: string
   currentSlug?: string
+  relatedPostsLabel?: string
 }
 
-export default function SidebarDrawer({ headings, title, backHref, backLabel, sidebarRoot, locale, currentCategory, currentSlug }: Props) {
+export default function SidebarDrawer({ headings, title, backHref, backLabel, sidebarRoot, locale, currentCategory, currentSlug, relatedPostsLabel }: Props) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -30,13 +30,13 @@ export default function SidebarDrawer({ headings, title, backHref, backLabel, si
 
   return (
     <>
-      {/* Sticky top bar */}
-      <div className="sticky top-18 z-30 flex items-center gap-3 py-3 mb-6">
-        {hasContent && (
+      {/* Sticky top bar — mobile only */}
+      {hasContent && (
+        <div className="min-[1100px]:hidden sticky top-18 z-30 flex items-center gap-3 py-3 mb-6">
           <button
             onClick={() => setOpen(true)}
             aria-label="Open sidebar"
-            className="min-[1100px]:hidden inline-flex items-center gap-[0.4rem] text-text-secondary text-[0.875rem] bg-[rgba(249,249,247,0.85)] dark:bg-[rgba(24,24,24,0.85)] backdrop-blur-[10px] border border-border-color rounded-sm px-3 py-1 transition-colors duration-150 hover:text-accent-color"
+            className="inline-flex items-center gap-[0.4rem] text-text-secondary text-[0.875rem] bg-[rgba(249,249,247,0.85)] dark:bg-[rgba(24,24,24,0.85)] backdrop-blur-[10px] border border-border-color rounded-sm px-3 py-1 transition-colors duration-150 hover:text-accent-color"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="3" y1="6" x2="21" y2="6" />
@@ -45,18 +45,8 @@ export default function SidebarDrawer({ headings, title, backHref, backLabel, si
             </svg>
             {title}
           </button>
-        )}
-
-        <Link
-          href={backHref}
-          className="inline-flex items-center gap-[0.4rem] text-text-secondary text-[0.875rem] bg-[rgba(249,249,247,0.85)] dark:bg-[rgba(24,24,24,0.85)] backdrop-blur-[10px] border border-border-color rounded-sm px-3 py-1 transition-colors duration-150 hover:text-accent-color"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          {backLabel}
-        </Link>
-      </div>
+        </div>
+      )}
 
       {hasContent && (
         <>
@@ -80,6 +70,9 @@ export default function SidebarDrawer({ headings, title, backHref, backLabel, si
                 locale={locale}
                 currentCategory={currentCategory}
                 currentSlug={currentSlug}
+                relatedPostsLabel={relatedPostsLabel}
+                backHref={backHref}
+                backLabel={backLabel}
               />
             </div>
           </div>

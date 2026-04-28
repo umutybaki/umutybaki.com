@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import type { TocItem, CategoryNode } from '@/lib/posts'
 import SidebarTree from './SidebarTree'
 
@@ -11,9 +12,12 @@ interface Props {
   locale?: string
   currentCategory?: string
   currentSlug?: string
+  relatedPostsLabel?: string
+  backHref?: string
+  backLabel?: string
 }
 
-export default function Sidebar({ headings, title, sidebarRoot, locale, currentCategory, currentSlug }: Props) {
+export default function Sidebar({ headings, title, sidebarRoot, locale, currentCategory, currentSlug, relatedPostsLabel, backHref, backLabel }: Props) {
   const [activeId, setActiveId] = useState<string>('')
   const observerRef = useRef<IntersectionObserver | null>(null)
 
@@ -47,6 +51,17 @@ export default function Sidebar({ headings, title, sidebarRoot, locale, currentC
 
   return (
     <nav className="sticky top-18 max-h-[calc(100vh-4.5rem)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pt-6" aria-label="Sidebar">
+      {backHref && (
+        <Link
+          href={backHref}
+          className="inline-flex items-center gap-[0.35rem] text-[0.75rem] text-text-secondary hover:text-accent-color transition-colors duration-150 mb-4"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          {backLabel}
+        </Link>
+      )}
       {hasTree && (
         <>
           <SidebarTree
@@ -54,6 +69,7 @@ export default function Sidebar({ headings, title, sidebarRoot, locale, currentC
             locale={locale}
             currentCategory={currentCategory}
             currentSlug={currentSlug}
+            relatedPostsLabel={relatedPostsLabel}
           />
           {headings.length > 0 && <div className="border-t border-border-color my-4" />}
         </>

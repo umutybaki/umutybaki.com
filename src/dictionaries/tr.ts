@@ -16,8 +16,9 @@ const tr: Dictionary = {
     allCategories: 'Tüm Kategoriler',
   },
   post: {
-    backToCategory: 'Tüm İçerikler',
-    sidebar: 'İçindekiler',
+    backToCategory: 'Tüm Yazıları Göster',
+    sidebar: 'Kenar Çubuğu',
+    relatedPosts: 'Bu kategoride',
   },
   projects: {
     pageTitle: 'Projeler',

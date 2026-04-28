@@ -97,7 +97,7 @@ Think of it this way: you're playing a game against someone who is trying to mak
 
 ## 5. The Minimax Algorithm
 
-### Intuition & Motivation
+### Intuition and Motivation
 
 The Minimax algorithm is the foundational algorithm for adversarial search. The core idea is beautifully simple: **assume your opponent plays optimally, and choose the move that gives you the best guaranteed outcome under that assumption**.
 
@@ -321,7 +321,7 @@ The key insight: even though B has a terminal state with value 12, MIN won't let
 Note that MIN has not actually played yet - we've just *simulated* what a rational MIN would do, and chose $a_1$ based on that simulation. These computed values at intermediate nodes are called the **minimax values**.
 
 
-## 7. Minimax Properties & Analysis
+## 7. Minimax Properties and Analysis
 
 **Completeness:** Yes, minimax is complete *if the game tree is finite*. It will always find a decision. If the game tree is infinite (which can happen with games that allow repeated states), the algorithm won't terminate.
 
@@ -338,7 +338,7 @@ Consider this example from the slides: a MAX node with two MIN children, termina
 
 ## 8. Alpha-Beta Pruning
 
-### Intuition & Motivation
+### Intuition and Motivation
 
 Most games are far too large to explore every possible continuation. Alpha-beta pruning is a technique that allows us to skip (prune) branches of the game tree that *cannot possibly affect the final decision*, without changing the result at the root.
 
@@ -550,7 +550,7 @@ Even with perfect ordering, full search of big games like chess remains hopeless
 **Metareasoning:** Alpha-beta is a simple example of *metareasoning* - computing about what to compute. Instead of blindly evaluating every node, we reason about which nodes are worth evaluating.
 
 
-## 11. Resource Limits & Depth-Limited Search
+## 11. Resource Limits and Depth-Limited Search
 
 ### The Problem
 
@@ -609,7 +609,7 @@ An important observation from the lecture: the **actual numerical values** of th
 This means our evaluation function doesn't need to predict exact minimax values; it just needs to correctly rank positions from best to worst.
 
 
-## 13. Stochastic Games & Expectiminimax
+## 13. Stochastic Games and Expectiminimax
 
 ### Introducing Randomness
 

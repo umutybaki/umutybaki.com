@@ -46,6 +46,9 @@ export default async function PostPage({ params }: Props) {
           locale={locale}
           currentCategory={post.category}
           currentSlug={post.slug}
+          relatedPostsLabel={dict.post.relatedPosts}
+          backHref={backHref}
+          backLabel={dict.post.backToCategory}
         />
       </aside>
 
@@ -59,6 +62,7 @@ export default async function PostPage({ params }: Props) {
           locale={locale}
           currentCategory={post.category}
           currentSlug={post.slug}
+          relatedPostsLabel={dict.post.relatedPosts}
         />
 
         <article

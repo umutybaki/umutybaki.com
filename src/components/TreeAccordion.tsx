@@ -23,7 +23,7 @@ function PostRow({ post, locale, depth, isActive }: { post: PostMeta; locale: st
         style={{ paddingLeft: `${indent}px` }}
         className="flex justify-between items-center h-9 pr-4 no-underline hover:bg-surface-hover rounded-sm transition-colors duration-150 group"
       >
-        <span className={`text-sm text-text-primary truncate group-hover:text-accent-color transition-colors duration-150 ${isActive ? 'underline underline-offset-2' : ''}`}>
+        <span className={`text-sm text-text-primary whitespace-nowrap group-hover:text-accent-color transition-colors duration-150 ${isActive ? 'underline underline-offset-2' : ''}`}>
           {post.title}
         </span>
         {post.date && (
@@ -143,11 +143,17 @@ function TreeNode({
 }
 
 export default function TreeAccordion({ nodes, locale, depth = 0, openPath, activePost }: TreeAccordionProps) {
-  return (
-    <div className={depth === 0 ? 'flex flex-col gap-1' : ''}>
+  const inner = (
+    <div className={`min-w-max ${depth === 0 ? 'flex flex-col gap-1' : ''}`}>
       {nodes.map((node) => (
         <TreeNode key={node.path.join('/')} node={node} locale={locale} depth={depth} openPath={openPath} activePost={activePost} />
       ))}
     </div>
   )
+
+  if (depth === 0) {
+    return <div className="overflow-x-auto">{inner}</div>
+  }
+
+  return inner
 }

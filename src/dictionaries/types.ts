@@ -38,6 +38,7 @@ export type Dictionary = {
   post: {
     backToCategory: string
     sidebar: string
+    relatedPosts: string
   }
   projects: {
     pageTitle: string

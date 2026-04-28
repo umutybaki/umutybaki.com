@@ -101,36 +101,55 @@ interface Props {
   locale: string
   currentCategory: string
   currentSlug: string
+  relatedPostsLabel?: string
 }
 
-export default function SidebarTree({ root, locale, currentCategory, currentSlug }: Props) {
-  const label = root.labels[locale] ?? root.labels['en'] ?? root.name
+export default function SidebarTree({ root, locale, currentCategory, currentSlug, relatedPostsLabel }: Props) {
+  const [open, setOpen] = useState(false)
 
   return (
     <div className="mb-2">
-      <p className="text-[0.7rem] font-roboto-mono text-accent-color font-semibold uppercase tracking-[0.06em] px-1 mb-1">
-        {label}
-      </p>
-      {root.posts.map((post) => (
-        <PostRow
-          key={post.slug}
-          post={post}
-          locale={locale}
-          currentCategory={currentCategory}
-          currentSlug={currentSlug}
-          depth={-1}
-        />
-      ))}
-      {root.children.map((child) => (
-        <TreeNode
-          key={child.name}
-          node={child}
-          locale={locale}
-          currentCategory={currentCategory}
-          currentSlug={currentSlug}
-          depth={0}
-        />
-      ))}
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="w-full flex items-center gap-1.5 px-1 mb-1 text-left bg-transparent border-none cursor-pointer group"
+      >
+        <svg
+          width="9" height="9" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+          className={`text-accent-color shrink-0 transition-transform duration-150 ${open ? 'rotate-90' : ''}`}
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+        <span className="text-[0.7rem] font-roboto-mono text-accent-color font-semibold uppercase tracking-[0.06em] group-hover:opacity-80 transition-opacity duration-150">
+          {relatedPostsLabel ?? 'Related Posts'}
+        </span>
+      </button>
+
+      <div className={`grid transition-[grid-template-rows] duration-200 ease-in ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">
+          {root.posts.map((post) => (
+            <PostRow
+              key={post.slug}
+              post={post}
+              locale={locale}
+              currentCategory={currentCategory}
+              currentSlug={currentSlug}
+              depth={-1}
+            />
+          ))}
+          {root.children.map((child) => (
+            <TreeNode
+              key={child.name}
+              node={child}
+              locale={locale}
+              currentCategory={currentCategory}
+              currentSlug={currentSlug}
+              depth={0}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
