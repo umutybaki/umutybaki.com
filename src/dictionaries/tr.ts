@@ -12,14 +12,8 @@ const tr: Dictionary = {
     description: 'Bilgisayar Mühendisliği & Ekonomi çift anadal öğrencisi. Mantıklı şeyler inşa etmeyi seviyorum.',
   },
   blog: {
-    pageTitle: 'Ders Notları',
+    pageTitle: 'Blog',
     allCategories: 'Tüm Kategoriler',
-    categories: {
-      comp201: 'COMP 201 — Bilgisayar Sistemleri ve Programlama',
-      comp341: 'COMP 341 — Yapay Zeka',
-      econ499: 'ECON 499 — Ekonomi Bitirme Projesi',
-      comp202: 'COMP 202 — Veri Yapıları ve Algoritmalar',
-    },
   },
   post: {
     backToCategory: 'Kategoriye Dön',

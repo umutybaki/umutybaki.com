@@ -1,14 +1,13 @@
-import { getPostsByCategory } from '@/lib/posts'
+import { getCategoryTree } from '@/lib/posts'
 import { getDictionary } from '@/dictionaries'
 import { getAlternates, pageTitle } from '@/lib/metadata'
 import PageTitle from '@/components/PageTitle'
-import PostList from '@/components/PostList'
-import PostListItem from '@/components/PostListItem'
-import Accordion from '@/components/Accordion'
+import TreeAccordion from '@/components/TreeAccordion'
 import type { Metadata } from 'next'
 
 interface Props {
   params: Promise<{ locale: string }>
+  searchParams: Promise<{ open?: string; post?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -21,33 +20,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function BlogPage({ params }: Props) {
+export default async function BlogPage({ params, searchParams }: Props) {
   const { locale } = await params
+  const { open, post } = await searchParams
   const dict = getDictionary(locale)
-  const postsByCategory = getPostsByCategory()
+  const tree = getCategoryTree()
 
   return (
-    <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
+    <main className="max-w-225 mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
       <PageTitle>{dict.blog.pageTitle}</PageTitle>
-
-      {Object.keys(postsByCategory).map((category) => (
-        <Accordion
-          key={category}
-          title={dict.blog.categories[category] ?? category}
-          defaultOpen
-        >
-          <PostList>
-            {postsByCategory[category].map((post) => (
-              <PostListItem
-                key={post.slug}
-                href={`/${locale}/blog/${category}/${post.slug}`}
-                title={post.title}
-                meta={post.date}
-              />
-            ))}
-          </PostList>
-        </Accordion>
-      ))}
+      <TreeAccordion nodes={tree} locale={locale} openPath={open} activePost={post} />
     </main>
   )
 }

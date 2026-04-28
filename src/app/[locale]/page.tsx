@@ -21,11 +21,11 @@ export default async function Home({ params }: Props) {
   const dict = getDictionary(locale)
 
   return (
-    <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
+    <main className="max-w-225 mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
       <section className="flex flex-col justify-center h-[calc(100vh-70px)]">
         <h1 className="text-[2.75rem] md:text-[3.5rem] font-bold tracking-[-0.03em] text-text-primary">Umut Yalçın Baki</h1>
         <p className="text-[0.9rem] text-accent-color font-medium mb-4 font-roboto-mono tracking-[0.02em]">{dict.home.subtitle}</p>
-        <p className="text-[1.1rem] text-text-secondary max-w-[560px] mb-0 leading-[1.7]">{dict.home.description}</p>
+        <p className="text-[1.1rem] text-text-secondary max-w-140 mb-0 leading-[1.7]">{dict.home.description}</p>
 
         <div className="flex gap-[0.6rem] flex-wrap mt-8">
           <a

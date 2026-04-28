@@ -287,7 +287,7 @@ mov $0x63, (%rcx, %rdx, 1)
 Up to now we have blurred over the question of *how many bytes* a `mov` actually copies. x86-64 uses a consistent naming scheme:
 
 | Size in bytes | Assembly name | Suffix | C type |
-|:---|:---|:---:|:---|
+|---:|:---|:---:|:---|
 | 1 | byte | `b` | `char` |
 | 2 | word | `w` | `short` |
 | 4 | double word | `l` | `int`, `float` |
@@ -682,7 +682,7 @@ Suppose our `loop` function starts at `0x4004ed`:
 Tracing the value of `%rip` over time:
 
 | Step | `%rip` | About to execute |
-|:---|:---|:---|
+|---:|:---|:---|
 | 1 | `4004ed` | `push %rbp` (1 byte) |
 | 2 | `4004ee` | `mov %rsp, %rbp` (3 bytes) |
 | 3 | `4004f1` | `movl $0x0, -0x4(%rbp)` (7 bytes) |
@@ -799,7 +799,7 @@ x86 provides two families of comparison jumps because signed and unsigned number
 - **Unsigned:** `ja`, `jae`, `jb`, `jbe` - these mean "above", "above or equal", "below", "below or equal".
 - **Equality:** `je` / `jne` work for both (equality doesn't care about signedness).
 
-### Full table
+### Conditional jump instructions — full table
 
 | Instruction | Synonym | Jump when… | In terms of flags |
 |:---|:---|:---|:---|
@@ -1019,7 +1019,7 @@ compiles to
 Let's trace the first few iterations:
 
 | Step | `%eax` (i) | After |
-|:---|:---|:---|
+|---:|---:|:---|
 | 1 | 0 | `mov $0, %eax` → `i = 0` |
 | 2 | 0 | `jmp` to test |
 | 3 | 0 | `cmp $99, %eax`: `0 - 99 = -99` → SF=1, ZF=0 → `i <= 99` |
@@ -1151,7 +1151,7 @@ compiles to
 
 Wait - the C compares against 16, but the assembly compares against 15! That's because `x < 16` is the same as `x <= 15` for ints. The compiler uses whichever form generates shorter machine code.
 
-### Full table
+### set instruction variants — full table
 
 Same condition suffixes as conditional jumps, just attached to `set`:
 
@@ -1230,7 +1230,7 @@ signed_division:
 
 The idea: shifting negative numbers rounds down, but `/` rounds toward zero. For negatives, we need to add `4 - 1 = 3` *before* shifting to compensate. The `cmovns` says "if the sign flag is clear (x is non-negative), use `x` unmodified". So the bias only applies when `x < 0`. Clever, right?
 
-### Full table
+### cmov instruction variants — full table
 
 | Instr | Synonym | Move when… |
 |:---|:---|:---|
@@ -1344,7 +1344,7 @@ That is a full, working, reverse-engineered C-to-assembly mapping, annotated. If
 ### Data sizes
 
 | Bytes | x86 name    | Suffix | Typical C       |
-|:------|:------------|:------:|:----------------|
+|------:|:------------|:------:|:----------------|
 | 1     | byte        | `b`    | `char`           |
 | 2     | word        | `w`    | `short`          |
 | 4     | double word | `l`    | `int`, `float`   |

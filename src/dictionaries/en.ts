@@ -12,14 +12,8 @@ const en: Dictionary = {
     description: 'Computer Engineering & Economics double major. I like building things that make sense.',
   },
   blog: {
-    pageTitle: 'Lecture Notes',
+    pageTitle: 'Blog',
     allCategories: 'All Categories',
-    categories: {
-      comp201: 'COMP 201 — Computer Systems & Programming',
-      comp341: 'COMP 341 — Artificial Intelligence',
-      econ499: 'ECON 499 — Economics Capstone',
-      comp202: 'COMP 202 — Data Structures & Algorithms',
-    },
   },
   post: {
     backToCategory: 'Back to Category',

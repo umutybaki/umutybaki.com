@@ -24,7 +24,7 @@ export default async function ProjectsPage({ params }: Props) {
   const dict = getDictionary(locale)
 
   return (
-    <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
+    <main className="max-w-225 mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
       <section>
         <PageTitle>{dict.projects.pageTitle}</PageTitle>
         <p>{dict.projects.subtitle}</p>

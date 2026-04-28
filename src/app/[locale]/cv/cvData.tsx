@@ -119,7 +119,7 @@ export function getCvData(d: Dictionary['cv']) {
       title: (
         <>
           {d.career.odarama.title}{' '}
-          <a href={d.career.odarama.companyUrl} target="_blank" rel="noopener noreferrer" className="text-[var(--accent-color)] hover:opacity-75">
+          <a href={d.career.odarama.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
             @ {d.career.odarama.company}
           </a>
         </>
@@ -134,7 +134,7 @@ export function getCvData(d: Dictionary['cv']) {
       title: (
         <>
           {d.career.gordion.title}{' '}
-          <a href={d.career.gordion.companyUrl} target="_blank" rel="noopener noreferrer" className="text-[var(--accent-color)] hover:opacity-75">
+          <a href={d.career.gordion.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
             @ {d.career.gordion.company}
           </a>
         </>
@@ -149,7 +149,7 @@ export function getCvData(d: Dictionary['cv']) {
       title: (
         <>
           {d.career.kocTutor.title}{' '}
-          <a href={d.career.kocTutor.companyUrl} target="_blank" rel="noopener noreferrer" className="text-[var(--accent-color)] hover:opacity-75">
+          <a href={d.career.kocTutor.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
             @ {d.career.kocTutor.company}
           </a>
         </>
@@ -164,7 +164,7 @@ export function getCvData(d: Dictionary['cv']) {
       title: (
         <>
           {d.career.kocRA.title}{' '}
-          <a href={d.career.kocRA.companyUrl} target="_blank" rel="noopener noreferrer" className="text-[var(--accent-color)] hover:opacity-75">
+          <a href={d.career.kocRA.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
             @ {d.career.kocRA.company}
           </a>
         </>
@@ -184,7 +184,7 @@ export function getCvData(d: Dictionary['cv']) {
           <a href={d.education.kocUni.nameUrl} target="_blank" rel="noopener noreferrer" className="text-inherit hover:opacity-75">
             {d.education.kocUni.name}
           </a>{' '}
-          <span className="text-[var(--accent-color)]">· {d.education.kocUni.subtitle}</span>
+          <span className="text-(--accent-color)">· {d.education.kocUni.subtitle}</span>
         </>
       ),
       date: d.education.kocUni.date,
@@ -198,7 +198,7 @@ export function getCvData(d: Dictionary['cv']) {
           <a href={d.education.maastricht.nameUrl} target="_blank" rel="noopener noreferrer" className="text-inherit hover:opacity-75">
             {d.education.maastricht.name}
           </a>{' '}
-          <span className="text-[var(--accent-color)]">· {d.education.maastricht.subtitle}</span>
+          <span className="text-(--accent-color)">· {d.education.maastricht.subtitle}</span>
         </>
       ),
       date: d.education.maastricht.date,
@@ -212,7 +212,7 @@ export function getCvData(d: Dictionary['cv']) {
           <a href={d.education.tev.nameUrl} target="_blank" rel="noopener noreferrer" className="text-inherit hover:opacity-75">
             {d.education.tev.name}
           </a>{' '}
-          <span className="text-[var(--accent-color)]">· {d.education.tev.subtitle}</span>
+          <span className="text-(--accent-color)">· {d.education.tev.subtitle}</span>
         </>
       ),
       date: d.education.tev.date,

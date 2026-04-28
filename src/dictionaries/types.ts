@@ -34,7 +34,6 @@ export type Dictionary = {
   blog: {
     pageTitle: string
     allCategories: string
-    categories: Record<string, string>
   }
   post: {
     backToCategory: string

@@ -33,7 +33,7 @@ export default async function CvPage({ params }: Props) {
   const { careerItems, educationItems, volunteeringItems, certificateItems, competitionItems } = getCvData(dict.cv)
 
   return (
-    <main className="max-w-[900px] mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
+    <main className="max-w-225 mx-auto px-6 py-12 md:px-8 md:py-16 relative z-10">
       {/* ── Hero ────────────────────────────────────────────── */}
       <section id="hero" className="mb-24 reveal active">
         <h1
