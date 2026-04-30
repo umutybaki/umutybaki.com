@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import { cookies } from 'next/headers'
 import Nav from '@/components/Nav'
-import { getDictionary, AVAILABLE_LOCALES } from '@/dictionaries'
+import { getDictionary } from '@/dictionaries'
 import { locales } from '@/i18n-config'
+import { isValidLocale } from '@/lib/locale'
 import '../globals.css'
 import 'katex/dist/katex.min.css'
 import NextTopLoader from 'nextjs-toploader'
@@ -22,7 +23,7 @@ interface Props {
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params
-  if (!locales.includes(locale as typeof locales[number])) notFound()
+  if (!isValidLocale(locale)) notFound()
 
   const dict = getDictionary(locale)
 
@@ -32,7 +33,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale} data-theme={theme} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);document.cookie='theme='+t+'; path=/; max-age=31536000; SameSite=Lax';}else if(window.matchMedia('(prefers-color-scheme: light)').matches){document.documentElement.setAttribute('data-theme','light');document.cookie='theme=light; path=/; max-age=31536000; SameSite=Lax';}}catch(e){}})();` }} />
+        <script src="/theme-init.js" />
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ4R2RV2NP" />
         <script
@@ -58,7 +59,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           speed={200}
           shadow="0 0 10px #ff6400,0 0 5px #ff6400"
         />
-        <Nav locale={locale} dict={dict.nav} availableLocales={AVAILABLE_LOCALES} />
+        <Nav locale={locale} dict={dict.nav} availableLocales={[...locales]} />
         {children}
       </body>
     </html>

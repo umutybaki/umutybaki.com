@@ -8,7 +8,7 @@ interface Props {
 
 export default function AppListItem({ href, logo, logoAlt, name, subtitle }: Props) {
   return (
-    <li className="border border-border-color rounded-md transition-all duration-150 hover:bg-surface-hover hover:border-[rgba(255,100,0,0.25)]">
+    <li className="border border-border-color rounded-md transition-all duration-150 hover:bg-surface-hover hover:border-[var(--accent-hover-border)]">
       <a
         href={href}
         className="flex items-center justify-start p-4 md:p-5 gap-4 md:gap-5 text-text-primary no-underline hover:opacity-100"

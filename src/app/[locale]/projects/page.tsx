@@ -1,7 +1,6 @@
 import { getDictionary } from '@/dictionaries'
 import { getAlternates, pageTitle } from '@/lib/metadata'
 import PageTitle from '@/components/PageTitle'
-import PostList from '@/components/PostList'
 import AppListItem from '@/components/AppListItem'
 import type { Metadata } from 'next'
 
@@ -29,17 +28,15 @@ export default async function ProjectsPage({ params }: Props) {
         <PageTitle>{dict.projects.pageTitle}</PageTitle>
         <p>{dict.projects.subtitle}</p>
 
-        <div className="mt-12">
-          <PostList>
-            <AppListItem
-              href="https://portwatcher.umutybaki.com"
-              logo="/media/portwatcher.svg"
-              logoAlt="PortWatcher Logo"
-              name="PortWatcher"
-              subtitle={dict.projects.portWatcherSubtitle}
-            />
-          </PostList>
-        </div>
+        <ul className="list-none flex flex-col gap-[0.4rem] mt-12">
+          <AppListItem
+            href="https://portwatcher.umutybaki.com"
+            logo="/media/portwatcher.svg"
+            logoAlt="PortWatcher Logo"
+            name="PortWatcher"
+            subtitle={dict.projects.portWatcherSubtitle}
+          />
+        </ul>
       </section>
     </main>
   )

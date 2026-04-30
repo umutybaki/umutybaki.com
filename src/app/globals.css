@@ -27,14 +27,12 @@
   --text-secondary: #737373;
   --accent-color: #ff6400;
   --accent-muted: rgba(255, 100, 0, 0.1);
-  --font-main: sans-serif;
+  --accent-hover-border: rgba(255, 100, 0, 0.25);
+  --accent-hover-border-strong: rgba(255, 100, 0, 0.3);
   --font-mono: monospace;
-  --max-width: 900px;
-  --border-radius-sm: 6px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
   --transition-fast: 0.15s ease;
-  --transition-med: 0.3s ease;
 }
 
 :root[data-theme="dark"] {

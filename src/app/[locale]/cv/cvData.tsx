@@ -93,6 +93,34 @@ const TevIcon = (
   </svg>
 )
 
+/* ─── Helpers ──────────────────────────────────────────────── */
+
+function renderParagraphs(items: string[]) {
+  return <>{items.map((p, i) => <p key={i}>{p}</p>)}</>
+}
+
+function renderJobTitle(title: string, companyUrl: string, company: string) {
+  return (
+    <>
+      {title}{' '}
+      <a href={companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
+        @ {company}
+      </a>
+    </>
+  )
+}
+
+function renderEduTitle(nameUrl: string, name: string, subtitle: string) {
+  return (
+    <>
+      <a href={nameUrl} target="_blank" rel="noopener noreferrer" className="text-inherit hover:opacity-75">
+        {name}
+      </a>{' '}
+      <span className="text-(--accent-color)">· {subtitle}</span>
+    </>
+  )
+}
+
 /* ─── CV Data Factory ──────────────────────────────────────── */
 
 export const technicalSkills = [
@@ -116,61 +144,33 @@ export function getCvData(d: Dictionary['cv']) {
     {
       icon: OdaramaIcon,
       iconGlow: 'rgba(209, 0, 177, 0.4)',
-      title: (
-        <>
-          {d.career.odarama.title}{' '}
-          <a href={d.career.odarama.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
-            @ {d.career.odarama.company}
-          </a>
-        </>
-      ),
+      title: renderJobTitle(d.career.odarama.title, d.career.odarama.companyUrl, d.career.odarama.company),
       date: d.career.odarama.date,
-      description: <>{d.career.odarama.description.map((p, i) => <p key={i}>{p}</p>)}</>,
+      description: renderParagraphs(d.career.odarama.description),
       tags: ['JavaScript', 'PHP', 'WordPress', 'Frontend'],
     },
     {
       icon: GordionIcon,
       iconGlow: 'rgba(0, 0, 0, 0.6)',
-      title: (
-        <>
-          {d.career.gordion.title}{' '}
-          <a href={d.career.gordion.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
-            @ {d.career.gordion.company}
-          </a>
-        </>
-      ),
+      title: renderJobTitle(d.career.gordion.title, d.career.gordion.companyUrl, d.career.gordion.company),
       date: d.career.gordion.date,
-      description: <>{d.career.gordion.description.map((p, i) => <p key={i}>{p}</p>)}</>,
+      description: renderParagraphs(d.career.gordion.description),
       tags: ['Python', 'AWS Deployment'],
     },
     {
       icon: KocUniIcon,
       iconGlow: 'rgba(194, 11, 36, 0.4)',
-      title: (
-        <>
-          {d.career.kocTutor.title}{' '}
-          <a href={d.career.kocTutor.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
-            @ {d.career.kocTutor.company}
-          </a>
-        </>
-      ),
+      title: renderJobTitle(d.career.kocTutor.title, d.career.kocTutor.companyUrl, d.career.kocTutor.company),
       date: d.career.kocTutor.date,
-      description: <>{d.career.kocTutor.description.map((p, i) => <p key={i}>{p}</p>)}</>,
+      description: renderParagraphs(d.career.kocTutor.description),
       tags: ['Python', 'Teaching'],
     },
     {
       icon: KocUniIcon,
       iconGlow: 'rgba(194, 11, 36, 0.4)',
-      title: (
-        <>
-          {d.career.kocRA.title}{' '}
-          <a href={d.career.kocRA.companyUrl} target="_blank" rel="noopener noreferrer" className="text-(--accent-color) hover:opacity-75">
-            @ {d.career.kocRA.company}
-          </a>
-        </>
-      ),
+      title: renderJobTitle(d.career.kocRA.title, d.career.kocRA.companyUrl, d.career.kocRA.company),
       date: d.career.kocRA.date,
-      description: <>{d.career.kocRA.description.map((p, i) => <p key={i}>{p}</p>)}</>,
+      description: renderParagraphs(d.career.kocRA.description),
       tags: ['Research'],
     },
   ]
@@ -179,44 +179,23 @@ export function getCvData(d: Dictionary['cv']) {
     {
       icon: KocUniIcon,
       iconGlow: 'rgba(194, 11, 36, 0.4)',
-      title: (
-        <>
-          <a href={d.education.kocUni.nameUrl} target="_blank" rel="noopener noreferrer" className="text-inherit hover:opacity-75">
-            {d.education.kocUni.name}
-          </a>{' '}
-          <span className="text-(--accent-color)">· {d.education.kocUni.subtitle}</span>
-        </>
-      ),
+      title: renderEduTitle(d.education.kocUni.nameUrl, d.education.kocUni.name, d.education.kocUni.subtitle),
       date: d.education.kocUni.date,
-      description: <>{d.education.kocUni.description.map((p, i) => <p key={i}>{p}</p>)}</>,
+      description: renderParagraphs(d.education.kocUni.description),
     },
     {
       icon: MaastrichtIcon,
       iconGlow: 'rgba(1, 28, 61, 0.4)',
-      title: (
-        <>
-          <a href={d.education.maastricht.nameUrl} target="_blank" rel="noopener noreferrer" className="text-inherit hover:opacity-75">
-            {d.education.maastricht.name}
-          </a>{' '}
-          <span className="text-(--accent-color)">· {d.education.maastricht.subtitle}</span>
-        </>
-      ),
+      title: renderEduTitle(d.education.maastricht.nameUrl, d.education.maastricht.name, d.education.maastricht.subtitle),
       date: d.education.maastricht.date,
-      description: <>{d.education.maastricht.description.map((p, i) => <p key={i}>{p}</p>)}</>,
+      description: renderParagraphs(d.education.maastricht.description),
     },
     {
       icon: TevIcon,
       iconGlow: 'rgba(255, 0, 0, 0.4)',
-      title: (
-        <>
-          <a href={d.education.tev.nameUrl} target="_blank" rel="noopener noreferrer" className="text-inherit hover:opacity-75">
-            {d.education.tev.name}
-          </a>{' '}
-          <span className="text-(--accent-color)">· {d.education.tev.subtitle}</span>
-        </>
-      ),
+      title: renderEduTitle(d.education.tev.nameUrl, d.education.tev.name, d.education.tev.subtitle),
       date: d.education.tev.date,
-      description: <>{d.education.tev.description.map((p, i) => <p key={i}>{p}</p>)}</>,
+      description: renderParagraphs(d.education.tev.description),
     },
   ]
 

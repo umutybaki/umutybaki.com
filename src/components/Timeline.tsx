@@ -20,19 +20,12 @@ export default function Timeline({ items }: TimelineProps) {
   const [selectedItem, setSelectedItem] = useState<TimelineItemData | null>(null)
 
   useEffect(() => {
+    if (!selectedItem) return
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedItem(null)
     }
-    if (selectedItem) {
-      document.addEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = ''
-    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [selectedItem])
 
   return (

@@ -2,19 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import Sidebar from './Sidebar'
-import type { TocItem, CategoryNode } from '@/lib/posts'
+import type { SidebarProps } from './sidebar-types'
 
-interface Props {
-  headings: TocItem[]
-  title: string
-  backHref: string
-  backLabel: string
-  sidebarRoot?: CategoryNode | null
-  locale?: string
-  currentCategory?: string
-  currentSlug?: string
-  relatedPostsLabel?: string
-}
+type Props = SidebarProps & { backHref: string; backLabel: string }
 
 export default function SidebarDrawer({ headings, title, backHref, backLabel, sidebarRoot, locale, currentCategory, currentSlug, relatedPostsLabel }: Props) {
   const [open, setOpen] = useState(false)
@@ -52,6 +42,7 @@ export default function SidebarDrawer({ headings, title, backHref, backLabel, si
         <>
           {/* Backdrop */}
           <div
+            data-testid="sidebar-backdrop"
             onClick={() => setOpen(false)}
             className={`min-[1100px]:hidden fixed inset-x-0 top-18 bottom-0 z-40 bg-black/40 transition-opacity duration-200 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
             aria-hidden="true"

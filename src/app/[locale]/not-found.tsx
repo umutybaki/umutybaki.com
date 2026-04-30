@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries'
-import { locales, defaultLocale } from '@/i18n-config'
+import { defaultLocale } from '@/i18n-config'
+import { isValidLocale } from '@/lib/locale'
 import Link from 'next/link'
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 
 export default async function NotFound({ params }: Props) {
   const { locale: localeParam } = await params
-  const locale = locales.includes(localeParam as typeof locales[number]) ? localeParam : defaultLocale
+  const locale = isValidLocale(localeParam) ? localeParam : defaultLocale
   const dict = getDictionary(locale)
 
   return (

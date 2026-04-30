@@ -12,7 +12,7 @@ function PostRow({ post, locale, currentCategory, currentSlug, depth }: {
   depth: number
 }) {
   const isCurrent = post.slug === currentSlug && post.category === currentCategory
-  const indent = (depth + 1) * 14
+  const indent = (depth + 1) * 10
 
   return (
     <Link
@@ -121,7 +121,7 @@ export default function SidebarTree({ root, locale, currentCategory, currentSlug
         >
           <polyline points="9 18 15 12 9 6" />
         </svg>
-        <span className="text-[0.7rem] font-roboto-mono text-accent-color font-semibold uppercase tracking-[0.06em] group-hover:opacity-80 transition-opacity duration-150">
+        <span className="text-[0.7rem] text-accent-color font-semibold uppercase tracking-[0.06em] group-hover:opacity-80 transition-opacity duration-150">
           {relatedPostsLabel ?? 'Related Posts'}
         </span>
       </button>

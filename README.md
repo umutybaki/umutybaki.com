@@ -16,9 +16,9 @@ Personal site at [umutybaki.com](https://umutybaki.com) — professional experie
 
 - **Markdown blog** — `remark` + `rehype` pipeline with syntax highlighting (`rehype-highlight`), math equations (`KaTeX`), and auto-generated heading slugs (`rehype-slug`) with duplicate deduplication.
 - **Nested blog navigation** — category tree rendered as collapsible accordions on the blog index page and inside each post's sidebar.
-- **Post sidebar** — sticky desktop panel (`Sidebar`) and a slide-in mobile/tablet drawer (`SidebarDrawer`) with floating blurred buttons. Both show a category tree (when `"sidebarRoot": true` is set in `_meta.json`) above the in-page TOC.
+- **Post sidebar** — sticky desktop panel (`Sidebar`) and a slide-in mobile/tablet drawer (`SidebarDrawer`) with floating blurred buttons. Both show a category tree (when `"sidebarRoot": true` is set in `_meta.json`) above the in-page TOC. Active heading is tracked via `IntersectionObserver` using a set of currently visible headings, picking the topmost.
 - **Bilingual i18n** — URL-segment locale (`/en`, `/tr`), cookie-persisted preference, `Accept-Language` fallback. All UI strings live in `src/dictionaries/`.
-- **Dark / light theme** — CSS-variable-based, persisted via cookie + `localStorage`.
+- **Dark / light theme** — CSS-variable-based, persisted via cookie + `localStorage`. Theme init script (`public/theme-init.js`) runs synchronously in `<head>` to prevent FOUC.
 - **Interactive CV** — fully dictionary-driven; no hardcoded strings.
 - **Serverless deployment** — GitHub Actions CI/CD with AWS OIDC auth, SST v3 provisions S3 + Lambda + CloudFront.
 
@@ -41,7 +41,9 @@ Personal site at [umutybaki.com](https://umutybaki.com) — professional experie
 │   └── [category]/
 │       ├── _meta.json              # Locale labels; add "sidebarRoot": true to enable tree nav
 │       └── [slug].md
-├── public/                         # Static assets
+├── public/
+│   ├── media/                      # Project logos (name differs from page routes on purpose — CloudFront routing)
+│   └── theme-init.js               # Synchronous theme init — prevents FOUC
 ├── src/
 │   ├── app/[locale]/
 │   │   ├── blog/[...path]/page.tsx # Post page — wires Sidebar + SidebarDrawer
@@ -51,12 +53,18 @@ Personal site at [umutybaki.com](https://umutybaki.com) — professional experie
 │   ├── components/
 │   │   ├── Sidebar.tsx             # Desktop sticky TOC + category tree (≥1100px)
 │   │   ├── SidebarDrawer.tsx       # Mobile/tablet slide-in drawer + floating top bar
+│   │   ├── sidebar-types.ts        # Shared SidebarProps type used by both sidebar components
 │   │   ├── SidebarTree.tsx         # Recursive accordion tree for post navigation
+│   │   ├── SocialLink.tsx          # Styled external link button with icon + label (home page)
 │   │   ├── TreeAccordion.tsx       # Category tree used on the blog index page
 │   │   ├── Accordion.tsx           # Generic collapsible section
 │   │   └── Nav.tsx                 # Sticky top navbar with mobile menu
 │   ├── dictionaries/               # en.ts, tr.ts, types.ts, index.ts
-│   ├── lib/posts.ts                # Post reading, parsing, heading extraction, tree building
+│   ├── lib/
+│   │   ├── icons.tsx               # GitHubIcon, LinkedInIcon — use these, don't inline SVGs
+│   │   ├── locale.ts               # isValidLocale() narrowing helper
+│   │   ├── metadata.ts             # getAlternates(), pageTitle() helpers
+│   │   └── posts.ts                # Post reading, parsing, heading extraction, tree building
 │   └── i18n-config.ts             # Locale list + default locale
 └── sst.config.ts
 ```

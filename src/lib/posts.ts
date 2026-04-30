@@ -41,13 +41,13 @@ export interface CategoryNode {
   children: CategoryNode[]
 }
 
-function sanitizeTitle(title: string): string {
+export function sanitizeTitle(title: string): string {
   return title
     .replace(/[—–]/g, '-')
     .replace(/&/g, 'and')
 }
 
-function slugify(text: string): string {
+export function slugify(text: string): string {
   return text
     .toLowerCase()
     .replace(/[^\w\s-]/g, '')
@@ -55,7 +55,7 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-function extractHeadings(content: string): TocItem[] {
+export function extractHeadings(content: string): TocItem[] {
   const headings: TocItem[] = []
   const seen = new Map<string, number>()
   const lines = content.split('\n')

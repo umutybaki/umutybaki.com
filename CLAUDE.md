@@ -42,8 +42,9 @@ To add a new blog category, create a new directory under `/posts/`. No other reg
 
 `src/app/[locale]/blog/[...path]/page.tsx` renders two sidebar components:
 
-- **`Sidebar`** (`src/components/Sidebar.tsx`) — desktop-only sticky panel (`hidden min-[1100px]:block`). Highlights the active heading via `IntersectionObserver`.
-- **`SidebarDrawer`** (`src/components/SidebarDrawer.tsx`) — client component that owns the sticky top bar (back button + sidebar toggle) and the slide-in drawer for mobile/tablet (`min-[1100px]:hidden`). The drawer opens below the navbar (`top-18`) and uses the same blurred background as the navbar. The sticky bar uses `sticky top-18` with the same blur. Do **not** set `document.body.overflow = hidden` when the drawer is open — it breaks the sticky navbar.
+- **`Sidebar`** (`src/components/Sidebar.tsx`) — desktop-only sticky panel (`hidden min-[1100px]:block`). Highlights the active heading via `IntersectionObserver`. The observer uses a `Set` ref to track which headings are currently inside the top 30% of the viewport (`rootMargin: '0px 0px -70% 0px'`), then picks the topmost one — this is intentional so the active item follows what the reader is actually on rather than what just entered the viewport.
+- **`SidebarDrawer`** (`src/components/SidebarDrawer.tsx`) — client component that owns the sticky top bar (back button + sidebar toggle) and the slide-in drawer for mobile/tablet (`min-[1100px]:hidden`). The drawer opens below the navbar (`top-18`) and uses the same blurred background as the navbar. The sticky bar uses `sticky top-18` with the same blur. Do **not** set `document.body.overflow = hidden` when the drawer is open — it breaks the sticky navbar. This rule also applies to any future modal/overlay on this site (Timeline modal included).
+- **Shared props type** lives in `src/components/sidebar-types.ts` (`SidebarProps`). `SidebarDrawer` extends it with `backHref`/`backLabel` required; `Sidebar` uses the base type with both optional.
 
 `dict.post.onThisPage` is the sidebar heading label; `dict.post.backToCategory` is the back button label.
 
@@ -51,7 +52,7 @@ To add a new blog category, create a new directory under `/posts/`. No other reg
 
 Language is determined by the `[locale]` URL segment. The `<html lang={locale}>` attribute is set in `src/app/[locale]/layout.tsx` (not the root layout) so SSR always emits the correct language.
 
-**Centralized config:** `src/i18n-config.ts` exports `locales` (`['en', 'tr']`), `defaultLocale` (`'en'`), and the `Locale` type. All other files import from here — never duplicate locale lists.
+**Centralized config:** `src/i18n-config.ts` exports `locales` (`['en', 'tr']`), `defaultLocale` (`'en'`), and the `Locale` type. All other files import from here — never duplicate locale lists. Use `isValidLocale(s)` from `src/lib/locale.ts` for locale narrowing — do not repeat the `locales.includes(s as Locale)` cast inline.
 
 **Middleware** (`src/middleware.ts`) redirects bare paths to `/${locale}...`. Locale detection priority:
 1. `NEXT_LOCALE` cookie (set when user explicitly switches language)
@@ -74,13 +75,21 @@ The language toggle in `Nav` navigates to `/${otherLocale}${restOfPath}` via `ro
 
 **Blog category labels** live in `dict.blog.categories` (not hardcoded). The old `CATEGORY_LABELS` objects have been removed.
 
-CV content strings (job titles, descriptions, dates) all live in the dictionary. `src/app/[locale]/cv/cvData.tsx` is a factory `getCvData(dict.cv)` that composes the JSX (with links) from those strings. The SVG icons and skill tags stay in that file. Description strings are plain text — no `dangerouslySetInnerHTML` is used.
+CV content strings (job titles, descriptions, dates) all live in the dictionary. `src/app/[locale]/cv/cvData.tsx` is a factory `getCvData(dict.cv)` that composes the JSX (with links) from those strings using three private helpers — `renderParagraphs`, `renderJobTitle`, `renderEduTitle`. The SVG icons and skill tags stay in that file. Description strings are plain text — no `dangerouslySetInnerHTML` is used.
 
 **Layout structure:** The root `src/app/layout.tsx` is a passthrough (returns `children` only). The real `<html>`/`<body>` shell lives in `src/app/[locale]/layout.tsx` so that `lang={locale}` is set correctly on every request. Font loading, theme script, GA, and `NextTopLoader` are all in the locale layout.
+
+### Shared UI primitives
+
+- **`src/lib/icons.tsx`** — `GitHubIcon` and `LinkedInIcon` as function components with an optional `size` prop (default `20`). Use these everywhere instead of inlining the SVG. The mail SVG in `cv/page.tsx` is not extracted because it only appears once.
+- **`src/components/SocialLink.tsx`** — styled external link button with icon + label, used on the home page. CV contact links use a different visual style and are kept inline in `cv/page.tsx`.
+- **Accent hover border colors** are CSS variables, not Tailwind theme tokens: `--accent-hover-border` (`rgba(255,100,0,0.25)`) and `--accent-hover-border-strong` (`rgba(255,100,0,0.3)`). Use them as Tailwind arbitrary values: `hover:border-(--accent-hover-border)`. Do not hardcode the rgba values in components.
 
 ### Theme system
 
 Dark/light mode uses CSS variables on `data-theme` attribute of `<html>`. Theme preference is persisted via cookie (1-year expiry) and `localStorage`. The `MarkdownTheme` component swaps between `github-markdown-light.css` and `github-markdown-dark.css` in `public/` by observing theme changes.
+
+The theme init script lives in `public/theme-init.js` and is loaded as a synchronous `<script src="/theme-init.js" />` in `<head>` — this is intentionally render-blocking to prevent flash of unstyled content (FOUC). Do not add `async` or `defer` to it.
 
 ### Deployment
 

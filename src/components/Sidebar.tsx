@@ -2,38 +2,32 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import type { TocItem, CategoryNode } from '@/lib/posts'
 import SidebarTree from './SidebarTree'
+import type { SidebarProps } from './sidebar-types'
 
-interface Props {
-  headings: TocItem[]
-  title: string
-  sidebarRoot?: CategoryNode | null
-  locale?: string
-  currentCategory?: string
-  currentSlug?: string
-  relatedPostsLabel?: string
-  backHref?: string
-  backLabel?: string
-}
-
-export default function Sidebar({ headings, title, sidebarRoot, locale, currentCategory, currentSlug, relatedPostsLabel, backHref, backLabel }: Props) {
+export default function Sidebar({ headings, title, sidebarRoot, locale, currentCategory, currentSlug, relatedPostsLabel, backHref, backLabel }: SidebarProps) {
   const [activeId, setActiveId] = useState<string>('')
   const observerRef = useRef<IntersectionObserver | null>(null)
+  // Tracks which heading IDs are currently inside the top 30% of the viewport
+  const intersectingRef = useRef(new Set<string>())
 
   useEffect(() => {
     if (headings.length === 0) return
 
     const ids = headings.map((h) => h.id)
+    const intersecting = intersectingRef.current
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            setActiveId(entry.target.id)
-            break
+            intersecting.add(entry.target.id)
+          } else {
+            intersecting.delete(entry.target.id)
           }
         }
+        // Pick the topmost heading currently visible in the shrunk viewport; clear if none
+        setActiveId(ids.find((id) => intersecting.has(id)) ?? '')
       },
       { rootMargin: '0px 0px -70% 0px', threshold: 0 }
     )
@@ -43,7 +37,10 @@ export default function Sidebar({ headings, title, sidebarRoot, locale, currentC
       if (el) observerRef.current?.observe(el)
     })
 
-    return () => observerRef.current?.disconnect()
+    return () => {
+      observerRef.current?.disconnect()
+      intersecting.clear()
+    }
   }, [headings])
 
   const hasTree = sidebarRoot && locale && currentCategory && currentSlug
