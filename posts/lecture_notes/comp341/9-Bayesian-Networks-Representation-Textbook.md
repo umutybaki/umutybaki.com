@@ -4,7 +4,7 @@ date: "2026-05-10"
 description: "A comprehensive, textbook-style guide to Bayesian Networks, covering graph semantics, conditional probability tables, construction, and d-separation for conditional independence."
 ---
 
-# Bayesian Networks: Representation
+# 9 - Bayesian Networks: Representation
 
 As we have seen in the study of probability, representing the full joint distribution of a complex environment is computationally intractable. For $n$ variables with a maximum domain size of $d$, the size of the joint distribution table scales as $O(d^n)$. This exponential growth makes it too big to store, too hard for human experts to specify, and too difficult to learn empirically from data.
 

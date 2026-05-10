@@ -4,7 +4,7 @@ date: "2026-05-10"
 description: "A comprehensive, textbook-style guide to Decision Networks, detailing the Maximum Expected Utility principle, human risk behaviors, and the Value of Perfect Information (VPI)."
 ---
 
-# Bayesian Networks: Incorporating Decisions
+# 12 - Bayesian Networks: Incorporating Decisions
 
 So far, we have studied how to construct Bayesian Networks to represent uncertainty and how to perform exact or approximate inference to calculate posterior probabilities (e.g., $P(\text{Rain} \mid \text{Cloudy})$). 
 

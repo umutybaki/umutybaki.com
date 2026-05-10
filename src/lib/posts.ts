@@ -132,7 +132,7 @@ function buildNode(dirPath: string, nodePath: string[]): CategoryNode {
     }
   }
 
-  posts.sort((a, b) => (a.date < b.date ? 1 : -1))
+  posts.sort((a, b) => a.title.localeCompare(b.title))
   children.sort((a, b) => a.name.localeCompare(b.name))
 
   return {

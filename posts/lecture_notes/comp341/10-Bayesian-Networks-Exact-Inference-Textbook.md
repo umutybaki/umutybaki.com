@@ -4,7 +4,7 @@ date: "2026-05-10"
 description: "A comprehensive, textbook-style guide to exact inference in Bayesian Networks, detailing inference by enumeration, factors, and the Variable Elimination algorithm."
 ---
 
-# Bayesian Networks: Exact Inference
+# 10 - Bayesian Networks: Exact Inference
 
 Once we have constructed a Bayesian Network that represents the probabilistic model of our domain, the primary task is to use it to answer questions. This process is called **Probabilistic Inference**. 
 

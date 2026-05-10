@@ -4,7 +4,7 @@ date: "2026-05-10"
 description: "A comprehensive, textbook-style guide to representing and quantifying uncertainty using probability, covering random variables, inference by enumeration, Bayes' rule, and conditional independence."
 ---
 
-# Probability: Representing and Quantifying Uncertainty
+# 8 - Probability and Uncertainty"
 
 The real world is an uncertain place. In classical, deterministic planning, we often assume that an agent operates in an environment where it knows exactly what the state of the world is and what the outcomes of its actions will be. However, in realistic scenarios, an agent must make decisions based on incomplete or noisy information. This chapter introduces the foundations of probabilistic reasoning, providing the mathematical framework necessary to represent, quantify, and manage uncertainty in artificial intelligence.
 

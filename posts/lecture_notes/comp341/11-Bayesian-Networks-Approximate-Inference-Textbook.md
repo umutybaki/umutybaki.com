@@ -4,7 +4,7 @@ date: "2026-05-10"
 description: "A comprehensive, textbook-style guide to approximate inference in Bayesian Networks using sampling methods: Prior, Rejection, Likelihood Weighting, and Gibbs Sampling."
 ---
 
-# Bayesian Networks: Approximate Inference
+# 11 - Bayesian Networks: Approximate Inference
 
 Exact inference in Bayesian Networks—even when highly optimized with algorithms like Variable Elimination—is proven to be **NP-complete**. For massive, highly connected real-world networks with thousands of variables, exact calculation requires too much time and memory.
 

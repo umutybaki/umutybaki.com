@@ -4,7 +4,7 @@ date: "2026-05-10"
 description: "A comprehensive, textbook-style guide to Reasoning Over Time, detailing Markov Chains, Hidden Markov Models (HMMs), and the Forward Algorithm for Filtering."
 ---
 
-# Bayesian Networks: Reasoning Over Time
+# 13 - Bayesian Networks: Reasoning Over Time
 
 Up until now, our Bayesian Networks have represented static snapshots of the world. However, many real-world environments are dynamic. The state of the world changes, and we often receive a sequence of observations over time. 
 

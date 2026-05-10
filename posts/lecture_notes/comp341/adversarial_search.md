@@ -1,10 +1,10 @@
 ---
-title: "Adversarial Search - Comprehensive Study Notes"
+title: "7 - Adversarial Search - Comprehensive Study Notes"
 date: "2026-04-14"
 description: "Self-contained notes on adversarial search covering minimax, alpha-beta pruning, and game-tree search for COMP 341 AI."
 ---
 
-# Adversarial Search - Comprehensive Study Notes
+# 7 - Adversarial Search
 
 > **Course:** COMP 341 - Introduction to Artificial Intelligence (Asst. Prof. Barış Akgün, Koç University)
 >
