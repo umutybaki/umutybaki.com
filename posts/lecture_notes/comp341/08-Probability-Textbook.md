@@ -68,8 +68,6 @@ $$ \text{Decision Theory} = \text{Probability Theory} + \text{Utility Theory} $$
 
 By maximizing expected utility, an agent can make optimal, rational decisions even when the outcomes are uncertain.
 
----
-
 ## 2. Fundamentals of Probability
 
 ### 2.1 Random Variables and Sample Spaces
@@ -125,8 +123,6 @@ From these three axioms, several important theorems immediately follow:
 - **Empty Set**: The probability of the impossible event (the empty set $\emptyset$) is 0. $P(\emptyset) = 0$.
 - **Complement**: The probability of an event not happening is 1 minus the probability of it happening. $P(A^c) = 1 - P(A)$.
 - **Inclusion-Exclusion Principle**: For any two events A and B, the probability of A OR B is the sum of their individual probabilities minus the probability of their intersection. $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
-
----
 
 ## 3. Probability Distributions
 
@@ -187,8 +183,6 @@ For example, to find $P(T)$ from $P(T, W)$:
 - $P(T=\text{hot}) = P(\text{hot}, \text{sun}) + P(\text{hot}, \text{rain}) = 0.4 + 0.1 = 0.5$
 - $P(T=\text{cold}) = P(\text{cold}, \text{sun}) + P(\text{cold}, \text{rain}) = 0.2 + 0.3 = 0.5$
 
----
-
 ## 4. Conditional Probability
 
 **Conditional probability** (or posterior probability) represents an agent's degree of belief after new evidence has been observed.
@@ -233,8 +227,6 @@ Suppose we want to find the distribution $P(W \mid T=\text{cold})$:
 
 This works mathematically because the sum of the selected probabilities is exactly the probability of the evidence, $P(T=\text{cold})$. We often denote this normalization constant as $\alpha$, allowing us to write:
 $$ P(W \mid T=\text{cold}) = \alpha \langle 0.2, 0.3 \rangle = \langle 0.4, 0.6 \rangle $$
-
----
 
 ## 5. Rules of Probability and Inference
 
@@ -300,8 +292,6 @@ While theoretically sound, Inference by Enumeration is completely intractable fo
 
 To handle non-trivial domains, we must find a way to reduce the size of the joint distribution representation.
 
----
-
 ## 6. Independence and Conditional Independence
 
 To defeat the exponential blowup of the joint distribution, we utilize structural properties of the domain: specifically, independence.
@@ -353,8 +343,6 @@ A common and highly practical application of conditional independence is the **N
 $$ P(\text{Cause}, \text{Effect}_1, \dots, \text{Effect}_n) = P(\text{Cause}) \prod_{i=1}^n P(\text{Effect}_i \mid \text{Cause}) $$
 
 Under this assumption, the total number of parameters required to define the joint distribution scales linearly with the number of effects $n$, making it exceptionally fast and efficient for many real-world classification tasks, even if the assumption of perfect conditional independence is slightly "naïve."
-
----
 
 ## Summary
 
