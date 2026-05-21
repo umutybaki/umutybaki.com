@@ -35,7 +35,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <head>
         <script src="/theme-init.js" />
         {/* Google AdSense */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6405541080280025" crossorigin="anonymous"></script>        {/* Google Analytics */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6405541080280025" crossOrigin="anonymous"></script>        {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ4R2RV2NP" />
         <script
           dangerouslySetInnerHTML={{
