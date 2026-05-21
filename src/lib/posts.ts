@@ -47,6 +47,12 @@ export function sanitizeTitle(title: string): string {
     .replace(/&/g, 'and')
 }
 
+export function normalizeSlug(raw: string): string {
+  return raw
+    .replace(/ /g, '_')
+    .replace(/[^A-Za-z0-9_-]/g, '')
+}
+
 export function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -77,7 +83,7 @@ export function extractHeadings(content: string): TocItem[] {
 function readPostMeta(filePath: string, categoryPath: string[]): PostMeta {
   const fileContents = fs.readFileSync(filePath, 'utf8')
   const { data } = matter(fileContents)
-  const slug = path.basename(filePath, '.md')
+  const slug = normalizeSlug(path.basename(filePath, '.md'))
   return {
     slug,
     categoryPath,
@@ -245,7 +251,7 @@ export function getAllPostParams(): { path: string[] }[] {
       if (stat.isDirectory()) {
         collect(fullPath, [...pathSoFar, entry])
       } else if (entry.endsWith('.md')) {
-        params.push({ path: [...pathSoFar, entry.replace(/\.md$/, '')] })
+        params.push({ path: [...pathSoFar, normalizeSlug(entry.replace(/\.md$/, ''))] })
       }
     }
   }
