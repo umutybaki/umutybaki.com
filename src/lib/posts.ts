@@ -89,7 +89,7 @@ function readPostMeta(filePath: string, categoryPath: string[]): PostMeta {
     categoryPath,
     category: categoryPath.join('/'),
     title: sanitizeTitle(data.title ?? slug),
-    date: data.date ?? '',
+    date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : (data.date ?? ''),
     description: data.description ?? '',
   }
 }
@@ -231,7 +231,7 @@ export async function getPost(category: string, slug: string): Promise<Post> {
     categoryPath,
     category,
     title: sanitizeTitle(data.title ?? slug),
-    date: data.date ?? '',
+    date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : (data.date ?? ''),
     description: data.description ?? '',
     contentHtml,
     headings,
