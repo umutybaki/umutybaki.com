@@ -178,6 +178,30 @@ The milk program is described as **self-financing** - it needs no budget support
 - That right is an **implicit subsidy**: Liconsa captures the gap between the cheap world price and the protected domestic price - a **quota rent**.
 - So the program is financed by the **trade barrier**. The true cost is borne by **Mexican milk consumers** (who pay protected high prices) and by **forgone tariff revenue**. It is an **opportunity cost**, just not a line in Liconsa's budget.
 
+```mermaid
+flowchart LR
+    PW(["Pw — world price\n≈ 45% of domestic price"])
+
+    subgraph TARIFF["Scenario A — with 125% import tariff"]
+        direction TB
+        PAY["Private importer\npays 125% tariff"] --> PT(["Domestic price = Pt"])
+        PT --> QS["Domestic supply rises: Q1 → Q2\nproduction distortion"]
+        PT --> QD["Consumer demand falls: Q4 → Q3\nconsumption distortion"]
+        QS & QD --> COST["Tariff revenue rectangle\n+ 2 deadweight-loss triangles"]
+    end
+
+    subgraph LICONSA["Scenario B — Liconsa tariff exemption"]
+        direction TB
+        EXEMPT["Liconsa imports\nat world price Pw"] --> SELL["Sells to poor families\nat subsidized price"]
+        SELL --> RECOV["Consumption DWL triangle\nrecovered ✓"]
+        SELL --> PROD_LOSS["Production DWL triangle\nstill lost ✗"]
+        RECOV & PROD_LOSS --> HIDDEN["Hidden cost:\nother consumers still pay Pt\ngovernment loses tariff revenue"]
+    end
+
+    PW --> PAY
+    PW --> EXEMPT
+```
+
 Illustrative scale (2002): Liconsa imported 104.5 million kilos of powder for 1,517 million pesos, produced 1,028 million liter-equivalents of milk, and sold about **95% at the subsidized price to beneficiaries** and **5% at unsubsidized prices**.
 
 ## The Debate - Both Sides

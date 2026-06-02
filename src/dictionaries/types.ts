@@ -39,6 +39,8 @@ export type Dictionary = {
     backToCategory: string
     sidebar: string
     relatedPosts: string
+    readingTime: string // e.g. "min read" — prepended with the number
+    words: string       // e.g. "words"
   }
   projects: {
     pageTitle: string

@@ -19,6 +19,8 @@ const tr: Dictionary = {
     backToCategory: 'Tüm Yazıları Göster',
     sidebar: 'Kenar Çubuğu',
     relatedPosts: 'Bu kategoride',
+    readingTime: 'dk okuma',
+    words: 'kelime',
   },
   projects: {
     pageTitle: 'Projeler',

@@ -3,6 +3,7 @@ import { getDictionary } from '@/dictionaries'
 import { getAlternates, pageTitle } from '@/lib/metadata'
 import Sidebar from '@/components/Sidebar'
 import SidebarDrawer from '@/components/SidebarDrawer'
+import MermaidInit from '@/components/MermaidInit'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -65,10 +66,15 @@ export default async function PostPage({ params }: Props) {
           relatedPostsLabel={dict.post.relatedPosts}
         />
 
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 font-mono">
+          {post.readingTime} {dict.post.readingTime} &middot; {post.wordCount.toLocaleString()} {dict.post.words}
+        </p>
+
         <article
           className="markdown-body"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
+        <MermaidInit />
       </main>
     </div>
   )

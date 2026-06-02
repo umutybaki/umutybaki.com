@@ -19,6 +19,8 @@ const en: Dictionary = {
     backToCategory: 'Show All Posts',
     sidebar: 'Sidebar',
     relatedPosts: 'In this category',
+    readingTime: 'min read',
+    words: 'words',
   },
   projects: {
     pageTitle: 'Projects',

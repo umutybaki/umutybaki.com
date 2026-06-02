@@ -12,6 +12,38 @@ import rehypeHighlight from 'rehype-highlight'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rehypeMermaid() {
+  return (tree: any) => {
+    function walk(node: any) {
+      if (!Array.isArray(node.children)) return
+      for (let i = 0; i < node.children.length; i++) {
+        const child = node.children[i]
+        if (child.type === 'element' && child.tagName === 'pre') {
+          const code = child.children?.[0]
+          if (
+            code?.type === 'element' &&
+            code.tagName === 'code' &&
+            (code.properties?.className as string[] | undefined)?.includes('language-mermaid')
+          ) {
+            const text = code.children?.[0]
+            const content = text?.type === 'text' ? text.value : ''
+            node.children[i] = {
+              type: 'element',
+              tagName: 'div',
+              properties: { className: ['mermaid'] },
+              children: [{ type: 'text', value: content }],
+            }
+            continue
+          }
+        }
+        if (child.type === 'element') walk(child)
+      }
+    }
+    walk(tree)
+  }
+}
+
 export interface TocItem {
   id: string
   text: string
@@ -31,6 +63,8 @@ export interface Post extends PostMeta {
   contentHtml: string
   headings: TocItem[]
   sidebarRoot: CategoryNode | null
+  wordCount: number
+  readingTime: number // minutes, rounded up
 }
 
 export interface CategoryNode {
@@ -216,6 +250,7 @@ export async function getPost(category: string, slug: string): Promise<Post> {
     .use(remarkGfm)
     .use(remarkMath)
     .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeMermaid)
     .use(rehypeHighlight)
     .use(rehypeKatex)
     .use(rehypeSlug)
@@ -225,6 +260,9 @@ export async function getPost(category: string, slug: string): Promise<Post> {
   const headings = extractHeadings(content)
   const categoryPath = category.split('/')
   const sidebarRoot = getSidebarRoot(categoryPath)
+
+  const wordCount = content.trim().split(/\s+/).filter(Boolean).length
+  const readingTime = Math.ceil(wordCount / 200)
 
   return {
     slug,
@@ -236,6 +274,8 @@ export async function getPost(category: string, slug: string): Promise<Post> {
     contentHtml,
     headings,
     sidebarRoot,
+    wordCount,
+    readingTime,
   }
 }
 
