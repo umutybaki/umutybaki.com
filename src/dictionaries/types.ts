@@ -26,6 +26,7 @@ export type Dictionary = {
     projects: string
     blog: string
     cv: string
+    tools: string
   }
   home: {
     subtitle: string
@@ -46,6 +47,12 @@ export type Dictionary = {
     pageTitle: string
     subtitle: string
     portWatcherSubtitle: string
+  }
+  tools: {
+    pageTitle: string
+    subtitle: string
+    qrCodeGeneratorName: string
+    qrCodeGeneratorSubtitle: string
   }
   guide: {
     title: string

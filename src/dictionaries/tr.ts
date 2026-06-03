@@ -6,6 +6,7 @@ const tr: Dictionary = {
     projects: 'Projeler',
     blog: 'Blog',
     cv: 'Özgeçmiş',
+    tools: 'Araçlar',
   },
   home: {
     subtitle: 'Koç Üniversitesi — Bilgisayar Mühendisliği & Ekonomi ÇAP',
@@ -26,6 +27,12 @@ const tr: Dictionary = {
     pageTitle: 'Projeler',
     subtitle: 'Geliştirdiğim projelerden küçük bir koleksiyon.',
     portWatcherSubtitle: 'macOS Menü Çubuğu Uygulaması',
+  },
+  tools: {
+    pageTitle: 'Araçlar',
+    subtitle: 'Küçük tarayıcı tabanlı araçlardan oluşan bir koleksiyon.',
+    qrCodeGeneratorName: 'QR Kod Oluşturucu',
+    qrCodeGeneratorSubtitle: 'Herhangi bir URL veya metin için QR kod oluşturun',
   },
   guide: {
     title: 'De Beers & ABD Rekabet Hukuku',

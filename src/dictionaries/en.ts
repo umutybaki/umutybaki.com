@@ -6,6 +6,7 @@ const en: Dictionary = {
     projects: 'Projects',
     blog: 'Blog',
     cv: 'CV',
+    tools: 'Tools',
   },
   home: {
     subtitle: 'Koç University — Computer Engineering & Economics DM',
@@ -26,6 +27,12 @@ const en: Dictionary = {
     pageTitle: 'Projects',
     subtitle: 'A small collection of projects I have created.',
     portWatcherSubtitle: 'macOS Menubar App',
+  },
+  tools: {
+    pageTitle: 'Tools',
+    subtitle: 'A small collection of browser-based tools.',
+    qrCodeGeneratorName: 'QR Code Generator',
+    qrCodeGeneratorSubtitle: 'Generate QR codes for any URL or text',
   },
   guide: {
     title: 'De Beers & U.S. Antitrust Law',

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <rect width="48" height="48" rx="10" fill="#111"/>
+  <!-- top-left finder -->
+  <rect x="6" y="6" width="14" height="14" rx="2.5" fill="white"/>
+  <rect x="9" y="9" width="8" height="8" rx="1.5" fill="#111"/>
+  <rect x="11" y="11" width="4" height="4" rx="1" fill="white"/>
+  <!-- top-right finder -->
+  <rect x="28" y="6" width="14" height="14" rx="2.5" fill="white"/>
+  <rect x="31" y="9" width="8" height="8" rx="1.5" fill="#111"/>
+  <rect x="33" y="11" width="4" height="4" rx="1" fill="white"/>
+  <!-- bottom-left finder -->
+  <rect x="6" y="28" width="14" height="14" rx="2.5" fill="white"/>
+  <rect x="9" y="31" width="8" height="8" rx="1.5" fill="#111"/>
+  <rect x="11" y="33" width="4" height="4" rx="1" fill="white"/>
+  <!-- data dots -->
+  <rect x="28" y="28" width="4" height="4" rx="1" fill="white"/>
+  <rect x="34" y="28" width="4" height="4" rx="1" fill="white"/>
+  <rect x="40" y="28" width="4" height="4" rx="1" fill="white"/>
+  <rect x="28" y="34" width="4" height="4" rx="1" fill="white"/>
+  <rect x="34" y="34" width="4" height="4" rx="1" fill="white"/>
+  <rect x="40" y="34" width="4" height="4" rx="1" fill="white"/>
+  <rect x="28" y="40" width="4" height="4" rx="1" fill="white"/>
+  <rect x="40" y="40" width="4" height="4" rx="1" fill="white"/>
+</svg>

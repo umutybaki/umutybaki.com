@@ -46,6 +46,9 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
           <Link href={`/${locale}/projects`} className="font-[450] text-[0.95rem] text-text-secondary transition-colors duration-150 hover:text-text-primary">
             {dict.projects}
           </Link>
+          <Link href={`/${locale}/tools`} className="font-[450] text-[0.95rem] text-text-secondary transition-colors duration-150 hover:text-text-primary">
+            {dict.tools}
+          </Link>
           <Link href={`/${locale}/blog`} className="font-[450] text-[0.95rem] text-text-secondary transition-colors duration-150 hover:text-text-primary">
             {dict.blog}
           </Link>
@@ -131,6 +134,9 @@ export default function Nav({ locale, dict, availableLocales }: NavProps) {
           </Link>
           <Link href={`/${locale}/blog`} onClick={() => setIsMobileMenuOpen(false)} className="text-[1.5rem] font-semibold text-text-primary transition-opacity duration-150 hover:opacity-65">
             {dict.blog}
+          </Link>
+          <Link href={`/${locale}/tools`} onClick={() => setIsMobileMenuOpen(false)} className="text-[1.5rem] font-semibold text-text-primary transition-opacity duration-150 hover:opacity-65">
+            {dict.tools}
           </Link>
         </div>
         <div style={{ marginTop: 'auto', padding: '2rem', display: 'flex', gap: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
