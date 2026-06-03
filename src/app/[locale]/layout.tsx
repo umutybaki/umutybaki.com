@@ -35,18 +35,10 @@ export default async function LocaleLayout({ children, params }: Props) {
       <head>
         <script src="/theme-init.js" />
         {/* Google AdSense */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6405541080280025" crossOrigin="anonymous"></script>        {/* Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ4R2RV2NP" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-ZZ4R2RV2NP');
-            `,
-          }}
-        />
+        {/* Google AdSense */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6405541080280025" crossOrigin="anonymous"></script>
+        {/* Umami Analytics */}
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="6178ddc5-9acf-4938-a953-6286663d8fac" />
       </head>
       <body className={`${inter.variable} ${robotoMono.variable}`}>
         <NextTopLoader
