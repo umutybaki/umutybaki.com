@@ -152,7 +152,7 @@ export default function QRCodeGeneratorPage() {
         {t.subtitle}
       </p>
 
-      <div className="flex flex-col md:flex-row gap-10 items-start">
+      <div className="flex flex-col md:flex-row gap-10 md:items-start">
 
         {/* Controls */}
         <div className="flex-1 min-w-0 flex flex-col gap-6">
@@ -161,10 +161,10 @@ export default function QRCodeGeneratorPage() {
             value={value}
             onChange={e => setValue(e.target.value)}
             placeholder={t.placeholder}
-            className="w-full px-4 py-3 rounded-md border border-border-color bg-transparent text-text-primary placeholder:text-text-secondary font-roboto-mono text-[0.9rem] outline-none focus:border-accent-color transition-colors duration-150"
+            className="w-full px-4 py-3 rounded-md border border-border-color bg-transparent text-text-primary placeholder:text-text-secondary font-roboto-mono text-base outline-none focus:border-accent-color transition-colors duration-150"
           />
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 items-center md:items-start">
             <span className="text-[0.8rem] text-text-secondary font-roboto-mono">{t.size}</span>
             <div className="flex gap-1">
               {SIZES.map(s => (
@@ -179,7 +179,7 @@ export default function QRCodeGeneratorPage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 items-center md:items-start">
             <span className="text-[0.8rem] text-text-secondary font-roboto-mono">{t.padding}</span>
             <div className="flex gap-1">
               {PADDINGS.map(p => (
@@ -194,7 +194,7 @@ export default function QRCodeGeneratorPage() {
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 justify-center md:justify-start">
             <button
               onClick={downloadSVG}
               disabled={!hasValue}
