@@ -33,6 +33,8 @@ const tr: Dictionary = {
     subtitle: 'Küçük tarayıcı tabanlı araçlardan oluşan bir koleksiyon.',
     qrCodeGeneratorName: 'QR Kod Oluşturucu',
     qrCodeGeneratorSubtitle: 'Herhangi bir URL veya metin için QR kod oluşturun',
+    pdfMergerName: 'PDF Birleştirici',
+    pdfMergerSubtitle: "PDF'leri temiz baskı için boş sayfa doldurumuyla birleştirin",
   },
   guide: {
     title: 'De Beers & ABD Rekabet Hukuku',

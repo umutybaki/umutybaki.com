@@ -53,6 +53,8 @@ export type Dictionary = {
     subtitle: string
     qrCodeGeneratorName: string
     qrCodeGeneratorSubtitle: string
+    pdfMergerName: string
+    pdfMergerSubtitle: string
   }
   guide: {
     title: string

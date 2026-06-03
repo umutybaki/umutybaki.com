@@ -33,6 +33,8 @@ const en: Dictionary = {
     subtitle: 'A small collection of browser-based tools.',
     qrCodeGeneratorName: 'QR Code Generator',
     qrCodeGeneratorSubtitle: 'Generate QR codes for any URL or text',
+    pdfMergerName: 'PDF Merger',
+    pdfMergerSubtitle: 'Merge PDFs with blank-page padding for clean printing',
   },
   guide: {
     title: 'De Beers & U.S. Antitrust Law',

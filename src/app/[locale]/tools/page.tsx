@@ -37,6 +37,14 @@ export default async function ToolsPage({ params }: Props) {
             subtitle={dict.tools.qrCodeGeneratorSubtitle}
             external={false}
           />
+          <AppListItem
+            href={`/${locale}/tools/pdf-merger`}
+            logo="/media/pdf-merger.svg"
+            logoAlt={dict.tools.pdfMergerName}
+            name={dict.tools.pdfMergerName}
+            subtitle={dict.tools.pdfMergerSubtitle}
+            external={false}
+          />
         </ul>
       </section>
     </main>
