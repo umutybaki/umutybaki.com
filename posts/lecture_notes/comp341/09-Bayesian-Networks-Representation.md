@@ -9,663 +9,291 @@ description: "Course: COMP 341 Intro to AI - Koç University"
 **Course**: COMP 341 Intro to AI - Koç University
 **Instructor**: Asst. Prof. Barış Akgün
 
+> **Where this fits.** Lecture 08 ended on a promise: conditional independence can compress an exponential joint distribution into something tractable, but written as bare equations it's unwieldy. This lecture delivers the graphical language that makes it manageable — the **Bayesian Network**. The chain rule (08) plus conditional independence (08) become a DAG whose edges *are* the independence assumptions. Once we can represent a distribution this compactly, lecture 10 shows how to query it.
 
 
 ## 1 Why Probabilistic Models
 
-### The Role of Models
+An agent reasons under uncertainty using a **probabilistic model** to perform **inference** — computing a posterior over unknowns given evidence:
 
-When we build an AI agent that must reason about the world, we need a way to represent uncertainty. The world is noisy - sensors fail, outcomes are stochastic, and we never have complete information. A **probabilistic model** is our tool for encoding what we know and what we are uncertain about.
+$$P(X_q \mid x_{e_1}, \ldots, x_{e_k})$$
 
-Key design philosophy:
-> "All models are wrong; but some are useful." - George E. P. Box
-
-This means: do not aim for a perfect representation of reality. Aim for a model that is *useful enough* to support good reasoning and decision-making.
-
-### What agents do with probabilistic models
-
-An agent uses a probabilistic model to perform **inference**: answering questions about unknown variables given observed evidence.
-
-There are several flavors of reasoning:
+Three flavors of reasoning:
 
 | Type | Direction | Example |
 | :--- | :--- | :--- |
-| **Diagnostic** (explanation) | Effect → Cause | Mehmet has a medical report. Was he sick? |
-| **Causal** (prediction) | Cause → Effect | There is an exam tomorrow. Will Mehmet be sleepy? |
-| **Value of information** | Any | Should I check the weather before deciding to go to a concert? |
+| **Diagnostic** | Effect → Cause | Mehmet has a medical report — was he sick? |
+| **Causal** | Cause → Effect | There's an exam tomorrow — will he be sleepy? |
+| **Value of information** | Any | Should I check the forecast before deciding? |
 
-Formally, we want to compute **posterior probabilities**:
-
-$$P(X_q \mid x_{e_1}, x_{e_2}, \ldots, x_{e_k})$$
-
-where $X_q$ is the **query variable** (what we want to know) and $x_{e_1}, \ldots, x_{e_k}$ are the **evidence** (what we have observed).
+> *"All models are wrong; but some are useful."* — George Box. Don't aim for a perfect model, aim for one good enough to support decisions.
 
 
 ## 2 The Problem with Full Joint Distributions
 
-### What is a Joint Distribution
+A joint over *n* binary variables needs **2ⁿ − 1** numbers; in general **O(dⁿ)** — exponential. Two concrete failures:
 
-A joint distribution over variables $X_1, X_2, \ldots, X_n$ specifies a probability for **every possible combination** of values. If each variable is binary (true/false), there are $2^n$ combinations to enumerate.
+1. **Too large to store.** 50 binary variables → 2⁵⁰ ≈ 10¹⁵ entries (over a petabyte).
+2. **Too hard to specify.** You can't estimate 10¹⁵ values from data, and no expert can write them down.
 
-For example, with 5 binary variables (Burglar, Earthquake, Alarm, JohnCalls, MaryCalls):
-- Full joint table has $2^5 - 1 = 31$ independent numbers.
-
-More generally, for $n$ variables each with domain size $d$:
-
-$$\text{Size of full joint} = O(d^n)$$
-
-This is **exponential in the number of variables**. For real-world problems with dozens or hundreds of variables, this is completely intractable.
-
-### Two Concrete Problems
-
-1. **Too large to store**: With 50 binary variables, you need $2^{50} \approx 10^{15}$ entries - more than a petabyte of memory just to store the table.
-
-2. **Too hard to specify**: Even if you could store it, how would you fill in all those probabilities? You cannot run enough experiments to estimate $10^{15}$ values. Domain experts cannot specify them by hand either.
-
-### The Solution Exploit Conditional Independence
-
-The key insight is that most variables do not directly influence each other. In any real domain, variable $X_i$ typically only has a handful of **direct causes**. If we encode *only* the local, direct relationships, we can:
-- Store vastly fewer numbers
-- Make the structure interpretable and expert-specifiable
-- Learn from data efficiently
-
-**Bayesian Networks** are the formal framework for doing exactly this.
+**The escape:** in any real domain each variable has only a handful of *direct* causes. Encode only those local relationships and you store far fewer numbers, get an interpretable structure, and can learn from data. Bayesian Networks formalize this.
 
 
 ## 3 What Is a Bayesian Network
 
-A **Bayesian Network** (also called a Bayes net, belief network, or probabilistic graphical model) is a compact representation of a joint probability distribution using a directed graph plus a set of local conditional probability tables.
+A **Bayesian Network** (Bayes net, belief network) is a compact encoding of a joint distribution as a **directed acyclic graph (DAG)** plus **local conditional probability tables (CPTs)**:
 
-**Informal definition**: A BN is a directed acyclic graph (DAG) where:
-- Each **node** represents a random variable.
-- Each **edge** $A \to B$ encodes that $A$ directly influences $B$.
-- Each node stores the probability of its own value given the values of its **parents** (the nodes with edges pointing into it).
+- Each **node** is a random variable.
+- Each **edge** A → B means A directly influences B.
+- Each node stores P(node | its parents).
 
-The magic: the whole joint distribution over all variables can be **reconstructed** from just these local tables, using a simple product formula.
+The payoff: the full joint can be *reconstructed* from these local tables via one product formula.
 
-### Intuition A Network of Local Influences
-
-Think about how a doctor reasons. They do not memorize every possible combination of symptoms, diseases, and test results. Instead, they know local relationships:
-- Pneumonia causes fever.
-- Fever causes sweating.
-- Smoking causes lung cancer.
-- Lung cancer causes a positive X-ray.
-
-Each piece of knowledge is local and manageable. The doctor chains these local facts together to reason about complex scenarios. A Bayesian Network formalizes this kind of reasoning.
+**Intuition.** A doctor doesn't memorize every symptom/disease/test combination. They know local links — pneumonia causes fever, smoking causes lung cancer, lung cancer causes a positive X-ray — and chain them. A BN formalizes that chaining.
 
 
-## 4 BN Semantics Nodes Arcs CPTs
+## 4 Semantics: Nodes, Arcs, CPTs
 
-### Nodes
+- **Nodes** — random variables (binary, discrete, or continuous). Each is either **observed** (evidence) or **unobserved** (hidden).
+- **Arcs** — A → B means A is a *direct parent* of B; the arc encodes a conditional-independence structure. The graph **must be a DAG** (no directed cycles) so the factorization is well-defined.
+- **CPTs** — every node Xᵢ stores P(Xᵢ | Parents(Xᵢ)). A binary node with two binary parents has 2² = 4 rows. A **root** node (no parents) stores a prior P(Xᵢ).
 
-Each node in a Bayesian Network represents a random variable. The variable can have any domain: binary (yes/no), discrete (sunny/rainy/cloudy), or continuous (though we mostly deal with discrete domains here).
-
-A node can be:
-- **Observed** (assigned/evidence): we know its value.
-- **Unobserved** (latent/hidden): we do not know its value and want to reason about it.
-
-### Arcs Directed Edges
-
-An arc $A \to B$ says: "A is a **direct parent** of B." Semantically:
-- A has a direct influence on B.
-- More formally: the arc encodes a conditional independence structure.
-
-**Important**: The graph must be a **DAG** (Directed Acyclic Graph) - no directed cycles allowed. This ensures that the chain rule factorization is valid and well-defined.
-
-### Conditional Probability Tables CPTs
-
-Every node $X_i$ in the network is associated with a **Conditional Probability Table (CPT)**:
-
-$$P(X_i \mid \text{Parents}(X_i))$$
-
-This table specifies the probability of every value of $X_i$ for every possible combination of values of its parents.
-
-**Example**: If $X_i$ is binary and has two binary parents, the CPT has $2^2 = 4$ rows, each containing the probability $P(X_i = \text{true} \mid \text{parent combination})$.
-
-If a node has **no parents** (a root node), its CPT is just a prior probability distribution $P(X_i)$.
-
-**Summary formula**:
-
-$$\text{Bayes Net} = \text{Graph Topology (DAG)} + \text{CPTs}$$
+$$\textbf{Bayes Net} = \textbf{DAG topology} + \textbf{CPTs}$$
 
 
-## 5 The Core Formula Joint as Product of Conditionals
+## 5 The Core Formula
 
-### The Main Equation
+The joint factorizes as a product of local conditionals:
 
-Given a Bayesian Network over variables $X_1, X_2, \ldots, X_n$, the joint distribution factorizes as:
+$$\boxed{P(X_1, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid \text{Parents}(X_i))}$$
 
-$$\boxed{P(X_1, X_2, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid \text{Parents}(X_i))}$$
+To get the probability of a full assignment, multiply one entry from each node's CPT.
 
-This is called the **Bayesian Network factorization**. To find the probability of any complete assignment of all variables, just multiply the appropriate entry from each node's CPT.
+<details>
+<summary>Why this works (from the chain rule)</summary>
 
-### Why Does This Work
+The chain rule (lecture 08) always holds:
 
-This comes from the **chain rule of probability**, applied cleverly:
+$$P(X_1, \ldots, X_n) = \prod_i P(X_i \mid X_1, \ldots, X_{i-1})$$
 
-$$P(X_1, X_2, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid X_1, X_2, \ldots, X_{i-1})$$
-
-In most cases, $X_i$ does not depend on *all* of its predecessors - only on its direct parents. So:
+The BN asserts that each Xᵢ depends only on its parents, not all predecessors:
 
 $$P(X_i \mid X_1, \ldots, X_{i-1}) = P(X_i \mid \text{Parents}(X_i))$$
 
-This equality holds by **conditional independence** - specifically, the independence assumptions encoded by the BN structure.
+Substituting gives the factorization. The conditional independences encoded by the structure are exactly what make this substitution valid.
 
-### Example Cavity Network
-
-Suppose we have: Cavity causes Toothache and Catch; Sunny weather is independent.
-
-$$P(\text{+cavity, +catch, -toothache, sunny})$$
-$$= P(\text{+cavity}) \times P(\text{-toothache} \mid \text{+cavity}) \times P(\text{+catch} \mid \text{+cavity}) \times P(\text{sunny})$$
-
-You simply look up each factor in the appropriate CPT and multiply.
+</details>
 
 
 ## 6 Worked Examples
 
-### Example 1 Coin Flips Fully Independent
+**Independent coins.** No causal links ⟹ **no arcs**. The factorization is just a product of marginals: P(H,T,T,H,T,H) = 0.5⁶.
 
-$$X_1 \quad X_2 \quad \cdots \quad X_n$$
+**Rain → Traffic.** One edge captures the causal link; P(T,R) = P(T|R)P(R). E.g. P(−t,+r) = P(−t|+r)P(+r) = 0.25 · 0.25 = 0.0625.
 
-Each coin is independent of all others. CPT for each:
+### The Alarm Network (the classic example)
 
-| Outcome | Probability |
-| :---: | ---: |
-| H | 0.5 |
-| T | 0.5 |
+*"I'm at work. John calls saying my alarm is ringing; Mary doesn't call. Alarms can also be set off by minor earthquakes. Is there a burglar?"*
 
-$$P(H, T, T, H, T, H) = 0.5^6 = 0.015625$$
-
-**Key insight**: If variables are absolutely independent (no causal relationships), the BN has **no arcs at all**. The factorization still works - it is just a product of marginal probabilities.
-
-
-### Example 2 Rain Causes Traffic
-
-```text
-R (Rain)
-+r: 0.25
--r: 0.75
-
-T (Traffic | Rain)
-+r, +t: 0.75    -r, +t: 0.50
-+r, -t: 0.25    -r, -t: 0.50
+```mermaid
+graph TD
+    B[Burglary] --> A[Alarm]
+    E[Earthquake] --> A
+    A --> J[John calls]
+    A --> M[Mary calls]
 ```
 
-The edge $R \to T$ captures the causal relationship. The joint is:
+$$P(B,E,A,J,M) = P(B)\,P(E)\,P(A\mid B,E)\,P(J\mid A)\,P(M\mid A)$$
 
-$$P(T, R) = P(T \mid R) \cdot P(R)$$
+This needs only **12 numbers** (2+2+4+2+2) instead of 2⁵ − 1 = 31 for the full joint.
 
-**Query**: What is $P(-t, +r)$?
+<details>
+<summary>CPTs and a sample calculation</summary>
 
-$$P(-t, +r) = P(-t \mid +r) \cdot P(+r) = 0.25 \times 0.25 = 0.0625$$
-
-
-### Example 3 The House Alarm Network
-
-This is the classic BN example from the lecture.
-
-**Scenario**: "I'm at work. My neighbor John calls to say my alarm is ringing, but Mary does not call. Sometimes alarms are triggered by minor earthquakes. Is there a burglar?"
-
-**Variables**: Burglary (B), Earthquake (E), Alarm (A), JohnCalls (J), MaryCalls (M)
-
-**Network structure**:
-
-```
-     B           E
-      \         /
-       \       /
-         Alarm
-        /     \
-   John        Mary
-   Calls       Calls
-```
-
-**CPTs**:
-
-| B | P(B) |     | E | P(E) |
+| B | P(B) | | E | P(E) |
 | :---: | ---: | :--- | :---: | ---: |
-| +b | 0.001 |   | +e | 0.002 |
-| -b | 0.999 |   | -e | 0.998 |
+| +b | 0.001 | | +e | 0.002 |
 
-| B | E | P(+A \| B, E) |
+| B | E | P(+a\|B,E) |
 | :---: | :---: | ---: |
 | +b | +e | 0.95 |
-| +b | -e | 0.94 |
-| -b | +e | 0.29 |
-| -b | -e | 0.001 |
+| +b | −e | 0.94 |
+| −b | +e | 0.29 |
+| −b | −e | 0.001 |
 
-| A | P(+J \| A) |     | A | P(+M \| A) |
+| A | P(+j\|A) | | A | P(+m\|A) |
 | :---: | ---: | :--- | :---: | ---: |
-| +a | 0.90 |          | +a | 0.70 |
-| -a | 0.05 |          | -a | 0.01 |
+| +a | 0.90 | | +a | 0.70 |
+| −a | 0.05 | | −a | 0.01 |
 
-**Total numbers needed**: 2 + 2 + 4 + 2 + 2 = **12 numbers** (instead of $2^5 - 1 = 31$ for the full joint).
+P(+b, −e, +a, +j, −m) = 0.001 · 0.998 · 0.94 · 0.90 · 0.30 ≈ 0.000252.
 
-**Joint factorization**:
+</details>
 
-$$P(B, E, A, J, M) = P(B) \cdot P(E) \cdot P(A \mid B, E) \cdot P(J \mid A) \cdot P(M \mid A)$$
+<details>
+<summary>Mehmet's day — the running course example</summary>
 
-**Example calculation**: $P(+b, -e, +a, +j, -m)$
+Variables: Exam, Concert, Sickness, Weather, MedicalReport, Sleepy, Boredom. Causal logic: bad Weather → Sick (and affects Concert); Sick/Exam/Concert → MedicalReport; Sick or missed Concert → Boredom; Exam or Concert → Sleepy next day. Diagnostic query: given a medical report, what caused it? The BN gives a posterior over each explanation (weather, exam pressure, sickness).
 
-$$= P(+b) \cdot P(-e) \cdot P(+a \mid +b, -e) \cdot P(+j \mid +a) \cdot P(-m \mid +a)$$
-$$= 0.001 \times 0.998 \times 0.94 \times 0.90 \times 0.30 \approx 0.000252$$
-
-
-### Example 4 Mehmets Day Running Course Example
-
-The lecture uses a relatable story involving a student named Mehmet:
-
-**Variables**: Exam, Concert, Sickness, Weather, MedicalReport, Sleepy, Boredom
-
-**Causal logic**:
-- Sick OR Exam OR Concert → likely MedicalReport
-- Bad Weather → Sick; Bad Weather also affects Concert
-- Sick OR missed Concert → Boredom
-- Exam OR Concert → Sleepy (next day)
-
-**Diagnostic reasoning example**: Given that Mehmet has a medical report, what caused it?
-- Possible explanations: bad weather, exam pressure, sickness
-- BN lets us compute the posterior probability of each explanation given the evidence.
+</details>
 
 
 ## 7 Constructing a Bayesian Network
 
-### The Algorithm
+1. Choose an ordering X₁, …, Xₙ.
+2. For each Xᵢ in order, add it and pick its parents from the *earlier* variables — the **minimal** set making Xᵢ conditionally independent of the rest of the earlier variables:
+   $$P(X_i \mid \text{Parents}(X_i)) = P(X_i \mid X_1, \ldots, X_{i-1})$$
 
-To build a valid BN, follow this procedure:
+By construction this matches the chain rule, so the network is valid.
 
-1. **Choose an ordering** of variables: $X_1, X_2, \ldots, X_n$.
-2. **For each variable** $X_i$ (in order):
-  - Add node $X_i$ to the graph.
-  - Choose **parents** from $\{X_1, \ldots, X_{i-1}\}$ (only earlier variables!) such that:
-$$P(X_i \mid \text{Parents}(X_i)) = P(X_i \mid X_1, X_2, \ldots, X_{i-1})$$
-- Equivalently: pick the **minimal** set of earlier variables that makes $X_i$ conditionally independent of all other earlier variables.
+**Ordering matters.** A *causal* ordering (causes before effects) gives the simplest graph.
 
-### Why This Guarantees Validity
+<details>
+<summary>Bad ordering example — M, J, A, B, E</summary>
 
-By construction:
+- P(J|M) = P(J)? **No** — John & Mary correlate (common cause Alarm), so M → J.
+- P(A|J,M) = P(A|J)? **No** — A needs both J and M as parents.
+- P(B|A,J,M) = P(B|A)? **Yes** — once Alarm is known, the calls add nothing.
+- P(E|B,A,J,M) = P(E|A,B)? **Yes.**
 
-$$P(X_1, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid X_1, \ldots, X_{i-1}) = \prod_{i=1}^{n} P(X_i \mid \text{Parents}(X_i))$$
+This ordering produces extra arcs. The causal order (B, E, A, J, M) is far simpler — matching expert intuition and easing specification.
 
-The first equality is the chain rule. The second uses conditional independence encoded by the chosen parents.
-
-### Why Ordering Matters
-
-Different orderings can produce very different BN structures. Consider the ordering M, J, A, B, E for the alarm network:
-
-- $P(J \mid M) = P(J)$? **No** - John and Mary are correlated (both caused by Alarm). So $M$ must be a parent of $J$ in this ordering.
-- $P(A \mid J, M) = P(A \mid J)$? **No** - $A$ needs both $J$ and $M$ as parents.
-- $P(B \mid A, J, M) = P(B \mid A)$? **Yes** - once Alarm is known, John's and Mary's calls add nothing about Burglar.
-- $P(E \mid B, A, J, M) = P(E \mid A, B)$? **Yes**.
-
-The causal ordering (B, E, A, J, M) gives a simpler network with fewer arcs.
-
-**Rule of thumb**: Causal orderings (causes before effects) generally produce simpler graphs. This matches domain expert intuitions and makes the model easier to specify.
+</details>
 
 
-## 8 Size Comparison Full Joint vs Bayes Net
+## 8 Size: Full Joint vs Bayes Net
 
 | Representation | Size |
 | :--- | :--- |
-| Full joint distribution | $O(d^n)$ |
-| Bayes Net (max $k$ parents per node) | $O(n \cdot d^{k+1})$ |
+| Full joint | O(dⁿ) |
+| Bayes net (≤ k parents per node) | O(n · d^(k+1)) |
 
-When $k \ll n$ (each node has few parents), this is an **exponential-to-linear** improvement.
-
-### Concrete Example Alarm Network
-
-- $n = 5$ variables, all binary ($d = 2$)
-- Full joint: $2^5 - 1 = 31$ numbers
-- Bayes Net: $1 + 1 + 4 + 2 + 2 = 10$ numbers
-
-For $n = 30$ binary variables with at most 3 parents:
-- Full joint: $2^{30} \approx 10^9$ numbers
-- Bayes Net: roughly $30 \times 2^4 = 480$ numbers
+When k ≪ n, this is an **exponential → linear** win. Alarm net: 31 → 10 numbers. For 30 binary variables with ≤ 3 parents: 10⁹ → ~480.
 
 
 ## 9 Causality vs Topology
 
-### Do BN Edges Always Represent Causality
-
-**No.** The edges encode **conditional independence**, not necessarily causality. Multiple different DAG structures can represent the same joint distribution.
-
-For Rain–Traffic:
-- $R \to T$ (Rain causes Traffic) - valid.
-- $T \to R$ (Traffic causes Rain) - also a valid BN encoding the **same** joint $P(R, T)$.
-
-Both are mathematically equivalent.
-
-### Why Causal Structure Is Preferred
-
-When the BN reflects true causal relationships:
-- Nodes have **fewer parents** (only true direct causes).
-- The model is easier to **understand and explain**.
-- Easier to **elicit from domain experts** ("what directly causes this?").
-- Easier to reason about **interventions** (what happens if I force a variable to a particular value?).
-
-**Practical advice**: Always try to draw arrows in the causal direction. Your network will be simpler and more interpretable.
+Edges encode **conditional independence, not necessarily causality**. Both R → T and T → R represent the same joint P(R,T). So why prefer the causal direction? Fewer parents, easier to understand and elicit from experts ("what directly causes this?"), and easier to reason about interventions. **Always try to draw arrows causally.**
 
 
-## 10 Conditional Independence in a BN
+## 10–11 Reading Independence: The Three Canonical Structures
 
-### The Central Question
+The central question: given the graph, are X and Z independent (possibly given evidence)? A naive "is there an unblocked path" check almost works but **breaks on colliders**. All reasoning reduces to three building blocks.
 
-Given a Bayesian Network, are two nodes $X$ and $Z$ independent, possibly given some observed evidence?
-
-This is non-trivial because influence can flow through the graph in complex ways. The answer depends entirely on the **graph topology** and **which nodes are observed**.
-
-### Why Simple Reachability Is Not Enough
-
-A naive approach: "if there is a path from $X$ to $Z$ not going through an observed node, they are dependent." This almost works but breaks for colliders (common effects). The correct approach requires checking each triple along the path.
-
-
-## 11 The Three Canonical Structures
-
-All complex independence reasoning in BNs reduces to three simple building blocks.
-
-### Structure 1 Causal Chain
-
-```text
-X --> Y --> Z
+```mermaid
+graph LR
+    subgraph Chain
+        X1[X] --> Y1[Y] --> Z1[Z]
+    end
+    subgraph Fork
+        Y2[Y] --> X2[X]
+        Y2 --> Z2[Z]
+    end
+    subgraph Collider
+        X3[X] --> Y3[Y]
+        Z3[Z] --> Y3
+    end
 ```
 
-**Real-world example**: Low Pressure → Rain → Traffic
+| Structure | X ⊥ Z? (no evidence) | X ⊥ Z \| Y? | Observing Y |
+| :--- | :---: | :---: | :--- |
+| **Chain** X→Y→Z | No | **Yes** | **Blocks** the path |
+| **Fork** X←Y→Z | No | **Yes** | **Blocks** the path |
+| **Collider** X→Y←Z | **Yes** | No | **Opens** the path |
 
-| Query | Answer | Intuition |
+The reversal on colliders is the whole subtlety: for chains and forks, observing the middle **blocks** flow; for a collider, observing the middle (or any descendant) **opens** it.
+
+**Chain** — e.g. LowPressure → Rain → Traffic. Once rain is known, pressure adds nothing about traffic.
+**Fork** — e.g. Weather → RoofDrip and Weather → Traffic. Once the common cause is known, the effects are independent (like two siblings' eye colors given their parents' genes).
+**Collider** — e.g. Burglar → Alarm ← Earthquake. The causes are independent *until* you observe the alarm; then learning it was an earthquake **explains away** the burglar (Berkson's paradox).
+
+<details>
+<summary>Proofs for the three structures</summary>
+
+**Chain, X ⊥ Z | Y:**
+$$P(Z\mid X,Y) = \frac{P(X)P(Y\mid X)P(Z\mid Y)}{P(X)P(Y\mid X)} = P(Z\mid Y)$$
+
+**Fork, X ⊥ Z | Y:**
+$$P(Z\mid X,Y) = \frac{P(Y)P(X\mid Y)P(Z\mid Y)}{P(X,Y)} = P(Z\mid Y)$$
+
+**Collider, X ⊥ Z (marginal):**
+$$P(X,Z) = \sum_y P(X)P(Z)P(y\mid X,Z) = P(X)P(Z)$$
+But observing Y couples them: P(Z | X, Y) ≠ P(Z | Y) in general — this is explaining away.
+
+</details>
+
+
+## 12 D-Separation: The General Algorithm
+
+For arbitrary topologies, **d-separation** decides whether X ⊥ Y given evidence set Z:
+
+1. Shade all evidence nodes (Z).
+2. Enumerate every undirected path between X and Y.
+3. Check each consecutive triple on each path:
+
+| Triple | Active when | Blocked when |
 | :--- | :--- | :--- |
-| $X \perp Z$? (no evidence) | **No** | $X$ influences $Z$ via $Y$ |
-| $X \perp Z \mid Y$? | **Yes** | Once rain is known, pressure adds nothing for traffic |
+| Chain A→B→C | B unobserved | B observed |
+| Fork A←B→C | B unobserved | B observed |
+| Collider A→B←C | B **or a descendant** observed | B and all descendants unobserved |
 
-**Proof that $X \perp Z \mid Y$**:
+4. A path is **active** iff *every* triple on it is active. If **any** path is active → not d-separated (dependence possible). If **all** paths are blocked → d-separated → **conditionally independent**.
 
-$$P(Z \mid X, Y) = \frac{P(X, Y, Z)}{P(X, Y)} = \frac{P(X) P(Y \mid X) P(Z \mid Y)}{P(X) P(Y \mid X)} = P(Z \mid Y)$$
+<details>
+<summary>Worked d-separation examples</summary>
 
-**Key phrase**: Observing the middle node $Y$ **blocks** the chain. Evidence along the chain does not flow past an observed variable.
+**Network** R → T ← B, with T → T′:
 
+- **R ⊥ B?** Only path R→T←B; collider at T unobserved → inactive → blocked → **YES**.
+- **R ⊥ B | T?** Collider at T now observed → active → **NO**. (Observing traffic makes rain and bad weather compete as explanations.)
 
-### Structure 2 Common Cause Fork
+**Network** L → R → T ← B, with T → T′:
 
-```
-     Y
-    / \
-   X   Z
-```
+- **L ⊥ B | T?** Triple at R (chain, unobserved) active; triple at T (collider, observed) active → path active → **NO**.
+- **L ⊥ B?** Collider at T unobserved → blocked → **YES**.
 
-**Real-world example**: Weather → Both Roof Drip and Traffic
+**Pitfall:** a "block at shaded nodes" reachability rule works for chains/forks but inverts for colliders — unobserved collider blocks, observed collider opens.
 
-| Query | Answer | Intuition |
-| :--- | :--- | :--- |
-| $X \perp Z$? (no evidence) | **No** | Knowing $X$ reveals $Y$, which tells you about $Z$ |
-| $X \perp Z \mid Y$? | **Yes** | Once the common cause is known, effects are independent |
-
-**Proof that $X \perp Z \mid Y$**:
-
-$$P(Z \mid X, Y) = \frac{P(Y) P(X \mid Y) P(Z \mid Y)}{P(X, Y)} = \frac{P(X, Y) P(Z \mid Y)}{P(X, Y)} = P(Z \mid Y)$$
-
-**Key phrase**: Observing the common cause $Y$ **blocks** the fork. Knowing the cause screens off the correlation between effects.
-
-**Analogy**: Two siblings have blue eyes because of shared genetics. Once you know the parents' genotypes, the siblings' eye colors are independent of each other.
-
-
-### Structure 3 Common Effect VStructure Collider
-
-```text
-X --> Y <-- Z
-```
-
-**Real-world example**: Burglar → Alarm ← Earthquake
-
-| Query | Answer | Intuition |
-| :--- | :--- | :--- |
-| $X \perp Z$? (no evidence) | **Yes** | Separate independent causes |
-| $X \perp Z \mid Y$? | **No** | Observing the effect creates competition |
-
-**Why $X \perp Z$ (no evidence)**:
-
-$$P(X, Z) = \sum_y P(X, Y=y, Z) = \sum_y P(X) P(Z) P(Y=y \mid X, Z) = P(X) P(Z)$$
-
-**Why observing $Y$ creates dependence** - called **explaining away** or **Berkson's paradox**:
-
-Suppose the alarm went off (Y = true). If you learn there was an earthquake ($X$ = true), then the need for a burglar to explain the alarm decreases - the earthquake "explains away" the alarm. Knowing the effect creates a dependency between its independent causes.
-
-$$P(Z \mid X, Y) = \frac{P(Z) P(Y \mid Z, X)}{P(Y \mid X)} \neq P(Z \mid Y) \text{ in general}$$
-
-**Key phrase**: Observing the collider $Y$ (or any of its descendants) **opens** the path - the opposite of chains and forks!
-
-
-### Summary Table of the Three Structures
-
-| Structure | $X \perp Z$? | $X \perp Z \mid Y$? | Effect of observing $Y$ |
-| :--- | :--- | :--- | :--- |
-| Chain $X \to Y \to Z$ | No | **Yes** | Blocks path |
-| Fork $X \leftarrow Y \to Z$ | No | **Yes** | Blocks path |
-| Collider $X \to Y \leftarrow Z$ | **Yes** | No | Opens path |
-
-**Critical insight**: For chains and forks, observing the middle node **blocks** information flow. For colliders (v-structures), observing the middle node **opens** information flow. This is the counter-intuitive reversal that makes BN reasoning non-trivial.
-
-
-## 12 DSeparation The General Algorithm
-
-### Motivation
-
-Real BNs have complex topologies with multiple interleaved paths. We need a systematic way to determine whether any two nodes $X$ and $Y$ are conditionally independent given a set of evidence nodes $Z$.
-
-The algorithm is called **d-separation** (directional separation). It is the foundation of all independence reasoning in Bayesian Networks.
-
-### The DSeparation Algorithm
-
-**Step 1**: Shade all **evidence nodes** (those in the set $Z$).
-
-**Step 2**: Enumerate all **undirected paths** between $X$ and $Y$.
-
-**Step 3**: For each path, check every consecutive triple of nodes along the path:
-
-| Triple type | When is it ACTIVE? | When is it INACTIVE (blocked)? |
-| :--- | :--- | :--- |
-| Chain: $A \to B \to C$ | $B$ is **unobserved** | $B$ is observed (shaded) |
-| Fork: $A \leftarrow B \to C$ | $B$ is **unobserved** | $B$ is observed (shaded) |
-| Collider: $A \to B \leftarrow C$ | $B$ or a descendant of $B$ is **observed** | $B$ and all its descendants are unobserved |
-
-A **path is active** if and only if **every triple on the path is active**.
-
-A **path is blocked** if at least one triple on the path is inactive.
-
-**Step 4**: Conclusion:
-- If **at least one active path** exists: $X$ and $Y$ are **NOT d-separated** → independence is **not guaranteed**.
-- If **all paths are blocked**: $X$ and $Y$ **ARE d-separated** given $Z$ → they are **conditionally independent**.
-
-### Active and Inactive Triples Cheat Sheet
-
-```text
-ACTIVE (info flows):
-  A --> B --> C    (chain, B unobserved)
-  A <-- B --> C    (fork, B unobserved)
-  A --> B <-- C    (collider, B or descendant observed)
-
-INACTIVE (info blocked):
-  A --> [B] --> C  (chain, B observed)
-  A <-- [B] --> C  (fork, B observed)
-  A --> B <-- C    (collider, B and all descendants unobserved)
-  (where [B] = B is observed/shaded)
-```
-
-### Worked Example 1 Rain Network
-
-```text
-R (Rain) --> T (Traffic) <-- B (Bad Weather)
-                |
-               T' (Traffic Tomorrow)
-```
-
-**Query**: $R \perp B$ (no evidence)?
-- Only path: $R \to T \leftarrow B$
-- Triple at $T$: collider, $T$ unobserved → **inactive**.
-- All paths blocked → **$R \perp B$: YES**.
-
-**Query**: $R \perp B \mid T$ (given Traffic observed)?
-- Path: $R \to T \leftarrow B$
-- Triple at $T$: collider, $T$ **observed** → **active**.
-- Active path exists → **$R \perp B \mid T$: NO**.
-
-Explanation: Observing traffic activates the collider. Now rain and bad weather are in competition as explanations for the traffic - they become correlated.
-
-### Worked Example 2 Extended Network with L
-
-```text
-L --> R --> T <-- B
-            |
-           T'
-```
-
-**Query**: $L \perp B \mid T$?
-- Path: $L \to R \to T \leftarrow B$
-- Triple at $R$: chain, $R$ unobserved → active.
-- Triple at $T$: collider, $T$ **observed** → active.
-- The full path is active → **$L \perp B \mid T$: NO**.
-
-**Query**: $L \perp B$ (no evidence)?
-- Triple at $T$: collider, $T$ unobserved → inactive.
-- Path is blocked → **$L \perp B$: YES**.
-
-### A Common Pitfall
-
-A naive reachability algorithm - "block paths at shaded nodes" - works for chains and forks but **fails for colliders**. Without observation, a collider is a **blocker**. With observation, a collider becomes an **opener**. This is the opposite of the other structures, and forgetting this is a common source of errors.
+</details>
 
 
 ## 13 The Markov Blanket
 
-### Definition
+The **Markov blanket** of X is the minimal set that, once observed, makes X independent of everything else:
 
-The **Markov Blanket** of a node $X$ is the minimal set of nodes that, when observed, makes $X$ conditionally independent of **all other nodes** in the network.
+$$\text{MB}(X) = \text{Parents}(X) \cup \text{Children}(X) \cup \text{Co-parents}(X)$$
 
-$$\text{Markov Blanket}(X) = \text{Parents}(X) \cup \text{Children}(X) \cup \text{Co-parents of children}(X)$$
+where co-parents are the *other* parents of X's children.
 
-where "co-parents of children" means: other parents of $X$'s children (excluding $X$ itself).
-
-**Formal property**:
-
-$$X \perp \text{(All variables outside MB)} \mid \text{Markov Blanket}(X)$$
-
-### Why This Exact Set
-
-Each component plays a role:
-
-- **Parents of $X$**: directly determine $X$. Without knowing them, $X$ is not independent of the rest of the graph.
-- **Children of $X$**: $X$ directly influences them; observing a child provides information about $X$.
-- **Co-parents (other parents of children)**: because of the collider (explaining-away) effect. Once a child $C$ is observed, $X$ becomes correlated with $C$'s other parents. Including those co-parents in the blanket removes this dependency.
-
-### Visual Intuition
-
-```text
-        P1    P2        <- Parents of X
-          \  /
-           X            <- The node
-          / \
-        C1   C2         <- Children of X
-       / \
-     CP1  CP2           <- Co-parents: other parents of C1
+```mermaid
+graph TD
+    P1[Parent] --> X
+    P2[Parent] --> X
+    X --> C1[Child]
+    X --> C2[Child]
+    CP[Co-parent] --> C1
 ```
 
-Markov Blanket of $X$ = {P1, P2, C1, C2, CP1, CP2}
+Why each piece: **parents** determine X; **children** carry information about X; **co-parents** are needed because observing a child opens a collider, coupling X with the child's other parents (explaining away). Including the co-parents removes that dependency.
 
-Once all these are observed, knowing the value of any other node in the network gives you no additional information about $X$.
-
-### Practical Importance
-
-The Markov blanket concept is central to:
-- **Gibbs sampling**: sample each variable conditioned only on its Markov blanket.
-- **Feature selection in ML**: the Markov blanket of a target variable contains the optimal minimal feature set for prediction.
-- **Local BN learning**: when learning structure from data, only search within Markov blankets.
+**Where it's used:** Gibbs sampling resamples each variable given only its blanket (lecture 11); feature selection (the blanket of a target is its optimal predictor set); local structure learning.
 
 
-## 14 Summary and Key Takeaways
+## 14 Key Takeaways
 
-### What Is a Bayesian Network
+- A BN = **DAG + CPTs**; the joint is $\prod_i P(X_i \mid \text{Parents}(X_i))$ — an exponential table compressed to a linear set of local tables.
+- **D-separation** reads conditional independence off the graph. Chains/forks: observing the middle **blocks**. Colliders: observing the middle (or a descendant) **opens** — always check descendants.
+- Prefer **causal** edge directions: fewer arcs, more interpretable.
+- **MB(X)** = parents + children + co-parents.
+- Sanity check: every CPT row sums to 1.
 
-A BN is a compact, interpretable representation of a joint probability distribution. It has two components:
+> **What's next.** We can now represent a distribution compactly and tell which variables are independent. **Lecture 10 (Exact Inference)** uses this structure to actually answer queries P(Q | e) — first by enumeration, then far more efficiently with variable elimination, which exploits the very factorization defined here.
 
-1. **A DAG**: nodes are variables, edges encode direct influence and conditional independence structure.
-2. **CPTs**: each node stores $P(X_i \mid \text{Parents}(X_i))$.
-
-### The Core Equation
-
-$$P(X_1, X_2, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid \text{Parents}(X_i))$$
-
-This compresses an exponentially large table into a linear number of local tables.
-
-### Size Win
-
-| | Full Joint | Bayes Net (max $k$ parents) |
-| :--- | :--- | :--- |
-| Size | $O(d^n)$ | $O(n \cdot d^{k+1})$ |
-| Alarm net ($n=5, d=2$) | 31 entries | 10 entries |
-
-### Reading Independence from the Graph DSeparation
-
-To check $X \perp Y \mid Z$:
-1. Shade evidence nodes $Z$.
-2. For every undirected path between $X$ and $Y$, check all triples.
-3. Chain/Fork triple: blocked when middle node is **observed**.
-4. Collider triple: blocked when middle node and all its descendants are **unobserved** (active when middle node or descendant is observed).
-5. All paths blocked → $X$ and $Y$ are d-separated → **independent**.
-
-### The Three Canonical Structures Summary
-
-```text
-Chain:    X --> Y --> Z
-  No obs Y:   X and Z DEPENDENT
-  Obs Y:      X and Z INDEPENDENT   (Y blocks)
-
-Fork:     X <-- Y --> Z
-  No obs Y:   X and Z DEPENDENT
-  Obs Y:      X and Z INDEPENDENT   (Y blocks)
-
-Collider: X --> Y <-- Z
-  No obs Y:   X and Z INDEPENDENT   (Y blocks by default)
-  Obs Y:      X and Z DEPENDENT     (Y opens -- explaining away)
-```
-
-### Markov Blanket
-
-The minimal set of nodes that screens a variable from the rest:
-
-$$\text{MB}(X) = \text{Parents}(X) + \text{Children}(X) + \text{Co-parents of children}(X)$$
-
-### Tips for Exam and Practice
-
-1. **Draw the BN before computing anything** - the graph structure determines all independence relationships.
-2. **Colliders are counter-intuitive**: not observed = blocked; observed = opened.
-3. **Always check descendants** for collider activation - not just the collider node itself.
-4. **Causal direction preferred**: fewer arcs, more interpretable, easier to specify.
-5. **Every CPT row must sum to 1**: use this as a sanity check.
-6. **The Markov blanket includes co-parents** - a common oversight is forgetting to include the other parents of $X$'s children.
-
-
-## Appendix Quick Reference Tables
-
-### Notation
+### Appendix — quick reference
 
 | Symbol | Meaning |
 | :--- | :--- |
-| $P(X_i \mid \text{Pa}(X_i))$ | CPT for node $X_i$ given its parents |
-| $X \perp Y$ | $X$ and $Y$ are marginally independent |
-| $X \perp Y \mid Z$ | $X$ and $Y$ are conditionally independent given $Z$ |
-| DAG | Directed Acyclic Graph |
-| CPT | Conditional Probability Table |
-| MB$(X)$ | Markov Blanket of $X$ |
-
-### DSeparation Triple Rules
-
-| Triple | Active when | Blocked when |
-| :--- | :--- | :--- |
-| $A \to B \to C$ | $B$ unobserved | $B$ observed |
-| $A \leftarrow B \to C$ | $B$ unobserved | $B$ observed |
-| $A \to B \leftarrow C$ | $B$ or descendant observed | $B$ and all descendants unobserved |
-
-### Three Structures Independence Table
-
-| Structure | $X \perp Z$ (marginal) | $X \perp Z \mid Y$ (conditional) |
-| :--- | :--- | :--- |
-| Causal Chain $X \to Y \to Z$ | No | **Yes** |
-| Common Cause $X \leftarrow Y \to Z$ | No | **Yes** |
-| Common Effect $X \to Y \leftarrow Z$ | **Yes** | No |
+| P(Xᵢ \| Pa(Xᵢ)) | CPT for node Xᵢ |
+| X ⊥ Y | marginally independent |
+| X ⊥ Y \| Z | conditionally independent given Z |
+| MB(X) | Markov blanket |
