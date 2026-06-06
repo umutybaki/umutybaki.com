@@ -1,10 +1,10 @@
 ---
-title: "Lecture 4 Informed Search COMP341"
+title: "04 - Informed Search"
 date: "2026-03-09"
 description: "Course: COMP341 - Introduction to Artificial Intelligence, Koç University"
 ---
 
-# Lecture 4 Informed Search COMP341
+# 04 - Informed Search
 
 **Course**: COMP341 - Introduction to Artificial Intelligence, Koç University
 **Instructor**: Asst. Prof. Barış Akgün

@@ -1,10 +1,10 @@
 ---
-title: "Lecture 7 Adversarial Search COMP341"
+title: "07 - Adversarial Search"
 date: "2026-03-30"
 description: "Course: COMP 341 - Intro to Artificial Intelligence"
 ---
 
-# Lecture 7 Adversarial Search COMP341
+# 07 - Adversarial Search
 
 **Course**: COMP 341 - Intro to Artificial Intelligence  
 **Instructor**: Asst. Prof. Barış Akgün, Koç University  

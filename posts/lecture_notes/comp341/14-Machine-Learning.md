@@ -1,10 +1,10 @@
 ---
-title: "Lecture 14 Machine Learning COMP341"
+title: "14 - Machine Learning"
 date: "2026-05-18"
 description: "> Course: COMP341 Intro to AI | Koç University | Asst. Prof. Barış Akgün"
 ---
 
-# Lecture 14 Machine Learning COMP341
+# 14 - Machine Learning
 
 > **Course**: COMP341 Intro to AI | Koç University | Asst. Prof. Barış Akgün
 > **Target**: CS student with strong programming background, zero prior AI/ML experience.

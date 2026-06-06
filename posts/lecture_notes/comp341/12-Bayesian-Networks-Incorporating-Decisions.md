@@ -1,10 +1,10 @@
 ---
-title: "Lecture 12 Bayesian Networks Incorporating Decisions COMP341"
+title: "12 - Bayesian Networks: Incorporating Decisions"
 date: "2026-05-04"
 description: "Course: COMP341 Intro to AI, Koç University"
 ---
 
-# Lecture 12 Bayesian Networks Incorporating Decisions COMP341
+# 12 - Bayesian Networks: Incorporating Decisions
 
 **Course**: COMP341 Intro to AI, Koç University  
 **Instructor**: Asst. Prof. Barış Akgün  

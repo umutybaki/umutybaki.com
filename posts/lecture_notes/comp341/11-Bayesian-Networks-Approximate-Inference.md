@@ -1,10 +1,10 @@
 ---
-title: "Lecture 11 Bayesian Networks Approximate Inference COMP341"
+title: "11 - Bayesian Networks: Approximate Inference"
 date: "2026-04-27"
 description: "Course: COMP341 – Introduction to AI, Koç University"
 ---
 
-# Lecture 11 Bayesian Networks Approximate Inference COMP341
+# 11 - Bayesian Networks: Approximate Inference
 
 **Course**: COMP341 – Introduction to AI, Koç University  
 **Instructor**: Asst. Prof. Barış Akgün  

@@ -1,10 +1,10 @@
 ---
-title: "Lecture 10 Bayesian Networks Exact Inference COMP341"
+title: "10 - Bayesian Networks: Exact Inference"
 date: "2026-04-20"
 description: "Course: COMP 341 Intro to AI - Koç University"
 ---
 
-# Lecture 10 Bayesian Networks Exact Inference COMP341
+# 10 - Bayesian Networks: Exact Inference
 
 **Course**: COMP 341 Intro to AI - Koç University  
 **Instructor**: Asst. Prof. Barış Akgün  

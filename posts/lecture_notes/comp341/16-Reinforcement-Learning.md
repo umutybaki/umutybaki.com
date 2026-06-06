@@ -1,10 +1,10 @@
 ---
-title: "Lecture 16 Reinforcement Learning COMP341"
+title: "16 - Reinforcement Learning"
 date: "2026-06-01"
 description: "> Course: COMP341 Intro to AI, Koç University"
 ---
 
-# Lecture 16 Reinforcement Learning COMP341
+# 16 - Reinforcement Learning
 
 > **Course**: COMP341 Intro to AI, Koç University  
 > **Instructor**: Asst. Prof. Barış Akgün  

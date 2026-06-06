@@ -1,10 +1,10 @@
 ---
-title: "Lecture 9 Bayesian Networks Representation COMP341"
+title: "09 - Bayesian Networks: Representation"
 date: "2026-04-13"
 description: "Course: COMP 341 Intro to AI - Koç University"
 ---
 
-# Lecture 9 Bayesian Networks Representation COMP341
+# 09 - Bayesian Networks: Representation
 
 **Course**: COMP 341 Intro to AI - Koç University
 **Instructor**: Asst. Prof. Barış Akgün

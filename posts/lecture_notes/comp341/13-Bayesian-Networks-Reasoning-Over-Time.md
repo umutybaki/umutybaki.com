@@ -1,10 +1,10 @@
 ---
-title: "Lecture 13 Bayesian Networks Reasoning Over Time COMP341"
+title: "13 - Bayesian Networks: Reasoning Over Time"
 date: "2026-05-11"
 description: "Course: COMP341 Introduction to Artificial Intelligence, Koç University"
 ---
 
-# Lecture 13 Bayesian Networks Reasoning Over Time COMP341
+# 13 - Bayesian Networks: Reasoning Over Time
 
 **Course**: COMP341 Introduction to Artificial Intelligence, Koç University  
 **Instructor**: Asst. Prof. Barış Akgün  

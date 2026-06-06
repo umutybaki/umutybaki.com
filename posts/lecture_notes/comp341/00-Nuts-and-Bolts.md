@@ -1,10 +1,10 @@
 ---
-title: "Lecture 0 Nuts and Bolts COMP341 Introduction to AI"
+title: "00 - Nuts and Bolts"
 date: "2026-02-09"
 description: "Koç University | Asst. Prof. Barış Akgün"
 ---
 
-# Lecture 0 Nuts and Bolts COMP341 Introduction to AI
+# 00 - Nuts and Bolts
 
 **Koç University | Asst. Prof. Barış Akgün**
 

@@ -1,10 +1,10 @@
 ---
-title: "Lecture 8 Probability COMP341"
+title: "08 - Probability"
 date: "2026-04-06"
 description: "Koç University | Intro to Artificial Intelligence | Asst. Prof. Barış Akgün"
 ---
 
-# Lecture 8 Probability COMP341
+# 08 - Probability
 **Koç University | Intro to Artificial Intelligence | Asst. Prof. Barış Akgün**
 
 

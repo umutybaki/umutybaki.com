@@ -1,10 +1,10 @@
 ---
-title: "Lecture 1 Introduction to AI COMP341"
+title: "01 - Introduction to AI"
 date: "2026-02-16"
 description: "Koç University | Asst. Prof. Barış Akgün"
 ---
 
-# Lecture 1 Introduction to AI COMP341
+# 01 - Introduction to AI
 **Koç University | Asst. Prof. Barış Akgün**
 
 

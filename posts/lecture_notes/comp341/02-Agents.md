@@ -1,10 +1,10 @@
 ---
-title: "Lecture 2 Agents COMP341"
+title: "02 - Agents"
 date: "2026-02-23"
 description: "> Course: COMP341 - Introduction to Artificial Intelligence"
 ---
 
-# Lecture 2 Agents COMP341
+# 02 - Agents
 
 > **Course**: COMP341 - Introduction to Artificial Intelligence  
 > **Institution**: Koç University  

@@ -1,10 +1,10 @@
 ---
-title: "Lecture 3 Uninformed Search COMP341"
+title: "03 - Uninformed Search"
 date: "2026-03-02"
 description: "Course: COMP341 Introduction to AI, Koç University"
 ---
 
-# Lecture 3 Uninformed Search COMP341
+# 03 - Uninformed Search
 
 **Course**: COMP341 Introduction to AI, Koç University  
 **Instructor**: Asst. Prof. Barış Akgün  

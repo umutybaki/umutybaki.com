@@ -1,10 +1,10 @@
 ---
-title: "Lecture 5 Local Search COMP341"
+title: "05 - Local Search"
 date: "2026-03-16"
 description: "Course: COMP341 Intro to AI, Koç University"
 ---
 
-# Lecture 5 Local Search COMP341
+# 05 - Local Search
 
 **Course**: COMP341 Intro to AI, Koç University  
 **Instructor**: Asst. Prof. Barış Akgün

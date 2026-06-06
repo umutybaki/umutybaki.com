@@ -1,10 +1,10 @@
 ---
-title: "Lecture 6 Constraint Satisfaction Problems CSPs COMP341"
+title: "06 - Constraint Satisfaction Problems"
 date: "2026-03-23"
 description: "Course: COMP341 Intro to AI, Koç University"
 ---
 
-# Lecture 6 Constraint Satisfaction Problems CSPs COMP341
+# 06 - Constraint Satisfaction Problems
 
 **Course**: COMP341 Intro to AI, Koç University  
 **Instructor**: Asst. Prof. Barış Akgün

@@ -1,10 +1,10 @@
 ---
-title: "Lecture 15 Markov Decision Processes MDPs COMP341"
+title: "15 - Markov Decision Processes"
 date: "2026-05-25"
 description: "Course: COMP341 - Introduction to Artificial Intelligence, Koç University"
 ---
 
-# Lecture 15 Markov Decision Processes MDPs COMP341
+# 15 - Markov Decision Processes
 
 **Course**: COMP341 - Introduction to Artificial Intelligence, Koç University  
 **Topic**: Making Sequential Decisions under Action Uncertainty
