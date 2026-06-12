@@ -243,9 +243,9 @@ Maroons were enslaved people who escaped the plantations and formed autonomous s
 </details>
 
 <details>
-<summary>The colour line (gradations of whiteness)</summary>
+<summary>Mulatto / the colour line (important)</summary>
 
-In Saint-Domingue race became the structuring principle of society: whites obsessively codified whiteness into as many as 128 gradations (quadroon, octoroon, and so on) to index rights and privileges. Free people of mixed heritage ("mulattoes") could own property and even distinguished themselves from the enslaved, yet shared with whites the common bond of property. This racial order shows how, in a slave society, the Revolution's "Rights of Man" collided with race as much as with class.
+"Mulatto" (from Portuguese *mulato*) was the colonial term for people of mixed European and African heritage in Saint-Domingue. Their position in the racial hierarchy was contradictory and explosive: legally free, able to own property (and enslaved people), yet denied political rights by white colonists who obsessively codified whiteness into up to **128 gradations** (quadroon, octoroon, etc.). Some mulattoes were wealthy planters who shared the bond of property with the white elite; others were artisans or servants. This ambiguity made them pivotal actors in the revolutionary crisis: Vincent Ogé led a mulatto revolt in October 1790 demanding political rights (he was executed); later, mulattoes allied first with the royalist bureaucracy against the grands blancs, then shifted again. The course's key point is that the colour line shows how **race, not just class, was the organizing principle of colonial society** — and how the Revolution's promise of "the Rights of Man" depended entirely on *which* men were being counted. The 128 gradations are your concrete example whenever a question asks about race as a social construction.
 
 </details>
 
@@ -271,9 +271,9 @@ Sonthonax was the French commissioner who, to win the war amid white-planter opp
 </details>
 
 <details>
-<summary>Toussaint Louverture (c. 1743–1803)</summary>
+<summary>Toussaint L'Ouverture (c. 1743–1803) (important)</summary>
 
-The educated former house-slave who became the central military and political leader of the Haitian Revolution, rising to Lieutenant-General (1796) and issuing a near-independent constitution in 1801. He embodied the contradiction of revolutionary universalism - wielding the Rights of Man within a slave society. Napoleon's General Leclerc trapped and deported him in 1802; he died in a French prison in 1803, leaving his 1801 "Final Proclamation" as a key primary source.
+The central military and political figure of the Haitian Revolution. Born an enslaved person (an educated former house-slave), he joined the 1791 uprising in his late forties, fought first for Spain, then switched to France after the National Convention abolished slavery in 1794, and rose to Lieutenant-General. He built schools, banned corporal punishment, regulated labor, and issued a near-independence constitution in 1801 — the document that made Napoleon send General Leclerc with ~20,000 troops to retake the island. Toussaint was lured into a trap, arrested, and deported to France, where he died in the Fort de Joux prison in April 1803. His **1801 "Final Proclamation"** is a primary source for the course. He is the key figure for the exam argument about the **limits of revolutionary universalism**: France proclaimed the Rights of Man in 1789 but extended genuine abolition only under the pressure of a slave revolt, and Napoleon tried to reverse it. Use Toussaint for any question on race, the Enlightenment's contradictions, or the meaning of "universal" rights.
 
 </details>
 
@@ -289,7 +289,7 @@ Toussaint's lieutenant, more uncompromising than Toussaint, who led the war to i
 <details>
 <summary>★ Orientalism (Said)</summary>
 
-Orientalism is the body of (mainly Western) scholarship on the languages, history, and cultures of "the Orient," which after Napoleon's Egyptian campaign (1798) became inseparable from imperial power. Edward Said's argument is that Western *knowledge* of the East is itself a *form of domination* - to catalogue and represent the Orient is to control it. The Institut d'Égypte and the Description de l'Égypte (1809–29) are textbook cases, and *Passion in the Desert* dramatizes it through the artist commissioned to sketch Egypt.
+Orientalism is the body of (mainly Western) scholarship on the languages, history, and cultures of "the Orient," which after Napoleon's Egyptian campaign (1798) became inseparable from imperial power. Edward Said's argument is that Western *knowledge* of the East is itself a *form of domination* - to catalogue and represent the Orient is to control it. The Institut d'Égypte and the Description de l'Égypte (1809–29) are textbook cases.
 
 </details>
 
@@ -335,6 +335,27 @@ The monumental multi-volume catalogue of Egypt's land, antiquities, and society 
 
 </details>
 
+<details>
+<summary>Rosetta Stone (important)</summary>
+
+A granodiorite stele inscribed in 196 BCE with a priestly decree in three scripts — Ancient Egyptian hieroglyphics, Demotic, and Ancient Greek — discovered by French soldiers at Rosetta (Rashid) during Napoleon's Egyptian Campaign in 1799. Its significance for the course is twofold. First, it is the founding artifact of **Egyptology**: the French scholar Jean-François Champollion used it to decipher hieroglyphics (1822), unlocking ancient Egyptian civilization for Western study. Second — and more importantly for the exam — it exemplifies Said's argument about **knowledge-as-power**: the Stone was seized by the British after their 1801 defeat of the French and taken to the British Museum, where it remains. The very act of carrying it to London makes the point: the Orient's past is catalogued, possessed, and displayed by the West. Napoleon's **Institut d'Égypte** and the **Description de l'Égypte** (1809–29) are the broader context; the Rosetta Stone is its most iconic product.
+
+</details>
+
+<details>
+<summary>Lord Cromer (important)</summary>
+
+The British Consul-General who effectively ruled Egypt from 1883 to 1907, following Britain's military occupation of 1882. Although nominally an advisor to the Egyptian Khedive, Cromer held real power: he oversaw Egyptian finances, restructured the economy to serve British imperial interests (cotton for export over food production), and blocked educational reform on the grounds that Egyptians were unfit for self-governance. Said uses Cromer extensively in *Orientalism* as the embodiment of the colonial administrator whose "knowledge" of the Orient was inseparable from contempt and control — Cromer's published writings describe Egyptians as inherently irrational and incapable of ruling themselves. He is the living proof of Said's argument that Orientalism is not just scholarship but a technology of domination.
+
+</details>
+
+<details>
+<summary>Suez Canal (important)</summary>
+
+The canal connecting the Mediterranean to the Red Sea, opened in 1869, built by French engineer Ferdinand de Lesseps with Egyptian forced labor (the *corvée* system) and largely funded by French and Egyptian capital. It immediately transformed global trade by slashing the Europe-to-Asia voyage. Its political significance for the course: when the Egyptian Khedive Ismail's debts forced him to sell Egypt's 44 % share in 1875, **Britain bought it** — making Britain the Canal's largest shareholder and giving it a direct strategic interest in Egyptian stability. This is the proximate cause of **Britain's occupation of Egypt in 1882** and the rise of Lord Cromer. The Canal thus links Week 7 (Napoleon's original rationale for Egypt was to cut Britain's route to India) to the broader Eastern Question (Week 8): control of Egypt, and through it the Canal, became the decisive prize of late-19th-century imperial rivalry. It also illustrates the pattern of debt → European financial control → full occupation that the course traces across the Ottoman world.
+
+</details>
+
 ### Week 8 The Eastern Question and Greece
 
 <details>
@@ -352,9 +373,9 @@ The treaty ending the Russo-Turkish War (1768–74), giving Russia a foothold in
 </details>
 
 <details>
-<summary>★ Phanariotes</summary>
+<summary>★ Phanariotes (important)</summary>
 
-Wealthy Greek Orthodox families of the Phanar (Fener) district of Istanbul, seat of the Orthodox Patriarch, who served as the Ottomans' secretaries, interpreters, and tax farmers. Their rise followed Ottoman decline after 1774, when the Empire needed people fluent in Western languages. Their Western contacts and Enlightenment ideas helped seed Greek revolutionary nationalism - three Phanariote merchants founded the Philiki Etaireia (1814).
+Wealthy Greek Orthodox merchant-administrative families living in the Phanar (Fener) district of Istanbul, the seat of the Ecumenical Patriarch. After Ottoman military losses in the Russo-Turkish War culminated in the **Treaty of Küçük Kaynarca (1774)**, the Empire urgently needed people fluent in Western languages for its increasingly complex diplomacy. The Phanariotes filled this role as secretaries, interpreters, and tax farmers, giving them privileged access to both Western Enlightenment ideas and the Ottoman state apparatus. Three Phanariote merchants — trading between Odessa and the Mediterranean — founded the **Philiki Etaireia (Society of Friends)** in Odessa in 1814, the secret society that prepared the Greek revolt. Their story is central to Week 8's argument: it was *Westernized elites*, not an ancient ethnic community, who manufactured Greek nationalism and triggered the revolt of 1821. The Phanariotes illustrate how imperial decline creates the very intermediaries who will eventually dismember the empire.
 
 </details>
 
@@ -440,7 +461,7 @@ Together with steamships, railroads were the catalyst of industrialization: Brit
 <details>
 <summary>★ Workhouse / Poor Law Amendment Act (1834)</summary>
 
-Britain ended the wage-subsidy Speenhamland system with the 1834 New Poor Law, which confined the jobless poor to workhouses run like prisons, treating poverty as a moral failing and breaking up families (~200,000 inmates by 1841). It embodies the punitive social order beneath industrial prosperity. *Oliver Twist* (Polanski, 2005) makes it concrete - Oliver "asking for more" gruel.
+Britain ended the wage-subsidy Speenhamland system with the 1834 New Poor Law, which confined the jobless poor to workhouses run like prisons, treating poverty as a moral failing and breaking up families (~200,000 inmates by 1841). It embodies the punitive social order beneath industrial prosperity.
 
 </details>
 
@@ -454,7 +475,7 @@ An early British poor-relief scheme that topped up low wages with payments funde
 <details>
 <summary>★ Child labor</summary>
 
-With industrialization, children were widely employed for tasks suited to their small size (such as clearing jammed machines) at roughly a quarter of an adult man's wage. It epitomizes the human cost behind Europe's economic ascendancy. Britain's 1833 law banned factory work for children under nine, an early sign of reform; *Oliver Twist* dramatizes the exploitation of pauper children.
+With industrialization, children were widely employed for tasks suited to their small size (such as clearing jammed machines) at roughly a quarter of an adult man's wage. It epitomizes the human cost behind Europe's economic ascendancy. Britain's 1833 law banned factory work for children under nine, an early sign of reform.
 
 </details>
 
@@ -477,7 +498,7 @@ Two influential responses to industrialization's social strains: Thomas Malthus 
 <details>
 <summary>★ Paris Commune (18 March – May 1871)</summary>
 
-A revolutionary government in which Parisian workers held power for roughly two months after the Franco-Prussian War, creating what the course calls the first communist state. It passed radical social legislation (secular schooling, a labor exchange, recognized women's unions) and made Paris "the laboratory of a new world." It was crushed in "Bloody Week" (from 21 May 1871, 15,000–25,000 killed) down Haussmann's boulevards, becoming the Left's model and the Right's nightmare; *Germinal* echoes its themes of revolt and repression.
+A revolutionary government in which Parisian workers held power for roughly two months after the Franco-Prussian War, creating what the course calls the first communist state. It passed radical social legislation (secular schooling, a labor exchange, recognized women's unions) and made Paris "the laboratory of a new world." It was crushed in "Bloody Week" (from 21 May 1871, 15,000–25,000 killed) down Haussmann's boulevards, becoming the Left's model and the Right's nightmare.
 
 </details>
 
@@ -510,11 +531,12 @@ The key anarchist thinkers: Frenchman Pierre-Joseph Proudhon (*What Is Property?
 </details>
 
 <details>
-<summary>Haussmannization</summary>
+<summary>Haussmann / Haussmannization (important)</summary>
 
-The mid-century rebuilding of Paris under Baron Haussmann and Napoleon III, which cut wide boulevards through the city. Beyond beautification, the boulevards were designed in part to suppress popular revolts - and were used exactly that way to crush the Commune in May 1871. Higher rents also pushed the poor to the eastern and peripheral districts, deepening the class geography that fed anarchism.
+Baron Georges-Eugène Haussmann was the Prefect of the Seine under Napoleon III who rebuilt Paris between the 1850s and 1870s, cutting wide, straight boulevards through the dense medieval city. The official justifications were sanitation, modernization, and traffic flow. The course stresses two further functions: (1) **military-political** — wide boulevards made it impossible to erect the barricades that had stopped troops in 1830 and 1848, and allowed artillery and cavalry to move quickly through the city. This was used directly in **Bloody Week (21 May 1871)**, when troops poured into Paris down Haussmann's boulevards to crush the Commune. (2) **Social displacement** — higher rents from new construction pushed the working-class poor to the eastern and peripheral neighborhoods, deepening the class geography that bred anarchism. Haussmannization is therefore a term that bridges Week 9 (industrial urbanism) and Week 10 (the Commune and anarchism), and it illustrates how the built environment is itself an instrument of class power and political control.
 
 </details>
+
 
 
 ## 4 Master timeline the whole post-midterm story in order
