@@ -27,6 +27,48 @@ const en: Dictionary = {
     pageTitle: 'Projects',
     subtitle: 'A small collection of projects I have created.',
     portWatcherSubtitle: 'macOS Menubar App',
+    notlukSubtitle: 'Attendance Tracker · macOS & iOS',
+  },
+  notluk: {
+    description: 'Notluk is a class schedule and attendance tracker for university students, on Mac, iPhone and iPad.',
+    tagline: 'Your classes and attendance, in one place.',
+    intro: 'Notluk keeps your weekly class schedule and tracks attendance for every course. Add your term and courses with their lectures, labs and problem sessions, mark each class as attended, missed or cancelled, and always know how many more classes you can miss. Your schedule syncs across your Mac, iPhone and iPad.',
+    platforms: 'macOS 27 · iOS & iPadOS 18+',
+    status: 'Beta on TestFlight',
+    featuresHeading: 'Features',
+    features: [
+      {
+        title: 'Weekly schedule',
+        description: 'Your week grouped by day, with each class\'s time, room and section: lecture, lab, problem session or your own.',
+      },
+      {
+        title: 'Attendance tracking',
+        description: 'Every class from the start of the term until today, marked attended, missed or cancelled. Cancelled classes don\'t count toward your rate.',
+      },
+      {
+        title: 'Attendance requirements',
+        description: 'Enter the rules from your syllabus for the whole course, per section type or for custom groups of sections, as a minimum rate or a maximum number of absences. Notluk shows how many more classes you can miss and whether you\'re on track.',
+      },
+      {
+        title: 'Term overview',
+        description: 'The Attendance tab shows your term\'s rate, the classes still to mark and which courses are at risk.',
+      },
+      {
+        title: 'Private sync',
+        description: 'Sign in with your email and your schedule is on every device. Each account can only ever read its own data.',
+      },
+    ],
+    privacyHeading: 'Privacy',
+    privacySummary: 'Notluk has no analytics, ads or tracking. It stores only your account details and what you enter, and you can delete your account and all its data from inside the app.',
+    privacyLink: 'Read the privacy policy',
+    contactHeading: 'Contact',
+    contactBody: 'Questions, feedback or data requests:',
+    backToProjects: 'Projects',
+    privacyPolicy: {
+      pageTitle: 'Notluk Privacy Policy',
+      description: 'What data the Notluk app handles, where it is stored and how to delete it.',
+      backToNotluk: 'Notluk',
+    },
   },
   tools: {
     pageTitle: 'Tools',

@@ -34,6 +34,18 @@ test.describe('page availability', () => {
     await expect(page.locator('h1')).toBeVisible()
   })
 
+  test('/en/projects/notluk loads', async ({ page }) => {
+    await page.goto('/en/projects/notluk')
+    await expect(page.locator('h1')).toHaveText('Notluk')
+  })
+
+  test('Notluk privacy policy loads in both locales', async ({ page }) => {
+    await page.goto('/en/projects/notluk/privacy')
+    await expect(page.locator('h1')).toHaveText('Notluk Privacy Policy')
+    await page.goto('/tr/projects/notluk/privacy')
+    await expect(page.locator('h1')).toHaveText('Notluk Gizlilik Politikası')
+  })
+
   test('/en/cv loads', async ({ page }) => {
     await page.goto('/en/cv')
     await expect(page.locator('h1')).toBeVisible()

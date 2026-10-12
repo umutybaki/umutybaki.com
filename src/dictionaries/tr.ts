@@ -27,6 +27,48 @@ const tr: Dictionary = {
     pageTitle: 'Projeler',
     subtitle: 'Geliştirdiğim projelerden küçük bir koleksiyon.',
     portWatcherSubtitle: 'macOS Menü Çubuğu Uygulaması',
+    notlukSubtitle: 'Devamsızlık Takibi · macOS ve iOS',
+  },
+  notluk: {
+    description: 'Notluk, üniversite öğrencileri için Mac, iPhone ve iPad\'de çalışan bir ders programı ve devamsızlık takip uygulamasıdır.',
+    tagline: 'Dersleriniz ve devamsızlığınız tek bir yerde.',
+    intro: 'Notluk haftalık ders programınızı tutar ve her dersin devamsızlığını takip eder. Döneminizi ve derslerinizi teorik ders, lab ve problem saatleriyle ekleyin, her dersi katıldım, katılmadım veya iptal olarak işaretleyin ve daha kaç ders kaçırabileceğinizi her zaman bilin. Programınız Mac, iPhone ve iPad arasında senkronize olur.',
+    platforms: 'macOS 27 · iOS ve iPadOS 18+',
+    status: 'TestFlight\'ta beta',
+    featuresHeading: 'Özellikler',
+    features: [
+      {
+        title: 'Haftalık program',
+        description: 'Haftanız günlere göre gruplanır; her dersin saati, sınıfı ve şubesi (teorik ders, lab, problem saati veya kendi tanımladığınız) görünür.',
+      },
+      {
+        title: 'Devamsızlık takibi',
+        description: 'Dönem başından bugüne kadarki her ders; katıldım, katılmadım veya iptal olarak işaretlenir. İptal edilen dersler orana sayılmaz.',
+      },
+      {
+        title: 'Devam zorunlulukları',
+        description: 'Ders izlencenizdeki kuralları tüm ders için, şube türüne göre veya özel şube grupları için en düşük katılım oranı ya da en fazla devamsızlık olarak girin. Notluk daha kaç ders kaçırabileceğinizi ve sınırın içinde olup olmadığınızı gösterir.',
+      },
+      {
+        title: 'Dönem özeti',
+        description: 'Devamsızlık sekmesi dönemin katılım oranını, henüz işaretlenmemiş dersleri ve riskteki dersleri gösterir.',
+      },
+      {
+        title: 'Gizli senkronizasyon',
+        description: 'E-postanızla giriş yapın, programınız tüm cihazlarınızda olsun. Her hesap yalnızca kendi verisine erişebilir.',
+      },
+    ],
+    privacyHeading: 'Gizlilik',
+    privacySummary: 'Notluk\'ta analitik, reklam veya takip yok. Yalnızca hesap bilgilerinizi ve girdiğiniz verileri saklar; hesabınızı ve tüm verilerinizi uygulamanın içinden silebilirsiniz.',
+    privacyLink: 'Gizlilik politikasını okuyun',
+    contactHeading: 'İletişim',
+    contactBody: 'Sorular, geri bildirim veya veri talepleri için:',
+    backToProjects: 'Projeler',
+    privacyPolicy: {
+      pageTitle: 'Notluk Gizlilik Politikası',
+      description: 'Notluk uygulamasının hangi verileri işlediği, nerede sakladığı ve nasıl silineceği.',
+      backToNotluk: 'Notluk',
+    },
   },
   tools: {
     pageTitle: 'Araçlar',
