@@ -36,6 +36,14 @@ export default async function ProjectsPage({ params }: Props) {
             name="PortWatcher"
             subtitle={dict.projects.portWatcherSubtitle}
           />
+          <AppListItem
+            href={`/${locale}/projects/notluk`}
+            logo="/media/notluk.png"
+            logoAlt="Notluk Logo"
+            name="Notluk"
+            subtitle={dict.projects.notlukSubtitle}
+            external={false}
+          />
         </ul>
       </section>
     </main>

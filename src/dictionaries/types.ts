@@ -47,6 +47,27 @@ export type Dictionary = {
     pageTitle: string
     subtitle: string
     portWatcherSubtitle: string
+    notlukSubtitle: string
+  }
+  notluk: {
+    description: string // meta description
+    tagline: string
+    intro: string
+    platforms: string
+    status: string
+    featuresHeading: string
+    features: { title: string; description: string }[]
+    privacyHeading: string
+    privacySummary: string
+    privacyLink: string
+    contactHeading: string
+    contactBody: string
+    backToProjects: string
+    privacyPolicy: {
+      pageTitle: string
+      description: string
+      backToNotluk: string
+    }
   }
   tools: {
     pageTitle: string
