@@ -14,6 +14,12 @@ importers:
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
+      jsqr:
+        specifier: ^1.4.0
+        version: 1.4.0
+      katex:
+        specifier: ^0.16.45
+        version: 0.16.45
       mermaid:
         specifier: ^11.15.0
         version: 11.15.0
@@ -1709,6 +1715,9 @@ packages:
     peerDependenciesMeta:
       canvas:
         optional: true
+
+  jsqr@1.4.0:
+    resolution: {integrity: sha512-dxLob7q65Xg2DvstYkRpkYtmKm2sPJ9oFhrhmudT1dZvNFFTlroai3AWSpLey/w5vMcLBXRgOJsbXpdN9HzU/A==}
 
   katex@0.16.45:
     resolution: {integrity: sha512-pQpZbdBu7wCTmQUh7ufPmLr0pFoObnGUoL/yhtwJDgmmQpbkg/0HSVti25Fu4rmd1oCR6NGWe9vqTWuWv3GcNA==}
@@ -4262,6 +4271,8 @@ snapshots:
       xml-name-validator: 5.0.0
     transitivePeerDependencies:
       - '@noble/hashes'
+
+  jsqr@1.4.0: {}
 
   katex@0.16.45:
     dependencies:

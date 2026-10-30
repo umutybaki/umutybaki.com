@@ -16,6 +16,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/attendance-qr/go.mod
+          cache-dependency-path: backend/attendance-qr/go.sum
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
