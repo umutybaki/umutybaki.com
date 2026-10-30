@@ -101,6 +101,7 @@ type request struct {
 	Epoch  string `json:"epoch"`
 	Peer   string `json:"peer"`
 	SDP    string `json:"sdp"`
+	Offer  string `json:"offer"`
 }
 type server struct {
 	db  store
@@ -133,7 +134,7 @@ func (s server) handle(ctx context.Context, event events.LambdaFunctionURLReques
 	if event.RequestContext.HTTP.Method != "POST" {
 		return fail(405, "Use POST")
 	}
-	if event.IsBase64Encoded || len(event.Body) > 30000 {
+	if event.IsBase64Encoded || len(event.Body) > 60000 {
 		return fail(413, "Invalid request body")
 	}
 	var req request
@@ -215,7 +216,7 @@ func (s server) handle(ctx context.Context, event events.LambdaFunctionURLReques
 			if len(req.Peer) != 64 || len(req.SDP) < 10 || len(req.SDP) > 20000 {
 				return fail(400, "Invalid answer")
 			}
-			err = s.db.Update(ctx, "peer:"+req.Epoch+":"+req.Peer, "SET answer = :answer", "attribute_exists(offer)", map[string]any{":answer": req.SDP})
+			err = s.db.Update(ctx, "peer:"+req.Epoch+":"+req.Peer, "SET answer = :answer", "offer = :offer", map[string]any{":answer": req.SDP, ":offer": req.Offer})
 		case "peers":
 			if !sharer {
 				return fail(403, "Sharer only")

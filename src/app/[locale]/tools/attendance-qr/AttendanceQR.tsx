@@ -46,6 +46,7 @@ export default function AttendanceQR({
   const stream = useRef<MediaStream | null>(null)
   const epoch = useRef('')
   const isSharing = useRef(false)
+  const answeredOffers = useRef(new Map<string, string>())
   const peers = useRef(new Map<string, RTCPeerConnection>())
   const channels = useRef(new Set<RTCDataChannel>())
   const revision = useRef(0)
@@ -77,6 +78,7 @@ export default function AttendanceQR({
     revision.current++
     peers.current.forEach((pc) => pc.close())
     peers.current.clear()
+    answeredOffers.current.clear()
     channels.current.forEach((ch) => ch.close())
     channels.current.clear()
     stream.current?.getTracks().forEach((track) => track.stop())
@@ -189,6 +191,7 @@ export default function AttendanceQR({
   }
   async function answer(peer: Peer, roomEpoch: string) {
     const existing = peers.current.get(peer.peer)
+    if (!existing && answeredOffers.current.get(peer.peer) === peer.offer) return
     if (
       existing &&
       (existing.remoteDescription?.sdp === peer.offer ||
@@ -226,8 +229,10 @@ export default function AttendanceQR({
       await call('answer', {
         epoch: roomEpoch,
         peer: peer.peer,
+        offer: peer.offer,
         sdp: pc.localDescription!.sdp,
       })
+      if (revision.current === rev) answeredOffers.current.set(peer.peer, peer.offer)
     } catch {
       pc.close()
       peers.current.delete(peer.peer)

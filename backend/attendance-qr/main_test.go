@@ -114,3 +114,12 @@ func TestHeartbeatCannotReviveExpiredOrReplacedLease(t *testing.T) {
 		t.Fatal("heartbeat is missing lease fencing")
 	}
 }
+
+func TestAnswerIsFencedToExactOffer(t *testing.T) {
+	s, db, token := setup()
+	db.updateError = &types.ConditionalCheckFailedException{}
+	r := invoke(s, token, request{Action: "answer", Epoch: "epoch", Peer: strings.Repeat("b", 64), SDP: "answer-for-old-offer", Offer: "old-offer"})
+	if r.StatusCode != 409 || db.condition != "offer = :offer" || db.values[":offer"] != "old-offer" {
+		t.Fatal("a delayed answer must not overwrite a replacement offer")
+	}
+}
