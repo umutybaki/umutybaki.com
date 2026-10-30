@@ -71,6 +71,8 @@ const tr: Dictionary = {
     },
   },
   tools: {
+    attendanceQRName: 'Yoklama QR',
+    attendanceQRSubtitle: 'Canlı QR yayınını izleyin ve son bağlantıyı açın',
     pageTitle: 'Araçlar',
     subtitle: 'Küçük tarayıcı tabanlı araçlardan oluşan bir koleksiyon.',
     qrCodeGeneratorName: 'QR Kod Oluşturucu',

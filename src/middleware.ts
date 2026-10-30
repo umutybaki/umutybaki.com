@@ -43,6 +43,13 @@ export function middleware(request: NextRequest) {
     return
   }
 
+  if (pathname === '/attendance-qr') {
+    return NextResponse.redirect(new URL(`/${getPreferredLocale(request)}/tools/attendance-qr`, request.url))
+  }
+  if (locales.some(locale => pathname === `/${locale}/attendance-qr`)) {
+    return NextResponse.redirect(new URL(`${pathname.slice(0, 3)}/tools/attendance-qr`, request.url))
+  }
+
   const hasLocale = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   )

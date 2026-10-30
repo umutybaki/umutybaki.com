@@ -35,6 +35,11 @@ describe('middleware — locale detection', () => {
     expect(res?.headers.get('location')).toContain('/en')
   })
 
+  it('routes the attendance shortcut to the localized tool', () => {
+    const res = middleware(makeRequest('/attendance-qr', { cookie: 'NEXT_LOCALE=tr' }))
+    expect(res?.headers.get('location')).toContain('/tr/tools/attendance-qr')
+  })
+
   it('preserves sub-path when redirecting', () => {
     const res = middleware(makeRequest('/about'))
     expect(res?.headers.get('location')).toContain('/en/about')

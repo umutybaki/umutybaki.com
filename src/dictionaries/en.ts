@@ -71,6 +71,8 @@ const en: Dictionary = {
     },
   },
   tools: {
+    attendanceQRName: 'Attendance QR',
+    attendanceQRSubtitle: 'Watch a live QR feed and open its latest link',
     pageTitle: 'Tools',
     subtitle: 'A small collection of browser-based tools.',
     qrCodeGeneratorName: 'QR Code Generator',
