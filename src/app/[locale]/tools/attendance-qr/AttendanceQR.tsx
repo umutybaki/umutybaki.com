@@ -218,7 +218,9 @@ export default function AttendanceQR({
       for (const track of stream.current.getVideoTracks()) {
         const sender = pc.addTrack(track, stream.current)
         const params = sender.getParameters()
-        params.encodings = [{ maxFramerate: 2, maxBitrate: 2500000 }]
+        params.encodings = (params.encodings?.length ? params.encodings : [{}]).map(
+          (encoding) => ({ ...encoding, maxFramerate: 30, maxBitrate: 1000000 }),
+        )
         params.degradationPreference = 'maintain-resolution'
         await sender.setParameters(params)
       }
@@ -250,7 +252,7 @@ export default function AttendanceQR({
           facingMode: { ideal: 'environment' },
           width: { ideal: 1280 },
           height: { ideal: 720 },
-          frameRate: { ideal: 2, max: 2 },
+          frameRate: { ideal: 30, max: 30 },
         },
       })
       if (!alive.current) {
@@ -404,7 +406,7 @@ export default function AttendanceQR({
         for (const ch of channels.current)
           if (ch.readyState === 'open' && ch.bufferedAmount < 4096)
             ch.send(JSON.stringify(latestQR.current))
-    }, 200)
+    }, 100)
     return () => clearInterval(timer)
   }, [])
   async function join(event: React.FormEvent) {

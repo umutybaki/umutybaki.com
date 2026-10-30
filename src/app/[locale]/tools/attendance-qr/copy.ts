@@ -30,7 +30,7 @@ export const copy = {
     network:
       'The direct connection failed. Please try again on a regular Wi-Fi or mobile network.',
     unavailable: 'The live feed has not been configured yet.',
-    quality: '720p or higher · up to 2 fps · no audio',
+    quality: '720p or higher · up to 30 fps · no audio',
     busy: 'Someone else started sharing. You can watch their feed.',
   },
   tr: {
@@ -64,7 +64,7 @@ export const copy = {
     network:
       'Doğrudan bağlantı kurulamadı. Normal bir Wi-Fi veya mobil ağda tekrar deneyin.',
     unavailable: 'Canlı yayın henüz yapılandırılmadı.',
-    quality: '720p ve üzeri · en fazla 2 fps · sessiz',
+    quality: '720p ve üzeri · en fazla 30 fps · sessiz',
     busy: 'Başka biri paylaşmaya başladı. Yayını izleyebilirsiniz.',
   },
 }
