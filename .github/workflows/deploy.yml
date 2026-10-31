@@ -16,12 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: backend/attendance-qr/go.mod
-          cache-dependency-path: backend/attendance-qr/go.sum
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -36,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Test
+        run: pnpm test
+
+      - name: Type check
+        run: pnpm exec tsc --noEmit --incremental false
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -43,4 +43,4 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy with SST
-        run: pnpm dlx sst deploy --stage production
+        run: pnpm run deploy
