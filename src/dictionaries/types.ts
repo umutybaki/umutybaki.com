@@ -70,8 +70,6 @@ export type Dictionary = {
     }
   }
   tools: {
-    attendanceQRName: string
-    attendanceQRSubtitle: string
     pageTitle: string
     subtitle: string
     qrCodeGeneratorName: string

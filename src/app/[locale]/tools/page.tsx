@@ -30,14 +30,6 @@ export default async function ToolsPage({ params }: Props) {
 
         <ul className="list-none flex flex-col gap-[0.4rem] mt-12">
           <AppListItem
-            href={`/${locale}/tools/attendance-qr`}
-            logo="/media/qr-code-generator.svg"
-            logoAlt={dict.tools.attendanceQRName}
-            name={dict.tools.attendanceQRName}
-            subtitle={dict.tools.attendanceQRSubtitle}
-            external={false}
-          />
-          <AppListItem
             href={`/${locale}/tools/qr-code-generator`}
             logo="/media/qr-code-generator.svg"
             logoAlt={dict.tools.qrCodeGeneratorName}
